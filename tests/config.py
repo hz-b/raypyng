@@ -2,6 +2,6 @@
 
 
 
-path_to_RAY = '/home/simone/RAY-UI-development'
+path_to_RAY = '~/RAY-UI-development'
 
-current_directory = '/home/simone/Documents/Dipole3.1_newBeamline/simulations/16/'
+current_directory = '/home/lservice/projects/ray/raypyng/tests/'
