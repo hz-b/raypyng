@@ -4,4 +4,7 @@
 # local-only files, including data which should NOT end in the repo
 local/
 
+# ignore test output folder
+tests/
+
 
