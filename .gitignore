@@ -1,0 +1,7 @@
+# python virtual environment
+.venv/
+
+# local-only files, including data which should NOT end in the repo
+local/
+
+
