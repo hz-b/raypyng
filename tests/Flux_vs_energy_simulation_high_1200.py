@@ -13,7 +13,8 @@ from config import path_to_RAY, current_directory
 import sys
 # Insert here the path to the installatio folder of RAY-UI
 
-sys.path.insert(1, path_to_RAY+'/RAYpy/')
+#sys.path.insert(1, path_to_RAY+'/RAYpy/')
+sys.path.insert(1,'/home/lservice/projects/ray/raypyng/RayPy') 
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -56,7 +57,7 @@ for rml in rml_file_list:
 
     # set the ray location, substitute the '...'
     #(pay attention to the slashes, the first and last one must be there)
-    ray_loc = path_to_RAY+"/rayui.sh -b\n"
+    ray_loc = path_to_RAY+"/rayui.sh"
     # set the name of the objects you want to export, separated by a comma
     expo_obj= "Dipole,DetectorAtFocus"
     # set the name of what you want to export. 

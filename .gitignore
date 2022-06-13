@@ -1,6 +1,9 @@
 # python virtual environment
 .venv/
 
+# python specific
+__pycache__/
+
 # local-only files, including data which should NOT end in the repo
 local/
 
