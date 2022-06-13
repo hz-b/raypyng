@@ -22,7 +22,7 @@ from RayPy import *
 
 ### IMPORTANT !!!! ####
 # Check how many CPU you have. Ray will be called once per CPU. 
-n_cpu = 12
+n_cpu = 1
 
 
 energy    =np.arange(40,3001,20)
@@ -30,7 +30,7 @@ SlitSize  =np.array([0.05])
 grating   =np.array([1200])
 cFactor   =np.array([2.25])
 blaze     =np.array([0.9])
-nrays     =500000
+nrays     =5000
 
 
 rml_file_list = ['high_energy_branch_flux_1200']
