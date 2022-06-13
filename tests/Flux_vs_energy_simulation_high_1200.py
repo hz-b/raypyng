@@ -37,6 +37,8 @@ rml_file_list = ['high_energy_branch_flux_1200']
 
 
 
+if __name__ == '__main__':
+    mp.freeze_support()
 
 for rml in rml_file_list:
     #######################
