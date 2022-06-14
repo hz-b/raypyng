@@ -114,13 +114,13 @@ class RayUIAPI:
         self._runner = runner
         self._read_wait_delay = 0.1
 
-    def load(self,rml_path):
-        return self._cmd_io("load",rml_path)
+    def load(self,rml_path,**kwargs):
+        return self._cmd_io("load",rml_path,**kwargs)
 
-    def trace(self):
-        return self._cmd_io("trace")
+    def trace(self,**kwargs):
+        return self._cmd_io("trace",**kwargs)
 
-    def _cmd_io(self,cmd:str,payload:str=None):
+    def _cmd_io(self,cmd:str,payload:str=None,/, cbNewLine=None):
         """_cmd_io is an internal method which helps to execute a rayui command.
         All commands are run in the following way:
         1. command send to ray
@@ -143,7 +143,7 @@ class RayUIAPI:
         cmdstr = cmd+" "+payload
         self._runner._write(cmdstr)
         self._wait_for_cmd_io(cmd, timeout = 2.0)
-        status = self._wait_for_cmd_io(cmd)
+        status = self._wait_for_cmd_io(cmd,cbdataread=cbNewLine)
         if status=="success":
             return True
         elif status=="failed":
@@ -153,18 +153,20 @@ class RayUIAPI:
         else:
             raise RayPyError("Got unsupported reply from ray while waiting for command IO")
         
-    def _wait_for_cmd_io(self,cmd,timeout=None)->str:
+    def _wait_for_cmd_io(self,cmd,timeout=None,cbdataread=None):
         timecnt = 0.0
         line = ""
         while True:
             line = self._runner._readline()
-            print("DEBUG:: line is:",line)
+            #print("DEBUG:: line is:",line)
             if line is None:
                 continue
             if (line.startswith(cmd)):
                 break
             else:
-                print("VERBOSE::",line)
+                if cbdataread is not None:
+                    cbdataread(line)
+                #print("VERBOSE::",line)
             time.sleep(self._read_wait_delay)
             timecnt+=self._read_wait_delay
             if timeout is not None and timecnt>timeout:
