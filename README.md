@@ -10,7 +10,7 @@ python3 -m venv .venv
 3. install dependencies:
 
 ```
-python3 -m pip install numpy matplotlib lxml ipython
+python3 -m pip install numpy matplotlib lxml ipython psutil
 ```
 
 4. Install ray:
