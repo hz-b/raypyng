@@ -57,7 +57,7 @@ for rml in rml_file_list:
 
     # set the ray location, substitute the '...'
     #(pay attention to the slashes, the first and last one must be there)
-    ray_loc = path_to_RAY+"/rayui.sh"
+    ray_loc = "xvfb-run "+path_to_RAY+"/rayui.sh"
     # set the name of the objects you want to export, separated by a comma
     expo_obj= "Dipole,DetectorAtFocus"
     # set the name of what you want to export. 
