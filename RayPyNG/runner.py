@@ -115,9 +115,12 @@ class RayUIAPI:
         self._read_wait_delay = 0.1
 
     def load(self,rml_path):
-        return self._cmd_io("load",rml_path,status_prefix="loaded")
+        return self._cmd_io("load",rml_path)
 
-    def _cmd_io(self,cmd:str,payload:str=None, status_prefix=None):
+    def trace(self):
+        return self._cmd_io("trace")
+
+    def _cmd_io(self,cmd:str,payload:str=None):
         """_cmd_io is an internal method which helps to execute a rayui command.
         All commands are run in the following way:
         1. command send to ray
@@ -129,29 +132,23 @@ class RayUIAPI:
             cmd (str): string with command (e.g. "load" or "trace")
             payload (str, optional): possible payload for the command (e.g. rml 
                                     file path for the load command). Defaults to None.
-            status_prefix (_type_, optional): Sometimes status reply prefix differs from 
-                                    the command. For example load command statuses are "loaded success"
-                                    and "loaded failed". So if it is a case it can be addionally 
-                                    specified. If set to None then same value is cmd would be used.
-                                    Defaults to None.
-
         Raises:
             RayPyError: in case of an unsupported reply 
 
         Returns:
             bool: True on success, False ray side error
         """
-        if status_prefix is None:
-            status_prefix = cmd
         if payload is None:
             payload = ""
         cmdstr = cmd+" "+payload
         self._runner._write(cmdstr)
         self._wait_for_cmd_io(cmd, timeout = 2.0)
-        status = self._wait_for_cmd_io(status_prefix)
+        status = self._wait_for_cmd_io(cmd)
         if status=="success":
             return True
         elif status=="failed":
+            return False
+        elif status=="ed failed": # specical workaround case for the "loaded failed" reply to laod command
             return False
         else:
             raise RayPyError("Got unsupported reply from ray while waiting for command IO")
@@ -161,10 +158,13 @@ class RayUIAPI:
         line = ""
         while True:
             line = self._runner._readline()
+            print("DEBUG:: line is:",line)
             if line is None:
                 continue
             if (line.startswith(cmd)):
                 break
+            else:
+                print("VERBOSE::",line)
             time.sleep(self._read_wait_delay)
             timecnt+=self._read_wait_delay
             if timeout is not None and timecnt>timeout:
