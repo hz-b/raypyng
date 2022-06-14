@@ -4,8 +4,9 @@
 from . import config
 from .errors import RayPyRunnerError,RayPyError,TimeoutError
 import os
-import subprocess
+import subprocess,signal
 import time
+import psutil
 
 ###############################################################################
 class RayUIRunner:
@@ -23,23 +24,23 @@ class RayUIRunner:
 
         # internal configuration parameters
         self._auto_flush = True     # flush on write calls
-        self._cmd_timeout = 0.25    # default timeout for commands like quit
 
     def run(self):
-        fullpath = os.path.join(self._path,self._binary)
-        if not os.path.isfile(fullpath):
-            raise RayPyRunnerError("Ray executable {0} is not found".format(fullpath))
+        if not self.isrunning:
+            fullpath = os.path.join(self._path,self._binary)
+            if not os.path.isfile(fullpath):
+                raise RayPyRunnerError("Ray executable {0} is not found".format(fullpath))
 
-        env = dict(os.environ) # TODO:: rethink a bit about this line 
-        self._process = subprocess.Popen(
-                                        fullpath+" -b", 
-                                        shell=True, 
-                                        stdin=subprocess.PIPE, 
-                                        stdout=subprocess.PIPE,
-                                        stderr=subprocess.STDOUT, 
-                                        env=env
-                                        )
-
+            env = dict(os.environ) # TODO:: rethink a bit about this line 
+            self._process = subprocess.Popen(
+                                            fullpath+" -b", 
+                                            shell=True, 
+                                            stdin=subprocess.PIPE, 
+                                            stdout=subprocess.PIPE,
+                                            stderr=subprocess.STDOUT, 
+                                            env=env
+                                            )
+        return self
 
     @property
     def isrunning(self):
@@ -54,16 +55,27 @@ class RayUIRunner:
             else:
                 return True
 
-    def quit(self):
-        """quit rayUI
+    def kill(self):
+        """kill RayUI process
         """
         if self.isrunning:
-            self._write("quit")
-            try:
-                self._process.wait(self._cmd_timeout)
-            except subprocess.TimeoutExpired:
-                raise RayPyRunnerError("Timeout while trying to quit")
-        
+            pid = self._process.pid
+            process = psutil.Process(pid)
+            for proc in process.children(recursive=True):
+                proc.kill()
+            process.kill()
+
+    @property
+    def pid(self):
+        """Get process id of the RayUI process
+
+        Returns:
+            _type_: PID of the process if it running, None otherwise
+        """
+        if self.isrunning:
+            return self._process.pid
+        else:
+            return None
 
     def _write(self, instr:str, endline="\n"):
         """Write command to RayUI interface
@@ -84,6 +96,11 @@ class RayUIRunner:
             raise RayPyRunnerError("RayUI process is not started")
 
     def _readline(self)->str:
+        """read a line from the stdout of the process and convert to a string
+
+        Returns:
+            str: line read from the input
+        """
         if self.isrunning:
             return self._process.stdout.readline().decode('utf8').rstrip('\n')
         else:
@@ -109,20 +126,50 @@ class RayUIRunner:
  
 ###############################################################################
 class RayUIAPI:
-    def __init__(self,runner:RayUIRunner) -> None:
+    """RayUIAPI class implements (hopefully all) command interface of the RayUI
+    """
+    def __init__(self,runner:RayUIRunner=None) -> None:
+        """_summary_
+
+        Args:
+            runner (RayUIRunner, optional): reference to existing runner. If set to None a new runner instance will be automaticlly created. Defaults to None.
+        """
         if runner is None:
-            raise RayPyError("Can not initialize RayUI API wrapper without runner")
+            runner = RayUIRunner().run()
         self._runner = runner
         self._read_wait_delay = 0.1
+        self._quit_timeout = 0.25    # default timeout for commands like quit
 
+    def quit(self):
+        """quit rayUI if it is running
+        """
+        if self._runner.isrunning:
+            self._runner._write("quit")
+            try:
+                self._process.wait(self._quit_timeout)
+            except subprocess.TimeoutExpired:
+                raise TimeoutError("Timeout while trying to quit")
+        
     def load(self,rml_path,**kwargs):
         return self._cmd_io("load",rml_path,**kwargs)
 
     def trace(self,**kwargs):
         return self._cmd_io("trace",**kwargs)
 
-    def export(self,*args,**kwargs):
-        raise NotImplementedError("export command is not yet implemented, need some documentation")
+    def export(self,objects:str, parameters:str, export_path:str, data_prefix:str, **kwargs):
+        """_summary_
+
+        Args:
+            objects (str): string with objects list, e.g. "Dipole,DetectorAtFocus"
+            parameters (str): stromg with parameters to export, e.g. "ScalarBeamProperties,ScalarElementProperties"
+            export_path (str): path where to save the data
+            data_prefix (str): prefix for the putput files
+
+        Returns:
+            _type_: _description_
+        """
+        payload = objects + " " + parameters + " " + export_path + " " + data_prefix
+        return self._cmd_io("export",payload,**kwargs)
 
     def _cmd_io(self,cmd:str,payload:str=None,/, cbNewLine=None):
         """_cmd_io is an internal method which helps to execute a rayui command.
