@@ -1,4 +1,5 @@
-# Ray runner
+###############################################################################
+# RayUI process handling and RayUI command API
 
 from . import config
 from .errors import RayPyRunnerError,RayPyError,TimeoutError
@@ -6,6 +7,7 @@ import os
 import subprocess
 import time
 
+###############################################################################
 class RayUIRunner:
     """RayUIRunner class implements all logic to start a RayUI process
     """
@@ -105,8 +107,7 @@ class RayUIRunner:
                 return ray_path
         raise RayPyRunnerError("Can not detect rayui installation path!")
  
-
- # sketich RayUI API calls
+###############################################################################
 class RayUIAPI:
     def __init__(self,runner:RayUIRunner) -> None:
         if runner is None:
@@ -119,6 +120,9 @@ class RayUIAPI:
 
     def trace(self,**kwargs):
         return self._cmd_io("trace",**kwargs)
+
+    def export(self,*args,**kwargs):
+        raise NotImplementedError("export command is not yet implemented, need some documentation")
 
     def _cmd_io(self,cmd:str,payload:str=None,/, cbNewLine=None):
         """_cmd_io is an internal method which helps to execute a rayui command.
