@@ -10,6 +10,7 @@
 from xml.sax import make_parser, handler
 import keyword
 
+
 ###############################################################################
 
 
@@ -188,6 +189,19 @@ class ParamElement(XmlElement):
         attr_name = list(self._attributes.keys())
         return children_names + attr_name + ['cdata']
 
+    def __getattr__(self, key):
+        matching_children = [x for x in self.children if x._name == key]
+        if key in self._attributes:
+            matching_children.append(self._attributes[key])
+        if matching_children:
+            if len(matching_children) == 1:
+                self.__dict__[key] = matching_children[0]
+                return matching_children[0]
+            else:
+                self.__dict__[key] = matching_children
+                return matching_children
+        else:
+            raise AttributeError("'%s' has no attribute '%s'" % (self._name, key))
 
 
 ###############################################################################
