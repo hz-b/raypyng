@@ -39,8 +39,14 @@ def xml2dict(t):
             d[t.tag] = text
     return d
 
+# some more info:
+# https://stackoverflow.com/questions/7684333/converting-xml-to-dictionary-using-elementtree
+
 # see more here for the info: https://stackoverflow.com/questions/4984647/accessing-dict-keys-like-an-attribute
 class AttrDict(dict):
     def __init__(self, *args, **kwargs):
         super(AttrDict, self).__init__(*args, **kwargs)
         self.__dict__ = self
+
+# various xml parsers
+# https://www.delftstack.com/howto/python/python-xml-parser/

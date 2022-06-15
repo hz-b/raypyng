@@ -1,5 +1,17 @@
 ## installation
 
+0. Install python3:
+
+```
+sudo apt install python3 python3-venv python3-wheel -y
+```
+
+or  (I still need to check ...)
+
+```
+sudo apt-get install python3-dev python3-pip python3-venv python3-wheel -y
+```
+
 1. Initialize virtual env:
 ```
 python3 -m venv .venv
@@ -8,6 +20,11 @@ python3 -m venv .venv
 2. activate venv
 
 3. install dependencies:
+
+```
+python3 -m pip install wheel
+```
+
 
 ```
 python3 -m pip install numpy matplotlib lxml ipython psutil
@@ -89,3 +106,33 @@ Modify ray to use xvfb:
     ray_loc = "xvfb-run "+path_to_RAY+"/rayui.sh"
 ```
 Note: xvfb-run script is a part of the xvfb distribuion and runs an app on a new virtual X11 server
+
+
+
+6. What we want to have for the Rml file processing:
+
+Simple access like:
+
+```ipython
+# load template and be ready to save to mybeamline.rml
+bl = RmlFile('mybeamline.rml', template='rml/beamline.rml')
+
+# modify some parameter
+bl.Screen2.distanceImagePlane = 4348.5
+
+# modify another parameter (note that original rml object name has spaces)
+bl.SimpleUndulator.numberRays = 10000
+# access rml level info:
+print(bl.SimpleUndulator.rml().name)
+"Simple Undulator"
+print(bl.SimpleUndulator.rml().type)
+"Simple Undulator"
+
+
+# see some service information
+print(bl.rml().version)  # Access to non-beamline parts of the rml file using rml() method
+print(bl.rml().ExtraInfo)
+
+# save the result
+bl.save()
+```
