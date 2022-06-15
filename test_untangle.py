@@ -7,6 +7,8 @@
 
 import RayPyNG.xmltools as xml
 
-e = xml.parse('rml/beamline.rml')
+e1 = xml.parse('rml/beamline.rml')
+e2 = xml.parse('tests/rml/high_energy_branch_flux_1200.rml')
+
 
 #e.lab.beamline.object[1].param[3]

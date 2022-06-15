@@ -8,10 +8,7 @@
 ###############################################################################
 
 from xml.sax import make_parser, handler
-import keyword
-
-
-###############################################################################
+from .collections import SafeValueDict, protectName
 
 
 ###############################################################################
@@ -28,7 +25,7 @@ class XmlElement:
         _type_: _description_
     """
     #####################################
-    def __init__(self, name:str, attributes:dict):
+    def __init__(self, name:str, attributes:dict, **kwargs):
         """_summary_
 
         Args:
@@ -127,7 +124,7 @@ class XmlElement:
 
 ###############################################################################
 class XmlAttributedNameElement(XmlElement):
-    def __init__(self, name_attribute:str, name: str, attributes: dict):
+    def __init__(self, name_attribute:str, name: str, attributes: dict, **kwargs):
         super().__init__(name, attributes)
         self._name_attribute = name_attribute
 
@@ -165,19 +162,19 @@ class XmlAttributedNameElement(XmlElement):
 
 ###############################################################################
 class BeamlineElement(XmlAttributedNameElement):
-    def __init__(self, name: str, attributes: dict):
-        super().__init__("name",name, attributes)
+    def __init__(self, name: str, attributes: dict, **kwargs):
+        super().__init__("name",name, attributes, **kwargs)
 
 ###############################################################################
 class ObjectElement(XmlAttributedNameElement):
-    def __init__(self, name: str, attributes: dict):
-        super().__init__("id",name, attributes)
+    def __init__(self, name: str, attributes: dict, **kwargs):
+        super().__init__("id",name, attributes, **kwargs)
 
 
 ###############################################################################
 class ParamElement(XmlElement):
-    def __init__(self, name: str, attributes: dict):
-        super().__init__(name, attributes)
+    def __init__(self, name: str, attributes: dict, **kwargs):
+        super().__init__(name, attributes, **kwargs)
 
     def __dir__(self):
         """enumerating child objects by its attibute name
@@ -205,38 +202,20 @@ class ParamElement(XmlElement):
 
 
 ###############################################################################
+global_known_classes = {"beamline":BeamlineElement, 
+                        "object":ObjectElement,
+                        "param":ParamElement}
 class Handler(handler.ContentHandler):
     
     #####################################
-    def __init__(self):
+    def __init__(self,/,known_classes=None):
         self.root = XmlElement(None, None)
         self.root.is_root = True
         self.elements = []
-
-
-    #####################################
-    def protectName(self,name:str)->str:
-        """convert name into python attribute safe name
-
-        Args:
-            name (str): _description_
-
-        Returns:
-            str: _description_
-        """
-
-        # repalce special characters with _
-        name = name.replace("-", "_")
-        name = name.replace(".", "_")
-        name = name.replace(":", "_")
-
-        # delete spaces
-        name = name.replace(" ", "")
-
-        # adding trailing _ for keywords
-        if keyword.iskeyword(name):
-            name += "_"
-        return name
+        if known_classes is None:
+            self._known_classes = global_known_classes
+        else:
+            self._known_classes = known_classes
 
 
     #####################################
@@ -248,20 +227,17 @@ class Handler(handler.ContentHandler):
             attributes (_type_): _description_
         """
         # convert names to a python safe version of it
-        name = self.protectName(name)
+        name = protectName(name)
         print("DEBUG::startElement::name=",name)
 
         # store attributes in a dictionary
-        attrs = dict()
+        attrs = SafeValueDict()
         for k, v in attributes.items():
-            attrs[k] = self.protectName(v)
+            attrs[k] = v#self.protectName(v)
         
         # create a new element
-        known_classes = {"beamline":BeamlineElement, 
-                        "object":ObjectElement,
-                        "param":ParamElement}
-        if name in known_classes.keys():
-            element = known_classes[name](name, attrs)
+        if name in self._known_classes.keys():
+            element = self._known_classes[name](name, attrs)
         else:
             element = XmlElement(name, attrs)
 
@@ -291,13 +267,13 @@ class Handler(handler.ContentHandler):
         self.elements[-1].add_cdata(cdata.strip())
 
 ###############################################################################
-def parse(filename:str, **parser_features)->XmlElement:
+def parse(filename:str, /, known_classes = None, **parser_features)->XmlElement:
     if filename is None:
         raise ValueError("parse() takes a filename")
     parser = make_parser()
     for feature, value in parser_features.items():
         parser.setFeature(getattr(handler, feature), value)
-    sax_handler = Handler()
+    sax_handler = Handler(known_classes=known_classes)
     parser.setContentHandler(sax_handler)
     parser.parse(filename)
     return sax_handler.root
