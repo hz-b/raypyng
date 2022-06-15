@@ -125,9 +125,10 @@ class XmlElement:
         return key in dir(self)
 
 ###############################################################################
-class BeamlineElement(XmlElement):
-    def __init__(self, name: str, attributes: dict):
+class XmlAttributedNameElement(XmlElement):
+    def __init__(self, name_attribute:str, name: str, attributes: dict):
         super().__init__(name, attributes)
+        self._name_attribute = name_attribute
 
     def __dir__(self):
         """enumerating child objects by its attibute name
@@ -135,11 +136,21 @@ class BeamlineElement(XmlElement):
         Returns:
             _type_: _description_
         """
-        children_names = [x._attributes["name"] for x in self.children]
+        children_names = [x._attributes[self._name_attribute] for x in self.children]
         return children_names
 
+    # def __setattr__(self, __name: str, __value) -> None:
+    #     if __name!="_name" and __name!="_attributes" and __name!="children" and __name!="is_root"  and __name!="cdata" and __name!="_name_attribute":
+    #         raise AttributeError("XmlAttributedNameElement object attribute '{}' is read-only".format(__name))
+
+    # def __setattr__(self, __name: str, __value) -> None:
+    #     if hasattr(self,__name):
+    #         return super().__setattr__(__name, __value)
+    #     else:
+    #         raise AttributeError("XmlAttributedNameElement object attribute '{}' is read-only".format(__name))
+
     def __getattr__(self, key):
-        matching_children = [x for x in self.children if x._attributes["name"] == key]
+        matching_children = [x for x in self.children if x._attributes[self._name_attribute] == key]
         if matching_children:
             if len(matching_children) == 1:
                 self.__dict__[key] = matching_children[0]
@@ -149,9 +160,21 @@ class BeamlineElement(XmlElement):
                 return matching_children
         else:
             raise AttributeError("'%s' has no attribute '%s'" % (self._name, key))
+
 
 ###############################################################################
-class ObjectElement(XmlElement):
+class BeamlineElement(XmlAttributedNameElement):
+    def __init__(self, name: str, attributes: dict):
+        super().__init__("name",name, attributes)
+
+###############################################################################
+class ObjectElement(XmlAttributedNameElement):
+    def __init__(self, name: str, attributes: dict):
+        super().__init__("id",name, attributes)
+
+
+###############################################################################
+class ParamElement(XmlElement):
     def __init__(self, name: str, attributes: dict):
         super().__init__(name, attributes)
 
@@ -161,20 +184,10 @@ class ObjectElement(XmlElement):
         Returns:
             _type_: _description_
         """
-        children_names = [x._attributes["id"] for x in self.children]
-        return children_names
+        children_names = [x._name for x in self.children]
+        attr_name = list(self._attributes.keys())
+        return children_names + attr_name + ['cdata']
 
-    def __getattr__(self, key):
-        matching_children = [x for x in self.children if x._attributes["id"] == key]
-        if matching_children:
-            if len(matching_children) == 1:
-                self.__dict__[key] = matching_children[0]
-                return matching_children[0]
-            else:
-                self.__dict__[key] = matching_children
-                return matching_children
-        else:
-            raise AttributeError("'%s' has no attribute '%s'" % (self._name, key))
 
 
 ###############################################################################
@@ -230,7 +243,9 @@ class Handler(handler.ContentHandler):
             attrs[k] = self.protectName(v)
         
         # create a new element
-        known_classes = {"beamline":BeamlineElement, "object":ObjectElement}
+        known_classes = {"beamline":BeamlineElement, 
+                        "object":ObjectElement,
+                        "param":ParamElement}
         if name in known_classes.keys():
             element = known_classes[name](name, attrs)
         else:
