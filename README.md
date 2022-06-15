@@ -135,4 +135,13 @@ print(bl.rml().ExtraInfo)
 
 # save the result
 bl.save()
+
+
+def setSourceDivergence(mrad):
+    if bl.lab.beamline[0].type=="Dipole":
+        bl.lab.beamline[0].sourceWidth = mrad*1000 # dipole param is in urads!
+    elif bl.lab.beamline[0].type=="SimpleUndulator":
+        bl.lab.beamline[0].sourceWidth = mrad
+    else
+        raise Exception("Unknonw source type")
 ```

@@ -1,7 +1,6 @@
 ###############################################################################
 # Reading/Writing/Modifying RML files
-from lxml import etree # ???
-import xml.etree.ElementTree as ET # ???
+from . import xmltools as xml
 
 ###############################################################################
 class BeamlineObject:
@@ -18,6 +17,9 @@ class RMLFile:
     def __init__(self,filename:str=None,/,template:str=None) -> None:
         self._filename=filename
         self._template = template if template is not None else filename
+        self.__known_classes = {"beamline":BeamlineElement, 
+                        "object":ObjectElement,
+                        "param":ParamElement}
         pass
 
     def _read(self,file:str=None):
@@ -28,4 +30,4 @@ class RMLFile:
         """
         if file is None:
             file = self._template
-        self._tree = ET.parse(file)
+        xml.parse(file,known_classes = self.__known_classes)        
