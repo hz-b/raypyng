@@ -8,13 +8,54 @@
 ###############################################################################
 
 from xml.sax import make_parser, handler
-from .collections import SafeValueDict, SafeValueList, sanitizeName
+from .collections import MappedList, MappedDict
 
 import typing
+import keyword
 
 ###############################################################################
 class XmlChildrenList(list):
     pass
+
+
+###############################################################################
+def sanitizeName(name:str)->str:
+    """convert name into python attribute safe name
+
+    Args:
+        name (str): _description_
+
+    Returns:
+        str: _description_
+    """
+
+    if name is None:
+        return None
+
+    # repalce special characters with _
+    name = name.replace("-", "_")
+    name = name.replace(".", "_")
+    name = name.replace(":", "_")
+
+    # delete spaces
+    name = name.replace(" ", "")
+
+    # adding trailing _ for keywords
+    if keyword.iskeyword(name):
+        name += "_"
+    return name
+
+###############################################################################
+class SafeValueDict(MappedDict):
+    def __init__(self, dict=None, **kwargs):
+        super().__init__(sanitizeName, dict, **kwargs)
+
+###############################################################################
+class SafeValueList(MappedList):
+    def __init__(self, initlist=None):
+        super().__init__(sanitizeName, initlist)
+
+
 
 ###############################################################################
 class XmlElement:
@@ -187,52 +228,7 @@ class XmlAttributedNameElement(XmlElement):
         else:
             raise AttributeError("'%s' has no attribute '%s'" % (self._name, key))
 
-
-###############################################################################
-class BeamlineElement(XmlAttributedNameElement):
-    def __init__(self, name: str, attributes: dict, **kwargs):
-        super().__init__("name",name, attributes, **kwargs)
-
-###############################################################################
-class ObjectElement(XmlAttributedNameElement):
-    def __init__(self, name: str, attributes: dict, **kwargs):
-        super().__init__("id",name, attributes, **kwargs)
-
-
-###############################################################################
-class ParamElement(XmlElement):
-    def __init__(self, name: str, attributes: dict, **kwargs):
-        super().__init__(name, attributes, **kwargs)
-
-    def __dir__(self):
-        """enumerating child objects by its attibute name
-
-        Returns:
-            _type_: _description_
-        """
-        children_names = [x._name for x in self._children]
-        attr_name = list(self._attributes.keys())
-        return children_names + attr_name + ['cdata']
-
-    def __getattr__(self, key):
-        matching_children = [x for x in self._children if x._name == key]
-        if key in self._attributes:
-            matching_children.append(self._attributes[key])
-        if matching_children:
-            if len(matching_children) == 1:
-                self.__dict__[key] = matching_children[0]
-                return matching_children[0]
-            else:
-                self.__dict__[key] = matching_children
-                return matching_children
-        else:
-            raise AttributeError("'%s' has no attribute '%s'" % (self._name, key))
-
-
-###############################################################################
-global_known_classes = {"beamline":BeamlineElement, 
-                        "object":ObjectElement,
-                        "param":ParamElement}
+global_known_classes = {} # part of the development code
 class Handler(handler.ContentHandler):
     
     #####################################
@@ -307,7 +303,8 @@ def parse(filename:str, /, known_classes = None, **parser_features)->XmlElement:
     return sax_handler.root
 
 
-def serialize(element:XmlElement,/,indent = ""):
+###############################################################################
+def serialize(element:XmlElement,/,indent = "", filename=None):
     strlist = [indent+'<'+element.original_name()]
     strlist.append(' ')
     if element.attributes() is not None:
@@ -325,4 +322,5 @@ def serialize(element:XmlElement,/,indent = ""):
         if element.cdata is not None:
             strlist.append(element.cdata)
     strlist += ['</',element.original_name(),'>\n']
-    return ''.join(strlist)
+    result =  ''.join(strlist)
+    return result

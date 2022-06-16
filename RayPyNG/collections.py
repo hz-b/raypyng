@@ -2,39 +2,8 @@
 ###############################################################################
 # Generic superclasses for collections line dict() or list()
 
-from collections import UserDict, UserList
-import keyword
-
 from collections.abc import MutableMapping,MutableSequence
 import typing
-
-###############################################################################
-def sanitizeName(name:str)->str:
-    """convert name into python attribute safe name
-
-    Args:
-        name (str): _description_
-
-    Returns:
-        str: _description_
-    """
-
-    if name is None:
-        return None
-
-    # repalce special characters with _
-    name = name.replace("-", "_")
-    name = name.replace(".", "_")
-    name = name.replace(":", "_")
-
-    # delete spaces
-    name = name.replace(" ", "")
-
-    # adding trailing _ for keywords
-    if keyword.iskeyword(name):
-        name += "_"
-    return name
-
 
 ###############################################################################
 # based on the collections.UserList implementation from python 3.8.10
@@ -250,15 +219,4 @@ class MappedDict(MutableMapping):
         for key in iterable:
             d[key] = value
         return d
-
-
-###############################################################################
-class SafeValueDict(MappedDict):
-    def __init__(self, dict=None, **kwargs):
-        super().__init__(sanitizeName, dict, **kwargs)
-
-###############################################################################
-class SafeValueList(MappedList):
-    def __init__(self, initlist=None):
-        super().__init__(sanitizeName, initlist)
 
