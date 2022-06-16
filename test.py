@@ -9,44 +9,10 @@ r.run()
 a.load("test")
 """
 
+from RayPyNG.rml import RMLFile
 
-import xml.etree.ElementTree as ET
-tree = ET.parse('rml/beamline.rml')
-root = tree.getroot()
+rml1 = RMLFile('tests/rml1.xml',template='rml/beamline.rml')
+rml2 = RMLFile('tests/rml2.xml',template='tests/rml/high_energy_branch_flux_1200.rml')
 
-from collections import defaultdict
-
-# code from https://www.delftstack.com/howto/python/convert-xml-to-dictionary-python/
-def xml2dict(t):
-    d = {t.tag: {} if t.attrib else None}
-    children = list(t)
-    if children:
-        dd = defaultdict(list)
-        for dc in map(xml2dict, children):
-            for k, v in dc.items():
-                dd[k].append(v)
-        d = {t.tag: {k: v[0] if len(v) == 1 else v
-                     for k, v in dd.items()}}
-    if t.attrib:
-        d[t.tag].update(('@' + k, v)
-                        for k, v in t.attrib.items())
-    if t.text:
-        text = t.text.strip()
-        if children or t.attrib:
-            if text:
-              d[t.tag]['#text'] = text
-        else:
-            d[t.tag] = text
-    return d
-
-# some more info:
-# https://stackoverflow.com/questions/7684333/converting-xml-to-dictionary-using-elementtree
-
-# see more here for the info: https://stackoverflow.com/questions/4984647/accessing-dict-keys-like-an-attribute
-class AttrDict(dict):
-    def __init__(self, *args, **kwargs):
-        super(AttrDict, self).__init__(*args, **kwargs)
-        self.__dict__ = self
-
-# various xml parsers
-# https://www.delftstack.com/howto/python/python-xml-parser/
+rml1.write()
+rml2.write()

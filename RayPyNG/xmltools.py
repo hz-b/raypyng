@@ -250,9 +250,7 @@ class Handler(handler.ContentHandler):
             name (_type_): _description_
             attributes (_type_): _description_
         """
-        # convert names to a python safe version of it
-        #name = sanitizeName(name)
-        print("DEBUG::startElement::name=",name)
+        #print("DEBUG::startElement::name=",name)
 
         # store attributes in a dictionary
         attrs = SafeValueDict()
@@ -305,34 +303,32 @@ def parse(filename:str, /, known_classes = None, **parser_features)->XmlElement:
 
 ###############################################################################
 def serialize(element:XmlElement,/,indent = "", filename=None):
-    strlist = []
-    #def serialize_children(element,indent):
-    if element.is_root:
+    def serialize_children(strlist,element,indent, base_indent):
         if element.children() is not None:
             if len(element.children()) > 0:
                 strlist.append('\n')
                 for c in element.children():
-                    strlist.append(serialize(c))
-                strlist += [indent]
-            if element.cdata is not None:
+                    strlist.append(serialize(c,indent=indent))
+                strlist += [base_indent]
+        if element.cdata is not None:
                 strlist.append(element.cdata)
+        return ''.join(strlist)
+
+    strlist = []
+    if element.is_root:
+        serialize_children(strlist,element,"","")
     else:
         strlist = [indent+'<'+element.original_name()]
-        strlist.append(' ')
-        if element.attributes() is not None:
+        if element.attributes() is not None and len(element.attributes())>0:
+            strlist.append(' ')
             attrs = []
             for k,v in element.attributes().original().items():
                 attrs+=[k+'="'+v+'"']
             strlist.append(" ".join(attrs))
         strlist.append('>')
-        if element.children() is not None:
-            if len(element.children()) > 0:
-                strlist.append('\n')
-                for c in element.children():
-                    strlist.append(serialize(c,indent=indent+"    "))
-                strlist += [indent]
-            if element.cdata is not None:
-                strlist.append(element.cdata)
+    
+        serialize_children(strlist,element,indent+"    ",base_indent=indent)
+
         strlist += ['</',element.original_name(),'>\n']
     result =  ''.join(strlist)
     return result

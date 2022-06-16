@@ -70,13 +70,14 @@ class RMLFile:
             file = self._template
         self._root = xml.parse(file,known_classes = self.__known_classes)      
 
+    def xml(self):
+        return xml.serialize(self._root).strip()
+
     def write(self,file:str=None):
         if file is None:
             file = self._filename
-        xmlstr = xml.serialize(self._root)
-        #print(xmlstr)
         with open(file,"w") as f:
-            f.write(xmlstr)
+            f.write(self.xml())
 
 ###############################################################################
 # test function for the data parsing
