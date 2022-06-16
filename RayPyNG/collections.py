@@ -121,9 +121,9 @@ class MappedList(MutableSequence):
         inst = self.__class__.__new__(self.__class__)
         inst.__dict__.update(self.__dict__)
         # Create a copy and avoid triggering descriptors
-        inst.__dict__["__data"] = self.__dict__["__data"][:]
-        inst.__dict__["__original_data"] = self.__dict__["__original_data"][:]
-        inst.__dict__["__func"] = self.__dict__["__func"][:]
+        inst.__dict__["_MappedList__data"] = self.__dict__["_MappedList__data"][:]
+        inst.__dict__["_MappedList__original_data"] = self.__dict__["_MappedList__original_data"][:]
+        inst.__dict__["_MappedList__func"] = self.__dict__["_MappedList__func"]
         return inst
     def append(self, item): 
         self.__original_data.append(item)
