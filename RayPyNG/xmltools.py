@@ -8,8 +8,13 @@
 ###############################################################################
 
 from xml.sax import make_parser, handler
-from .collections import SafeValueDict, protectName
+from .collections import SafeValueDict, SafeValueList, sanitizeName
 
+import typing
+
+###############################################################################
+class XmlChildrenList(list):
+    pass
 
 ###############################################################################
 class XmlElement:
@@ -25,24 +30,47 @@ class XmlElement:
         _type_: _description_
     """
     #####################################
-    def __init__(self, name:str, attributes:dict, **kwargs):
+    def __init__(self, name:str, attributes:typing.MutableMapping, **kwargs):
         """_summary_
 
         Args:
             name (str): element name
-            attributes (dict): element attributes
+            attributes (dict): element attributes as a dict-like object
         """
-        self._name = name
+        if name is not None and not isinstance(name,str):
+            raise TypeError("name parameter of 'XmlElement' class must be a string or 'None', got {}".format(type(name)))
+        self._original_name = name
+        self._name = sanitizeName(name)
+        #self._name = name
+        if attributes is not None and not isinstance(attributes,typing.MutableMapping):
+            raise TypeError("attributes parameter of 'XmlElement' class must be a dict-line object or 'None', got {}".format(type(attributes)))
         self._attributes = attributes
-        self.children = []
+        self._children = []
         self.is_root = False
         self.cdata = ""
+
+
+    #@property
+    def children(self):
+        return self._children
+
+    #@property
+    def attributes(self):
+        return self._attributes
+
+    #@property
+    def original_name(self):
+        return self._original_name
+
+    #@property
+    def name(self):
+        return self._name
 
     def add_child(self, element):
         """
         Store child elements.
         """
-        self.children.append(element)
+        self._children.append(element)
 
     def add_cdata(self, cdata):
         """
@@ -61,9 +89,9 @@ class XmlElement:
         Find a child element by name
         """
         if name:
-            return [e for e in self.children if e._name == name]
+            return [e for e in self._children if e._name == name]
         else:
-            return self.children
+            return self._children
 
 
     # dictionary line access to the elements
@@ -72,7 +100,7 @@ class XmlElement:
 
     # attribute aka ./dot access to the fields
     def __getattr__(self, key):
-        matching_children = [x for x in self.children if x._name == key]
+        matching_children = [x for x in self._children if x._name == key]
         if matching_children:
             if len(matching_children) == 1:
                 self.__dict__[key] = matching_children[0]
@@ -86,7 +114,7 @@ class XmlElement:
     def __hasattribute__(self, name):
         if name in self.__dict__:
             return True
-        return any(x._name == name for x in self.children)
+        return any(x._name == name for x in self._children)
 
     def __iter__(self):
         yield self
@@ -95,7 +123,7 @@ class XmlElement:
         return "Element <%s> with attributes %s, children %s and cdata %s" % (
             self._name,
             self._attributes,
-            self.children,
+            self._children,
             self.cdata,
         )
 
@@ -113,11 +141,11 @@ class XmlElement:
         return self.cdata == val
 
     def __dir__(self):
-        children_names = [x._name for x in self.children]
+        children_names = [x._name for x in self._children]
         return children_names
 
     def __len__(self):
-        return len(self.children)
+        return len(self._children)
 
     def __contains__(self, key):
         return key in dir(self)
@@ -134,7 +162,7 @@ class XmlAttributedNameElement(XmlElement):
         Returns:
             _type_: _description_
         """
-        children_names = [x._attributes[self._name_attribute] for x in self.children]
+        children_names = [x._attributes[self._name_attribute] for x in self._children]
         return children_names
 
     # def __setattr__(self, __name: str, __value) -> None:
@@ -148,7 +176,7 @@ class XmlAttributedNameElement(XmlElement):
     #         raise AttributeError("XmlAttributedNameElement object attribute '{}' is read-only".format(__name))
 
     def __getattr__(self, key):
-        matching_children = [x for x in self.children if x._attributes[self._name_attribute] == key]
+        matching_children = [x for x in self._children if x._attributes[self._name_attribute] == key]
         if matching_children:
             if len(matching_children) == 1:
                 self.__dict__[key] = matching_children[0]
@@ -182,12 +210,12 @@ class ParamElement(XmlElement):
         Returns:
             _type_: _description_
         """
-        children_names = [x._name for x in self.children]
+        children_names = [x._name for x in self._children]
         attr_name = list(self._attributes.keys())
         return children_names + attr_name + ['cdata']
 
     def __getattr__(self, key):
-        matching_children = [x for x in self.children if x._name == key]
+        matching_children = [x for x in self._children if x._name == key]
         if key in self._attributes:
             matching_children.append(self._attributes[key])
         if matching_children:
@@ -227,7 +255,7 @@ class Handler(handler.ContentHandler):
             attributes (_type_): _description_
         """
         # convert names to a python safe version of it
-        name = protectName(name)
+        #name = sanitizeName(name)
         print("DEBUG::startElement::name=",name)
 
         # store attributes in a dictionary
@@ -277,3 +305,24 @@ def parse(filename:str, /, known_classes = None, **parser_features)->XmlElement:
     parser.setContentHandler(sax_handler)
     parser.parse(filename)
     return sax_handler.root
+
+
+def serialize(element:XmlElement,/,indent = ""):
+    strlist = [indent+'<'+element.original_name()]
+    strlist.append(' ')
+    if element.attributes() is not None:
+        attrs = []
+        for k,v in element.attributes().original().items():
+            attrs+=[k+'="'+v+'"']
+        strlist.append(" ".join(attrs))
+    strlist.append('>')
+    if element.children() is not None:
+        if len(element.children()) > 0:
+            strlist.append('\n')
+            for c in element.children():
+                strlist.append(serialize(c,indent=indent+"    "))
+            strlist += [indent]
+        if element.cdata is not None:
+            strlist.append(element.cdata)
+    strlist += ['</',element.original_name(),'>\n']
+    return ''.join(strlist)
