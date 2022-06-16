@@ -224,9 +224,9 @@ class MappedDict(MutableMapping):
         inst = self.__class__.__new__(self.__class__)
         inst.__dict__.update(self.__dict__)
         # Create a copy and avoid triggering descriptors
-        inst.__dict__["__data"] = self.__dict__["__data"].copy()
-        inst.__dict__["__original_data"] = self.__dict__["__original_data"].copy()
-        inst.__dict__["__func"] = self.__dict__["__func"].copy()
+        inst.__dict__["_MappedDict__data"] = self.__dict__["_MappedDict__data"].copy()
+        inst.__dict__["_MappedDict__original_data"] = self.__dict__["_MappedDict__original_data"].copy()
+        inst.__dict__["_MappedDict__func"] = self.__dict__["_MappedDict__func"] 
         return inst
 
     def copy(self):
