@@ -54,9 +54,13 @@ class RMLFile:
         self.__known_classes = {"beamline":BeamlineElement, 
                                 "object":ObjectElement,
                                 "param":ParamElement}
-        pass
+        self.read()
+        self.beamline = self._root.lab.beamline
+        
 
-    def _read(self,file:str=None):
+
+    ###################################
+    def read(self,file:str=None):
         """read rml file
 
         Args:
@@ -64,7 +68,15 @@ class RMLFile:
         """
         if file is None:
             file = self._template
-        xml.parse(file,known_classes = self.__known_classes)        
+        self._root = xml.parse(file,known_classes = self.__known_classes)      
+
+    def write(self,file:str=None):
+        if file is None:
+            file = self._filename
+        xmlstr = xml.serialize(self._root)
+        #print(xmlstr)
+        with open(file,"w") as f:
+            f.write(xmlstr)
 
 ###############################################################################
 # test function for the data parsing

@@ -305,22 +305,34 @@ def parse(filename:str, /, known_classes = None, **parser_features)->XmlElement:
 
 ###############################################################################
 def serialize(element:XmlElement,/,indent = "", filename=None):
-    strlist = [indent+'<'+element.original_name()]
-    strlist.append(' ')
-    if element.attributes() is not None:
-        attrs = []
-        for k,v in element.attributes().original().items():
-            attrs+=[k+'="'+v+'"']
-        strlist.append(" ".join(attrs))
-    strlist.append('>')
-    if element.children() is not None:
-        if len(element.children()) > 0:
-            strlist.append('\n')
-            for c in element.children():
-                strlist.append(serialize(c,indent=indent+"    "))
-            strlist += [indent]
-        if element.cdata is not None:
-            strlist.append(element.cdata)
-    strlist += ['</',element.original_name(),'>\n']
+    strlist = []
+    #def serialize_children(element,indent):
+    if element.is_root:
+        if element.children() is not None:
+            if len(element.children()) > 0:
+                strlist.append('\n')
+                for c in element.children():
+                    strlist.append(serialize(c))
+                strlist += [indent]
+            if element.cdata is not None:
+                strlist.append(element.cdata)
+    else:
+        strlist = [indent+'<'+element.original_name()]
+        strlist.append(' ')
+        if element.attributes() is not None:
+            attrs = []
+            for k,v in element.attributes().original().items():
+                attrs+=[k+'="'+v+'"']
+            strlist.append(" ".join(attrs))
+        strlist.append('>')
+        if element.children() is not None:
+            if len(element.children()) > 0:
+                strlist.append('\n')
+                for c in element.children():
+                    strlist.append(serialize(c,indent=indent+"    "))
+                strlist += [indent]
+            if element.cdata is not None:
+                strlist.append(element.cdata)
+        strlist += ['</',element.original_name(),'>\n']
     result =  ''.join(strlist)
     return result
