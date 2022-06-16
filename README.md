@@ -145,3 +145,41 @@ def setSourceDivergence(mrad):
     else
         raise Exception("Unknonw source type")
 ```
+
+
+7. Paramter setting API
+
+Idea 1
+```ipython
+rml1.beamline.M1.inicidence.value = Range(1,5,points=21)
+rml1.beamline.M1.inicidence.value = Range(lambda: random(1,5),points=21)
+```
+
+Idea 2
+```ipython
+
+Element(rml1.beamline.M2).Parameter("incidence",Range(lambda: random(1,5),points=21))
+                         .Parameter("cff",5) # Always use 5 as a value
+                         .Parameter("xpos", Range(1,5)) # number of points automatically linked to the first parameter
+
+Element(rml1.beamline.M3).Parameter("incidence",Range(1,3,points=11))
+```
+
+idea3:
+```ipython
+params = [
+            {rml1.beamline.M1.alpha:[1 2 3 4], rml1.beamline.M2.beta:[5 6 7 8]}}, # set two parameters: "alpha" and "beta" in a dependent way. 
+            {rml1.beamline.M2.posX:0.1}, # set a value - in independed way
+            {rml1.beamline.M2.posy:range(1,5,1)} # set a range of  values - in independed way
+        ]
+
+simulate(params)
+
+
+with rml1.beamline:
+    params = [
+            {M1.alpha:[1 2 3 4], M2.beta:[5 6 7 8]}}, # set two parameters: "alpha" and "beta" in a dependent way. 
+            {M2.posX:0.1}, # set a value - in independed way
+            {M2.posY:range(1,5,1)} # set a range of  values - in independed way
+        ]
+```
