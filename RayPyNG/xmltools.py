@@ -191,6 +191,13 @@ class XmlElement:
     def __contains__(self, key):
         return key in dir(self)
 
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        pass#return True
+
 ###############################################################################
 class XmlAttributedNameElement(XmlElement):
     def __init__(self, name_attribute:str, name: str, attributes: dict, **kwargs):
