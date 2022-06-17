@@ -55,7 +55,6 @@ class RMLFile:
                                 "object":ObjectElement,
                                 "param":ParamElement}
         self.read()
-        self.beamline = self._root.lab.beamline
         
 
 
@@ -69,6 +68,7 @@ class RMLFile:
         if file is None:
             file = self._template
         self._root = xml.parse(file,known_classes = self.__known_classes)      
+        self.beamline = self._root.lab.beamline
 
     def xml(self):
         return xml.serialize(self._root).strip()
@@ -79,6 +79,13 @@ class RMLFile:
         with open(file,"w") as f:
             f.write(self.xml())
 
+    def __str__(self) -> str:
+        return f"RMLFile('{self._filename}',template='{self._template}')"
+
+    def __repr__(self) -> str:
+        return f"RMLFile('{self._filename}',template='{self._template}')"
+
+    
 ###############################################################################
 # test function for the data parsing
 def parse(filename:str):
