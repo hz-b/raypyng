@@ -14,8 +14,45 @@ import typing
 import keyword
 
 ###############################################################################
-class XmlChildrenList(list):
-    pass
+class XmlAttribute:
+    def __init__(self,xmlvalue=None) -> None:
+        if xmlvalue is not None:
+            self.__value=xmlvalue
+
+    @property
+    def value(self):
+        return self.__value
+    
+    @value.setter
+    def value(self,pyvalue):
+        self.__value = pyvalue
+
+    def __str__(self):
+        return str(self.__value)
+
+###############################################################################
+class XmlMappedAttribute(XmlAttribute):
+    def __init__(self,xmlvalue=None,map=None) -> None:
+        if map is None:
+            raise ValueError(f"map parameter is required and can not be 'None'")
+        self.__map = map
+        super().__init__(xmlvalue)
+        if xmlvalue in self.__map:
+            self.value = self.__map[xmlvalue] 
+        else:
+            raise ValueError(f"Invalid value for the XmlAttribute: {xmlvalue}")
+            
+    def __str__(self):
+        for k,v in self.__map.items():
+            if v==self.value:
+                return k
+        raise ValueError(f"Can not map to bool: {self.value}")
+
+###############################################################################
+class XmlBoolAttribute(XmlMappedAttribute):
+    def __init__(self,xmlvalue=None,true='True',false='False') -> None:
+        m = {true:True,false:False}
+        super().__init__(xmlvalue,m)
 
 
 ###############################################################################
@@ -85,6 +122,7 @@ class XmlElement:
         #self._name = name
         if attributes is not None and not isinstance(attributes,typing.MutableMapping):
             raise TypeError("attributes parameter of 'XmlElement' class must be a dict-line object or 'None', got {}".format(type(attributes)))
+        
         self._attributes = attributes
         self._children = []
         self.is_root = False
@@ -161,7 +199,7 @@ class XmlElement:
         yield self
 
     def __str__(self):
-        return "Element <%s> with attributes %s, children %s and cdata %s" % (
+        return "XmlElement <%s> with attributes %s, children %s and cdata %s" % (
             self._name,
             self._attributes,
             self._children,
@@ -169,7 +207,7 @@ class XmlElement:
         )
 
     def __repr__(self):
-        return "Element(name = %s, attributes = %s, cdata = %s)" % (
+        return "XmlElement(name = %s, attributes = %s, cdata = %s)" % (
             self._name,
             self._attributes,
             self.cdata,
@@ -235,6 +273,7 @@ class XmlAttributedNameElement(XmlElement):
         else:
             raise AttributeError("'%s' has no attribute '%s'" % (self._name, key))
 
+###############################################################################
 global_known_classes = {} # part of the development code
 class Handler(handler.ContentHandler):
     
