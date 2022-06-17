@@ -8,6 +8,6 @@ __pycache__/
 local/
 
 # ignore test output folder
-tests/
+#tests/
 
 
