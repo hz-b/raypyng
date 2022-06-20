@@ -30,6 +30,9 @@ class XmlAttribute:
     def __str__(self):
         return str(self.__value)
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}('{self}')"
+
 ###############################################################################
 class XmlMappedAttribute(XmlAttribute):
     def __init__(self,xmlvalue=None,map=None) -> None:
@@ -47,6 +50,10 @@ class XmlMappedAttribute(XmlAttribute):
             if v==self.value:
                 return k
         raise ValueError(f"Can not map to bool: {self.value}")
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}('{self}',map={self.__map})"
+
 
 ###############################################################################
 class XmlBoolAttribute(XmlMappedAttribute):
@@ -218,6 +225,10 @@ class XmlElement:
 
     def __eq__(self, val):
         return self.cdata == val
+
+
+    def __hash__(self) -> int:
+        return hash((tuple(self._children),tuple(self._attributes),tuple(self._name)))
 
     def __dir__(self):
         children_names = [x._name for x in self._children]
