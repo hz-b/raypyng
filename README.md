@@ -183,3 +183,13 @@ with rml1.beamline:
             {M2.posY:range(1,5,1)} # set a range of  values - in independed way
         ]
 ```
+
+idea4:
+```python
+# this can be used to set a value or a range of values
+simulation.addIndependentParam(param=rml1.beamline.M1.alpha,                              value=[1,2,3,4])
+# this can be used add dependent parameters
+simulation.addDependentParam(param=rml1.beamline.M1.posY,    
+                             values=[10,20,30,40],
+                             dependency=rml.beamline.M1:alpha)
+```
