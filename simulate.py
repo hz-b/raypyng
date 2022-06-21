@@ -1,6 +1,7 @@
 
 from RayPyNG.rml import RMLFile
 import itertools
+import os
 
 class Simulate():
     """class to simulate 
@@ -67,7 +68,8 @@ class Simulate():
             print('self.dep_value_dependency',self.dep_value_dependency)
     
     def _calc_loop(self):
-        self.param_to_simulate = []
+        self.param_to_simulate = self.ind_par + self.dep_par
+        self.simulations_param_list = []
         # here we arrange the indipendent parameters in a grid
         self.loop = list(itertools.product(*self.ind_param_values))
         
@@ -84,11 +86,37 @@ class Simulate():
                 #print(par.id, loop[self.dep_param_dependency_index[ind]], self.dep_value_dependency[ind][loop[self.dep_param_dependency_index[ind]]] )
                 to_add = (self.dep_value_dependency[ind][loop[self.dep_param_dependency_index[ind]]],)
                 loop = loop + to_add
-            print('Round ', count, ': ',loop)
-        print('self.ind_par', self.ind_par)
-        print('self.dep_par', self.dep_par)
+            self.simulations_param_list.append(loop)
         self.par = self.ind_par + self.dep_par
-        print('self.par', self.par)
+    
+    def create_simulation_files(self, name:str,/, path:str=None, repeat:bool=1, prefix:str='RAYPy_Simulation'):
+        if path is None:
+            path = os.getcwd()
+            for n in range (0,repeat):
+                #print ('N', n)
+                count = 0
+                sim_folder = os.path.join(path, prefix+'_'+str(n))
+                if not os.path.exists(sim_folder):
+                    os.makedirs(sim_folder)
+                # write the rml files
+                for sim_n,single_simulation in enumerate(self.simulations_param_list):
+                    for ind, value in enumerate(single_simulation):
+                        self.param_to_simulate[ind].cdata = str(value)
+                    rml.write(os.path.join(sim_folder,str(sim_n)+'_'+name))
+        # create csv file with simulations recap
+        with open(os.path.join(sim_folder,'looper.csv'), 'w') as f:
+            header = 'n '
+            for par in self.param_to_simulate:
+                header = header + '\t'+str(par.id)
+            header += '\n'
+            f.write(header)
+            print(header)
+            for ind,par in enumerate(self.simulations_param_list):
+                print(ind, par)
+                f.write(str(ind)+'\t'+str(par)+'\n')
+            
+
+
 
 
 
@@ -110,6 +138,7 @@ params = [
 sim.set_param(params)
 sim._extract_param(verbose=False)
 sim._calc_loop()
+sim.create_simulation_files('simulation_test')
         
         
 
