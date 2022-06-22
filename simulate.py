@@ -1,7 +1,8 @@
 
 from RayPyNG.rml import RMLFile
 import itertools
-import os
+import os 
+import numpy as np
 
 class Simulate():
     """class to simulate 
@@ -12,13 +13,24 @@ class Simulate():
         else:
             raise Exception("rml file must be defined")
 
-    def set_param(self, param= None):
+    def set_param(self, param:list=None):
         if param is not None:
             self.param = param
         else:
-            raise Exception("params must be set")
+            raise Exception("Params must be set")
+        self._check_param()
     
-    def _extract_param(self, verbose=False):
+    def _check_param(self):
+        # self.param must be a list
+        if not isinstance(self.param, list) == True:
+            raise AssertionError('params must be a list')
+        # every element in the list must be a dictionary
+        for d in self.param:
+            if not isinstance(d, dict):
+                raise AssertionError('The elements of params must be dictionaries')
+        
+    
+    def _extract_param(self, verbose:bool=False):
         self.ind_param_values = []
         self.ind_par = []
         self.dep_param_dependency = {}
@@ -47,7 +59,7 @@ class Simulate():
             elif len(keys_par) == 1:
                 # check if we have a float, int, str, 
                 # and convert it to list if necessary
-                if isinstance(par[keys_par[0]], (float, int, str)):
+                if isinstance(par[keys_par[0]], (float, int, str,np.ndarray)):
                     par[keys_par[0]]=[par[keys_par[0]]]
                 # if we have a list or output of range this will work
                 # otherwise we raise an exception                
@@ -55,7 +67,7 @@ class Simulate():
                     try:
                         par[keys_par[0]] = list(par[keys_par[0]])
                     except TypeError:
-                        raise('The only permitted type are: int, float, str, list, range')
+                        raise Exception('The only permitted type are: int, float, str, list, range')
             self.ind_param_values.append(par[keys_par[0]])
             self.ind_par.append(keys_par[0])
             self.dep_par = list(self.dep_param_dependency.keys())
@@ -112,27 +124,30 @@ class Simulate():
             f.write(header)
             print(header)
             for ind,par in enumerate(self.simulations_param_list):
+                line = ''
+                line += str(ind)+'\t'
                 print(ind, par)
-                f.write(str(ind)+'\t'+str(par)+'\n')
+                for value in par:
+                    line += str(value)+'\t'
+                f.write(line+'\n')
             
 
 
 
 
 
-
+import numpy as np
 rml = RMLFile('RayPyNG/rml2.xml',template='examples/rml/high_energy_branch_flux_1200.rml')
 sim = Simulate(rml=rml)
 
 params = [  
             # set two parameters: "alpha" and "beta" in a dependent way. 
-            {rml.beamline.M1.grazingIncAngle:[1,2], rml.beamline.M1.azimuthalAngle:[0,180], rml.beamline.Dipole.photonEnergy:[1000,2000]}, 
+            {rml.beamline.M1.grazingIncAngle:np.array([1,2]), rml.beamline.M1.azimuthalAngle:[0,180], rml.beamline.Dipole.photonEnergy:[1000,2000]}, 
             # set a range of  values - in independed way
             {rml.beamline.M1.exitArmLengthMer:range(19400,19501, 100)},
             # set a value - in independed way
-            {rml.beamline.M1.exitArmLengthSag:100}
+            {rml.beamline.M1.exitArmLengthSag:np.array(100)}
         ]
-
 
 
 sim.set_param(params)
