@@ -28,7 +28,23 @@ class Simulate():
         for d in self.param:
             if not isinstance(d, dict):
                 raise AssertionError('The elements of params must be dictionaries')
-        
+        # the items permitted types are:
+        # int,float,str,np.array
+        # a list of the types above
+        # the output of range, that I still did not understand what it is
+        # in any case at the end we want to have either
+        # a list or a numpy array
+        for d in self.param:
+            for k in d.keys():
+                if isinstance(d[k], (list)):
+                    pass
+                elif isinstance(d[k], (float, int, str)):
+                    d[k] = [d[k]]
+                else: # this works with range output, but I would like to capture the type..
+                    try:
+                        d[k] = list(d[k])
+                    except TypeError:
+                        raise Exception('The only permitted type are: int, float, str, list, range, np.array, check',d[k]) 
     
     def _extract_param(self, verbose:bool=False):
         self.ind_param_values = []
@@ -55,19 +71,7 @@ class Simulate():
                                 self.dep_value_dependency[index_param][par[keys_par[0]][index_values]]=dep_value
                             index_values += 1
                         index_param += 1
-            # If there is only one key we have an indipendent parameter
-            elif len(keys_par) == 1:
-                # check if we have a float, int, str, 
-                # and convert it to list if necessary
-                if isinstance(par[keys_par[0]], (float, int, str,np.ndarray)):
-                    par[keys_par[0]]=[par[keys_par[0]]]
-                # if we have a list or output of range this will work
-                # otherwise we raise an exception                
-                else:
-                    try:
-                        par[keys_par[0]] = list(par[keys_par[0]])
-                    except TypeError:
-                        raise Exception('The only permitted type are: int, float, str, list, range')
+            # here we deal with the indipendent parameters
             self.ind_param_values.append(par[keys_par[0]])
             self.ind_par.append(keys_par[0])
             self.dep_par = list(self.dep_param_dependency.keys())
@@ -136,7 +140,6 @@ class Simulate():
 
 
 
-import numpy as np
 rml = RMLFile('RayPyNG/rml2.xml',template='examples/rml/high_energy_branch_flux_1200.rml')
 sim = Simulate(rml=rml)
 
@@ -146,7 +149,7 @@ params = [
             # set a range of  values - in independed way
             {rml.beamline.M1.exitArmLengthMer:range(19400,19501, 100)},
             # set a value - in independed way
-            {rml.beamline.M1.exitArmLengthSag:np.array(100)}
+            {rml.beamline.M1.exitArmLengthSag:np.array([100])}
         ]
 
 
