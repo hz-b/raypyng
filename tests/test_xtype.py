@@ -66,6 +66,49 @@ class TypeX2:
 
         return  X.__new__(*args,**kwargs)
 
+class MetaType(type):
+    def __new__(cls, clsname, bases, attribs):
+        # change bases
+        print(f'cls={cls},clsname={clsname},bases={bases},attribs={attribs}')
+        return type(clsname, bases, attribs)
+
+class TypeX3(metaclass=MetaType):
+    def __new__(cls, *args, **kwargs):
+        print(f"cls={cls}, args={args}, kwargs={kwargs}")
+        if not args:
+            raise TypeError("value or type is needed for creating AutoType object")
+        _val_or_type, *args = args
+        if isinstance(_val_or_type,type):
+            return _val_or_type.__new__(cls,*args,**kwargs)
+        else:
+            _type = type(_val_or_type)
+            return _type.__new__(cls,_val_or_type,*args,**kwargs)
+
+class TypedBase:
+    def __init__(self) -> None:
+        self.tname = type(self)
+    
+
+def TypeFactory(*args, **kwargs):
+        print(f"args={args}, kwargs={kwargs}")
+        if not args:
+            raise TypeError("value or type is needed for creating AutoType object")
+        
+        def new(_type):
+            _cls = str(_type.__name__)+'.TypedBase'
+            return type(_cls,(_type,TypedBase),{'__init__': lambda self,*args,**kwargs: super().__init__(self,*args,**kwargs)})
+
+        _val_or_type, *args = args
+        if isinstance(_val_or_type,type):
+            _type = new(_val_or_type)
+            print(f"_type={type}, args={args}, kwargs={kwargs}")
+            return _type(*args,**kwargs)
+        else:
+            _type = new(type(_val_or_type))
+            print(f"_type={type}, val={_val_or_type}, args={args}, kwargs={kwargs}")
+            return new(_type)(_val_or_type,*args,**kwargs)
+
+
 # some reading on metaclasses:
 # https://stackoverflow.com/questions/100003/what-are-metaclasses-in-python
 
@@ -153,3 +196,42 @@ class Unsigned(metaclass=ModifiedType, base_type=int):
             ret = cls(max(0, ret))
             return ret
         return wrapper
+
+
+# some ideas from https://www.geeksforgeeks.org/create-classes-dynamically-in-python/
+
+# program to create class dynamically
+  
+# constructor
+def constructor(self, arg):
+    self.constructor_arg = arg
+  
+# method
+def displayMethod(self, arg):
+    print(arg)
+  
+# class method
+@classmethod
+def classMethod(cls, arg):
+    print(arg)
+  
+class BaseClass:
+    sparam = "Hello"
+
+# creating class dynamically
+
+class AttributeBase:
+    pass
+
+def AttributeFactory(*args,**kwargs):
+    if not args:
+        raise TypeError("value or type is needed for creating AttributeFactory object")
+    type_or_value, *args = args
+    if isinstance(type_or_value,type):
+        _type = type_or_value
+    else:
+        _type = type(type_or_value)
+        args = (type_or_value, *args)
+    _sclass = type(f"Attribute<{_type}>", (AttributeBase, _type, ), {})
+    return _sclass(*args,**kwargs)
+  
