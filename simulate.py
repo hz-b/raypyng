@@ -111,7 +111,11 @@ class Simulate():
     def _enable_param(self, param):
         if not self._check_if_enabled(param):
             param.enabled = 'T'
-    
+        try:
+            param.auto = 'T'
+        except AttributeError:
+            pass
+
     def _write_value_to_param(self, param, value):
         self._enable_param(param)
         if not isinstance(value,str):
@@ -156,7 +160,7 @@ sim = Simulate(rml=rml)
 
 params = [  
             # set two parameters: "alpha" and "beta" in a dependent way. 
-            {rml.beamline.M1.grazingIncAngle:np.array([1,2]), rml.beamline.M1.azimuthalAngle:[0,180], rml.beamline.Dipole.photonEnergy:[1000,2000]}, 
+            {rml.beamline.M1.grazingIncAngle:np.array([1,2]), rml.beamline.M1.longRadius:[0,180], rml.beamline.Dipole.photonEnergy:[1000,2000]}, 
             # set a range of  values - in independed way
             {rml.beamline.M1.exitArmLengthMer:range(19400,19501, 100)},
             # set a value - in independed way
