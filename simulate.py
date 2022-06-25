@@ -13,7 +13,12 @@ class Simulate():
         else:
             raise Exception("rml file must be defined")
 
-    def set_param(self, param:list=None):
+    def set_param(self, param:list):
+        """Set parameters for simulations
+
+        Args:
+            param (list, optional): list of dictionaries. Defaults to None.
+        """        
         if param is not None:
             self.param = param
         else:
@@ -21,6 +26,9 @@ class Simulate():
         self._check_param()
     
     def _check_param(self):
+        """Check that self.param is a list of dictionaries, and convert the 
+        items of the dictionaries to lists, otherwise raise an exception.
+        """        
         # self.param must be a list
         if not isinstance(self.param, list) == True:
             raise AssertionError('params must be a list')
@@ -47,6 +55,19 @@ class Simulate():
                         raise Exception('The only permitted type are: int, float, str, list, range, np.array, check',d[k]) 
     
     def _extract_param(self, verbose:bool=False):
+        """Parse self.param and extract dependent and independent parameters
+
+        Args:
+            verbose (bool, optional): If True print the returned objects. Defaults to False.
+
+        Returns:
+            self.ind_param_values (list): indieendent parameter values
+            self.ind_par (list): independent parameters
+            self.dep_param_dependency (dict): dictionary of dependencies
+            self.dep_value_dependency (list): dictionaries of dependent values
+            self.dep_par (list): dependent parameters
+
+        """                 
         self.ind_param_values = []
         self.ind_par = []
         self.dep_param_dependency = {}
@@ -82,8 +103,15 @@ class Simulate():
             print('###########################################')
             print('self.dep_param_dependency', self.dep_param_dependency)
             print('self.dep_value_dependency',self.dep_value_dependency)
+        return (self.ind_param_values,self.ind_par,self.dep_param_dependency,self.dep_value_dependency,self.dep_par)
     
     def _calc_loop(self):
+        """Calculate the simulations loop
+
+        Returns:
+            self.param_to_simulate (list): idependent and dependent parameters
+            self.simulations_param_list (list): parameters values for each simulation loop
+        """                
         self.param_to_simulate = self.ind_par + self.dep_par
         self.simulations_param_list = []
         # here we arrange the indipendent parameters in a grid
@@ -104,25 +132,54 @@ class Simulate():
                 loop = loop + to_add
             self.simulations_param_list.append(loop)
         self.par = self.ind_par + self.dep_par
+        return (self.param_to_simulate, self.simulations_param_list)
     
     def _check_if_enabled(self, param):
+        """Check if a parameter is enabled
+
+        Args:
+            param (RML object): an parameter to simulate
+
+        Returns:
+            (bool): True if the parameter is enabled, False otherwise
+        """        
         return param.enabled=='T'
     
     def _enable_param(self, param):
+        """Set enabled to True in a beamline object, and auto to False
+
+        Args:
+            param (RML object): beamline object
+        """        
         if not self._check_if_enabled(param):
             param.enabled = 'T'
         try:
-            param.auto = 'T'
+            param.auto = 'F'
         except AttributeError:
             pass
 
     def _write_value_to_param(self, param, value):
+        """Write a value to a parameter, making sure enable is T 
+        and auto is F
+
+        Args:
+            param (RML object): beamline object
+            value (str,int,float): the value to set the beamline object to
+        """        
         self._enable_param(param)
         if not isinstance(value,str):
             value = str(value)
             param.cdata = value
 
     def create_simulation_files(self, name:str,/, path:str=None, repeat:bool=1, prefix:str='RAYPy_Simulation'):
+        """Create the files for the simulations in folder
+
+        Args:
+            name (str): name for the folder
+            path (str, optional): path to the folder. Defaults to None.
+            repeat (bool, int, optional): number of times to repeat the simlations. Defaults to 1.
+            prefix (str, optional): prefix to the folder name. Defaults to 'RAYPy_Simulation'.
+        """        
         if path is None:
             path = os.getcwd()
             for n in range (0,repeat):
