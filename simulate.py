@@ -105,6 +105,19 @@ class Simulate():
             self.simulations_param_list.append(loop)
         self.par = self.ind_par + self.dep_par
     
+    def _check_if_enabled(self, param):
+        return param.enabled=='T'
+    
+    def _enable_param(self, param):
+        if not self._check_if_enabled(param):
+            param.enabled = 'T'
+    
+    def _write_value_to_param(self, param, value):
+        self._enable_param(param)
+        if not isinstance(value,str):
+            value = str(value)
+            param.cdata = value
+
     def create_simulation_files(self, name:str,/, path:str=None, repeat:bool=1, prefix:str='RAYPy_Simulation'):
         if path is None:
             path = os.getcwd()
@@ -113,11 +126,11 @@ class Simulate():
                 count = 0
                 sim_folder = os.path.join(path, prefix+'_'+str(n))
                 if not os.path.exists(sim_folder):
-                    os.makedirs(sim_folder)
+                    os.makedirs(sim_folder)              
                 # write the rml files
                 for sim_n,single_simulation in enumerate(self.simulations_param_list):
                     for ind, value in enumerate(single_simulation):
-                        self.param_to_simulate[ind].cdata = str(value)
+                        self._write_value_to_param(self.param_to_simulate[ind], value)
                     rml.write(os.path.join(sim_folder,str(sim_n)+'_'+name))
         # create csv file with simulations recap
         with open(os.path.join(sim_folder,'looper.csv'), 'w') as f:
@@ -126,11 +139,9 @@ class Simulate():
                 header = header + '\t'+str(par.id)
             header += '\n'
             f.write(header)
-            print(header)
             for ind,par in enumerate(self.simulations_param_list):
                 line = ''
                 line += str(ind)+'\t'
-                print(ind, par)
                 for value in par:
                     line += str(value)+'\t'
                 f.write(line+'\n')
