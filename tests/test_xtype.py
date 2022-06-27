@@ -221,7 +221,9 @@ class BaseClass:
 # creating class dynamically
 
 class AttributeBase:
-    pass
+    def __init__(self,*args,**kwargs) -> None:
+        self.param = 42
+    
 
 def AttributeFactory(*args,**kwargs):
     if not args:
@@ -232,6 +234,8 @@ def AttributeFactory(*args,**kwargs):
     else:
         _type = type(type_or_value)
         args = (type_or_value, *args)
-    _sclass = type(f"Attribute<{_type}>", (AttributeBase, _type, ), {})
+    _sclass = type(f"Attribute<{_type}>", (AttributeBase, _type, ), {
+        "__new__" : lambda __name, __bases, *args, **kwargs : _type.__new__(__name, __bases, *args, **kwargs)
+    })
     return _sclass(*args,**kwargs)
   
