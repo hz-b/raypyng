@@ -3,6 +3,7 @@ from .rml import RMLFile
 import itertools
 import os 
 #from collections.abc import MutableMapping,MutableSequence
+from .runner import RayUIAPI,RayUIRunner
 
 class Simulate():
     """class to simulate 
@@ -20,7 +21,8 @@ class Simulate():
     def rml(self):
         return self._rml
 
-    def set_param(self, param:list):
+    @property
+    def params(self, param:list):
         """Set parameters for simulations
 
         Args:
@@ -118,16 +120,24 @@ class Simulate():
         result = []
         for param_set in self.params_list():
             rml = RMLFile(f'bla_bla_bla{len(result)}.rml',template=self.rml.template)
-            indexer += 1
             for param,value in param_set.items():
                 param.cdata = str(value)
             result.append(rml)
         return result
 
 
-    def run_example(self):
-        for rml in self.rml_list(...):
+    def run_example(self,name,*args,**kwargs):
+        for index,rml in enumerate(self.rml_list(name,*args,**kwargs)):
             rml.write()
+            runner = RayUIRunner()
+            api = RayUIAPI(runner)
+            runner.run()
+            api.load(rml.filename)
+            api.trace()
+            api.export('Dipole', 'ScalarBeamProperties', name, str(index))
+            api.export('DetectorAtFocus', 'ScalarElementProperties', name, str(index))
+            api.quit()
+            runner.kill()
 
     def params_list(self, obj=None):
         result = []
@@ -135,8 +145,14 @@ class Simulate():
             result.append(dict(zip(self.param_to_simulate, i)))
         return result
 
-    
 
+    # def test123(self):
+    #         self.path = ...
+    #         self.name = ...
+
+    # @property
+    # def rml_filepath(self):
+    #     return os.join(self.path,self.name)
 
     def _calc_loop(self):
         """Calculate the simulations loop

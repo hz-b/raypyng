@@ -6,7 +6,7 @@ import numpy as np
 
 #rml = RMLFile('RayPyNG/rml2.xml',template='examples/rml/high_energy_branch_flux_1200.rml')
 #sim = Simulate(rml=rml)
-sim = Simulate('RayPyNG/rml2.xml',template='examples/rml/high_energy_branch_flux_1200.rml')
+sim = Simulate(None,template='examples/rml/high_energy_branch_flux_1200.rml')
 rml = sim.rml
 
 params = [  
@@ -28,20 +28,34 @@ params3 = [
         ]
 
 
-param_list = [
-    # self.params() returns 
-    {rml.beamline.M1.grazingIncAngle:1,rml.beamline.M1.longRadius:0,rml.beamline.Dipole.photonEnergy:1000,rml.beamline.M1.exitArmLengthMer:19400,rml.beamline.M1.exitArmLengthSag:100}
-    # self.params() returns 
-    {rml.beamline.M1.grazingIncAngle:2,rml.beamline.M1.longRadius:180,rml.beamline.Dipole.photonEnergy:2000,rml.beamline.M1.exitArmLengthMer:19400,rml.beamline.M1.exitArmLengthSag:100}
-    # self.params() returns 
-    {rml.beamline.M1.grazingIncAngle:1,rml.beamline.M1.longRadius:0,rml.beamline.Dipole.photonEnergy:1000,rml.beamline.M1.exitArmLengthMer:19501,rml.beamline.M1.exitArmLengthSag:100}
-    # ...
-    ...
-]
+# param_list = [
+#     # self.params() returns 
+#     {rml.beamline.M1.grazingIncAngle:1,rml.beamline.M1.longRadius:0,rml.beamline.Dipole.photonEnergy:1000,rml.beamline.M1.exitArmLengthMer:19400,rml.beamline.M1.exitArmLengthSag:100}
+#     # self.params() returns 
+#     {rml.beamline.M1.grazingIncAngle:2,rml.beamline.M1.longRadius:180,rml.beamline.Dipole.photonEnergy:2000,rml.beamline.M1.exitArmLengthMer:19400,rml.beamline.M1.exitArmLengthSag:100}
+#     # self.params() returns 
+#     {rml.beamline.M1.grazingIncAngle:1,rml.beamline.M1.longRadius:0,rml.beamline.Dipole.photonEnergy:1000,rml.beamline.M1.exitArmLengthMer:19501,rml.beamline.M1.exitArmLengthSag:100}
+#     # ...
+#     ...
+# ]
 
-sim.set_param(params)
+sp = SimulationParams(rml, params) # epxands to rml_list/params_list, now aware of runner
+
+sim = Simulation(sp) # usees rml_list to save rml and run simulation
+sim.name = ...
+sim.repeat = ...
+sim.path = 'my-path/' # expand internally to abspath()!
+sim.prefix = 'asdasd'
+#sim.exports = ['Dipole,DetectorAtFocus', 'ScalarBeamProperties,ScalarElementProperties']
+sim.elements = [rml.beamline.Dipole,rml.beamline.DetectorAtFocus]
+sim.exports = ['ScalarBeamProperties','ScalarElementProperties']
+sim.run(nNowrkers = 10)
+
+
+sim.params=params
 sim._extract_param(verbose=False)
 sim._calc_loop()
-sim.create_simulation_files('simulation_test')
-        
+#sim.create_simulation_files('simulation_test')
+
+
         
