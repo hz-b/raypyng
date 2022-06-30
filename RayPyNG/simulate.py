@@ -2,6 +2,7 @@
 from .rml import RMLFile
 import itertools
 import os 
+#from collections.abc import MutableMapping,MutableSequence
 
 class Simulate():
     """class to simulate 
@@ -111,6 +112,32 @@ class Simulate():
             print('self.dep_value_dependency',self.dep_value_dependency)
         return (self.ind_param_values,self.ind_par,self.dep_param_dependency,self.dep_value_dependency,self.dep_par)
     
+
+
+    def rml_list(self, name:str,/, path:str=None, repeat:int=1, prefix:str='RAYPy_Simulation'):
+        result = []
+        for param_set in self.params_list():
+            rml = RMLFile(f'bla_bla_bla{len(result)}.rml',template=self.rml.template)
+            indexer += 1
+            for param,value in param_set.items():
+                param.cdata = str(value)
+            result.append(rml)
+        return result
+
+
+    def run_example(self):
+        for rml in self.rml_list(...):
+            rml.write()
+
+    def params_list(self, obj=None):
+        result = []
+        for i in self.simulations_param_list:
+            result.append(dict(zip(self.param_to_simulate, i)))
+        return result
+
+    
+
+
     def _calc_loop(self):
         """Calculate the simulations loop
 

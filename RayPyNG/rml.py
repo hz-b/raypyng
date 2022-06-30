@@ -57,6 +57,10 @@ class RMLFile:
         self.read()
         
 
+    @property
+    def template(self):
+        return self._template
+
 
     ###################################
     def read(self,file:str=None):
