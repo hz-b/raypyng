@@ -1,17 +1,23 @@
 
-from RayPyNG.rml import RMLFile
+from .rml import RMLFile
 import itertools
 import os 
-import numpy as np
 
 class Simulate():
     """class to simulate 
     """
-    def __init__(self, rml=None) -> None:
+    def __init__(self, rml=None,**kwargs) -> None:
         if rml is not None:
-            self.rml = rml
+            if isinstance(rml,RMLFile):
+                self._rml = rml
+            else: # assume that parameter is the file name as required for RMLFile
+                self._rml = RMLFile(rml,**kwargs)
         else:
             raise Exception("rml file must be defined")
+
+    @property 
+    def rml(self):
+        return self._rml
 
     def set_param(self, param:list):
         """Set parameters for simulations
@@ -192,7 +198,7 @@ class Simulate():
                 for sim_n,single_simulation in enumerate(self.simulations_param_list):
                     for ind, value in enumerate(single_simulation):
                         self._write_value_to_param(self.param_to_simulate[ind], value)
-                    rml.write(os.path.join(sim_folder,str(sim_n)+'_'+name))
+                    self._rml.write(os.path.join(sim_folder,str(sim_n)+'_'+name))
         # create csv file with simulations recap
         with open(os.path.join(sim_folder,'looper.csv'), 'w') as f:
             header = 'n '
@@ -212,23 +218,23 @@ class Simulate():
 
 
 
-rml = RMLFile('RayPyNG/rml2.xml',template='examples/rml/high_energy_branch_flux_1200.rml')
-sim = Simulate(rml=rml)
+# rml = RMLFile('RayPyNG/rml2.xml',template='examples/rml/high_energy_branch_flux_1200.rml')
+# sim = Simulate(rml=rml)
 
-params = [  
-            # set two parameters: "alpha" and "beta" in a dependent way. 
-            {rml.beamline.M1.grazingIncAngle:np.array([1,2]), rml.beamline.M1.longRadius:[0,180], rml.beamline.Dipole.photonEnergy:[1000,2000]}, 
-            # set a range of  values - in independed way
-            {rml.beamline.M1.exitArmLengthMer:range(19400,19501, 100)},
-            # set a value - in independed way
-            {rml.beamline.M1.exitArmLengthSag:np.array([100])}
-        ]
+# params = [  
+#             # set two parameters: "alpha" and "beta" in a dependent way. 
+#             {rml.beamline.M1.grazingIncAngle:np.array([1,2]), rml.beamline.M1.longRadius:[0,180], rml.beamline.Dipole.photonEnergy:[1000,2000]}, 
+#             # set a range of  values - in independed way
+#             {rml.beamline.M1.exitArmLengthMer:range(19400,19501, 100)},
+#             # set a value - in independed way
+#             {rml.beamline.M1.exitArmLengthSag:np.array([100])}
+#         ]
 
 
-sim.set_param(params)
-sim._extract_param(verbose=False)
-sim._calc_loop()
-sim.create_simulation_files('simulation_test')
+# sim.set_param(params)
+# sim._extract_param(verbose=False)
+# sim._calc_loop()
+# sim.create_simulation_files('simulation_test')
         
         
 
