@@ -10,4 +10,5 @@ local/
 # ignore test output folder
 #tests/
 
-
+# Ignoring simlation tests
+RAYPy_Simulation_*
