@@ -54,9 +54,12 @@ sim.repeat = 1
 #sim.prefix = 'asdasd_'
 
 # This must be a list of dictionaries
-sim.exports = [{rml.beamline.Dipole:'ScalarBeamProperties'},{rml.beamline.DetectorAtFocus:['ScalarElementProperties','ScalarBeamProperties']}]
+sim.exports = [{rml.beamline.Dipole:'ScalarBeamProperties'},
+                {rml.beamline.DetectorAtFocus:['ScalarElementProperties',
+                                            'ScalarBeamProperties']
+                }
+            ]
 
-#sim.run(nNowrkers = 10)
 
 
 sim.params=params
@@ -66,6 +69,7 @@ sim.rml_list()
 
 #uncomment to run the simulations
 sim.run_example()
+#sim.run(nNowrkers = 10)
 
 
         
