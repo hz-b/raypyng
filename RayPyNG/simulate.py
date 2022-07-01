@@ -17,6 +17,8 @@ class Simulate():
                 self._rml = RMLFile(rml,**kwargs)
         else:
             raise Exception("rml file must be defined")
+        self.path   = None
+        self.prefix = 'RAYPy_Simulation'
         
 
     @property
@@ -31,12 +33,12 @@ class Simulate():
         return self._rml
 
     @property 
-    def simulation_folder(self):
-        return self._simulation_folder
+    def simulation_name(self):
+        return self._simulation_name
     
-    @simulation_folder.setter
-    def simulation_folder(self,value):
-        self._simulation_folder = value
+    @simulation_name.setter
+    def simulation_name(self,value):
+        self._simulation_name = value
         
     @property 
     def repeat(self):
@@ -54,6 +56,8 @@ class Simulate():
 
     @path.setter
     def path(self,value):
+        if value == None:
+            value=os.getcwd()
         if not isinstance(value, str):
             raise ValueError ('Only str are allowed')
         if not os.path.exists(value):
@@ -184,26 +188,58 @@ class Simulate():
     
 
 
-    def rml_list(self, name:str,/, path:str=None, repeat:int=1, prefix:str='RAYPy_Simulation'):
+    # def rml_list(self, name:str,/, path:str=None, repeat:int=1, prefix:str='RAYPy_Simulation'):
+    def rml_list(self):    
         result = []
-        for param_set in self.params_list():
-            rml = RMLFile(f'bla_bla_bla{len(result)}.rml',template=self.rml.template)
-            for param,value in param_set.items():
-                param.cdata = str(value)
-            result.append(rml)
+        abs_path = os.path.join(self.path, self.prefix+'_'+self.simulation_name)
+        print('absolute path', abs_path)
+        # check if simulation folder exists, otherwise create it
+        if not os.path.exists(abs_path):
+            os.makedirs(abs_path)      
+        for r in range(0,self.repeat):
+            sim_folder = os.path.join(abs_path,'round_'+str(r))
+            if not os.path.exists(sim_folder):
+                os.makedirs(sim_folder)
+            for sim_n,param_set in enumerate(self.params_list()):
+                rml_path = os.path.join(sim_folder,str(sim_n)+'_'+self.simulation_name)
+                rml = RMLFile(rml_path+'.rml',template=self.rml.template)
+                for param,value in param_set.items():
+                    param.cdata = str(value)
+                rml.write()
+                # is this gonna create problems if I have millions of simulations?
+                result.append(rml)
+
+            # create csv file with simulations recap
+            with open(os.path.join(sim_folder,'looper.csv'), 'w') as f:
+                header = 'n '
+                for par in self.param_to_simulate:
+                    header = header + '\t'+str(par.id)
+                header += '\n'
+                f.write(header)
+                for ind,par in enumerate(self.simulations_param_list):
+                    line = ''
+                    line += str(ind)+'\t'
+                    for value in par:
+                        line += str(value)+'\t'
+                    f.write(line+'\n')  
         return result
 
 
     def run_example(self,*args,**kwargs):
-        for index,rml in enumerate(self.rml_list(self._name,*args,**kwargs)):
+        for index,rml in enumerate(self.rml_list(*args,**kwargs)):
+            print('rml', os.path.dirname(rml.filename))
             rml.write()
             runner = RayUIRunner()
             api = RayUIAPI(runner)
             runner.run()
             api.load(rml.filename)
             api.trace()
-            api.export('Dipole', 'ScalarBeamProperties', name, str(index))
-            api.export('DetectorAtFocus', 'ScalarElementProperties', name, str(index))
+            for i, d in enumerate(self.exports):
+                for obj in d.keys():
+                    print ('export', obj['name'], d[obj], self.simulation_name, str(index))
+                    api.export(obj['name'], d[obj], os.path.dirname(rml.filename), str(index))
+            # api.export('Dipole', 'ScalarBeamProperties', name, str(index))
+            # api.export('DetectorAtFocus', 'ScalarElementProperties', name, str(index))
             api.quit()
             runner.kill()
 
