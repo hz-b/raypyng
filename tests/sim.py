@@ -45,19 +45,27 @@ params3 = [
 #sim = Simulation(sp) # usees rml_list to save rml and run simulation
 
 # sim.simulation_folder = '/home/simone/Documents/RAYPYNG/raypyng/test'
-sim.simulation_folder = 'test'
+sim.simulation_name = 'test'
 sim.repeat = 1
-sim.path = '/home/simone/Documents/RAYPYNG/raypyng' # expand internally to abspath()!
-sim.prefix = 'asdasd'
-sim.exports = [{},{}]
-#sim.exports = ['Dipole,DetectorAtFocus', 'ScalarBeamProperties,ScalarElementProperties']
+#this is defined at the current working directory by default
+#sim.path = '/home/simone/Documents/RAYPYNG/raypyng' # expand internally to abspath()!
+
+# this is defined as RAYPy_simulation by default
+#sim.prefix = 'asdasd_'
+
+# This must be a list of dictionaries
+sim.exports = [{rml.beamline.Dipole:'ScalarBeamProperties'},{rml.beamline.DetectorAtFocus:['ScalarElementProperties','ScalarBeamProperties']}]
+
 #sim.run(nNowrkers = 10)
 
 
 sim.params=params
 sim._extract_param(verbose=False)
 sim._calc_loop()
-#sim.create_simulation_files('simulation_test')
+sim.rml_list()
+
+#uncomment to run the simulations
+sim.run_example()
 
 
         
