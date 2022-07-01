@@ -177,6 +177,19 @@ class SimulationParams():
             pass
 
 
+    def _write_value_to_param(self, param, value):
+        """Write a value to a parameter, making sure enable is T 
+        and auto is F
+
+        Args:
+            param (RML object): beamline object
+            value (str,int,float): the value to set the beamline object to
+        """        
+        self._enable_param(param)
+        if not isinstance(value,str):
+            value = str(value)
+            param.cdata = value
+
 class Simulate():
     """class to simulate 
     """
@@ -269,6 +282,7 @@ class Simulate():
 
     @exports.setter
     def exports(self,value):
+        print('hi')
         if not isinstance(value, list):
             raise AssertionError ('The exports must be a list, while it is a '+str(type(value)), value)
         for d in value:
@@ -286,19 +300,19 @@ class Simulate():
                             raise AssertionError('It is not possible to export this file. The possible files to exports are ', self.possible_exports)
 
         self._exports = value
-
+        self._exports_list = self.compose_exports_list(value, verbose=False)
+        
     @property
     def params(self):       
         return self.param
 
     @params.setter
     def params(self,value):
-        # self.param must be a list
         if not isinstance(value, SimulationParams) == True:
             raise AssertionError('Params must be an instance of SimulationParams')
-        self.param = value
-        _ = self.param._extract_param(verbose=False)
-        _ =self.param._calc_loop()
+        self.sp = value
+        _ = self.sp._extract_param(verbose=False)
+        _ =self.sp._calc_loop()
 
     def rml_list(self):    
         result = []
@@ -310,11 +324,11 @@ class Simulate():
             sim_folder = os.path.join(abs_path,'round_'+str(r))
             if not os.path.exists(sim_folder):
                 os.makedirs(sim_folder)
-            for sim_n,param_set in enumerate(self.param.params_list()):
+            for sim_n,param_set in enumerate(self.sp.params_list()):
                 rml_path = os.path.join(sim_folder,str(sim_n)+'_'+self.simulation_name)
                 rml = RMLFile(rml_path+'.rml',template=self.rml.template)
                 for param,value in param_set.items():
-                    param.cdata = str(value)
+                    self.sp._write_value_to_param(param,value)
                 rml.write()
                 # is this gonna create problems if I have millions of simulations?
                 result.append(rml)
@@ -322,17 +336,32 @@ class Simulate():
             # create csv file with simulations recap
             with open(os.path.join(sim_folder,'looper.csv'), 'w') as f:
                 header = 'n '
-                for par in self.param.param_to_simulate:
+                for par in self.sp.param_to_simulate:
                     header = header + '\t'+str(par.id)
                 header += '\n'
                 f.write(header)
-                for ind,par in enumerate(self.param.simulations_param_list):
+                for ind,par in enumerate(self.sp.simulations_param_list):
                     line = ''
                     line += str(ind)+'\t'
                     for value in par:
                         line += str(value)+'\t'
                     f.write(line+'\n')  
         return result
+
+    def compose_exports_list(self, exports_dict_list,/,verbose:bool=False):
+        self.exports_list=[]
+        for i, d in enumerate(self.exports):
+                for obj in d.keys():
+                    if isinstance(d[obj], str):
+                        self.exports_list.append((obj['name'], d[obj]))
+                    elif isinstance(d[obj], list):
+                        for l in d[obj]:
+                            self.exports_list.append((obj['name'], l))
+                    else: raise ValueError('The exported param can be only str or list of str.')
+        if verbose:
+            print('you will export the following:')
+            for d in self.exports_list:
+                print(d[0], d[1])
 
     def run_example(self,*args,**kwargs):
         for index,rml in enumerate(self.rml_list(*args,**kwargs)):
@@ -342,29 +371,11 @@ class Simulate():
             runner.run()
             api.load(rml.filename)
             api.trace()
-            for i, d in enumerate(self.exports):
-                for obj in d.keys():
-                    if isinstance(d[obj], str):
-                        api.export(obj['name'], d[obj], os.path.dirname(rml.filename), str(index)+'_')
-                    elif isinstance(d[obj], list):
-                        for l in d[obj]:
-                            api.export(obj['name'], l, os.path.dirname(rml.filename), str(index)+'_') 
-                    else: raise ValueError('The exported param can be only str or list of str.')
+            for i, d in enumerate(self.exports_list):
+                api.export(d[0], d[1], os.path.dirname(rml.filename), str(index)+'_') 
             api.quit()
             runner.kill()
 
-    def _write_value_to_param(self, param, value):
-        """Write a value to a parameter, making sure enable is T 
-        and auto is F
-
-        Args:
-            param (RML object): beamline object
-            value (str,int,float): the value to set the beamline object to
-        """        
-        self._enable_param(param)
-        if not isinstance(value,str):
-            value = str(value)
-            param.cdata = value
 
     
 

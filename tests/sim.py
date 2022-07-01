@@ -3,6 +3,10 @@ from RayPyNG.simulate import Simulate
 from RayPyNG.simulate import SimulationParams
 import numpy as np
 
+sim = Simulate('examples/rml/high_energy_branch_flux_1200.rml',template='examples/rml/high_energy_branch_flux_1200.rml')
+rml = sim.rml
+sp = SimulationParams(rml) # epxands to rml_list/params_list, now aware of runner
+
 
 params = [  
             # set two parameters: "alpha" and "beta" in a dependent way. 
@@ -14,13 +18,7 @@ params = [
         ]
 
 
-sp = SimulationParams(rml) # epxands to rml_list/params_list, now aware of runner
 sp.params=params
-
-
-
-sim = Simulate('examples/rml/high_energy_branch_flux_1200.rml',template='examples/rml/high_energy_branch_flux_1200.rml')
-rml = sim.rml
 
 # sim.simulation_folder = '/home/simone/Documents/RAYPYNG/raypyng/test'
 sim.simulation_name = 'test'
