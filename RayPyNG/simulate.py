@@ -23,8 +23,24 @@ class Simulate():
 
     @property
     def possible_exports(self):
-        self._possible_exports = ['ScalarBeamProperties',
-                              'ScalarElementProperties'
+        self._possible_exports = ['AnglePhiDistribution',
+                                'AnglePsiDistribution',
+                                'BeamPropertiesPlotSnapshot',
+                                'EnergyDistribution',
+                                'FootprintAbsorbedRays',
+                                'FootprintAllRays',
+                                'FootprintOutgoingRays',
+                                'FootprintPlotSnapshot',
+                                'FootprintWastedRays',
+                                'IntensityPlotSnapshot',
+                                'IntensityX',
+                                'IntensityYZ',
+                                'PathlengthDistribution',
+                                'RawRaysBeam',
+                                'RawRaysIncoming',
+                                'RawRaysOutgoing',
+                                'ScalarBeamProperties',
+                                'ScalarElementProperties'
                              ]
         return self._possible_exports
 
