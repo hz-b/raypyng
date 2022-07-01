@@ -1,5 +1,6 @@
 
 from .rml import RMLFile
+from .rml import ObjectElement,ParamElement
 import itertools
 import os 
 #from collections.abc import MutableMapping,MutableSequence
@@ -16,33 +17,90 @@ class Simulate():
                 self._rml = RMLFile(rml,**kwargs)
         else:
             raise Exception("rml file must be defined")
+        
+
+    @property
+    def possible_exports(self):
+        self._possible_exports = ['ScalarBeamProperties',
+                              'ScalarElementProperties'
+                             ]
+        return self._possible_exports
 
     @property 
     def rml(self):
         return self._rml
 
-    @property
-    def params(self, param:list):
-        """Set parameters for simulations
-
-        Args:
-            param (list, optional): list of dictionaries. Defaults to None.
-        """        
-        if param is not None:
-            self.param = param
-        else:
-            raise Exception("Params must be set")
-        self._check_param()
+    @property 
+    def simulation_folder(self):
+        return self._simulation_folder
     
-    def _check_param(self):
-        """Check that self.param is a list of dictionaries, and convert the 
-        items of the dictionaries to lists, otherwise raise an exception.
-        """        
+    @simulation_folder.setter
+    def simulation_folder(self,value):
+        self._simulation_folder = value
+        
+    @property 
+    def repeat(self):
+        return self._repeat
+    
+    @repeat.setter
+    def repeat(self,value):
+        if not isinstance(value, int):
+            raise ValueError ('Only int are allowed')
+        self._repeat = value
+
+    @property 
+    def path(self):
+        return self._path
+
+    @path.setter
+    def path(self,value):
+        if not isinstance(value, str):
+            raise ValueError ('Only str are allowed')
+        if not os.path.exists(value):
+            raise ValueError('The path does not exist')
+        self._path = value
+
+
+    @property 
+    def prefix(self):
+        return self._prefix
+
+    @prefix.setter
+    def prefix(self,value):
+        if not isinstance(value, str):
+            raise ValueError ('Only str are allowed')
+        self._prefix = value
+
+    @property 
+    def exports(self):
+        return self._exports
+
+    @exports.setter
+    def exports(self,value):
+        if not isinstance(value, list):
+            raise AssertionError ('The exports must be a list, while it is a '+str(type(value)), value)
+        for d in value:
+            if not isinstance(d,dict):
+                raise AssertionError('The element of the list must be dictionaries, while I found a '+str(type(d)), d)
+            for k in d.keys():
+                if not isinstance(k,ObjectElement):
+                    raise AssertionError('The keys of the dictionaries must be instance of ObjectElement, while ', k, 'is a ', str(type(k)))
+                if d[k] not in self.possible_exports:
+                    raise AssertionError('It is not possible to export this file. The possible files to exports are ', self.possible_exports)
+        self._exports = value
+
+
+    @property
+    def params(self):       
+        return self.param
+
+    @params.setter
+    def params(self,value):
         # self.param must be a list
-        if not isinstance(self.param, list) == True:
+        if not isinstance(value, list) == True:
             raise AssertionError('params must be a list')
         # every element in the list must be a dictionary
-        for d in self.param:
+        for d in value:
             if not isinstance(d, dict):
                 raise AssertionError('The elements of params must be dictionaries')
         # the items permitted types are:
@@ -51,8 +109,10 @@ class Simulate():
         # the output of range, that I still did not understand what it is
         # in any case at the end we want to have either
         # a list or a numpy array
-        for d in self.param:
+        for d in value:
             for k in d.keys():
+                if not isinstance(k,ParamElement):
+                    raise AssertionError('The keys of the dictionaries must be instance of ParamElement, while ', k, 'is a ', str(type(k)))
                 if isinstance(d[k], (list)):
                     pass
                 elif isinstance(d[k], (float, int, str)):
@@ -62,7 +122,15 @@ class Simulate():
                         d[k] = list(d[k])
                     except TypeError:
                         raise Exception('The only permitted type are: int, float, str, list, range, np.array, check',d[k]) 
+        self.param = value
+
+        
     
+    def _check_param(self):
+        """Check that self.param is a list of dictionaries, and convert the 
+        items of the dictionaries to lists, otherwise raise an exception.
+        """        
+        
     def _extract_param(self, verbose:bool=False):
         """Parse self.param and extract dependent and independent parameters
 
@@ -126,8 +194,8 @@ class Simulate():
         return result
 
 
-    def run_example(self,name,*args,**kwargs):
-        for index,rml in enumerate(self.rml_list(name,*args,**kwargs)):
+    def run_example(self,*args,**kwargs):
+        for index,rml in enumerate(self.rml_list(self._name,*args,**kwargs)):
             rml.write()
             runner = RayUIRunner()
             api = RayUIAPI(runner)
