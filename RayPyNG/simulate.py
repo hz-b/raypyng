@@ -105,7 +105,6 @@ class Simulate():
             for k in d.keys():
                 if not isinstance(k,ObjectElement):
                     raise AssertionError('The keys of the dictionaries must be instance of ObjectElement, while ', k, 'is a ', str(type(k)))
-                print(isinstance(d[k], str))
                 if isinstance(d[k], str):
                     if d[k] not in self.possible_exports:
                         raise AssertionError('It is not possible to export this file. The possible files to exports are ', self.possible_exports)
@@ -257,9 +256,12 @@ class Simulate():
             api.trace()
             for i, d in enumerate(self.exports):
                 for obj in d.keys():
-                    api.export(obj['name'], d[obj], os.path.dirname(rml.filename), str(index))
-            # api.export('Dipole', 'ScalarBeamProperties', name, str(index))
-            # api.export('DetectorAtFocus', 'ScalarElementProperties', name, str(index))
+                    if isinstance(d[obj], str):
+                        api.export(obj['name'], d[obj], os.path.dirname(rml.filename), str(index))
+                    elif isinstance(d[obj], list):
+                        for l in d[obj]:
+                            api.export(obj['name'], l, os.path.dirname(rml.filename), str(index)) 
+                    else: raise ValueError('The exported param can be only str or list of str.')
             api.quit()
             runner.kill()
 
