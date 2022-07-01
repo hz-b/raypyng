@@ -192,7 +192,6 @@ class Simulate():
     def rml_list(self):    
         result = []
         abs_path = os.path.join(self.path, self.prefix+'_'+self.simulation_name)
-        print('absolute path', abs_path)
         # check if simulation folder exists, otherwise create it
         if not os.path.exists(abs_path):
             os.makedirs(abs_path)      
@@ -227,7 +226,6 @@ class Simulate():
 
     def run_example(self,*args,**kwargs):
         for index,rml in enumerate(self.rml_list(*args,**kwargs)):
-            print('rml', os.path.dirname(rml.filename))
             rml.write()
             runner = RayUIRunner()
             api = RayUIAPI(runner)
@@ -236,7 +234,6 @@ class Simulate():
             api.trace()
             for i, d in enumerate(self.exports):
                 for obj in d.keys():
-                    print ('export', obj['name'], d[obj], self.simulation_name, str(index))
                     api.export(obj['name'], d[obj], os.path.dirname(rml.filename), str(index))
             # api.export('Dipole', 'ScalarBeamProperties', name, str(index))
             # api.export('DetectorAtFocus', 'ScalarElementProperties', name, str(index))
