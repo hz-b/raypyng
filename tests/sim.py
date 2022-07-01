@@ -1,6 +1,7 @@
 
 from RayPyNG.rml import RMLFile
 from RayPyNG.simulate import Simulate
+from RayPyNG.simulate import SimulationParams
 import numpy as np
 
 
@@ -40,8 +41,10 @@ params3 = [
 #     ...
 # ]
 
-#sp = SimulationParams(rml, params) # epxands to rml_list/params_list, now aware of runner
-
+sp = SimulationParams(rml) # epxands to rml_list/params_list, now aware of runner
+sp.params=params
+sp._extract_param(verbose=False)
+sp._calc_loop()
 #sim = Simulation(sp) # usees rml_list to save rml and run simulation
 
 # sim.simulation_folder = '/home/simone/Documents/RAYPYNG/raypyng/test'
@@ -67,8 +70,9 @@ sim._extract_param(verbose=False)
 sim._calc_loop()
 sim.rml_list()
 
+
 #uncomment to run the simulations
-sim.run_example()
+#sim.run_example()
 #sim.run(nNowrkers = 10)
 
 
