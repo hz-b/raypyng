@@ -43,13 +43,13 @@ params3 = [
 
 sp = SimulationParams(rml) # epxands to rml_list/params_list, now aware of runner
 sp.params=params
-sp._extract_param(verbose=False)
-sp._calc_loop()
+#sp._extract_param(verbose=False)
+#sp._calc_loop()
 #sim = Simulation(sp) # usees rml_list to save rml and run simulation
 
 # sim.simulation_folder = '/home/simone/Documents/RAYPYNG/raypyng/test'
 sim.simulation_name = 'test'
-sim.repeat = 1
+sim.repeat = 2
 #this is defined at the current working directory by default
 #sim.path = '/home/simone/Documents/RAYPYNG/raypyng' # expand internally to abspath()!
 
@@ -64,15 +64,15 @@ sim.exports = [{rml.beamline.Dipole:'ScalarBeamProperties'},
             ]
 
 
-
-sim.params=params
-sim._extract_param(verbose=False)
-sim._calc_loop()
+# params must be an instance of SimulationsParams
+sim.params=sp 
+#sim._extract_param(verbose=False)
+#sim._calc_loop()
 sim.rml_list()
 
 
 #uncomment to run the simulations
-#sim.run_example()
+sim.run_example()
 #sim.run(nNowrkers = 10)
 
 
