@@ -316,12 +316,12 @@ class Simulate():
 
     def rml_list(self):    
         result = []
-        abs_path = os.path.join(self.path, self.prefix+'_'+self.simulation_name)
+        self.sim_path = os.path.join(self.path, self.prefix+'_'+self.simulation_name)
         # check if simulation folder exists, otherwise create it
-        if not os.path.exists(abs_path):
-            os.makedirs(abs_path)      
+        if not os.path.exists(self.sim_path):
+            os.makedirs(self.sim_path)      
         for r in range(0,self.repeat):
-            sim_folder = os.path.join(abs_path,'round_'+str(r))
+            sim_folder = os.path.join(self.sim_path,'round_'+str(r))
             if not os.path.exists(sim_folder):
                 os.makedirs(sim_folder)
             for sim_n,param_set in enumerate(self.sp.params_list()):
@@ -363,8 +363,28 @@ class Simulate():
             for d in self.exports_list:
                 print(d[0], d[1])
 
-    def run_example(self,*args,**kwargs):
-        for index,rml in enumerate(self.rml_list(*args,**kwargs)):
+    def check_simulations(self,/,verbose:bool=False):
+        missing_simulations=[]
+        for simulation in self.rml_list():
+            folder = os.path.dirname(simulation.filename)
+            filename = os.path.basename(simulation.filename)
+            sim_number = filename.split("_")[0]
+            for d in self.exports_list:
+                export = sim_number+'_'+d[0]+'-'+d[1]+'.csv'
+                csv = os.path.join(folder,export)
+                if not os.path.exists(csv):
+                    missing_simulations.append(simulation)
+                    break
+        if verbose:
+            print('I have ', len(missing_simulations), 'simulations to do!')
+        return missing_simulations
+
+    def run_example(self):
+        # for index,rml in enumerate(self.rml_list()):
+        for rml in self.check_simulations():
+            print('simulating:', rml.filename)
+            filename = os.path.basename(rml.filename)
+            sim_number = filename.split("_")[0]
             rml.write()
             runner = RayUIRunner()
             api = RayUIAPI(runner)
@@ -372,7 +392,7 @@ class Simulate():
             api.load(rml.filename)
             api.trace()
             for i, d in enumerate(self.exports_list):
-                api.export(d[0], d[1], os.path.dirname(rml.filename), str(index)+'_') 
+                api.export(d[0], d[1], os.path.dirname(rml.filename), sim_number+'_') 
             api.quit()
             runner.kill()
 
