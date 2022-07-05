@@ -3,6 +3,7 @@ from .rml import RMLFile
 from .rml import ObjectElement,ParamElement
 import itertools
 import os 
+import numpy as np
 #from collections.abc import MutableMapping,MutableSequence
 from .runner import RayUIAPI,RayUIRunner
 
@@ -282,7 +283,6 @@ class Simulate():
 
     @exports.setter
     def exports(self,value):
-        print('hi')
         if not isinstance(value, list):
             raise AssertionError ('The exports must be a list, while it is a '+str(type(value)), value)
         for d in value:
@@ -309,7 +309,7 @@ class Simulate():
     @params.setter
     def params(self,value):
         if not isinstance(value, SimulationParams) == True:
-            raise AssertionError('Params must be an instance of SimulationParams')
+            raise AssertionError('Params must be an instance of SimulationParams, while it is', type(params))
         self.sp = value
         _ = self.sp._extract_param(verbose=False)
         _ =self.sp._calc_loop()
@@ -357,13 +357,14 @@ class Simulate():
                     elif isinstance(d[obj], list):
                         for l in d[obj]:
                             self.exports_list.append((obj['name'], l))
-                    else: raise ValueError('The exported param can be only str or list of str.')
+                    else: 
+                        raise ValueError('The exported param can be only str or list of str.')
         if verbose:
-            print('you will export the following:')
+            print('The following will be exported:')
             for d in self.exports_list:
                 print(d[0], d[1])
 
-    def check_simulations(self,/,verbose:bool=False):
+    def check_simulations(self,/,verbose:bool=True):
         missing_simulations=[]
         for simulation in self.rml_list():
             folder = os.path.dirname(simulation.filename)
@@ -376,13 +377,11 @@ class Simulate():
                     missing_simulations.append(simulation)
                     break
         if verbose:
-            print('I have ', len(missing_simulations), 'simulations to do!')
+            print('I still have ', len(missing_simulations), 'simulations to do!')
         return missing_simulations
 
     def run_example(self):
-        # for index,rml in enumerate(self.rml_list()):
         for rml in self.check_simulations():
-            print('simulating:', rml.filename)
             filename = os.path.basename(rml.filename)
             sim_number = filename.split("_")[0]
             rml.write()
@@ -396,10 +395,28 @@ class Simulate():
             api.quit()
             runner.kill()
 
+    def RP_simulation(self, source:ObjectElement, energy_range:range, exported_object:ObjectElement,/,params=None,exit_slit_size=None, cff=None, sim_folder:str=None, repeat:int=1):
+        if not isinstance(source, ObjectElement):
+            raise TypeError('The source must be an ObjectElement part of a beamline, while it is a', type(source))
+        if not isinstance(energy_range, (range,np.ndarray)):
+           raise TypeError('The energy_range must be an a ragne or a numpy array, while it is a', type(energy_range))
+        if not isinstance(exported_object, ObjectElement):
+            raise TypeError('The exported_object must be an ObjectElement part of a beamline, while it is a', type(exported_object))
+        params = []
+        params.append({source.energySpread:energy_range})
+        sp = SimulationParams(self.rml)
+        sp.params=params
+        self.params=sp
+        self.exports=[{exported_object:'ScalarBeamProperties'}]
+        if sim_folder is None:
+            self.simulation_name = 'RP'
+        else: 
+            self.simulation_name = sim_folder
+        self.repeat = repeat
 
-    
-
-
+        self.rml_list()
+        self.run_example()
+        
 
 
         
