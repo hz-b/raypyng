@@ -18,6 +18,17 @@ params = [
         ]
 
 
+
+params = [  
+            # set two parameters: "alpha" and "beta" in a dependent way. 
+            {rml.beamline.Dipole.photonEnergy:np.arange(100,2000,100)}, 
+            # set a range of  values - in independed way
+            {rml.beamline.ExitSlit.totalHeight:0.05},
+            # set a value - in independed way
+            {rml.beamline.Dipole.numberRays:5000}
+        ]
+
+
 sp.params=params
 
 # sim.simulation_folder = '/home/simone/Documents/RAYPYNG/raypyng/test'

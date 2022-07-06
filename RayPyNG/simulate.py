@@ -390,7 +390,7 @@ class Simulate():
 
     def run_example_mp(self,/,force=False):
         # trace using RAY-UI with number of workers
-        num_of_workers = 16
+        num_of_workers = 6
         filenames = []
         exports = []
         for rml in self.check_simulations(force=force):
@@ -417,7 +417,7 @@ class Simulate():
     #         runner.kill()
 
     def generate_export_params(self,rml):
-        sim_number = rml.filename.split("_")[0]
+        sim_number = os.path.basename(rml.filename).split("_")[0]
         return [ (d[0], d[1], os.path.dirname(rml.filename), sim_number+'_') for d in self.exports_list]
 
 
@@ -479,14 +479,17 @@ def run_rml_func_NoExports(rml_filename):
 
 def run_rml_func(_tuple):
     rml_filename,exports = _tuple
-    sim_number = rml_filename.split("_")[0]
+    #sim_number = rml_filename.split("_")[0]
     runner = RayUIRunner()
     api = RayUIAPI(runner)
     runner.run()
     api.load(rml_filename)
     api.trace()
     for e in exports:
-        api.export(*e) 
-    api.quit()
+        api.export(*e)
+    try: 
+        api.quit()
+    except:
+        pass
     runner.kill()
     return None
