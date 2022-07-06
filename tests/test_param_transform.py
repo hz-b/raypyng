@@ -1,6 +1,8 @@
 import numpy as np # needed for params3 generation, not for the internal processing
 import math
 
+from collections.abc import Iterable
+
 # Example:
 # In [5]: convert_params(params3)
 # Out[5]: 
@@ -28,7 +30,7 @@ import math
 
 params3 = [  
             # set two parameters: "alpha" and "beta" in a dependent way. 
-            {'grazingIncAngle':[1,2], 'longRadius':[100,180], 'photonEnergy':[1000,2000]}, 
+            {'grazingIncAngle':np.array([1,2]), 'longRadius':[100,180], 'photonEnergy':[1000,2000]}, 
             # set a range of  values - in independed way
             {'exitArmLengthMer':range(19400,19501, 100)},
             # set a value - in independed way
@@ -63,31 +65,49 @@ def LLD2LD(lld):
                     out_ld_d[k]=v
     return  out_ld
 
-def LDL2LLD(l):
+def LDL2LLD(ldl):
     """convert list of dicts of lists to list of lists of dicts
 
     Args:
-        l (_type_): _description_
+        ldl (_type_): input list of dicts of lists
 
     Returns:
         _type_: _description_
     """
-    final = [DL2LD(d) for d in l]
-    return final
-
-
+    #final = [DL2LD(a_dict) for a_dict in ldl]
+    return [DL2LD(a_dict) for a_dict in ldl]
 
 # based on the code from  here: https://stackoverflow.com/questions/5558418/list-of-dicts-to-from-dict-of-lists
-def DL2LD (dl) :
+def DL2LD(dl) :
     """
     convert dict of lists to list of dicts
     """
     if not dl: return []
-    #reserve as much *distinct* dicts as the longest sequence
-    result = [{} for i in range(max(map (len, dl.values())))]
+    # prepare resulting output list of dicts based on longest input
+    result = [{} for i in range(max(map(xlen, dl.values())))]
     #fill each dict, one key at a time
-    for k, seq in dl.items() :
-        for oneDict, oneValue in zip(result, seq) :
-            oneDict[k] = oneValue
+    for key, list_or_value in dl.items(): # iterate over input dict
+        if isinstance(list_or_value,Iterable): 
+            for out_dict,current_value in zip(result, list_or_value) :  # iterate over output dictinaries in parallel
+                out_dict[key] = current_value
+        else:
+            for out_dict in result:  # iterate over output dictinaries in parallel
+                out_dict[key] = list_or_value
     return result
 
+def xlen(x):
+    """return number of elements in sequence or 1
+
+    Args:
+        x (Any): any value
+
+    Returns:
+        int: number of elements
+    """
+    return len(x) if isinstance(x,Iterable) else 1
+
+
+# examples for the coding:
+
+dl = {'key1':[1,2], 'key2': [3,4]}
+dlv2 = {'key1':[1,2], 'key2': [3,4], 'key3':5}
