@@ -79,6 +79,8 @@ sim.run_example_mp(force=True)
  - we are passing rml to both the SimulationParams class 
    and to the Simulation class. 
    This might generate some errors, can we avoid it?
+
+   test
 '''
 
 
