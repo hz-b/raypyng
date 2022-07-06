@@ -45,11 +45,20 @@ sim.params=sp
 sim.rml_list()
 
 
+#sim.check_simulations(force=True)
+
 #uncomment to run the simulations
-sim.run_example()
+#sim.run_example(force=True)
+#uncomment to run the simulations
+sim.run_example_mp(force=True)
 
 # To be implemented
 #sim.run(nNowrkers = 10)
+
+
+
+# test resolving power simulations
+#sim.RP_simulation(rml.beamline.Dipole, np.arange(1000,1101,50), rml.beamline.DetectorAtFocus)
 
 '''A couple of things to keep in mind:
  - when we rteace we want to check if the file was 
