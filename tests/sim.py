@@ -61,7 +61,7 @@ sim.rml_list()
 #uncomment to run the simulations
 #sim.run_example(force=True)
 #uncomment to run the simulations
-sim.run_example_mp(force=True)
+sim.run_example_mp(number_of_cpus=8,force=True)
 
 # To be implemented
 #sim.run(nNowrkers = 10)
@@ -79,8 +79,7 @@ sim.run_example_mp(force=True)
  - we are passing rml to both the SimulationParams class 
    and to the Simulation class. 
    This might generate some errors, can we avoid it?
-
-   test
+ - to run the script: PYTHONPATH=. python tests/sim.py 
 '''
 
 

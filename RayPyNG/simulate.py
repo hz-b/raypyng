@@ -388,9 +388,8 @@ class Simulate():
         for rml in self.check_simulations(force=force):
             self.run_one(rml)
 
-    def run_example_mp(self,/,force=False):
+    def run_example_mp(self,/,number_of_cpus=1,force=False):
         # trace using RAY-UI with number of workers
-        num_of_workers = 6
         filenames = []
         exports = []
         for rml in self.check_simulations(force=force):
@@ -398,7 +397,7 @@ class Simulate():
             exports.append(self.generate_export_params(rml))
             rml.write()
         #return zip(filenames,exports)
-        with schwimmbad.JoblibPool(num_of_workers) as pool:
+        with schwimmbad.JoblibPool(number_of_cpus) as pool:
             #pool.map(run_rml_func,filenames)#zip(filenames,exports))
             pool.map(run_rml_func,zip(filenames,exports))
 

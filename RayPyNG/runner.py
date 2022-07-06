@@ -172,7 +172,6 @@ class RayUIAPI:
             _type_: _description_
         """
         payload = objects + " " + parameters + " " + export_path + " " + data_prefix
-        print("DEBUG::export::",payload)
         return self._cmd_io("export",payload,**kwargs)
 
     def _cmd_io(self,cmd:str,payload:str=None,/, cbNewLine=None):
