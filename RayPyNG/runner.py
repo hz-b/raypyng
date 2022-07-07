@@ -102,7 +102,10 @@ class RayUIRunner:
             str: line read from the input
         """
         if self.isrunning:
-            return self._process.stdout.readline().decode('utf8').rstrip('\n')
+            line =  self._process.stdout.readline().decode('utf8').rstrip('\n')
+            if True: # verbose
+                print(line)
+            return line
         else:
             return None
 
@@ -146,7 +149,7 @@ class RayUIAPI:
         if self._runner.isrunning:
             self._runner._write("quit")
             try:
-                self._process.wait(self._quit_timeout)
+                self._runner._process.wait(self._quit_timeout)
             except subprocess.TimeoutExpired:
                 raise TimeoutError("Timeout while trying to quit")
         

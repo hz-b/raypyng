@@ -126,11 +126,14 @@ class XmlElement:
         )
 
     def __repr__(self):
-        return "XmlElement(name = %s, attributes = %s, cdata = %s)" % (
-            self._name,
-            self._attributes,
-            self.cdata,
-        )
+        if True:
+            return "XmlElement(name = %s, attributes = %s, cdata = %s)" % (
+                self._name,
+                self._attributes,
+                self.cdata,
+            )
+        else:
+            return f'{self.id}'
 
     def __nonzero__(self):
         return self.is_root or self._name is not None

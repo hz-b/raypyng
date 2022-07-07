@@ -57,6 +57,18 @@ class RMLFile:
         self.read()
         
 
+    @property
+    def template(self):
+        return self._template
+
+    @property
+    def filename(self):
+        return self._filename
+
+    @filename.setter
+    def filename(self,value):
+        self._filename = value
+
 
     ###################################
     def read(self,file:str=None):
