@@ -59,28 +59,19 @@ sim.rml_list()
 #sim.check_simulations(force=True)
 
 #uncomment to run the simulations
-#sim.run_example(force=True)
+#sim.run(force=True)
 #uncomment to run the simulations
-sim.run_example_mp(number_of_cpus=8,force=True)
+sim.run_mp(number_of_cpus=8,force=False)
 
-# To be implemented
-#sim.run(nNowrkers = 10)
+
 
 
 
 # test resolving power simulations
-#sim.RP_simulation(rml.beamline.Dipole, np.arange(1000,1101,50), rml.beamline.DetectorAtFocus)
+#sim._RP_simulation(rml.beamline.Dipole, np.arange(1000,1101,50), rml.beamline.DetectorAtFocus)
 
-'''A couple of things to keep in mind:
- - when we rteace we want to check if the file was 
-   already traced and exported, or if we have to do it
- - we put the simulations in a list called result: 
-   what happens if we have millions of simulations?
- - we are passing rml to both the SimulationParams class 
-   and to the Simulation class. 
-   This might generate some errors, can we avoid it?
- - to run the script: PYTHONPATH=. python tests/sim.py 
-'''
+# to run the script
+# PYTHONPATH=. python tests/sim.py
 
 
         

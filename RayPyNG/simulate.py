@@ -384,11 +384,11 @@ class Simulate():
             print('I still have ', len(missing_simulations), 'simulations to do!')
         return missing_simulations
 
-    def run_example(self,/,force=False):
+    def run(self,/,force=False):
         for rml in self.check_simulations(force=force):
             self.run_one(rml)
 
-    def run_example_mp(self,/,number_of_cpus=1,force=False):
+    def run_mp(self,/,number_of_cpus=1,force=False):
         # trace using RAY-UI with number of workers
         filenames = []
         exports = []
@@ -401,43 +401,14 @@ class Simulate():
             #pool.map(run_rml_func,filenames)#zip(filenames,exports))
             pool.map(run_rml_func,zip(filenames,exports))
 
-    # def run_one(self,rml):
-    #         filename = os.path.basename(rml.filename)
-    #         sim_number = filename.split("_")[0]
-    #         rml.write()
-    #         runner = RayUIRunner()
-    #         api = RayUIAPI(runner)
-    #         runner.run()
-    #         api.load(rml.filename)
-    #         api.trace()
-    #         for i, d in enumerate(self.exports_list):
-    #             api.export(d[0], d[1], os.path.dirname(rml.filename), sim_number+'_') 
-    #         api.quit()
-    #         runner.kill()
-
     def generate_export_params(self,rml):
         sim_number = os.path.basename(rml.filename).split("_")[0]
         return [ (d[0], d[1], os.path.dirname(rml.filename), sim_number+'_') for d in self.exports_list]
 
-
     def run_one(self,rml):
         return self.run_rml(rml.filename)
 
-    def run_rml(self,rml_filename):
-        sim_number = rml_filename.split("_")[0]
-        runner = RayUIRunner()
-        api = RayUIAPI(runner)
-        runner.run()
-        api.load(rml_filename)
-        api.trace()
-        for i, d in enumerate(self.exports_list):
-            api.export(d[0], d[1], os.path.dirname(rml_filename), sim_number+'_') 
-        api.quit()
-        runner.kill()
-        return None
-
-
-    def RP_simulation(self, source:ObjectElement, energy_range:range, exported_object:ObjectElement,/,params=None,exit_slit_size=None, cff=None, sim_folder:str=None, repeat:int=1):
+    def _RP_simulation(self, source:ObjectElement, energy_range:range, exported_object:ObjectElement,/,params=None,exit_slit_size=None, cff=None, sim_folder:str=None, repeat:int=1):
         if not isinstance(source, ObjectElement):
             raise TypeError('The source must be an ObjectElement part of a beamline, while it is a', type(source))
         if not isinstance(energy_range, (range,np.ndarray)):
@@ -462,20 +433,6 @@ class Simulate():
 
 
         
-
-
-def run_rml_func_NoExports(rml_filename):
-    sim_number = rml_filename.split("_")[0]
-    runner = RayUIRunner()
-    api = RayUIAPI(runner)
-    runner.run()
-    api.load(rml_filename)
-    api.trace()
-
-    api.quit()
-    runner.kill()
-    return None
-
 def run_rml_func(_tuple):
     rml_filename,exports = _tuple
     #sim_number = rml_filename.split("_")[0]
