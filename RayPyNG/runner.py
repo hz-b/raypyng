@@ -12,7 +12,7 @@ import psutil
 class RayUIRunner:
     """RayUIRunner class implements all logic to start a RayUI process
     """
-    def __init__(self,ray_path=config.ray_path,ray_binary=config.ray_binary,background=True) -> None:
+    def __init__(self,ray_path=config.ray_path,ray_binary=config.ray_binary,background=True,hide=False) -> None:
         if ray_path is None:
             ray_path = self.__detect_ray_path()
         else:
@@ -21,6 +21,12 @@ class RayUIRunner:
         self._binary = ray_binary
         self._options = "-b" if background else ""
         self._process = None
+        if hide:
+            self._hide = "xvfb-run --auto-servernum --server-num=1 "
+        else: 
+            self._hide = ''
+
+
 
         # internal configuration parameters
         self._auto_flush = True     # flush on write calls
@@ -30,7 +36,7 @@ class RayUIRunner:
             fullpath = os.path.join(self._path,self._binary)
             if not os.path.isfile(fullpath):
                 raise RayPyRunnerError("Ray executable {0} is not found".format(fullpath))
-
+            fullpath = self._hide + fullpath
             env = dict(os.environ) # TODO:: rethink a bit about this line 
             self._process = subprocess.Popen(
                                             fullpath+" -b", 
