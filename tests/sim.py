@@ -3,7 +3,7 @@ from RayPyNG.simulate import Simulate
 from RayPyNG.simulate import SimulationParams
 import numpy as np
 
-sim = Simulate('examples/rml/high_energy_branch_flux_1200.rml',template='examples/rml/high_energy_branch_flux_1200.rml')
+sim = Simulate('examples/rml/high_energy_branch_flux_1200.rml',template='examples/rml/high_energy_branch_flux_1200.rml', hide=True)
 rml = sim.rml
 sp = SimulationParams(rml) # epxands to rml_list/params_list, now aware of runner
 

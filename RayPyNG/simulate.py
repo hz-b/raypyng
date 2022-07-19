@@ -197,7 +197,7 @@ class SimulationParams():
 class Simulate():
     """class to simulate 
     """
-    def __init__(self, rml=None,**kwargs) -> None:
+    def __init__(self, rml=None, hide=False,**kwargs) -> None:
         if rml is not None:
             if isinstance(rml,RMLFile):
                 self._rml = rml
@@ -207,6 +207,7 @@ class Simulate():
             raise Exception("rml file must be defined")
         self.path   = None
         self.prefix = 'RAYPy_Simulation'
+        self._hide = hide
         
     def test_simo(self,s):
         print(s.simulations_param_list)
@@ -390,16 +391,14 @@ class Simulate():
 
     def run_mp(self,/,number_of_cpus=1,force=False):
         # trace using RAY-UI with number of workers
-        filenames = []
+        filenames_and_hide = []
         exports = []
         for rml in self.check_simulations(force=force):
-            filenames.append(rml.filename)
+            filenames_and_hide.append([rml.filename, self._hide])
             exports.append(self.generate_export_params(rml))
             rml.write()
-        #return zip(filenames,exports)
         with schwimmbad.JoblibPool(number_of_cpus) as pool:
-            #pool.map(run_rml_func,filenames)#zip(filenames,exports))
-            pool.map(run_rml_func,zip(filenames,exports))
+            pool.map(run_rml_func,zip(filenames_and_hide,exports))
 
     def generate_export_params(self,rml):
         sim_number = os.path.basename(rml.filename).split("_")[0]
@@ -434,9 +433,10 @@ class Simulate():
 
         
 def run_rml_func(_tuple):
-    rml_filename,exports = _tuple
-    #sim_number = rml_filename.split("_")[0]
-    runner = RayUIRunner()
+    filenames_and_hide,exports = _tuple
+    rml_filename = filenames_and_hide[0]
+    hide = filenames_and_hide[1]
+    runner = RayUIRunner(hide=hide)
     api = RayUIAPI(runner)
     runner.run()
     api.load(rml_filename)
