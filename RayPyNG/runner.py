@@ -15,7 +15,7 @@ class RayUIRunner:
     def __init__(self,ray_path=config.ray_path,ray_binary=config.ray_binary,background=True,hide=False) -> None:
         if ray_path is None:
             ray_path = self.__detect_ray_path()
-        else:
+        if ray_path is None:
             raise Exception("ray_path must be defined for now!")
         self._path = ray_path
         self._binary = ray_binary
@@ -101,14 +101,21 @@ class RayUIRunner:
         else:
             raise RayPyRunnerError("RayUI process is not started")
 
-    def _readline(self)->str:
+    def _readline(self, cmd=None)->str:
         """read a line from the stdout of the process and convert to a string
 
         Returns:
             str: line read from the input
         """
+        print("DEBUG:: start runner._readline")
         if self.isrunning:
-            line =  self._process.stdout.readline().decode('utf8').rstrip('\n')
+            print("DEBUG:: start runner._readline, self is running")
+            if cmd == 'trace success':
+                line =  self._process.stdout.readline()
+                print("DEBUG:: start runner._readline, line", line)
+            else :
+                line =  self._process.stdout.readline().decode('utf8').rstrip('\n')
+            print("DEBUG:: start runner._readline, line catched")
             if True: # verbose
                 print(line)
             return line
@@ -162,8 +169,12 @@ class RayUIAPI:
     def load(self,rml_path,**kwargs):
         return self._cmd_io("load",rml_path,**kwargs)
 
-    def trace(self,**kwargs):
-        return self._cmd_io("trace",**kwargs)
+    def trace(self,analyze=True,**kwargs):
+        if analyze:
+            cmd = "trace"
+        else:
+            cmd ="trace noanalyze"
+        return self._cmd_io(cmd,**kwargs)
 
     def export(self,objects:str, parameters:str, export_path:str, data_prefix:str, **kwargs):
         """_summary_
@@ -178,6 +189,7 @@ class RayUIAPI:
             _type_: _description_
         """
         payload = objects + " " + parameters + " " + export_path + " " + data_prefix
+        print('exportcmd: ', payload)
         return self._cmd_io("export",payload,**kwargs)
 
     def _cmd_io(self,cmd:str,payload:str=None,/, cbNewLine=None):
@@ -201,10 +213,14 @@ class RayUIAPI:
         if payload is None:
             payload = ""
         cmdstr = cmd+" "+payload
+        print('give command', cmdstr)
         self._runner._write(cmdstr)
         self._wait_for_cmd_io(cmd, timeout = 2.0)
+        print('here I wait', cbNewLine)
+
         status = self._wait_for_cmd_io(cmd,cbdataread=cbNewLine)
-        if status=="success":
+        print('statussimo', status)
+        if status=="success" or 'trace success':
             return True
         elif status=="failed":
             return False
@@ -216,12 +232,16 @@ class RayUIAPI:
     def _wait_for_cmd_io(self,cmd,timeout=None,cbdataread=None):
         timecnt = 0.0
         line = ""
+        print('I am waiting for this command:', cmd)
         while True:
-            line = self._runner._readline()
-            #print("DEBUG:: line is:",line)
+            print('here I arrive, time:', timecnt)
+            line = self._runner._readline(cmd=cmd)
+            print("DEBUG:: line is:",line, type(line))
             if line is None:
                 continue
             if (line.startswith(cmd)):
+                break
+            if line == 'trace success':
                 break
             else:
                 if cbdataread is not None:
@@ -231,6 +251,7 @@ class RayUIAPI:
             timecnt+=self._read_wait_delay
             if timeout is not None and timecnt>timeout:
                 raise TimeoutError("timeout while waiting ray command io")
+        print('Command executed')
         return line.lstrip(cmd).strip()
 
 

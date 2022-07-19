@@ -1,8 +1,8 @@
 from RayPyNG import runner
 
-r = runner.RayUIRunner()
+r = runner.RayUIRunner(ray_path='/home/simone/RAY-UI-development_bk/')
 a = runner.RayUIAPI(r)
 
 r.run()
 
-a.load("test")
+a.load('rml/beamline.rml')
