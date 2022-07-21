@@ -42,19 +42,21 @@ sim.repeat = 1
 
 # this is defined as RAYPy_simulation by default
 #sim.prefix = 'asdasd_'
+analyze = False
+analyze = True
 
-# sim.analyze = True
-# # This must be a list of dictionaries
-# sim.exports  =  [{rml.beamline.Dipole:'ScalarBeamProperties'},
-#                  {rml.beamline.DetectorAtFocus:['ScalarElementProperties','ScalarBeamProperties']}
-#                 ]
-
-
-sim.analyze = False
-## This must be a list of dictionaries
-sim.exports  =  [{rml.beamline.Dipole:'RawRaysOutgoing'},
-                 {rml.beamline.DetectorAtFocus:['RawRaysOutgoing']}
-                ]
+if analyze:
+    sim.analyze = True
+    # This must be a list of dictionaries
+    sim.exports  =  [{rml.beamline.Dipole:'ScalarBeamProperties'},
+                    {rml.beamline.DetectorAtFocus:['ScalarElementProperties','ScalarBeamProperties']}
+                    ]
+else:
+    sim.analyze = False
+    ## This must be a list of dictionaries
+    sim.exports  =  [{rml.beamline.Dipole:'RawRaysOutgoing'},
+                    {rml.beamline.DetectorAtFocus:['RawRaysOutgoing']}
+                    ]
 
 # params must be an instance of SimulationsParams
 sim.params=sp 
