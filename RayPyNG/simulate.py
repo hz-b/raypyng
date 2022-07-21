@@ -209,9 +209,6 @@ class Simulate():
         self.prefix = 'RAYPy_Simulation'
         self._hide = hide
         self.analyze = True
-        
-    def test_simo(self,s):
-        print(s.simulations_param_list)
 
     @property
     def possible_exports(self):
@@ -457,15 +454,12 @@ def run_rml_func(_tuple):
     rml_filename = filenames_hide_analyze[0]
     hide         = filenames_hide_analyze[1]
     analyze      = filenames_hide_analyze[2]
-    print('exports', exports)
     runner = RayUIRunner(hide=hide)
     api    = RayUIAPI(runner)
     runner.run()
     api.load(rml_filename)
     api.trace(analyze=analyze)
-    print('exports', exports)
     for e in exports:
-        print('e',e)
         api.export(*e)
     try: 
         api.quit()
