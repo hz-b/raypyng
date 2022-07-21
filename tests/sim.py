@@ -43,7 +43,6 @@ sim.repeat = 1
 # this is defined as RAYPy_simulation by default
 #sim.prefix = 'asdasd_'
 
-# analyze:
 # sim.analyze = True
 # # This must be a list of dictionaries
 # sim.exports  =  [{rml.beamline.Dipole:'ScalarBeamProperties'},
@@ -52,7 +51,7 @@ sim.repeat = 1
 
 
 sim.analyze = False
-# This must be a list of dictionaries
+## This must be a list of dictionaries
 sim.exports  =  [{rml.beamline.Dipole:'RawRaysOutgoing'},
                  {rml.beamline.DetectorAtFocus:['RawRaysOutgoing']}
                 ]
@@ -68,8 +67,9 @@ sim.rml_list()
 
 #uncomment to run the simulations
 #sim.run(force=True)
+
 #uncomment to run the simulations
-sim.run_mp(number_of_cpus=1,force=False)
+sim.run_mp(number_of_cpus=5,force=False)
 
 
 
