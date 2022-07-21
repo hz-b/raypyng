@@ -35,19 +35,28 @@ sp.params=params
 sim.simulation_name = 'test'
 
 # repeat the simulations as many time as needed
-sim.repeat = 2
+sim.repeat = 1
 
 #this is defined at the current working directory by default
 #sim.path = '/home/simone/Documents/RAYPYNG/raypyng' 
 
 # this is defined as RAYPy_simulation by default
 #sim.prefix = 'asdasd_'
+analyze = False
+analyze = True
 
-# This must be a list of dictionaries
-sim.exports  =  [{rml.beamline.Dipole:'ScalarBeamProperties'},
-                 {rml.beamline.DetectorAtFocus:['ScalarElementProperties','ScalarBeamProperties']}
-                ]
-
+if analyze:
+    sim.analyze = True
+    # This must be a list of dictionaries
+    sim.exports  =  [{rml.beamline.Dipole:'ScalarBeamProperties'},
+                    {rml.beamline.DetectorAtFocus:['ScalarElementProperties','ScalarBeamProperties']}
+                    ]
+else:
+    sim.analyze = False
+    ## This must be a list of dictionaries
+    sim.exports  =  [{rml.beamline.Dipole:'RawRaysOutgoing'},
+                    {rml.beamline.DetectorAtFocus:['RawRaysOutgoing']}
+                    ]
 
 # params must be an instance of SimulationsParams
 sim.params=sp 
@@ -60,8 +69,9 @@ sim.rml_list()
 
 #uncomment to run the simulations
 #sim.run(force=True)
+
 #uncomment to run the simulations
-sim.run_mp(number_of_cpus=8,force=False)
+sim.run_mp(number_of_cpus=5,force=False)
 
 
 

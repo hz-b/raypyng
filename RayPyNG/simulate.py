@@ -208,9 +208,7 @@ class Simulate():
         self.path   = None
         self.prefix = 'RAYPy_Simulation'
         self._hide = hide
-        
-    def test_simo(self,s):
-        print(s.simulations_param_list)
+        self.analyze = True
 
     @property
     def possible_exports(self):
@@ -234,6 +232,13 @@ class Simulate():
                                 'ScalarElementProperties'
                              ]
         return self._possible_exports
+    
+    @property
+    def possible_exports_without_analysis(self):
+        self._possible_exports_without_analysis = ['RawRaysIncoming',
+                                'RawRaysOutgoing'
+                             ]
+        return self._possible_exports_without_analysis
 
     @property 
     def rml(self):
@@ -246,6 +251,16 @@ class Simulate():
     @simulation_name.setter
     def simulation_name(self,value):
         self._simulation_name = value
+
+    @property 
+    def analyze(self):
+        return self._analyze
+    
+    @analyze.setter
+    def analyze(self,value):
+        if not isinstance(value, bool):
+            raise ValueError ('Only bool are allowed')
+        self._analyze = value
         
     @property 
     def repeat(self):
@@ -300,7 +315,9 @@ class Simulate():
                         raise AssertionError('It is not possible to export this file. The possible files to exports are ', self.possible_exports)
                 elif isinstance(d[k], list):
                     for dd in d[k]:
-                        if dd not in self.possible_exports:
+                        if dd not in self.possible_exports and self._analyze==True:
+                            raise AssertionError('It is not possible to export this file. The possible files to exports are ', self.possible_exports)
+                        elif dd not in self.possible_exports_without_analysis and self._analyze==False:
                             raise AssertionError('It is not possible to export this file. The possible files to exports are ', self.possible_exports)
 
         self._exports = value
@@ -391,14 +408,14 @@ class Simulate():
 
     def run_mp(self,/,number_of_cpus=1,force=False):
         # trace using RAY-UI with number of workers
-        filenames_and_hide = []
+        filenames_hide_analyze = []
         exports = []
         for rml in self.check_simulations(force=force):
-            filenames_and_hide.append([rml.filename, self._hide])
+            filenames_hide_analyze.append([rml.filename, self._hide, self._analyze])
             exports.append(self.generate_export_params(rml))
             rml.write()
         with schwimmbad.JoblibPool(number_of_cpus) as pool:
-            pool.map(run_rml_func,zip(filenames_and_hide,exports))
+            pool.map(run_rml_func,zip(filenames_hide_analyze,exports))
 
     def generate_export_params(self,rml):
         sim_number = os.path.basename(rml.filename).split("_")[0]
@@ -433,14 +450,15 @@ class Simulate():
 
         
 def run_rml_func(_tuple):
-    filenames_and_hide,exports = _tuple
-    rml_filename = filenames_and_hide[0]
-    hide = filenames_and_hide[1]
+    filenames_hide_analyze,exports = _tuple
+    rml_filename = filenames_hide_analyze[0]
+    hide         = filenames_hide_analyze[1]
+    analyze      = filenames_hide_analyze[2]
     runner = RayUIRunner(hide=hide)
-    api = RayUIAPI(runner)
+    api    = RayUIAPI(runner)
     runner.run()
     api.load(rml_filename)
-    api.trace()
+    api.trace(analyze=analyze)
     for e in exports:
         api.export(*e)
     try: 

@@ -1,6 +1,7 @@
 ###############################################################################
 # RayUI process handling and RayUI command API
 
+from sre_constants import SUCCESS
 from . import config
 from .errors import RayPyRunnerError,RayPyError,TimeoutError
 import os
@@ -15,7 +16,7 @@ class RayUIRunner:
     def __init__(self,ray_path=config.ray_path,ray_binary=config.ray_binary,background=True,hide=False) -> None:
         if ray_path is None:
             ray_path = self.__detect_ray_path()
-        else:
+        if ray_path is None:
             raise Exception("ray_path must be defined for now!")
         self._path = ray_path
         self._binary = ray_binary
@@ -100,7 +101,7 @@ class RayUIRunner:
                 self._process.stdin.flush()
         else:
             raise RayPyRunnerError("RayUI process is not started")
-
+    
     def _readline(self)->str:
         """read a line from the stdout of the process and convert to a string
 
@@ -114,6 +115,7 @@ class RayUIRunner:
             return line
         else:
             return None
+
 
     def __detect_ray_path(self) -> str:
         """Internal function to autodetect installation path of RayUI
@@ -162,8 +164,12 @@ class RayUIAPI:
     def load(self,rml_path,**kwargs):
         return self._cmd_io("load",rml_path,**kwargs)
 
-    def trace(self,**kwargs):
-        return self._cmd_io("trace",**kwargs)
+    def trace(self,analyze=True,**kwargs):
+        if analyze:
+            cmd = "trace"
+        else:
+            cmd ="trace noanalyze"
+        return self._cmd_io(cmd,**kwargs)
 
     def export(self,objects:str, parameters:str, export_path:str, data_prefix:str, **kwargs):
         """_summary_
@@ -203,8 +209,11 @@ class RayUIAPI:
         cmdstr = cmd+" "+payload
         self._runner._write(cmdstr)
         self._wait_for_cmd_io(cmd, timeout = 2.0)
-        status = self._wait_for_cmd_io(cmd,cbdataread=cbNewLine)
-        if status=="success":
+        if cmd == 'trace noanalyze':
+            status = 'success'
+        else:
+            status = self._wait_for_cmd_io(cmd,cbdataread=cbNewLine)
+        if status=="success" or 'trace success':
             return True
         elif status=="failed":
             return False
@@ -218,9 +227,10 @@ class RayUIAPI:
         line = ""
         while True:
             line = self._runner._readline()
-            #print("DEBUG:: line is:",line)
             if line is None:
                 continue
+            if line == 'trace success':
+                break
             if (line.startswith(cmd)):
                 break
             else:
