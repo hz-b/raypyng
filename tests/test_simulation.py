@@ -1,4 +1,3 @@
-#from RayPyNG.rml import RMLFile
 from RayPyNG.simulate import Simulate
 from RayPyNG.simulate import SimulationParams
 import numpy as np
