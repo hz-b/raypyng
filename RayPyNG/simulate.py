@@ -1,7 +1,7 @@
 
 from fileinput import filename
 from .rml import RMLFile
-from .rml import ObjectElement,ParamElement
+from .rml import ObjectElement,ParamElement, BeamlineElement
 import itertools
 import os 
 import numpy as np
@@ -116,10 +116,19 @@ class SimulationParams():
             print('self.dep_value_dependency',self.dep_value_dependency)
         return (self.ind_param_values,self.ind_par,self.dep_param_dependency,self.dep_value_dependency,self.dep_par)
 
+    def _make_dictionary(self, keys, items):
+        d = {}
+        for v,k in enumerate(keys):
+            # it follows a dirty little trick to ensure that all the dictionry keys
+            # are different
+            k.cdata=v+3987.3423421534563632
+            d.update({k:items[v]})
+        return d
+
     def params_list(self, obj=None):
         result = []
         for i in self.simulations_param_list:
-            result.append(dict(zip(self.param_to_simulate, i)))
+            result.append(self._make_dictionary(self.param_to_simulate, i))
         return result
 
     def _calc_loop(self, verbose:bool=True):
@@ -144,7 +153,6 @@ class SimulationParams():
         # here we add the dependent parameters
         for count, loop in enumerate(self.loop):
             for ind,par in enumerate(self.dep_param_dependency.keys()):
-                #print(par.id, loop[self.dep_param_dependency_index[ind]], self.dep_value_dependency[ind][loop[self.dep_param_dependency_index[ind]]] )
                 to_add = (self.dep_value_dependency[ind][loop[self.dep_param_dependency_index[ind]]],)
                 loop = loop + to_add
             self.simulations_param_list.append(loop)
@@ -192,7 +200,7 @@ class SimulationParams():
         self._enable_param(param)
         if not isinstance(value,str):
             value = str(value)
-            param.cdata = value
+        param.cdata = value
 
 class Simulate():
     """class to simulate 
@@ -337,22 +345,23 @@ class Simulate():
 
     def rml_list(self):    
         result = []
+        self.sim_list_path = []
         self.sim_path = os.path.join(self.path, self.prefix+'_'+self.simulation_name)
         # check if simulation folder exists, otherwise create it
         if not os.path.exists(self.sim_path):
-            os.makedirs(self.sim_path)      
+            os.makedirs(self.sim_path)
         for r in range(0,self.repeat):
             sim_folder = os.path.join(self.sim_path,'round_'+str(r))
             if not os.path.exists(sim_folder):
                 os.makedirs(sim_folder)
             for sim_n,param_set in enumerate(self.sp.params_list()):
-                rml_path = os.path.join(sim_folder,str(sim_n)+'_'+self.simulation_name)
-                rml = RMLFile(rml_path+'.rml',template=self.rml.template)
+                rml_path = os.path.join(sim_folder,str(sim_n)+'_'+self.simulation_name+'.rml')
                 for param,value in param_set.items():
                     self.sp._write_value_to_param(param,value)
-                rml.write()
+                self.rml.write(rml_path)
+                self.sim_list_path.append(rml_path)
                 # is this gonna create problems if I have millions of simulations?
-                result.append(rml)
+                result.append(self.rml)
 
             # create csv file with simulations recap
             with open(os.path.join(sim_folder,'looper.csv'), 'w') as f:
@@ -369,7 +378,7 @@ class Simulate():
                     f.write(line+'\n')  
         return result
 
-    def compose_exports_list(self, exports_dict_list,/,verbose:bool=False):
+    def compose_exports_list(self, exports_dict_list,/,verbose:bool=True):
         self.exports_list=[]
         for i, d in enumerate(self.exports):
                 for obj in d.keys():
@@ -388,9 +397,9 @@ class Simulate():
     def check_simulations(self,/,verbose:bool=True, force:bool=False):
         if force: return self.rml_list()
         missing_simulations=[]
-        for simulation in self.rml_list():
-            folder = os.path.dirname(simulation.filename)
-            filename = os.path.basename(simulation.filename)
+        for ind,simulation in enumerate(self.rml_list()):
+            folder = os.path.dirname(self.sim_list_path[ind])
+            filename = os.path.basename(self.sim_list_path[ind])
             sim_number = filename.split("_")[0]
             for d in self.exports_list:
                 export = sim_number+'_'+d[0]+'-'+d[1]+'.csv'
@@ -410,33 +419,66 @@ class Simulate():
         # trace using RAY-UI with number of workers
         filenames_hide_analyze = []
         exports = []
-        for rml in self.check_simulations(force=force):
+        for ind,rml in enumerate(self.check_simulations(force=force)):
             filenames_hide_analyze.append([rml.filename, self._hide, self._analyze])
-            exports.append(self.generate_export_params(rml))
+            exports.append(self.generate_export_params(self.sim_list_path[ind]))
             rml.write()
         with schwimmbad.JoblibPool(number_of_cpus) as pool:
             pool.map(run_rml_func,zip(filenames_hide_analyze,exports))
 
     def generate_export_params(self,rml):
-        sim_number = os.path.basename(rml.filename).split("_")[0]
-        return [ (d[0], d[1], os.path.dirname(rml.filename), sim_number+'_') for d in self.exports_list]
+        folder = os.path.dirname(rml)
+        filename = os.path.basename(rml)
+        sim_number = filename.split("_")[0]
+        return [ (d[0], d[1], folder, sim_number+'_') for d in self.exports_list]
 
     def run_one(self,rml):
         return self.run_rml(rml.filename)
 
-    def _RP_simulation(self, source:ObjectElement, energy_range:range, exported_object:ObjectElement,/,params=None,exit_slit_size=None, cff=None, sim_folder:str=None, repeat:int=1):
-        if not isinstance(source, ObjectElement):
+    def RP_simulation(self, energy_range:range, exported_object:ObjectElement,/, *args,source:ObjectElement=None,sim_folder:str=None, repeat:int=1, cpu:int=1, force:bool=False):
+        if not isinstance(source, ObjectElement) and source != None:
             raise TypeError('The source must be an ObjectElement part of a beamline, while it is a', type(source))
         if not isinstance(energy_range, (range,np.ndarray)):
            raise TypeError('The energy_range must be an a ragne or a numpy array, while it is a', type(energy_range))
         if not isinstance(exported_object, ObjectElement):
             raise TypeError('The exported_object must be an ObjectElement part of a beamline, while it is a', type(exported_object))
         params = []
-        params.append({source.energySpread:energy_range})
+        
+        # find source and add to param with defined user energy range
+        found_source = False
+        if source == None:
+            for oe in self.rml.beamline._children:
+                for par in oe:
+                    try:
+                        params.append({par.photonEnergy:energy_range})
+                        found_source = True
+                        break
+                    except:
+                        pass
+        else:
+            params.append({source.photonEnergy:energy_range})
+            found_source = True
+        if found_source!=True:
+            raise Error('I did not find the source')
+        if args:
+            for a in args:
+                if not isinstance(a,dict):
+                    raise TypeError('The args must be dictionaries, while I found a',type(a) )
+                params.append(a)
+        # turn reflectivity of all elements off, grating eff to 100%
+        for oe in self.rml.beamline._children:
+                for par in oe:
+                    try:
+                        params.append({par.reflectivityType:0})
+                    except:
+                        pass
         sp = SimulationParams(self.rml)
         sp.params=params
         self.params=sp
-        self.exports=[{exported_object:'ScalarBeamProperties'}]
+        if self.analyze == True:
+            self.exports=[{exported_object:'ScalarBeamProperties'}]
+        elif self.analyze == False:
+            self.exports=[{exported_object:'RawRaysOutgoing'}]
         if sim_folder is None:
             self.simulation_name = 'RP'
         else: 
@@ -444,7 +486,7 @@ class Simulate():
         self.repeat = repeat
 
         self.rml_list()
-        self.run_mp(number_of_cpus=5,force=False)
+        self.run_mp(number_of_cpus=cpu,force=True)
         
 
 
