@@ -444,7 +444,7 @@ class Simulate():
         self.repeat = repeat
 
         self.rml_list()
-        self.run_example()
+        self.run_mp(number_of_cpus=5,force=False)
         
 
 
