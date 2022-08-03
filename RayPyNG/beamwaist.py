@@ -1,3 +1,6 @@
+from RayPyNG.simulate import Simulate
+from .rml import ObjectElement
+
 import numpy as np
 import matplotlib.pyplot as plt
 import time
@@ -6,12 +9,14 @@ import sys
 from scipy.ndimage import rotate
     
 
-class RayPy_PlotBeamline():
+class PlotBeamwaist():
     '''
     To use this class one needs to trace and export RawRaysOutgoing for each optical element (no image planes)
     '''
-    def __init__(self, directory):
-        self.directory = directory
+    def __init__(self, directory:str, sim:Simulate):
+        self.directory = 'RAYPy_Simulation_'+directory
+        if isinstance(sim,Simulate):
+            self._sim = sim
         self.lim              = False
         self.step             = False
         self.z                = False
@@ -23,6 +28,41 @@ class RayPy_PlotBeamline():
         self.elements         = []
         self.distances        = [0]
         self.count_fig        = 0
+    
+    def simulate_beamline(self, energy:float,/,source:ObjectElement=None,sim_folder:str=None, force:bool=False):
+        self._sim.beamwaist_simulation(energy,source=source,sim_folder=sim_folder, force=force)
+    
+    def _element_list(self):
+        self.element_names_list = []
+        self.distance_list=[]
+        self.rotation_list=[]
+        for ind, oe in enumerate(self._sim.rml.beamline._children):
+                for par in oe:
+                    try:
+                        a=par.alignmentError
+                        self.distance_list.append(float(par.worldPosition.z.cdata))
+                        self.element_names_list.append('element_'+str(ind))
+                        # print('DEBUG:: oe.name:', oe.name)
+                        if ind == 0:
+                            self.rotation_list.append(False)
+                        else:
+                            if par.azimuthalAngle.cdata == '0' or par.azimuthalAngle.cdata=='180':
+                                self.rotation_list.append(False)
+                            elif par.azimuthalAngle.cdata == '90' or par.azimuthalAngle.cdata=='270':
+                                self.rotation_list.append(True)
+                            else: 
+                                raise ValueError('Only beamline elements with azimula angle 0,90,180,270 are supported', oe.name, par.azimuthalAngle.cdata)
+                    except AttributeError:
+                        pass
+        #print('DEBUG:: element_names_list', self.element_names_list)
+        #print('DEBUG:: distance_list', self.distance_list)
+        #print('DEBUG:: rotation_list', self.rotation_list)
+        # I overwrite the names for the moment, since I can not access them automatically
+        self.element_names_list=['Dipole', 'M1', 'PremirrorM2', 'PG', 'M3', 'ExitSlit', 'KB1', 'KB2' ]
+        for ind in range(len(self.element_names_list)):
+            self.add_element(name=self.element_names_list[ind],
+                            z=self.distance_list[ind],
+                            rot=self.rotation_list[ind])
     
     def reduce_Nrays(self,factor):
         self.factor = factor
@@ -51,8 +91,8 @@ class RayPy_PlotBeamline():
         if self.previous_results == False:
             print('Trace '+name)
             
-            rays    = np.loadtxt(os.path.join(self.directory, 
-                                         name
+            rays    = np.loadtxt(os.path.join(self.directory,'round_0', 
+                                         '0_'+name
                                          +'-RawRaysOutgoing.csv'), 
                             skiprows=2)
             if self.factor != False:
@@ -126,14 +166,13 @@ class RayPy_PlotBeamline():
                 argmax_0   =  np.argmax(yh)
                 
             else:
+                print('else')
                 xh_temp    =  self.make_histogram(x)
                 yh_temp    =  self.make_histogram(y)
                 xh         =  np.concatenate((xh,xh_temp[0]), axis=0)
                 yh         =  np.concatenate((yh,yh_temp[0]))
                 argmax     =  np.argmax(yh)
                 #yh         = np.roll(yh,argmax_0-argmax)
-
-            
 
         xh=xh.reshape((n+1,xh_temp[0].shape[0]))  
         yh=yh.reshape((n+1,yh_temp[0].shape[0]))  
