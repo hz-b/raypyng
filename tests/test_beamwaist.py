@@ -16,12 +16,11 @@ bw.simulate_beamline(energy,nrays=nrays, force=False)
 
 bw.define_hist(lim=20,step=.5)  # lim should be larger than max beam waist
 bw.define_zstep(step_z=100)      # in mm, step in optical direction to trace RAYS
-bw.reduce_Nrays(factor = 1)   # this reduces the n of rays by the factor you set
+bw.reduce_Nrays(factor = 100)   # this reduces the n of rays by the factor you set
 
-element_names_list = ['Dipole', 'M1', 'PreM2', 'PG', 'M3', 'ExitSlit', 'KB1', 'KB2' ]
-#bw.trace_beamwaist(save_results=True,element_names_list=element_names_list)
+bw.trace_beamwaist(save_results=True)
 
-bw.load_previous_results(element_names_list=element_names_list) # set the firs argument to true if you already saved the results of the trace
+bw.load_previous_results() # set the firs argument to true if you already saved the results of the trace
 
 
 bw.change_name(new_name = 'Dip', pos=0)
