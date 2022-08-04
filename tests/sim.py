@@ -3,7 +3,8 @@ from RayPyNG.simulate import Simulate
 from RayPyNG.simulate import SimulationParams
 import numpy as np
 
-
+# to run the script
+# PYTHONPATH=. python tests/test_beamwaist.py
 
 sim = Simulate('examples/rml/high_energy_branch_flux_1200.rml',template='examples/rml/high_energy_branch_flux_1200.rml', hide=True)
 
