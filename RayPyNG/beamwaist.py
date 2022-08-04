@@ -36,13 +36,12 @@ class PlotBeamwaist():
         for ind, oe in enumerate(self._sim.rml.beamline._children):
                 for par in oe:
                     try:
-                        #a=par.alignmentError
+                        # append to distances
                         if ind != 0:
                             self.distance_list.append(float(par.worldPosition.z.cdata)-sum(self.distance_list))                            
                         else:    
                             self.distance_list.append(float(par.worldPosition.z.cdata))
-                        self.element_names_list.append('element_'+str(ind))
-                        # print('DEBUG:: oe.name:', oe.name)
+                        # append to rotation
                         if ind == 0:
                             self.rotation_list.append(False)
                         else:
@@ -52,6 +51,9 @@ class PlotBeamwaist():
                                 self.rotation_list.append(True)
                             else: 
                                 raise ValueError('Only beamline elements with azimuthal angle 0,90,180,270 are supported', oe.name, par.azimuthalAngle.cdata)
+                        # append to element names list, only if it is not an imageplane
+                        if oe.get_attribute('type') != 'ImagePlaneBundle' and oe.get_attribute('type') != 'ImagePlane':
+                            self.element_names_list.append(oe.get_attribute('name'))
                     except AttributeError:
                         pass
         if debug:
@@ -251,7 +253,6 @@ class PlotBeamwaist():
         
         # remove xticks and labels which are too close to eaeachhc other
         for ind in range(xtick_pos.shape[0]-2, 1, -1):
-            print('DEBUG:: ind', ind)
             if ind>0:# < xtick_pos.shape[0]-1:
                 if np.abs(xtick_pos[ind]-xtick_pos[ind+1])<1:
                     xtick_label = np.delete(xtick_label,ind)
