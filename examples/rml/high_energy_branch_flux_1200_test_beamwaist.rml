@@ -2,7 +2,7 @@
     <version>1.1</version>
     <beamline>
         <object name="Dipole" type="Dipole">
-            <param id="numberRays" enabled="T">100000</param>
+            <param id="numberRays" enabled="T">100</param>
             <param id="sourceWidth" enabled="T">0.062</param>
             <param id="sourceHeight" enabled="T">0.04</param>
             <param id="verEbeamDiv" enabled="T">2</param>
@@ -17,7 +17,7 @@
             <param id="rotationYerror" enabled="F">0</param>
             <param id="energyDistributionType" comment="Values" enabled="T">1</param>
             <param id="photonEnergyDistributionFile" relative="" enabled="F"></param>
-            <param id="photonEnergy" enabled="T">1000</param>
+            <param id="photonEnergy" enabled="T">500</param>
             <param id="energySpreadType" comment="white band" enabled="T">0</param>
             <param id="energySpreadUnit" comment="%" enabled="T">1</param>
             <param id="energySpread" enabled="T">0.1</param>
@@ -124,7 +124,7 @@
                 <z>0.999848</z>
             </param>
         </object>
-        <object name="Premirror M2" type="Plane Mirror">
+        <object name="PreM2" type="Plane Mirror">
             <param id="geometricalShape" comment="rectangle" enabled="T">0</param>
             <param id="totalWidth" enabled="T">25</param>
             <param id="totalLength" enabled="T">500</param>

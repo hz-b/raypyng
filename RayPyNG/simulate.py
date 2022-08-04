@@ -459,7 +459,7 @@ class Simulate():
             params.append({source.photonEnergy:energy_range})
             found_source = True
         if found_source!=True:
-            raise Error('I did not find the source')
+            raise AttributeError('I did not find the source')
         if args:
             for a in args:
                 if not isinstance(a,dict):
@@ -487,6 +487,66 @@ class Simulate():
 
         self.rml_list()
         self.run_mp(number_of_cpus=cpu,force=True)
+
+    def beamwaist_simulation(self, energy:float,/,source:ObjectElement=None,nrays:int=None,sim_folder:str=None, force:bool=False):
+        if not isinstance(energy, (int,float)):
+           raise TypeError('The energy_range must be an a ragne or a numpy array, while it is a', type(energy_range))
+        params = []
+        # find source and add to param with defined user energy range
+        found_source = False
+        if source == None:
+            for oe in self.rml.beamline._children:
+                for par in oe:
+                    try:
+                        params.append({par.photonEnergy:energy})
+                        if nrays != None:
+                            params.append({par.numberRays:nrays})
+                        found_source = True
+                        break
+                    except:
+                        pass
+        else:
+            params.append({source.photonEnergy:energy})
+            if nrays != None:
+                params.append({source.numberRays:nrays})
+            found_source = True
+        if found_source!=True:
+            raise AttributeError('I did not find the source')
+        
+        # turn reflectivity of all elements off, grating eff to 100%
+        for oe in self.rml.beamline._children:
+                for par in oe:
+                    try:
+                        params.append({par.reflectivityType:0})
+                    except:
+                        pass
+        sp = SimulationParams(self.rml)
+        sp.params=params
+        self.params=sp
+        self.analyze = False
+        # make a list of optical elements
+        # exlude screens, that do not have misalignment param
+        oe_list=[]
+        for oe in self.rml.beamline._children:
+            for par in oe:
+                try:
+                    par.alignmentError
+                    oe_list.append(oe)
+                except AttributeError:
+                    pass
+        exports = []
+        for oe in oe_list:
+            exports.append({oe:'RawRaysOutgoing'})
+            # print('DEBUG:: exported oe', oe.name)
+        self.exports = exports
+        if sim_folder is None:
+            self.simulation_name = 'Beamwaist'
+        else: 
+            self.simulation_name = sim_folder
+        self.repeat = 1
+
+        self.rml_list()
+        self.run_mp(number_of_cpus=1,force=force)
         
 
 
