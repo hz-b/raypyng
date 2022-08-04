@@ -488,7 +488,7 @@ class Simulate():
         self.rml_list()
         self.run_mp(number_of_cpus=cpu,force=True)
 
-    def beamwaist_simulation(self, energy:float,/,source:ObjectElement=None,sim_folder:str=None, force:bool=False):
+    def beamwaist_simulation(self, energy:float,/,source:ObjectElement=None,nrays:int=None,sim_folder:str=None, force:bool=False):
         if not isinstance(energy, (int,float)):
            raise TypeError('The energy_range must be an a ragne or a numpy array, while it is a', type(energy_range))
         params = []
@@ -499,12 +499,16 @@ class Simulate():
                 for par in oe:
                     try:
                         params.append({par.photonEnergy:energy})
+                        if nrays != None:
+                            params.append({par.numberRays:nrays})
                         found_source = True
                         break
                     except:
                         pass
         else:
             params.append({source.photonEnergy:energy})
+            if nrays != None:
+                params.append({source.numberRays:nrays})
             found_source = True
         if found_source!=True:
             raise AttributeError('I did not find the source')
@@ -533,6 +537,7 @@ class Simulate():
         exports = []
         for oe in oe_list:
             exports.append({oe:'RawRaysOutgoing'})
+            # print('DEBUG:: exported oe', oe.name)
         self.exports = exports
         if sim_folder is None:
             self.simulation_name = 'Beamwaist'
