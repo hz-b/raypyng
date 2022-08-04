@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import time
 import os
 import sys
-from scipy.ndimage import rotate
     
 
 class PlotBeamwaist():
@@ -25,22 +24,23 @@ class PlotBeamwaist():
         self.factor           = False
         self.previous_results = False
         self.count_el         = 0
-        self.elements         = []
-        self.distances        = [0]
         self.count_fig        = 0
     
-    def simulate_beamline(self, energy:float,/,source:ObjectElement=None,sim_folder:str=None, force:bool=False):
-        self._sim.beamwaist_simulation(energy,source=source,sim_folder=sim_folder, force=force)
+    def simulate_beamline(self, energy:float,/,source:ObjectElement=None,nrays:int=None, force:bool=False):
+        self._sim.beamwaist_simulation(energy,source=source,nrays=nrays,sim_folder=self.directory, force=force)
     
-    def _element_list(self):
+    def _parse_beamline_elements(self, debug=False):
         self.element_names_list = []
         self.distance_list=[]
         self.rotation_list=[]
         for ind, oe in enumerate(self._sim.rml.beamline._children):
                 for par in oe:
                     try:
-                        a=par.alignmentError
-                        self.distance_list.append(float(par.worldPosition.z.cdata))
+                        #a=par.alignmentError
+                        if ind != 0:
+                            self.distance_list.append(float(par.worldPosition.z.cdata)-sum(self.distance_list))                            
+                        else:    
+                            self.distance_list.append(float(par.worldPosition.z.cdata))
                         self.element_names_list.append('element_'+str(ind))
                         # print('DEBUG:: oe.name:', oe.name)
                         if ind == 0:
@@ -51,45 +51,51 @@ class PlotBeamwaist():
                             elif par.azimuthalAngle.cdata == '90' or par.azimuthalAngle.cdata=='270':
                                 self.rotation_list.append(True)
                             else: 
-                                raise ValueError('Only beamline elements with azimula angle 0,90,180,270 are supported', oe.name, par.azimuthalAngle.cdata)
+                                raise ValueError('Only beamline elements with azimuthal angle 0,90,180,270 are supported', oe.name, par.azimuthalAngle.cdata)
                     except AttributeError:
                         pass
-        #print('DEBUG:: element_names_list', self.element_names_list)
-        #print('DEBUG:: distance_list', self.distance_list)
-        #print('DEBUG:: rotation_list', self.rotation_list)
+        if debug:
+            print('DEBUG:: element_names_list', self.element_names_list)
+            print('DEBUG:: distance_list', self.distance_list)
+            print('DEBUG:: rotation_list', self.rotation_list)
+
+
+    def trace_beamwaist(self, save_results:bool=True, element_names_list:list=None):
+        self._parse_beamline_elements()
         # I overwrite the names for the moment, since I can not access them automatically
-        self.element_names_list=['Dipole', 'M1', 'PremirrorM2', 'PG', 'M3', 'ExitSlit', 'KB1', 'KB2' ]
+        if element_names_list != None:
+            self.element_names_list=element_names_list
         for ind in range(len(self.element_names_list)):
             self.add_element(name=self.element_names_list[ind],
-                            z=self.distance_list[ind],
+                            z=self.distance_list[ind+1],
                             rot=self.rotation_list[ind])
+        if save_results == True:
+            self.save_results()
     
     def reduce_Nrays(self,factor):
         self.factor = factor
         
-    def load_previous_results(self,previous_results, directory=False):
+    def load_previous_results(self, element_names_list=None):
+        self._parse_beamline_elements()
+        if element_names_list != None:
+            self.element_names_list=element_names_list
         start1  = time.time()
-        self.previous_results = previous_results
-        if self.previous_results == True:
-            print('Load results...')
-            self.xh=np.loadtxt(os.path.join(directory,'xh.txt'))
-            self.yh=np.loadtxt(os.path.join(directory,'yh.txt'))
-            stop = time.time()
-            print('time:', np.round(stop-start1,2),'s')
+        print('Load results...')
+        self.xh=np.loadtxt(os.path.join(self.directory,'xh.txt'))
+        self.yh=np.loadtxt(os.path.join(self.directory,'yh.txt'))
+        stop = time.time()
+        print('time:', np.round(stop-start1,2),'s')
         
-    def save_results(self, save_results, directory):
-        if save_results == True:
-            np.savetxt(os.path.join(directory, 'xh.txt'), self.xh)
-            np.savetxt(os.path.join(directory, 'yh.txt'), self.yh)
+    def save_results(self):
+        np.savetxt(os.path.join(self.directory, 'xh.txt'), self.xh)
+        np.savetxt(os.path.join(self.directory, 'yh.txt'), self.yh)
             
-    def add_element(self,name,z,rot=False,step_z=False):
-        self.elements.append(name)
-        self.distances.append(z)
+    def add_element(self,name,z,rot=False):
         start1  = time.time()
         z       = np.arange(0,z+self.step_z,self.step_z)
 
         if self.previous_results == False:
-            print('Trace '+name)
+            print('Tracing '+name)
             
             rays    = np.loadtxt(os.path.join(self.directory,'round_0', 
                                          '0_'+name
@@ -97,16 +103,16 @@ class PlotBeamwaist():
                             skiprows=2)
             if self.factor != False:
                 max_n_rays = int(rays.shape[0]/self.factor)
-            if max_n_rays <= 100:
+            if max_n_rays < 100:
                 sys.exit('Set a lower reduction factor, there are no more rays to plot!')
             rays = rays[0:max_n_rays]
             
             
             if self.count_el == 0:
-                self.xh,self.yh   = self.trace(z,rays,self.lim,self.step,rot)
+                self.xh,self.yh   = self.trace(z,rays,rot)
                 print(self.xh.shape, self.yh.shape)
             else:
-                txh,tyh   = self.trace(z,rays,self.lim,self.step,rot)
+                txh,tyh   = self.trace(z,rays,rot, name)
             if rot == True:
                 txh=np.rot90(txh)
                 tyh=np.rot90(tyh)
@@ -148,14 +154,11 @@ class PlotBeamwaist():
         return xh
         
         
-    def trace(self,z,rays,lim,step,rot=False):
+    def trace(self,z,rays,rot=False, element=None):
         for n,z in enumerate(z):
-            #print(z,n)
-
             x,y      = self.trace_pos(rays,z)
             shiftx   = np.average(x)
             shifty   = np.average(y)
-            #print('average',shiftx,shifty)
             y        = y-shifty
             x        = x-shiftx
             if n==0:
@@ -166,14 +169,10 @@ class PlotBeamwaist():
                 argmax_0   =  np.argmax(yh)
                 
             else:
-                print('else')
                 xh_temp    =  self.make_histogram(x)
                 yh_temp    =  self.make_histogram(y)
                 xh         =  np.concatenate((xh,xh_temp[0]), axis=0)
                 yh         =  np.concatenate((yh,yh_temp[0]))
-                argmax     =  np.argmax(yh)
-                #yh         = np.roll(yh,argmax_0-argmax)
-
         xh=xh.reshape((n+1,xh_temp[0].shape[0]))  
         yh=yh.reshape((n+1,yh_temp[0].shape[0]))  
 
@@ -181,31 +180,43 @@ class PlotBeamwaist():
         if rot==False:
             return xh,np.rot90(yh)
         elif rot==True:
-            return yh,np.rot90(xh)
+            return yh,np.rot90(np.flip(xh)) # no idea why I have to flip this
         
     def change_name(self, new_name, pos):
-        self.elements[pos] = new_name 
+        self.element_names_list[pos] = new_name 
         
         
-    def plot(self,save_img = True, save_directory=False, img_name='test', extension='.png', show_img=False, annotate_OE=False,lim_top=False,lim_side=False):
+    def plot(self,save_img = True, img_name='test', extension='.png', show_img=False, annotate_OE=False,lim_top=False,lim_side=False, debug=False):
         dx, dy = self.step_z, self.step
+        xmax = self.yh.shape[1]*self.step_z + dx
         y, x = np.mgrid[slice(-self.lim, self.lim + dy, dy),
-            slice(0, self.yh.shape[1]*self.step_z + dx, dx)]
-        print('######################')
-        print('Dimension check')
-        print('yh shape:  ', self.yh.shape)
-        print('xh shape:  ', self.xh.shape)
-        print('x shape:    ',x.shape)
-        print('y shape:    ',y.shape)
+            slice(0,xmax , dx)]
+        x=x[:,:-1]
+        y=y[:,:-1]
+        if debug:
+            print('######################')
+            print('Dimension check')
+            print('yh shape:  ', self.yh.shape)
+            print('xh shape:  ', self.xh.shape)
+            print('x shape:    ',x.shape)
+            print('y shape:    ',y.shape)
+            print('x :    ',x)
+            print('self.yh.shape[1], self.step_z, dx', self.yh.shape, self.yh.shape[1], self.step_z, dx)
+            print('self.yh.shape[1]*self.step_z + dx',self.yh.shape[1]*self.step_z + dx)
+            print('DEBUG:: self.distances', self.distances)
+            print('DEBUG:: self.distance_list', self.distance_list)
+            print('DEBUG:: self.elements', self.elements)
+            print('DEBUG:: self.elements_name_list', self.element_names_list)
 
         g=1.5
         plt.figure(self.count_fig)
         fig, (ax1, ax2) = plt.subplots(2,figsize=(6.4*g, 4.8*g))
         pcm=ax1.pcolormesh(x/1000,y,self.xh, cmap='inferno')
         ax1.clear()
-        #pcm=ax2.pcolormesh(x/1000,y,self.yh, cmap='inferno')
         ax1.pcolormesh(x/1000,y,np.log(self.xh), cmap='inferno')
         ax2.pcolormesh(x/1000,y,np.log(self.yh), cmap='inferno')
+        
+
         ax1.set_title('top view')
         ax2.set_title('side view')
         ax2.set_xlabel('[meters]')
@@ -216,41 +227,56 @@ class PlotBeamwaist():
         cbar1.set_label('# of rays [a.u.]')#, rotation=-90) 
         cbar2.set_label('# of rays [a.u.]')
         posx=0
+        xtick_pos = []
+        xtick_label = []
+        # put correct ticks and labels
+        plot_length = xmax/1000
+        beamline_length = sum(self.distance_list)/1000
+        beamline_el_pos = np.cumsum(self.distance_list[:-1])/1000
+        xtick_pos = (beamline_el_pos*plot_length)/beamline_length
+        xtick_label = np.round(beamline_el_pos,2)
+
+        # label the elements
         if annotate_OE == True:
-            for n, text in enumerate(self.elements):
-                posx += self.distances[n]/1000
-                if self.distances[n+1]/1000<=1:
-                    posy += 2
-                
-                if lim_top != False:
-                    if self.lim >= lim_top[2]:
-                        posy =  lim_top[2]
-                else:
-                    posy =  -self.lim
-                
-                if self.distances[n+1]/1000<=1:
-                    #print('I shift')
-                    posy += 2
-                    
+            for ind, text in enumerate(self.element_names_list):
+                posy =  -self.lim
+                posx = xtick_pos[ind]
+
+                if ind<len(self.element_names_list)-1:
+                    if (xtick_pos[ind+1]-xtick_pos[ind])<1:
+                        posy += 3
+
                 ax1.text(posx,posy,text, rotation=45)
-                
-                if lim_side != False:
-                    if self.lim >= lim_side[2]:
-                        posy =  lim_side[2]
-                else:
-                    posy =  -self.lim
-                if self.distances[n+1]/1000<=1:
-                    #print('I shift')
-                    posy += 2
                 ax2.text(posx,posy,text, rotation=45)
+        
+        # remove xticks and labels which are too close to eaeachhc other
+        for ind in range(xtick_pos.shape[0]-2, 1, -1):
+            print('DEBUG:: ind', ind)
+            if ind>0:# < xtick_pos.shape[0]-1:
+                if np.abs(xtick_pos[ind]-xtick_pos[ind+1])<1:
+                    xtick_label = np.delete(xtick_label,ind)
+                    xtick_pos = np.delete(xtick_pos,ind)
+
+        if debug:
+            print('DEBUG:: plot_length', plot_length)
+            print('DEBUG:: self.distance_list', self.distance_list)
+            print('DEBUG:: beamline_length', beamline_length)
+            print('DEBUG:: beamline_el_pos', beamline_el_pos)
+            print('DEBUG:: xtick_label', xtick_label)
+            print('DEBUG:: xtick_pos', xtick_pos)
+        ax1.set_xticks(xtick_pos)
+        ax1.set_xticklabels(xtick_label, rotation = 45, ha="right")
+        ax2.set_xticks(xtick_pos)
+        ax2.set_xticklabels(xtick_label, rotation = 45, ha="right")
+
         if lim_top != False:
             ax1.set_xlim(lim_top[0],lim_top[1])
             ax1.set_ylim(lim_top[2],lim_top[3])
         if lim_side != False:
             ax2.set_xlim(lim_side[0],lim_side[1])
             ax2.set_ylim(lim_side[2],lim_side[3])
-        if save_directory != False:
-            plt.savefig(os.path.join(save_directory,img_name+extension))
+        if save_img == True:
+            plt.savefig(os.path.join(self.directory,img_name+extension))
         plt.tight_layout()
         plt.close(0)
         if show_img == True:
