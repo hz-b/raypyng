@@ -54,7 +54,7 @@ class PlotBeamwaist():
                                 raise ValueError('Only beamline elements with azimuthal angle 0,90,180,270 are supported', oe.name, par.azimuthalAngle.cdata)
                         # append to element names list, only if it is not an imageplane
                         if oe.get_attribute('type') != 'ImagePlaneBundle' and oe.get_attribute('type') != 'ImagePlane':
-                            self.element_names_list.append(oe.get_attribute('name'))
+                            self.element_names_list.append(oe.attributes().original()['name'])
                     except AttributeError:
                         pass
         if debug:

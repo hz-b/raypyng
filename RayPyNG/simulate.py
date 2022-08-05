@@ -385,10 +385,10 @@ class Simulate():
         for i, d in enumerate(self.exports):
                 for obj in d.keys():
                     if isinstance(d[obj], str):
-                        self.exports_list.append((obj['name'], d[obj]))
+                        self.exports_list.append((obj.attributes().original()['name'], d[obj]))
                     elif isinstance(d[obj], list):
                         for l in d[obj]:
-                            self.exports_list.append((obj['name'], l))
+                            self.exports_list.append((obj.attributes().original()['name'], l))
                     else: 
                         raise ValueError('The exported param can be only str or list of str.')
         if verbose:
