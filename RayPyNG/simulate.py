@@ -395,7 +395,7 @@ class Simulate():
                 print(d[0], d[1])
 
     def check_simulations(self,/,verbose:bool=True, force:bool=False):
-        if force: return self.rml_list()
+        if force: return {k:v for k,v in enumerate(self.rml_list())}
         missing_simulations={}
         for ind,simulation in enumerate(self.rml_list()):
             folder = os.path.dirname(self.sim_list_path[ind])
