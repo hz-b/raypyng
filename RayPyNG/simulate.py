@@ -412,8 +412,9 @@ class Simulate():
         return missing_simulations
 
     def run(self,/,force=False):
-        for rml in self.check_simulations(force=force):
-            self.run_one(rml)
+        for ind,rml in enumerate(self.check_simulations(force=force)):
+            rml.write()
+            run_rml_func(([rml.filename, self._hide, self._analyze],self.generate_export_params(self.sim_list_path[ind])))
 
     def run_mp(self,/,number_of_cpus=1,force=False):
         # trace using RAY-UI with number of workers
@@ -433,7 +434,7 @@ class Simulate():
         return [ (d[0], d[1], folder, sim_number+'_') for d in self.exports_list]
 
     def run_one(self,rml):
-        return self.run_rml(rml.filename)
+        return run_rml_func([rml.filename,False,True])
 
     def RP_simulation(self, energy_range:range, exported_object:ObjectElement,/, *args,source:ObjectElement=None,sim_folder:str=None, repeat:int=1, cpu:int=1, force:bool=False):
         if not isinstance(source, ObjectElement) and source != None:
