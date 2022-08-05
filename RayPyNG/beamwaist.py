@@ -14,6 +14,7 @@ class PlotBeamwaist():
     '''
     def __init__(self, directory:str, sim:Simulate):
         self.directory = 'RAYPy_Simulation_'+directory
+        self._original_directory = directory
         if isinstance(sim,Simulate):
             self._sim = sim
         self.lim              = False
@@ -27,7 +28,7 @@ class PlotBeamwaist():
         self.count_fig        = 0
     
     def simulate_beamline(self, energy:float,/,source:ObjectElement=None,nrays:int=None, force:bool=False):
-        self._sim.beamwaist_simulation(energy,source=source,nrays=nrays,sim_folder=self.directory, force=force)
+        self._sim.beamwaist_simulation(energy,source=source,nrays=nrays,sim_folder=self._original_directory, force=force)
     
     def _parse_beamline_elements(self, debug=False):
         self.element_names_list = []
