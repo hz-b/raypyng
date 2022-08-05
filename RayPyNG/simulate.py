@@ -396,7 +396,7 @@ class Simulate():
 
     def check_simulations(self,/,verbose:bool=True, force:bool=False):
         if force: return self.rml_list()
-        missing_simulations=[]
+        missing_simulations={}
         for ind,simulation in enumerate(self.rml_list()):
             folder = os.path.dirname(self.sim_list_path[ind])
             filename = os.path.basename(self.sim_list_path[ind])
@@ -405,33 +405,34 @@ class Simulate():
                 export = sim_number+'_'+d[0]+'-'+d[1]+'.csv'
                 csv = os.path.join(folder,export)
                 if not os.path.exists(csv):
-                    missing_simulations.append(simulation)
+                    missing_simulations[ind]=simulation
                     break
         if verbose:
             print('I still have ', len(missing_simulations), 'simulations to do!')
+            #print('missing_simulations',missing_simulations)
         return missing_simulations
 
     def run(self,/,force=False):
-        for ind,rml in enumerate(self.check_simulations(force=force)):
+        for ind,rml in self.check_simulations(force=force).items():
             rml.write()
-            run_rml_func(([rml.filename, self._hide, self._analyze],self.generate_export_params(self.sim_list_path[ind])))
+            run_rml_func(([rml.filename, self._hide, self._analyze],self.generate_export_params(ind,self.sim_list_path[ind])))
 
     def run_mp(self,/,number_of_cpus=1,force=False):
         # trace using RAY-UI with number of workers
         filenames_hide_analyze = []
         exports = []
-        for ind,rml in enumerate(self.check_simulations(force=force)):
+        for ind,rml in self.check_simulations(force=force).items():
             filenames_hide_analyze.append([rml.filename, self._hide, self._analyze])
-            exports.append(self.generate_export_params(self.sim_list_path[ind]))
+            exports.append(self.generate_export_params(ind,self.sim_list_path[ind]))
             rml.write()
         with schwimmbad.JoblibPool(number_of_cpus) as pool:
             pool.map(run_rml_func,zip(filenames_hide_analyze,exports))
 
-    def generate_export_params(self,rml):
+    def generate_export_params(self,simulation_index,rml):
         folder = os.path.dirname(rml)
-        filename = os.path.basename(rml)
-        sim_number = filename.split("_")[0]
-        return [ (d[0], d[1], folder, sim_number+'_') for d in self.exports_list]
+        #filename = os.path.basename(rml)
+        #sim_number = filename.split("_")[0]
+        return [ (d[0], d[1], folder, str(simulation_index)+'_') for d in self.exports_list]
 
     def run_one(self,rml):
         return run_rml_func([rml.filename,False,True])
