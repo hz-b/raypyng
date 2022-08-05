@@ -148,8 +148,8 @@ class RayUIAPI:
         if runner is None:
             runner = RayUIRunner().run()
         self._runner = runner
-        self._read_wait_delay = 0.01 # if rayui does not send anything to stdio this delay will be used before next attempt to read
-        self._quit_timeout = 0.25    # default timeout for commands like quit
+        self._read_wait_delay = 0.01    # if rayui does not send anything to stdio this delay will be used before next attempt to read
+        self._quit_timeout = 10         # default timeout for commands like quit
 
     def quit(self):
         """quit rayUI if it is running
