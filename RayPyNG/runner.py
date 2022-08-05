@@ -148,7 +148,7 @@ class RayUIAPI:
         if runner is None:
             runner = RayUIRunner().run()
         self._runner = runner
-        self._read_wait_delay = 0.1
+        self._read_wait_delay = 0.01 # if rayui does not send anything to stdio this delay will be used before next attempt to read
         self._quit_timeout = 0.25    # default timeout for commands like quit
 
     def quit(self):
@@ -228,6 +228,8 @@ class RayUIAPI:
         while True:
             line = self._runner._readline()
             if line is None:
+                time.sleep(self._read_wait_delay)
+                timecnt+=self._read_wait_delay
                 continue
             if line == 'trace success':
                 break
@@ -237,8 +239,6 @@ class RayUIAPI:
                 if cbdataread is not None:
                     cbdataread(line)
                 #print("VERBOSE::",line)
-            time.sleep(self._read_wait_delay)
-            timecnt+=self._read_wait_delay
             if timeout is not None and timecnt>timeout:
                 raise TimeoutError("timeout while waiting ray command io")
         return line.lstrip(cmd).strip()
