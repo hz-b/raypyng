@@ -361,7 +361,7 @@ class Simulate():
                 self.rml.write(rml_path)
                 self.sim_list_path.append(rml_path)
                 # is this gonna create problems if I have millions of simulations?
-                result.append(self.rml)
+                result.append(RMLFile(rml_path))
 
             # create csv file with simulations recap
             with open(os.path.join(sim_folder,'looper.csv'), 'w') as f:
