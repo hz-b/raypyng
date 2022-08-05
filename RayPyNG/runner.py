@@ -149,7 +149,7 @@ class RayUIAPI:
             runner = RayUIRunner().run()
         self._runner = runner
         self._read_wait_delay = 0.01    # if rayui does not send anything to stdio this delay will be used before next attempt to read
-        self._quit_timeout = 10         # default timeout for commands like quit
+        self._quit_timeout = 300         # default timeout for commands like quit
 
     def quit(self):
         """quit rayUI if it is running
@@ -183,7 +183,9 @@ class RayUIAPI:
         Returns:
             _type_: _description_
         """
-        payload = objects + " " + parameters + " " + export_path + " " + data_prefix
+        #payload = objects + " " + parameters + " " + export_path + " " + data_prefix
+        payload = '"'+objects + '"' + " " + parameters + " " + export_path + " " + data_prefix
+        print("DEBUG:: export payload:",payload)
         return self._cmd_io("export",payload,**kwargs)
 
     def _cmd_io(self,cmd:str,payload:str=None,/, cbNewLine=None):
