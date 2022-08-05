@@ -208,11 +208,11 @@ class RayUIAPI:
             payload = ""
         cmdstr = cmd+" "+payload
         self._runner._write(cmdstr)
-        self._wait_for_cmd_io(cmd, timeout = 2.0)
-        if cmd == 'trace noanalyze':
-            status = 'success'
-        else:
-            status = self._wait_for_cmd_io(cmd,cbdataread=cbNewLine)
+        #self._wait_for_cmd_io(cmd, timeout = 2.0)
+        # if cmd == 'trace noanalyze':
+        #     status = 'success'
+        # else:
+        status = self._wait_for_cmd_io(cmd,cbdataread=cbNewLine)
         if status=="success" or 'trace success':
             return True
         elif status=="failed":
@@ -225,14 +225,15 @@ class RayUIAPI:
     def _wait_for_cmd_io(self,cmd,timeout=None,cbdataread=None):
         timecnt = 0.0
         line = ""
+        cmd = cmd.split(" ")[0]
         while True:
             line = self._runner._readline()
             if line is None:
                 time.sleep(self._read_wait_delay)
                 timecnt+=self._read_wait_delay
                 continue
-            if line == 'trace success':
-                break
+            #if line == 'trace success':
+            #    break
             if (line.startswith(cmd)):
                 break
             else:
