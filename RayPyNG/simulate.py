@@ -364,10 +364,12 @@ class Simulate():
                 result.append(RMLFile(rml_path))
 
             # create csv file with simulations recap
+            print("DEBUG::",sim_folder)
             with open(os.path.join(sim_folder,'looper.csv'), 'w') as f:
                 header = 'n '
                 for par in self.sp.param_to_simulate:
-                    header = header + '\t'+str(par.id)
+                    #header = header + '\t'+str(par.id)#get_full_path().lstrip("lab.beamline."))
+                    header = header + '\t'+str(par.get_full_path().lstrip("lab.beamline."))
                 header += '\n'
                 f.write(header)
                 for ind,par in enumerate(self.sp.simulations_param_list):
@@ -565,9 +567,12 @@ def run_rml_func(_tuple):
     api.trace(analyze=analyze)
     for e in exports:
         api.export(*e)
+    #time.sleep(0.1) # testing file creation issue
     try: 
         api.quit()
-    except:
+    except Exception as e:
+        print("WARNING! Got exception while quitting ray, the error was:",e)
         pass
+    #time.sleep(1) # testing file creation issue
     runner.kill()
     return None

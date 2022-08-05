@@ -18,7 +18,7 @@ class XmlElement:
         _type_: _description_
     """
     #####################################
-    def __init__(self, name:str, attributes:typing.MutableMapping, **kwargs):
+    def __init__(self, name:str, attributes:typing.MutableMapping, parent=None, **kwargs):
         """_summary_
 
         Args:
@@ -46,7 +46,22 @@ class XmlElement:
         self._children = []
         self.is_root = False
         self.cdata = ""
+        self._parent = parent
 
+    def get_full_path(self):
+        if self._parent is None:
+            return self.resolvable_name()
+        else:
+            return self._parent.get_full_path()+"."+self.resolvable_name()
+
+    def resolvable_name(self):
+        if self._parent is None:
+            return self._name
+        else:
+            if hasattr(self._parent,"_name_attribute"):
+                return self[self._parent._name_attribute]
+            else:
+                return self._name#"NOTFOUND"
 
     #@property
     def children(self):
@@ -165,8 +180,9 @@ class XmlElement:
 ###############################################################################
 class XmlAttributedNameElement(XmlElement):
     def __init__(self, name_attribute:str, name: str, attributes: dict, **kwargs):
-        super().__init__(name, attributes)
+        super().__init__(name, attributes,**kwargs)
         self._name_attribute = name_attribute
+
 
     def __dir__(self):
         """enumerating child objects by its attibute name

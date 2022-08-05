@@ -1,3 +1,4 @@
+from multiprocessing import parent_process
 from xml.sax import make_parser, handler
 from .elements import *
 from .dictionaries import *
@@ -38,16 +39,17 @@ class Handler(handler.ContentHandler):
             attrs[k] = v#self.protectName(v)
         
         # create a new element
-        if name in self._known_classes.keys():
-            element = self._known_classes[name](name, attrs)
-        else:
-            element = XmlElement(name, attrs)
-
-        # and add it to the known element list
         if len(self.elements) > 0:
-            self.elements[-1].add_child(element)
+            parent = self.elements[-1]
         else:
-            self.root.add_child(element)
+            parent = self.root
+
+        if name in self._known_classes.keys():
+            element = self._known_classes[name](name, attrs, parent=parent)
+        else:
+            element = XmlElement(name, attrs,paren=parent)
+        # and add it to the known element list
+        parent.add_child(element)
         self.elements.append(element)
 
     #####################################
