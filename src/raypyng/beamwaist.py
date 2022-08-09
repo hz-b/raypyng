@@ -1,4 +1,4 @@
-from RayPyNG.simulate import Simulate
+from .simulate import Simulate
 from .rml import ObjectElement
 
 import numpy as np
