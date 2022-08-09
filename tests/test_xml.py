@@ -6,7 +6,7 @@
 #t1 = untangle.parse('rml/beamline.rml')
 
 #import RayPyNG.xmltools as xml
-import RayPyNG.rml as rml
+import src.raypyng.rml as rml
 
 e1 = rml.parse('rml/beamline.rml')
 e2 = rml.parse('tests/rml/high_energy_branch_flux_1200.rml')

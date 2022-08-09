@@ -1,5 +1,5 @@
-from RayPyNG.simulate import Simulate
-from RayPyNG.beamwaist import PlotBeamwaist 
+from src.raypyng.simulate import Simulate
+from src.raypyng.beamwaist import PlotBeamwaist 
 
 
 sim = Simulate('examples/rml/high_energy_branch_flux_1200_test_beamwaist.rml',
