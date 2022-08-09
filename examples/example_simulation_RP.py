@@ -17,8 +17,5 @@ sim.analyze = False
 # test resolving power simulations
 sim.RP_simulation(energy_range, elisa.DetectorAtFocus,ES,cff,cpu=5, force=False)
 
-# to run the script
-# PYTHONPATH=. python tests/test_simulate_RP.py
-
 
         

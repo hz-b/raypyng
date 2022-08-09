@@ -60,8 +60,5 @@ sim.rml_list()
 sim.run_mp(number_of_cpus=5,force=False)
 
 
-# to run the script
-# PYTHONPATH=. python tests/test_simulate_noanalyze.py
-
 
         
