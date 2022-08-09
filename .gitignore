@@ -13,3 +13,7 @@ local/
 # Ignoring simlation tests
 RAYPy_Simulation_*
 test/
+
+# Ignore distribution on pip
+dist
+src/raypyng_test.egg-info
