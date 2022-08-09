@@ -1,4 +1,4 @@
-import RayPyNG.collections as rc
+import src.raypyng.collections as rc
 from copy import copy
 lx = ['good_value', 'bad value']
 ml = rc.MappedList(rc.sanitizeName,lx)

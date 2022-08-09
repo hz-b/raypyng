@@ -1,4 +1,4 @@
-from RayPyNG import runner
+from src.raypyng import runner
 
 r = runner.RayUIRunner(ray_path='/home/simone/RAY-UI-development_bk/')
 a = runner.RayUIAPI(r)

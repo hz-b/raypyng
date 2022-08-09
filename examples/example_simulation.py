@@ -1,10 +1,10 @@
-from src.raypyng.simulate import Simulate
-from src.raypyng.simulate import SimulationParams
+from raypyng.simulate import Simulate
+from raypyng.simulate import SimulationParams
 import numpy as np
 
 
 
-sim = Simulate('examples/rml/high_energy_branch_flux_1200.rml',template='examples/rml/high_energy_branch_flux_1200.rml', hide=True)
+sim = Simulate('rml/high_energy_branch_flux_1200.rml',template='rml/high_energy_branch_flux_1200.rml', hide=True)
 
 rml=sim.rml
 elisa = sim.rml.beamline
@@ -34,8 +34,9 @@ sp.params=params
 #and then plug them into the Simulation class
 sim.params=sp 
 
+
 # sim.simulation_folder = '/home/simone/Documents/RAYPYNG/raypyng/test'
-sim.simulation_name = 'noAnalyze_test'
+sim.simulation_name = 'test'
 
 # repeat the simulations as many time as needed
 sim.repeat = 1
@@ -46,12 +47,16 @@ sim.repeat = 1
 # this is defined as RAYPy_simulation by default
 #sim.prefix = 'asdasd_'
 
-sim.analyze = False
-## This must be a list of dictionaries
-sim.exports  =  [{elisa.Dipole:'RawRaysOutgoing'},
-                {elisa.DetectorAtFocus:['RawRaysOutgoing']}
+
+# by default analyze is set to True
+sim.analyze = True
+# This must be a list of dictionaries [{element1:export1},{element2:export1,export2}] 
+sim.exports  =  [{elisa.Dipole:'ScalarBeamProperties'},
+                {elisa.DetectorAtFocus:['ScalarElementProperties','ScalarBeamProperties']}
                 ]
 
+# params must be an instance of SimulationsParams
+#sim.params=sp 
 
 # create the rml files
 sim.rml_list()
@@ -60,8 +65,7 @@ sim.rml_list()
 sim.run_mp(number_of_cpus=5,force=False)
 
 
-# to run the script
-# PYTHONPATH=. python tests/test_simulate_noanalyze.py
+
 
 
         
