@@ -1,10 +1,10 @@
 [project]
 name = "raypyng_test"
-version = "0.0.8"
+version = "0.0.9"
 authors = [
   { name="Simone Vadilonga, Ruslan Ovsyannikov", email="simone.vadilonga@helmholtz-berlin.de" },
 ]
-description = "Python interaface for RAY-UI x-ray tracing program"
+description = "Python interface for RAY-UI x-ray tracing program"
 readme = "README.md"
 license = { file="LICENSE" }
 requires-python = ">=3.8"
