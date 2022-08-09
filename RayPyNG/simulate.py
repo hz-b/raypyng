@@ -364,7 +364,7 @@ class Simulate():
                 result.append(RMLFile(rml_path))
 
             # create csv file with simulations recap
-            print("DEBUG::",sim_folder)
+            #print("DEBUG::",sim_folder)
             with open(os.path.join(sim_folder,'looper.csv'), 'w') as f:
                 header = 'n '
                 for par in self.sp.param_to_simulate:
