@@ -1,5 +1,6 @@
-## installation
+## Install the package
 
+### Using virtualenv
 0. Install python3:
 
 ```
@@ -25,23 +26,67 @@ python3 -m venv .venv
 python3 -m pip install wheel
 ```
 
-
 ```
 python3 -m pip install numpy matplotlib lxml ipython psutil
 ```
 
-4. Install ray:
+```
+python3 -m pip install --upgrade  --index-url https://test.pypi.org/simple/  raypyng_test
+```
 
-4.1 Install dependencies:
+### Using conda
+```
+conda create -n raypyng_pkg python=3.9
+```
+
+```
+conda activate raypyng_pkg
+```
+
+```
+python3 -m pip install --upgrade  --index-url https://test.pypi.org/simple/  raypyng_test
+```
+
+
+```
+conda install numpy psutil joblib matplotlib
+
+```
+
+```
+pip install schwimmbad
+```
+
+
+## Install xvfb to run RAYUI headless
+xvfb is a virtual X11 framebuffer server.
+
+Install xvfb:
+```
+sudo apt install xvfb
+```
+
+Note: xvfb-run script is a part of the xvfb distribuion and runs an app on a new virtual X11 server
+
+
+
+## Install RAY-UI
+
+1. Install ray
+Download ray installer from https://www.helmholtz-berlin.de/forschung/oe/wi/optik-strahlrohre/arbeitsgebiete/ray_en.html. 
+And run the installer...
+
+
+2. if missing, install dependencies:
 ```
 sudo apt install libxkbcommon0 libharfbuzz0b libxcb-render0
 ```
 
-4.2 Intall ray
+3. Install ray
 Download ray installer from https://www.helmholtz-berlin.de/forschung/oe/wi/optik-strahlrohre/arbeitsgebiete/ray_en.html. 
 And run the installer...
 
-4.3 History of resolving dependency issues:
+4. History of resolving dependency issues:
 
 Issue with the installer: missing `libxkbcommon.so.0`, searching solution:
 ```
@@ -87,109 +132,3 @@ libxcb-render0 seems to be the answer ....
 
 NOW IT WORKS!!!
 
-
-5. Headless run (removing those annoying flashing windows...)
-
-5.1 Using `xvfb`
-
-xvfb is a virtual X11 framebuffer server.
-
-Install xvfb:
-```
-sudo apt install xvfb
-```
-
-Modify ray to use xvfb:
-```python
-    # set the ray location, substitute the '...'
-    #(pay attention to the slashes, the first and last one must be there)
-    ray_loc = "xvfb-run "+path_to_RAY+"/rayui.sh"
-```
-Note: xvfb-run script is a part of the xvfb distribuion and runs an app on a new virtual X11 server
-
-
-
-6. What we want to have for the Rml file processing:
-
-Simple access like:
-
-```ipython
-# load template and be ready to save to mybeamline.rml
-bl = RmlFile('mybeamline.rml', template='rml/beamline.rml')
-
-# modify some parameter
-bl.Screen2.distanceImagePlane = 4348.5
-
-# modify another parameter (note that original rml object name has spaces)
-bl.SimpleUndulator.numberRays = 10000
-# access rml level info:
-print(bl.SimpleUndulator.rml().name)
-"Simple Undulator"
-print(bl.SimpleUndulator.rml().type)
-"Simple Undulator"
-
-
-# see some service information
-print(bl.rml().version)  # Access to non-beamline parts of the rml file using rml() method
-print(bl.rml().ExtraInfo)
-
-# save the result
-bl.save()
-
-
-def setSourceDivergence(mrad):
-    if bl.lab.beamline[0].type=="Dipole":
-        bl.lab.beamline[0].sourceWidth = mrad*1000 # dipole param is in urads!
-    elif bl.lab.beamline[0].type=="SimpleUndulator":
-        bl.lab.beamline[0].sourceWidth = mrad
-    else
-        raise Exception("Unknonw source type")
-```
-
-
-7. Paramter setting API
-
-Idea 1
-```ipython
-rml1.beamline.M1.inicidence.value = Range(1,5,points=21)
-rml1.beamline.M1.inicidence.value = Range(lambda: random(1,5),points=21)
-```
-
-Idea 2
-```ipython
-
-Element(rml1.beamline.M2).Parameter("incidence",Range(lambda: random(1,5),points=21))
-                         .Parameter("cff",5) # Always use 5 as a value
-                         .Parameter("xpos", Range(1,5)) # number of points automatically linked to the first parameter
-
-Element(rml1.beamline.M3).Parameter("incidence",Range(1,3,points=11))
-```
-
-idea3:
-```ipython
-params = [
-            {rml1.beamline.M1.alpha:[1 2 3 4], rml1.beamline.M2.beta:[5 6 7 8]}}, # set two parameters: "alpha" and "beta" in a dependent way. 
-            {rml1.beamline.M2.posX:0.1}, # set a value - in independed way
-            {rml1.beamline.M2.posy:range(1,5,1)} # set a range of  values - in independed way
-        ]
-
-simulate(params)
-
-
-with rml1.beamline:
-    params = [
-            {M1.alpha:[1 2 3 4], M2.beta:[5 6 7 8]}}, # set two parameters: "alpha" and "beta" in a dependent way. 
-            {M2.posX:0.1}, # set a value - in independed way
-            {M2.posY:range(1,5,1)} # set a range of  values - in independed way
-        ]
-```
-
-idea4:
-```python
-# this can be used to set a value or a range of values
-simulation.addIndependentParam(param=rml1.beamline.M1.alpha,                              value=[1,2,3,4])
-# this can be used add dependent parameters
-simulation.addDependentParam(param=rml1.beamline.M1.posY,    
-                             values=[10,20,30,40],
-                             dependency=rml.beamline.M1:alpha)
-```
