@@ -27,7 +27,7 @@ python3 -m pip install wheel
 ```
 
 ```
-python3 -m pip install numpy matplotlib lxml ipython psutil
+python3 -m pip install numpy psutil joblib matplotlib ipython schwimmbad
 ```
 
 ```
@@ -49,7 +49,7 @@ python3 -m pip install --upgrade  --index-url https://test.pypi.org/simple/  ray
 
 
 ```
-conda install numpy psutil joblib matplotlib
+conda install numpy psutil joblib matplotlib ipython
 
 ```
 
