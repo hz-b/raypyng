@@ -165,11 +165,11 @@ class RayUIAPI:
         return self._cmd_io("load",rml_path,**kwargs)
 
     def trace(self,analyze=True,**kwargs):
-        if analyze:
-            cmd = "trace"
-        else:
-            cmd ="trace noanalyze"
-        return self._cmd_io(cmd,**kwargs)
+        # if analyze:
+        #     cmd = "trace"
+        # else:
+        #     cmd ="trace noanalyze"
+        return self._cmd_io("trace",None if analyze else "noanalyze", **kwargs)
 
     def export(self,objects:str, parameters:str, export_path:str, data_prefix:str, **kwargs):
         """_summary_
@@ -227,7 +227,7 @@ class RayUIAPI:
     def _wait_for_cmd_io(self,cmd,timeout=None,cbdataread=None):
         timecnt = 0.0
         line = ""
-        cmd = cmd.split(" ")[0]
+        #cmd = cmd.split(" ")[0]
         while True:
             line = self._runner._readline()
             if line is None:
