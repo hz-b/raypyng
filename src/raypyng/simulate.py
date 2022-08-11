@@ -1,5 +1,3 @@
-
-from fileinput import filename
 from .rml import RMLFile
 from .rml import ObjectElement,ParamElement, BeamlineElement
 import itertools
@@ -7,9 +5,11 @@ import os
 import numpy as np
 #from collections.abc import MutableMapping,MutableSequence
 from .runner import RayUIAPI,RayUIRunner
+from .recipes import SimulationRecipe
 
 import schwimmbad
 
+################################################################
 class SimulationParams():
     def __init__(self, rml=None, param_list=None,**kwargs) -> None:
         if rml is not None:
@@ -202,10 +202,20 @@ class SimulationParams():
             value = str(value)
         param.cdata = value
 
+################################################################
 class Simulate():
     """class to simulate 
     """
     def __init__(self, rml=None, hide=False,**kwargs) -> None:
+        """_summary_
+
+        Args:
+            rml (_type_, optional): Rml file with the beamline template. Defaults to None.
+            hide (bool, optional): force hiding of GUI leftovers. Defaults to False.
+
+        Raises:
+            Exception: _description_
+        """
         if rml is not None:
             if isinstance(rml,RMLFile):
                 self._rml = rml
@@ -217,6 +227,7 @@ class Simulate():
         self.prefix = 'RAYPy_Simulation'
         self._hide = hide
         self.analyze = True
+        self._repeat = 1
 
     @property
     def possible_exports(self):
@@ -418,7 +429,17 @@ class Simulate():
             #print('missing_simulations',missing_simulations)
         return missing_simulations
 
-    def run(self,/,force=False):
+    def run(self,recipe=None,/,force=False, **kwargs):
+        print(f"DEBUG:: isinstance(recipe,SimulationRecipe) is {isinstance(recipe,SimulationRecipe)}")
+        if isinstance(recipe,SimulationRecipe):
+            self.params = recipe.params(self)
+            self.exports = recipe.exports(self)
+            self.simulation_name = recipe.simulation_name(self)
+        elif recipe is None:
+            pass
+        else:
+            raise TypeError("Unsupported type of the recipe!")
+            
         for ind,rml in self.check_simulations(force=force).items():
             rml.write()
             run_rml_func(([rml.filename, self._hide, self._analyze],self.generate_export_params(ind,self.sim_list_path[ind])))

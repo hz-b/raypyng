@@ -1,6 +1,8 @@
 from raypyng import Simulate
+from raypyng.recipes import ResolvingPower
 import numpy as np
 import os
+
 
 
 this_file_dir=os.path.dirname(os.path.realpath(__file__))
@@ -16,8 +18,12 @@ cff = {elisa.PG.cFactor:2.5}
 ES = {elisa.ExitSlit.totalHeight:[0.1,0.05]}
 
 sim.analyze = False
+
+#sim.params,sim.exports, sim.simulation_name = ResolvingPower(energy_range, elisa.DetectorAtFocus,ES,cff)
+rp = ResolvingPower(energy_range, elisa.DetectorAtFocus,ES,cff)
+
 # test resolving power simulations
-sim.RP_simulation(energy_range, elisa.DetectorAtFocus,ES,cff,cpu=5, force=False)
+sim.run(rp, cpu=5, force=False)
 
 
         
