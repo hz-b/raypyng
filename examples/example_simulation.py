@@ -1,5 +1,4 @@
-from raypyng.simulate import Simulate
-#from raypyng.simulate import SimulationParams
+from raypyng import Simulate
 import numpy as np
 import os
 
