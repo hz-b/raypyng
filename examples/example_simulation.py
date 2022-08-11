@@ -1,10 +1,12 @@
 from raypyng.simulate import Simulate
 from raypyng.simulate import SimulationParams
 import numpy as np
+import os
 
+this_file_dir=os.path.dirname(os.path.realpath(__file__))
+rml_file = os.path.join(this_file_dir,'rml/high_energy_branch_flux_1200.rml')
 
-
-sim = Simulate('rml/high_energy_branch_flux_1200.rml',template='rml/high_energy_branch_flux_1200.rml', hide=True)
+sim = Simulate(rml_file, hide=True)
 
 rml=sim.rml
 elisa = sim.rml.beamline
