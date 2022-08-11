@@ -1,4 +1,4 @@
-from raypyng import Simulate
+from raypyng import Simulate, multiprocessing
 import numpy as np
 import os
 
@@ -17,7 +17,7 @@ elisa = sim.rml.beamline
 energy    = np.arange(200, 2001,200)
 SlitSize  = np.array([0.1,0.05])
 cff       = np.array([2.25])
-nrays     = 10000
+nrays     = 20
 
 # define a list of dictionaries with the parameters to scan
 params = [  
@@ -58,7 +58,9 @@ sim.exports  =  [{elisa.Dipole:'RawRaysOutgoing'},
 #sim.rml_list()
 
 #uncomment to run the simulations
-sim.run_mp(number_of_cpus=5,force=False)
+#sim.run(multiprocessing=5, force=True)
+sim.run(multiprocessing=False, force=False)
+#sim.run(force=True)
 
 
 

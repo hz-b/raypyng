@@ -6,8 +6,7 @@ import numpy as np
 #from collections.abc import MutableMapping,MutableSequence
 from .runner import RayUIAPI,RayUIRunner
 from .recipes import SimulationRecipe
-
-import schwimmbad
+from .multiprocessing import RunPool
 
 ################################################################
 class SimulationParams():
@@ -429,30 +428,22 @@ class Simulate():
             #print('missing_simulations',missing_simulations)
         return missing_simulations
 
-    def run(self,recipe=None,/,force=False, **kwargs):
-        print(f"DEBUG:: isinstance(recipe,SimulationRecipe) is {isinstance(recipe,SimulationRecipe)}")
-        if isinstance(recipe,SimulationRecipe):
-            self.params = recipe.params(self)
-            self.exports = recipe.exports(self)
-            self.simulation_name = recipe.simulation_name(self)
-        elif recipe is None:
-            pass
-        else:
-            raise TypeError("Unsupported type of the recipe!")
-            
-        for ind,rml in self.check_simulations(force=force).items():
-            rml.write()
-            run_rml_func(([rml.filename, self._hide, self._analyze],self.generate_export_params(ind,self.sim_list_path[ind])))
+    def run(self,recipe=None,/,multiprocessing=True, force=False):#, **kwargs):
+        if recipe is not None:
+            if isinstance(recipe,SimulationRecipe):
+                self.params = recipe.params(self)
+                self.exports = recipe.exports(self)
+                self.simulation_name = recipe.simulation_name(self)
+            else:
+                raise TypeError("Unsupported type of the recipe!")
 
-    def run_mp(self,/,number_of_cpus=1,force=False):
-        # trace using RAY-UI with number of workers
         filenames_hide_analyze = []
         exports = []
         for ind,rml in self.check_simulations(force=force).items():
             filenames_hide_analyze.append([rml.filename, self._hide, self._analyze])
             exports.append(self.generate_export_params(ind,self.sim_list_path[ind]))
             rml.write()
-        with schwimmbad.JoblibPool(number_of_cpus) as pool:
+        with RunPool(multiprocessing) as pool:
             pool.map(run_rml_func,zip(filenames_hide_analyze,exports))
 
     def generate_export_params(self,simulation_index,rml):
@@ -461,61 +452,6 @@ class Simulate():
         #sim_number = filename.split("_")[0]
         return [ (d[0], d[1], folder, str(simulation_index)+'_') for d in self.exports_list]
 
-    def run_one(self,rml):
-        return run_rml_func([rml.filename,False,True])
-
-    def RP_simulation(self, energy_range:range, exported_object:ObjectElement,/, *args,source:ObjectElement=None,sim_folder:str=None, repeat:int=1, cpu:int=1, force:bool=False):
-        if not isinstance(source, ObjectElement) and source != None:
-            raise TypeError('The source must be an ObjectElement part of a beamline, while it is a', type(source))
-        if not isinstance(energy_range, (range,np.ndarray)):
-           raise TypeError('The energy_range must be an a ragne or a numpy array, while it is a', type(energy_range))
-        if not isinstance(exported_object, ObjectElement):
-            raise TypeError('The exported_object must be an ObjectElement part of a beamline, while it is a', type(exported_object))
-        params = []
-        
-        # find source and add to param with defined user energy range
-        found_source = False
-        if source == None:
-            for oe in self.rml.beamline._children:
-                for par in oe:
-                    try:
-                        params.append({par.photonEnergy:energy_range})
-                        found_source = True
-                        break
-                    except:
-                        pass
-        else:
-            params.append({source.photonEnergy:energy_range})
-            found_source = True
-        if found_source!=True:
-            raise AttributeError('I did not find the source')
-        if args:
-            for a in args:
-                if not isinstance(a,dict):
-                    raise TypeError('The args must be dictionaries, while I found a',type(a) )
-                params.append(a)
-        # turn reflectivity of all elements off, grating eff to 100%
-        for oe in self.rml.beamline._children:
-                for par in oe:
-                    try:
-                        params.append({par.reflectivityType:0})
-                    except:
-                        pass
-        sp = SimulationParams(self.rml)
-        sp.params=params
-        self.params=sp
-        if self.analyze == True:
-            self.exports=[{exported_object:'ScalarBeamProperties'}]
-        elif self.analyze == False:
-            self.exports=[{exported_object:'RawRaysOutgoing'}]
-        if sim_folder is None:
-            self.simulation_name = 'RP'
-        else: 
-            self.simulation_name = sim_folder
-        self.repeat = repeat
-
-        self.rml_list()
-        self.run_mp(number_of_cpus=cpu,force=True)
 
     def beamwaist_simulation(self, energy:float,/,source:ObjectElement=None,nrays:int=None,sim_folder:str=None, force:bool=False):
         if not isinstance(energy, (int,float)):
@@ -576,10 +512,7 @@ class Simulate():
 
         self.rml_list()
         self.run_mp(number_of_cpus=1,force=force)
-        
-
-
-        
+         
 def run_rml_func(_tuple):
     filenames_hide_analyze,exports = _tuple
     rml_filename = filenames_hide_analyze[0]

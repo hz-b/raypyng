@@ -23,7 +23,7 @@ sim.analyze = False
 rp = ResolvingPower(energy_range, elisa.DetectorAtFocus,ES,cff)
 
 # test resolving power simulations
-sim.run(rp, cpu=5, force=False)
+sim.run(rp, multiprocessing=5, force=True)
 
 
         

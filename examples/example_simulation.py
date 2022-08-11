@@ -63,7 +63,7 @@ sim.exports  =  [{elisa.Dipole:'ScalarBeamProperties'},
 #sim.rml_list()
 
 #uncomment to run the simulations
-sim.run_mp(number_of_cpus=5,force=False)
+sim.run(multiprocessing=5,force=True)
 
 
 
