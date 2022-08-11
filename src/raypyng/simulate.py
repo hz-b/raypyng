@@ -210,7 +210,7 @@ class Simulate():
             if isinstance(rml,RMLFile):
                 self._rml = rml
             else: # assume that parameter is the file name as required for RMLFile
-                self._rml = RMLFile(rml,**kwargs)
+                self._rml = RMLFile(None,template=rml)
         else:
             raise Exception("rml file must be defined")
         self.path   = None
