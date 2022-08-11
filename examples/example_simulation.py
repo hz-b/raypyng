@@ -1,5 +1,5 @@
 from raypyng.simulate import Simulate
-from raypyng.simulate import SimulationParams
+#from raypyng.simulate import SimulationParams
 import numpy as np
 import os
 
@@ -10,7 +10,7 @@ sim = Simulate(rml_file, hide=True)
 
 rml=sim.rml
 elisa = sim.rml.beamline
-sp = SimulationParams(rml) 
+#sp = SimulationParams(rml) 
 
 
 
@@ -31,10 +31,10 @@ params = [
             {elisa.Dipole.numberRays:nrays}
         ]
 # set the paramters in the siumulationParams class
-sp.params=params
+#sp.params=params
 
 #and then plug them into the Simulation class
-sim.params=sp 
+sim.params=params
 
 
 # sim.simulation_folder = '/home/simone/Documents/RAYPYNG/raypyng/test'

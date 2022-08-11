@@ -337,9 +337,13 @@ class Simulate():
 
     @params.setter
     def params(self,value):
-        if not isinstance(value, SimulationParams) == True:
-            raise AssertionError('Params must be an instance of SimulationParams, while it is', type(params))
-        self.sp = value
+        if not isinstance(value, SimulationParams):
+            #raise AssertionError('Params must be an instance of SimulationParams, while it is', type(params))
+            sp = SimulationParams(self.rml)
+            sp.params = value
+            self.sp = sp
+        else:
+            self.sp = value
         _ = self.sp._extract_param(verbose=False)
         _ =self.sp._calc_loop()
 
