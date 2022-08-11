@@ -9,6 +9,8 @@ import subprocess,signal
 import time
 import psutil
 
+#import sys # used for some debugging
+
 ###############################################################################
 class RayUIRunner:
     """RayUIRunner class implements all logic to start a RayUI process
@@ -22,6 +24,7 @@ class RayUIRunner:
         self._binary = ray_binary
         self._options = "-b" if background else ""
         self._process = None
+        self._verbose = False
         if hide:
             self._hide = "xvfb-run --auto-servernum --server-num=1 "
         else: 
@@ -110,7 +113,7 @@ class RayUIRunner:
         """
         if self.isrunning:
             line =  self._process.stdout.readline().decode('utf8').rstrip('\n')
-            if True: # verbose
+            if self._verbose: # verbose
                 print(line)
             return line
         else:
@@ -209,14 +212,14 @@ class RayUIAPI:
         if payload is None:
             payload = ""
         cmdstr = cmd+" "+payload
+        #print(f"Executing {cmdstr}")
         self._runner._write(cmdstr)
-        #self._wait_for_cmd_io(cmd, timeout = 2.0)
-        # if cmd == 'trace noanalyze':
-        #     status = 'success'
-        # else:
+        #print(f"Will wait for return of the {cmd}")
         status = self._wait_for_cmd_io(cmd,cbdataread=cbNewLine)
-        if status=="success" or 'trace success':
+        if status=="success":# or 'trace success':
             return True
+        #elif status=="":# emty returns are also OK....
+        #    return True
         elif status=="failed":
             return False
         elif status=="ed failed": # specical workaround case for the "loaded failed" reply to laod command
@@ -228,6 +231,7 @@ class RayUIAPI:
         timecnt = 0.0
         line = ""
         #cmd = cmd.split(" ")[0]
+        cmd_seen = False # we shall see cmd twice - once as ACK for the execution and once as status return
         while True:
             line = self._runner._readline()
             if line is None:
@@ -237,7 +241,10 @@ class RayUIAPI:
             #if line == 'trace success':
             #    break
             if (line.startswith(cmd)):
-                break
+                if cmd_seen:
+                    break
+                else:
+                    cmd_seen = True
             else:
                 if cbdataread is not None:
                     cbdataread(line)
