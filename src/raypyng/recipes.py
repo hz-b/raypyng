@@ -14,7 +14,11 @@ class SimulationRecipe:
 
 ################################################################
 class ResolvingPower(SimulationRecipe):
+    """_summary_
 
+    Args:
+        SimulationRecipe (_type_): _description_
+    """
     def __init__(self, energy_range:range, exported_object:ObjectElement,/, *args,source:ObjectElement=None,sim_folder:str=None, repeat:int=1, cpu:int=1, force:bool=False):
     
         if not isinstance(source, ObjectElement) and source != None:
