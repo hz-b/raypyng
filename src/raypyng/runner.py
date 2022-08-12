@@ -36,6 +36,12 @@ class RayUIRunner:
         self._auto_flush = True     # flush on write calls
 
     def run(self):
+        """Open one instance of RAY-UI using subprocess
+
+        Raises:
+            RayPyRunnerError: if the RAY-UI executable is not found raise an error
+
+        """        
         if not self.isrunning:
             fullpath = os.path.join(self._path,self._binary)
             if not os.path.isfile(fullpath):
@@ -54,6 +60,11 @@ class RayUIRunner:
 
     @property
     def isrunning(self):
+        """Check weather a process is running and rerutn a boolean
+
+        Returns:
+            bool: returns True if the process is running, otherwise False
+        """        
         if self._process is None:
             return False
         else:
@@ -66,7 +77,7 @@ class RayUIRunner:
                 return True
 
     def kill(self):
-        """kill RayUI process
+        """kill a RAY-UI process
         """
         if self.isrunning:
             pid = self._process.pid
@@ -92,11 +103,11 @@ class RayUIRunner:
 
         Args:
             instr (str): _description_
-            endline (str, optional): _description_. Defaults to "\n".
+            endline (str, optional): _description_. Defaults to endline character.
 
         Raises:
             RayPyRunnerError: _description_
-        """
+        """     
         if self.isrunning:
             payload = bytes(instr+endline,"utf8")
             self._process.stdin.write(payload)
@@ -143,8 +154,7 @@ class RayUIAPI:
     """RayUIAPI class implements (hopefully all) command interface of the RayUI
     """
     def __init__(self,runner:RayUIRunner=None) -> None:
-        """_summary_
-
+        """Optional Reference to an existing RayUIRunner
         Args:
             runner (RayUIRunner, optional): reference to existing runner. If set to None a new runner instance will be automaticlly created. Defaults to None.
         """
