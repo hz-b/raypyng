@@ -439,9 +439,11 @@ class Simulate():
 
         filenames_hide_analyze = []
         exports = []
-        for ind,rml in self.check_simulations(force=force).items():
+        missing_simulations= self.check_simulations(force=force).items()
+        for ind,rml in missing_simulations:
             filenames_hide_analyze.append([rml.filename, self._hide, self._analyze])
-            exports.append(self.generate_export_params(ind,self.sim_list_path[ind]))
+            sim_index = ind%int(len(missing_simulations)/self.repeat)
+            exports.append(self.generate_export_params(sim_index,self.sim_list_path[ind]))
             rml.write()
         with RunPool(multiprocessing) as pool:
             pool.map(run_rml_func,zip(filenames_hide_analyze,exports))
