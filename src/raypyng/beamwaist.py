@@ -1,5 +1,6 @@
 from .simulate import Simulate
 from .rml import ObjectElement
+from .recipes import BeamWaist
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -28,7 +29,12 @@ class PlotBeamwaist():
         self.count_fig        = 0
     
     def simulate_beamline(self, energy:float,/,source:ObjectElement=None,nrays:int=None, force:bool=False):
-        self._sim.beamwaist_simulation(energy,source=source,nrays=nrays,sim_folder=self._original_directory, force=force)
+        #sim.params,sim.exports, sim.simulation_name = ResolvingPower(energy_range, elisa.DetectorAtFocus,ES,cff)
+        rp = BeamWaist(energy,source=source,nrays=nrays,sim_folder=self._original_directory, force=force)
+
+        # test resolving power simulations
+        self._sim.run(rp, multiprocessing=5, force=force)
+        #self._sim.beamwaist_simulation(energy,source=source,nrays=nrays,sim_folder=self._original_directory, force=force)
     
     def _parse_beamline_elements(self, debug=False):
         self.element_names_list = []
@@ -45,17 +51,20 @@ class PlotBeamwaist():
                         # append to rotation
                         if ind == 0:
                             self.rotation_list.append(False)
-                        else:
+                        elif hasattr(par, "azimuthalAngle"):
                             if par.azimuthalAngle.cdata == '0' or par.azimuthalAngle.cdata=='180':
                                 self.rotation_list.append(False)
                             elif par.azimuthalAngle.cdata == '90' or par.azimuthalAngle.cdata=='270':
                                 self.rotation_list.append(True)
                             else: 
                                 raise ValueError('Only beamline elements with azimuthal angle 0,90,180,270 are supported', oe.name, par.azimuthalAngle.cdata)
+                        else:
+                            self.rotation_list.append(False)
                         # append to element names list, only if it is not an imageplane
-                        if oe.get_attribute('type') != 'ImagePlaneBundle' and oe.get_attribute('type') != 'ImagePlane':
-                            self.element_names_list.append(oe.attributes().original()['name'])
+                        #if oe.get_attribute('type') != 'ImagePlaneBundle' and oe.get_attribute('type') != 'ImagePlane':
+                        self.element_names_list.append(oe.attributes().original()['name'])
                     except AttributeError:
+                        print(oe.attributes().original()['name'], par.worldPosition.z.cdata)
                         pass
         if debug:
             print('DEBUG:: element_names_list', self.element_names_list)
@@ -69,9 +78,10 @@ class PlotBeamwaist():
         if element_names_list != None:
             self.element_names_list=element_names_list
         for ind in range(len(self.element_names_list)):
-            self.add_element(name=self.element_names_list[ind],
-                            z=self.distance_list[ind+1],
-                            rot=self.rotation_list[ind])
+            if ind+1 != len(self.element_names_list):
+                self.add_element(name=self.element_names_list[ind],
+                                z=self.distance_list[ind+1],
+                                rot=self.rotation_list[ind])
         if save_results == True:
             self.save_results()
     
@@ -113,14 +123,14 @@ class PlotBeamwaist():
             
             if self.count_el == 0:
                 self.xh,self.yh   = self.trace(z,rays,rot)
-                print(self.xh.shape, self.yh.shape)
+                #print("DEBUG:: self.xh.shape, self.yh.shape:",self.xh.shape, self.yh.shape)
             else:
                 txh,tyh   = self.trace(z,rays,rot, name)
             if rot == True:
                 txh=np.rot90(txh)
                 tyh=np.rot90(tyh)
             if self.count_el != 0:
-                print(txh.shape, tyh.shape)
+                #print("DEBUG:: txh.shape, tyh.shape:",txh.shape, tyh.shape)
                 self.xh=np.concatenate((self.xh,txh),axis=1)
                 self.yh=np.concatenate((self.yh,tyh),axis=1)
 
@@ -235,22 +245,22 @@ class PlotBeamwaist():
         # put correct ticks and labels
         plot_length = xmax/1000
         beamline_length = sum(self.distance_list)/1000
-        beamline_el_pos = np.cumsum(self.distance_list[:-1])/1000
+        beamline_el_pos = np.cumsum(self.distance_list)/1000
         xtick_pos = (beamline_el_pos*plot_length)/beamline_length
         xtick_label = np.round(beamline_el_pos,2)
 
         # label the elements
         if annotate_OE == True:
             for ind, text in enumerate(self.element_names_list):
-                posy =  -self.lim
-                posx = xtick_pos[ind]
+                if ind !=len(self.element_names_list):
+                    posy =  -self.lim
+                    posx = xtick_pos[ind]
 
                 if ind<len(self.element_names_list)-1:
                     if (xtick_pos[ind+1]-xtick_pos[ind])<1:
                         posy += 3
-
-                ax1.text(posx,posy,text, rotation=45)
-                ax2.text(posx,posy,text, rotation=45)
+                ax1.text(posx,posy,text, rotation=60)
+                ax2.text(posx,posy,text, rotation=60)
         
         # remove xticks and labels which are too close to eaeachhc other
         for ind in range(xtick_pos.shape[0]-2, 1, -1):
