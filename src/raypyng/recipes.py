@@ -25,8 +25,15 @@ class ResolvingPower(SimulationRecipe):
             raise TypeError('The source must be an ObjectElement part of a beamline, while it is a', type(source))
         if not isinstance(energy_range, (range,np.ndarray)):
            raise TypeError('The energy_range must be an a ragne or a numpy array, while it is a', type(energy_range))
-        if not isinstance(exported_object, ObjectElement):
-            raise TypeError('The exported_object must be an ObjectElement part of a beamline, while it is a', type(exported_object))
+        if isinstance(exported_object, list):
+            for exp_obj in exported_object:
+                if not isinstance(exp_obj, ObjectElement):
+                    raise TypeError('The exported_object must be an ObjectElement part of a beamline, while it is a', type(exported_object))
+        else:
+            if not isinstance(exported_object, ObjectElement):
+                raise TypeError('The exported_object must be an ObjectElement part of a beamline, while it is a', type(exported_object))
+            else:
+                exported_object = [exported_object]
 
         self.source = source
         self.energy_range = energy_range
@@ -65,11 +72,14 @@ class ResolvingPower(SimulationRecipe):
         return params
 
     def exports(self,sim:Simulate):
-        #params
+        params = []
         if sim.analyze:
-            return [{self.exported_object:'ScalarBeamProperties'}]
-        else:
-            return [{self.exported_object:'RawRaysOutgoing'}]
+            export = "ScalarBeamProperties"
+        else: 
+            export = "RawRaysOutgoing"
+        for exp_obj in self.exported_object:
+            params.append({exp_obj:export})
+        return params
 
     def simulation_name(self,sim:Simulate):
         if self.sim_folder is None:
