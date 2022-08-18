@@ -93,6 +93,14 @@ class SimulationParams():
                 index_param  = 0
                 for dep_param in keys_par:
                     if dep_param != keys_par[0]:
+                        if len(par[dep_param]) != len(par[keys_par[0]]):
+                            dep_param_string = dep_param.get_full_path().lstrip("lab.beamline.")
+                            indep_param_string = keys_par[0].get_full_path().lstrip("lab.beamline.")
+                            raise AssertionError ('The parameter {} has {} values, but since it depends on {} it \
+                                should have the same number of values, {}'.format(dep_param_string,
+                                                                                len(par[dep_param]),
+                                                                                indep_param_string,
+                                                                                len(par[keys_par[0]])))
                         index_values = 0
                         self.dep_param_dependency[dep_param] = keys_par[0]
                         for dep_value in par[dep_param]:
