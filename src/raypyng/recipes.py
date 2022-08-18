@@ -123,12 +123,7 @@ class BeamWaist(SimulationRecipe):
     def exports(self,sim:Simulate):
         oe_list=[]
         for oe in sim.rml.beamline.children():
-            for par in oe:
-                try:
-                    par.alignmentError
-                    oe_list.append(oe)
-                except AttributeError:
-                    pass
+            oe_list.append(oe)
         exports = []
         for oe in oe_list:
             exports.append({oe:'RawRaysOutgoing'})
