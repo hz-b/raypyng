@@ -79,4 +79,68 @@ class ResolvingPower(SimulationRecipe):
 
 ################################################################
 
+class BeamWaist(SimulationRecipe):
+    """_summary_
+
+    Args:
+        SimulationRecipe (_type_): _description_
+    """
+    def __init__(self, energy:float,/,source:ObjectElement=None,nrays:int=None,sim_folder:str=None, force:bool=False):
+    
+        if not isinstance(energy, (int,float)):
+           raise TypeError('The energy must be an a int or float, while it is a', type(energy))
+
+        self.source = source
+        self.energy = energy
+        self.nrays  = nrays
+        self.sim_folder = sim_folder
+    
+    def params(self,sim:Simulate):
+        params = []
+
+        # find source and add to param with defined user energy range
+        found_source = False
+        if self.source == None:
+            for oe in sim.rml.beamline.children():
+                if hasattr(oe,"photonEnergy"):
+                    self.source = oe
+                    found_source = True
+                    break        
+            if found_source!=True:
+                raise AttributeError('I did not find the source')        
+        params.append({self.source.photonEnergy:self.energy})
+        
+        for oe in sim.rml.beamline.children():
+                for par in oe:
+                    try:
+                        params.append({par.reflectivityType:0})
+                    except:
+                        pass
+
+        # all done, return resulting params
+        return params
+
+    def exports(self,sim:Simulate):
+        oe_list=[]
+        for oe in sim.rml.beamline.children():
+            for par in oe:
+                try:
+                    par.alignmentError
+                    oe_list.append(oe)
+                except AttributeError:
+                    pass
+        exports = []
+        for oe in oe_list:
+            exports.append({oe:'RawRaysOutgoing'})
+            # print('DEBUG:: exported oe', oe.name)
+        return exports
+
+    def simulation_name(self,sim:Simulate):
+        if self.sim_folder is None:
+            return 'Beamwaist'
+        else: 
+            return self.sim_folder
+
+################################################################
+
     
