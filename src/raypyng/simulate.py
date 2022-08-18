@@ -329,8 +329,12 @@ class Simulate():
                 if not isinstance(k,ObjectElement):
                     raise AssertionError('The keys of the dictionaries must be instance of ObjectElement, while ', k, 'is a ', str(type(k)))
                 if isinstance(d[k], str):
-                    if d[k] not in self.possible_exports:
-                        raise AssertionError('It is not possible to export this file. The possible files to exports are ', self.possible_exports)
+                    if self.analyze:
+                        possible_exports = self.possible_exports
+                    else: 
+                        possible_exports = self.possible_exports_without_analysis
+                    if d[k] not in possible_exports:
+                        raise AssertionError('It is not possible to export {}, check the spelling. The possible files to exports are {}'.format(d[k],possible_exports))
                 elif isinstance(d[k], list):
                     for dd in d[k]:
                         if dd not in self.possible_exports and self._analyze==True:
