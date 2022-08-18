@@ -1,5 +1,6 @@
 from .simulate import Simulate
 from .rml import ObjectElement
+from .recipes import BeamWaist
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -28,7 +29,12 @@ class PlotBeamwaist():
         self.count_fig        = 0
     
     def simulate_beamline(self, energy:float,/,source:ObjectElement=None,nrays:int=None, force:bool=False):
-        self._sim.beamwaist_simulation(energy,source=source,nrays=nrays,sim_folder=self._original_directory, force=force)
+        #sim.params,sim.exports, sim.simulation_name = ResolvingPower(energy_range, elisa.DetectorAtFocus,ES,cff)
+        rp = BeamWaist(energy,source=source,nrays=nrays,sim_folder=self._original_directory, force=force)
+
+        # test resolving power simulations
+        self._sim.run(rp, multiprocessing=5, force=force)
+        #self._sim.beamwaist_simulation(energy,source=source,nrays=nrays,sim_folder=self._original_directory, force=force)
     
     def _parse_beamline_elements(self, debug=False):
         self.element_names_list = []
