@@ -29,6 +29,7 @@ bw.load_previous_results() # set the firs argument to true if you already saved 
 
 
 bw.change_name(new_name = 'Dip', pos=0)
+bw.change_name(new_name = 'Focus', pos=8)
 
 xh,yh,x,y=bw.plot(save_img=True,img_name='high_energy_branch',extension='.png',show_img=True,annotate_OE=True, debug=False)
 
