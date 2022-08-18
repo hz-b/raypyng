@@ -1,6 +1,6 @@
 [project]
 name = "raypyng_test"
-version = "0.0.11"
+version = "0.0.12"
 authors = [
   { name="Simone Vadilonga, Ruslan Ovsyannikov", email="simone.vadilonga@helmholtz-berlin.de" },
 ]
