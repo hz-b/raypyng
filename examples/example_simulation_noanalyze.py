@@ -59,7 +59,7 @@ sim.exports  =  [{elisa.Dipole:'RawRaysOutgoing'},
 
 #uncomment to run the simulations
 #sim.run(multiprocessing=5, force=True)
-sim.run(multiprocessing=False, force=False)
+sim.run(multiprocessing=5, force=False)
 #sim.run(force=True)
 
 
