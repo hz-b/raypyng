@@ -14,10 +14,7 @@ class SimulationRecipe:
 
 ################################################################
 class ResolvingPower(SimulationRecipe):
-    """Resolving Power Simulations, 
-
-    Args:
-        SimulationRecipe (_type_): _description_
+    """Resolving Power Simulations, reflectivity is automatically switched off for all elements
     """
     def __init__(self, energy_range:range, exported_object:ObjectElement,/, *args,source:ObjectElement=None,sim_folder:str=None):
     
@@ -90,9 +87,6 @@ class ResolvingPower(SimulationRecipe):
 ################################################################
 class Flux(SimulationRecipe):
     """Flux simulations, reflectivity is automatically switched on for all elements
-
-    Args:
-        SimulationRecipe (class): inherits from Simulation Recipe
     """
     def __init__(self, energy_range:range, exported_object:ObjectElement,/, *args,source:ObjectElement=None,sim_folder:str=None):
     
@@ -165,10 +159,8 @@ class Flux(SimulationRecipe):
 ################################################################
 
 class BeamWaist(SimulationRecipe):
-    """_summary_
-
-    Args:
-        SimulationRecipe (_type_): _description_
+    """Beamwaist Simulation: at one defined energy export RawRaysOutgoing for all 
+    optical elements, including image planes
     """
     def __init__(self, energy:float,/,source:ObjectElement=None,nrays:int=None,sim_folder:str=None):
     
