@@ -22,7 +22,7 @@
   \item \spxentry{\_enable\_param()}\spxextra{raypyng.simulate.SimulationParams method}, 
 		\hyperpage{3}
   \item \spxentry{\_extract\_param()}\spxextra{raypyng.simulate.SimulationParams method}, 
-		\hyperpage{3}
+		\hyperpage{4}
   \item \spxentry{\_readline()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{5}
   \item \spxentry{\_write()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{5}
   \item \spxentry{\_write\_value\_to\_param()}\spxextra{raypyng.simulate.SimulationParams method}, 
@@ -47,6 +47,7 @@
   \indexspace
   \bigletter P
   \item \spxentry{params}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{1}
+  \item \spxentry{params}\spxextra{raypyng.simulate.SimulationParams property}, \hyperpage{4}
   \item \spxentry{path}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{1}
   \item \spxentry{pid}\spxextra{raypyng.runner.RayUIRunner property}, \hyperpage{6}
   \item \spxentry{possible\_exports}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{1}
@@ -58,6 +59,7 @@
   \item \spxentry{RayUIRunner}\spxextra{class in raypyng.runner}, \hyperpage{5}
   \item \spxentry{repeat}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{2}
   \item \spxentry{rml}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{2}
+  \item \spxentry{rml}\spxextra{raypyng.simulate.SimulationParams property}, \hyperpage{4}
   \item \spxentry{rml\_list()}\spxextra{raypyng.simulate.Simulate method}, \hyperpage{2}
   \item \spxentry{run()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{6}
   \item \spxentry{run()}\spxextra{raypyng.simulate.Simulate method}, \hyperpage{2}

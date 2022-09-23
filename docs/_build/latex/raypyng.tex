@@ -102,8 +102,8 @@ A class that takes care of performing the simulations with RAY\sphinxhyphen{}UI
 \pysigstopsignatures
 \sphinxAtStartPar
 Initialize the class with a rml file
-:param rml: Rml file with the beamline template. Defaults to None.
-:type rml: string, optional
+:param rml: string pointing to an rml file with the beamline template, or an RMLFile class object. Defaults to None.
+:type rml: RMLFile/string, optional
 :param hide: force hiding of GUI leftovers, xvfb needs to be installed. Defaults to False.
 :type hide: bool, optional
 \begin{quote}\begin{description}
@@ -283,12 +283,6 @@ int
 \pysigstopsignatures
 \sphinxAtStartPar
 RMLFile object instantiated in init
-\begin{quote}\begin{description}
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-RMLFile
-
-\end{description}\end{quote}
 
 \end{fulllineitems}
 
@@ -359,13 +353,33 @@ A string to append to the folder where the simulations will be executed.
 \phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.simulate.}}\sphinxbfcode{\sphinxupquote{SimulationParams}}}{\emph{\DUrole{n}{rml}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{param\_list}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
-\pysigstopsignatures\index{\_\_init\_\_() (raypyng.simulate.SimulationParams method)@\spxentry{\_\_init\_\_()}\spxextra{raypyng.simulate.SimulationParams method}}
+\pysigstopsignatures
+\sphinxAtStartPar
+A class that takes care of the simulations parameters, makes sure that they are written correctly,
+and returns the the list of simulations that is requested by the user.
+\index{\_\_init\_\_() (raypyng.simulate.SimulationParams method)@\spxentry{\_\_init\_\_()}\spxextra{raypyng.simulate.SimulationParams method}}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams.__init__}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_\_init\_\_}}}{\emph{\DUrole{n}{rml}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{param\_list}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{{ $\rightarrow$ None}}
 \pysigstopsignatures
+\sphinxAtStartPar
+\_summary\_
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{rml}} (\sphinxstyleliteralemphasis{\sphinxupquote{RMLFile/string}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} string pointing to an rml file with the beamline template, or an RMLFile class object. Defaults to None.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{param\_list}} (\sphinxstyleliteralemphasis{\sphinxupquote{list}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} list of dictionaries containing the parameters and values to simulate. Defaults to None.
+
+\end{itemize}
+
+\end{description}\end{quote}
+
 \end{fulllineitems}
 
 \index{\_\_weakref\_\_ (raypyng.simulate.SimulationParams attribute)@\spxentry{\_\_weakref\_\_}\spxextra{raypyng.simulate.SimulationParams attribute}}
@@ -513,6 +527,32 @@ and auto is F
 \end{itemize}
 
 \end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{params (raypyng.simulate.SimulationParams property)@\spxentry{params}\spxextra{raypyng.simulate.SimulationParams property}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams.params}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{params}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+The parameters to scan, as a list of dictionaries.
+For each dictionary the keys are the parameters elements of the beamline, and the values are the
+values to be assigned.
+
+\end{fulllineitems}
+
+\index{rml (raypyng.simulate.SimulationParams property)@\spxentry{rml}\spxextra{raypyng.simulate.SimulationParams property}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams.rml}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{rml}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+RMLFile object instantiated in init
 
 \end{fulllineitems}
 
