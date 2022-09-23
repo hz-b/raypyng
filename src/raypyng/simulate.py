@@ -10,7 +10,16 @@ from .multiprocessing import RunPool
 
 ################################################################
 class SimulationParams():
+    """A class that takes care of the simulations parameters, makes sure that they are written correctly,
+    and returns the the list of simulations that is requested by the user.
+    """    
     def __init__(self, rml=None, param_list=None,**kwargs) -> None:
+        """_summary_
+
+        Args:
+            rml (RMLFile/string, optional): string pointing to an rml file with the beamline template, or an RMLFile class object. Defaults to None.
+            param_list (list, optional): list of dictionaries containing the parameters and values to simulate. Defaults to None.
+        """        
         if rml is not None:
             if isinstance(rml,RMLFile):
                 self._rml = rml
@@ -23,10 +32,16 @@ class SimulationParams():
         
     @property 
     def rml(self):
+        """RMLFile object instantiated in init
+        """        
         return self._rml
 
     @property
-    def params(self):       
+    def params(self):   
+        """The parameters to scan, as a list of dictionaries.
+        For each dictionary the keys are the parameters elements of the beamline, and the values are the 
+        values to be assigned.
+        """            
         return self.param
 
     @params.setter
@@ -216,7 +231,7 @@ class Simulate():
     def __init__(self, rml=None, hide=False,**kwargs) -> None:
         """Initialize the class with a rml file
         Args:
-            rml (string, optional): Rml file with the beamline template. Defaults to None.
+            rml (RMLFile/string, optional): string pointing to an rml file with the beamline template, or an RMLFile class object. Defaults to None.
             hide (bool, optional): force hiding of GUI leftovers, xvfb needs to be installed. Defaults to False.
 
         Raises:
@@ -279,9 +294,6 @@ class Simulate():
     @property 
     def rml(self):
         """RMLFile object instantiated in init
-
-        Returns:
-            RMLFile
         """        
         return self._rml
 
