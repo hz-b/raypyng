@@ -2,6 +2,7 @@ from importlib.resources import path
 import numpy as np
 import os
 import warnings
+from natsort import natsorted, ns
 
 
 class PostProcess():
@@ -9,6 +10,7 @@ class PostProcess():
     At the moment works only if the exported data are RawRaysOutgoing
     """
     def __init__(self) -> None:
+        self.format_saved_files = '.dat'
         pass
 
     def _list_files(self,dir_path:str, end_filename:str):
@@ -27,7 +29,7 @@ class PostProcess():
             # check only text files
             if file.endswith(end_filename):
                 res.append(os.path.join(dir_path,file))
-        return sorted(res)
+        return natsorted(res, alg=ns.IGNORECASE)
 
     def _extract_bandwidth_fwhm(self,rays_bw:np.array):
         """calculate the fwhm of the rays_bw.
@@ -52,6 +54,11 @@ class PostProcess():
         return 2.3555*np.std(rays_pos)
 
     def _extract_intensity(self,rays:np.array):
+        """calculate how many rays there are
+
+        Args:
+            rays (np.array): contains rays information
+        """        
         return(rays.size)
     
     def _save_file(self, filename:str, array:np.array):
@@ -61,8 +68,19 @@ class PostProcess():
             filename (_type_): file name(path)
             array (_type_): array to save
         """        
-        np.save(filename,array)
+        np.savetxt(filename+self.format_saved_files,array)
 
+    def _load_file(self,filepath):
+        """Load a .npy file and returns the array
+
+        Args:
+            filepath (str): the path to the file to load
+
+        Returns:
+            arr (np.array): The loaded numpy array
+        """        
+        arr = np.loadtxt(filepath)
+        return arr
 
     def postprocess_RawRays(self,exported_element:str=None, exported_object:str=None, dir_path:str=None, sim_number:str=None):
         """The method looks in the folder dir_path for a file with the filename:
@@ -101,18 +119,6 @@ class PostProcess():
         new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays')
         self._save_file(new_filename, ray_properties)
         return 
-    
-    def _load_file(self,filepath):
-        """Load a .npy file and returns the array
-
-        Args:
-            filepath (str): the path to the file to load
-
-        Returns:
-            arr (np.array): The loaded numpy array
-        """        
-        arr = np.load(filepath)
-        return arr
 
     def cleanup(self,dir_path:str=None, repeat:int=1, exp_elements:list=None):
         """This functions reads all the temporary files created by self.postptocess_RawRays()
@@ -127,7 +133,9 @@ class PostProcess():
         for d in exp_elements:
             for r in range(repeat):
                 dir_path_round=os.path.join(dir_path,"round_"+str(r))
-                files = self._list_files(dir_path_round, d[0]+"_analyzed_rays.npy")
+                files = self._list_files(dir_path_round, d[0]+"_analyzed_rays"+self.format_saved_files)
+                for fm in files:
+                    print("DEBUG:: files", fm)
                 for f_ind, f in enumerate(files):
                     if r == 0 and f_ind==0:
                         analyzed_rays = self._load_file(f)
@@ -140,7 +148,7 @@ class PostProcess():
                         analyzed_rays[:,f_ind] += tmp
                     else:
                         pass
-                    os.remove(f)
+                    #os.remove(f)
             fn = os.path.join(dir_path, d[0])
             analyzed_rays = analyzed_rays/repeat
             self._save_file(fn,analyzed_rays)
