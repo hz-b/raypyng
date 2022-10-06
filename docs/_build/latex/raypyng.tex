@@ -61,7 +61,7 @@
 
 
 \title{RayPyNG}
-\date{Aug 12, 2022}
+\date{Sep 23, 2022}
 \release{}
 \author{Simone Vadilonga, Ruslan Ovsyannikov}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -92,7 +92,7 @@
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.simulate.}}\sphinxbfcode{\sphinxupquote{Simulate}}}{\emph{\DUrole{n}{rml}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{hide}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-class to simulate
+A class that takes care of performing the simulations with RAY\sphinxhyphen{}UI
 \index{\_\_init\_\_() (raypyng.simulate.Simulate method)@\spxentry{\_\_init\_\_()}\spxextra{raypyng.simulate.Simulate method}}
 
 \begin{fulllineitems}
@@ -101,22 +101,15 @@ class to simulate
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_\_init\_\_}}}{\emph{\DUrole{n}{rml}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{hide}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{{ $\rightarrow$ None}}
 \pysigstopsignatures
 \sphinxAtStartPar
-\_summary\_
+Initialize the class with a rml file
+:param rml: string pointing to an rml file with the beamline template, or an RMLFile class object. Defaults to None.
+:type rml: RMLFile/string, optional
+:param hide: force hiding of GUI leftovers, xvfb needs to be installed. Defaults to False.
+:type hide: bool, optional
 \begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{rml}} (\sphinxstyleliteralemphasis{\sphinxupquote{\_type\_}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} Rml file with the beamline template. Defaults to None.
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{hide}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} force hiding of GUI leftovers. Defaults to False.
-
-\end{itemize}
-
 \sphinxlineitem{Raises}
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{Exception}} \textendash{} \_description\_
+\sphinxstyleliteralstrong{\sphinxupquote{Exception}} \textendash{} If the rml file is not defined an exception is raised
 
 \end{description}\end{quote}
 
@@ -134,6 +127,220 @@ list of weak references to the object (if defined)
 
 \end{fulllineitems}
 
+\index{analyze (raypyng.simulate.Simulate property)@\spxentry{analyze}\spxextra{raypyng.simulate.Simulate property}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.analyze}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{analyze}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+Turn on or off the RAY\sphinxhyphen{}UI analysis of the results.
+The analysis of the results takes time, so turn it on only if needed
+\begin{quote}\begin{description}
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+True: analysis on, False: analysis off
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+bool
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{exports (raypyng.simulate.Simulate property)@\spxentry{exports}\spxextra{raypyng.simulate.Simulate property}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.exports}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{exports}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+The files to export once the simulation is complete.
+for a list of possible files check self.possible\_exports
+and self.possible\_exports\_without\_analysis.
+
+\sphinxAtStartPar
+It is expeceted a list of dictionaries, and for each dictionary the key is the element
+to be exported and the valuee are the files to be exported
+
+\end{fulllineitems}
+
+\index{params (raypyng.simulate.Simulate property)@\spxentry{params}\spxextra{raypyng.simulate.Simulate property}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.params}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{params}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+The parameters to scan, as a list of dictionaries.
+For each dictionary the keys are the parameters elements of the beamline, and the values are the
+values to be assigned.
+
+\end{fulllineitems}
+
+\index{path (raypyng.simulate.Simulate property)@\spxentry{path}\spxextra{raypyng.simulate.Simulate property}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.path}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{path}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+The path where to execute the simlations
+\begin{quote}\begin{description}
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+by default the path is the current path from which
+the program is executed
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+string
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{possible\_exports (raypyng.simulate.Simulate property)@\spxentry{possible\_exports}\spxextra{raypyng.simulate.Simulate property}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.possible_exports}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{possible\_exports}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+A list of the files that can be exported by RAY\sphinxhyphen{}UI
+\begin{quote}\begin{description}
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+list of the names of the possible exports for RAY\sphinxhyphen{}UI
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+list
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{possible\_exports\_without\_analysis (raypyng.simulate.Simulate property)@\spxentry{possible\_exports\_without\_analysis}\spxextra{raypyng.simulate.Simulate property}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.possible_exports_without_analysis}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{possible\_exports\_without\_analysis}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+A list of the files that can be exported by RAY\sphinxhyphen{}UI when the
+analysis option is turned off
+\begin{quote}\begin{description}
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+list of the names of the possible exports for RAY\sphinxhyphen{}UI when analysis is off
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+list
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{repeat (raypyng.simulate.Simulate property)@\spxentry{repeat}\spxextra{raypyng.simulate.Simulate property}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.repeat}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{repeat}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+The simulations can be repeated an arbitrary number of times
+If the statitcs are not good enough using 2 millions of rays is suggested
+to repeat them instead of increasing the number of rays
+\begin{quote}\begin{description}
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+the number of repetition of the simulations, by default is 1
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+int
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{rml (raypyng.simulate.Simulate property)@\spxentry{rml}\spxextra{raypyng.simulate.Simulate property}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.rml}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{rml}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+RMLFile object instantiated in init
+
+\end{fulllineitems}
+
+\index{rml\_list() (raypyng.simulate.Simulate method)@\spxentry{rml\_list()}\spxextra{raypyng.simulate.Simulate method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.rml_list}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{rml\_list}}}{}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+This function creates the folder structure and the rml files to simulate.
+It requires the param to be set. Useful if one wants to create the simulation files
+for a manual check before starting the simulations.
+
+\end{fulllineitems}
+
+\index{run() (raypyng.simulate.Simulate method)@\spxentry{run()}\spxextra{raypyng.simulate.Simulate method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.run}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{run}}}{\emph{\DUrole{n}{recipe}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{o}{/}}, \emph{\DUrole{n}{multiprocessing}\DUrole{o}{=}\DUrole{default_value}{True}}, \emph{\DUrole{n}{force}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+This method starts the simulations. params and exports need to be defined.
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{recipe}} (\sphinxstyleliteralemphasis{\sphinxupquote{SimulationRecipe}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} If using a recipee pass it as a parameter. Defaults to None.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{multiprocessing}} (\sphinxstyleliteralemphasis{\sphinxupquote{boolint}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} If True all the cpus are used. If an integer n is provided, n cpus are used. Defaults to True.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{force}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} If True all the simlations are performed, even if the export files already exist. If False only the simlations for which are missing some exports are performed. Defaults to False.
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{simulation\_name (raypyng.simulate.Simulate property)@\spxentry{simulation\_name}\spxextra{raypyng.simulate.Simulate property}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.simulation_name}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{simulation\_name}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+A string to append to the folder where the simulations will be executed.
+
+\end{fulllineitems}
+
 
 \end{fulllineitems}
 
@@ -146,13 +353,33 @@ list of weak references to the object (if defined)
 \phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.simulate.}}\sphinxbfcode{\sphinxupquote{SimulationParams}}}{\emph{\DUrole{n}{rml}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{param\_list}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
-\pysigstopsignatures\index{\_\_init\_\_() (raypyng.simulate.SimulationParams method)@\spxentry{\_\_init\_\_()}\spxextra{raypyng.simulate.SimulationParams method}}
+\pysigstopsignatures
+\sphinxAtStartPar
+A class that takes care of the simulations parameters, makes sure that they are written correctly,
+and returns the the list of simulations that is requested by the user.
+\index{\_\_init\_\_() (raypyng.simulate.SimulationParams method)@\spxentry{\_\_init\_\_()}\spxextra{raypyng.simulate.SimulationParams method}}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams.__init__}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_\_init\_\_}}}{\emph{\DUrole{n}{rml}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{param\_list}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{{ $\rightarrow$ None}}
 \pysigstopsignatures
+\sphinxAtStartPar
+\_summary\_
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{rml}} (\sphinxstyleliteralemphasis{\sphinxupquote{RMLFile/string}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} string pointing to an rml file with the beamline template, or an RMLFile class object. Defaults to None.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{param\_list}} (\sphinxstyleliteralemphasis{\sphinxupquote{list}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} list of dictionaries containing the parameters and values to simulate. Defaults to None.
+
+\end{itemize}
+
+\end{description}\end{quote}
+
 \end{fulllineitems}
 
 \index{\_\_weakref\_\_ (raypyng.simulate.SimulationParams attribute)@\spxentry{\_\_weakref\_\_}\spxextra{raypyng.simulate.SimulationParams attribute}}
@@ -300,6 +527,32 @@ and auto is F
 \end{itemize}
 
 \end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{params (raypyng.simulate.SimulationParams property)@\spxentry{params}\spxextra{raypyng.simulate.SimulationParams property}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams.params}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{params}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+The parameters to scan, as a list of dictionaries.
+For each dictionary the keys are the parameters elements of the beamline, and the values are the
+values to be assigned.
+
+\end{fulllineitems}
+
+\index{rml (raypyng.simulate.SimulationParams property)@\spxentry{rml}\spxextra{raypyng.simulate.SimulationParams property}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams.rml}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{rml}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+RMLFile object instantiated in init
 
 \end{fulllineitems}
 

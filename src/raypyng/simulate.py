@@ -11,7 +11,16 @@ from .postprocessing import PostProcess
 
 ################################################################
 class SimulationParams():
+    """A class that takes care of the simulations parameters, makes sure that they are written correctly,
+    and returns the the list of simulations that is requested by the user.
+    """    
     def __init__(self, rml=None, param_list=None,**kwargs) -> None:
+        """_summary_
+
+        Args:
+            rml (RMLFile/string, optional): string pointing to an rml file with the beamline template, or an RMLFile class object. Defaults to None.
+            param_list (list, optional): list of dictionaries containing the parameters and values to simulate. Defaults to None.
+        """        
         if rml is not None:
             if isinstance(rml,RMLFile):
                 self._rml = rml
@@ -24,10 +33,16 @@ class SimulationParams():
         
     @property 
     def rml(self):
+        """RMLFile object instantiated in init
+        """        
         return self._rml
 
     @property
-    def params(self):       
+    def params(self):   
+        """The parameters to scan, as a list of dictionaries.
+        For each dictionary the keys are the parameters elements of the beamline, and the values are the 
+        values to be assigned.
+        """            
         return self.param
 
     @params.setter
@@ -212,17 +227,16 @@ class SimulationParams():
 
 ################################################################
 class Simulate():
-    """class to simulate 
+    """A class that takes care of performing the simulations with RAY-UI 
     """
     def __init__(self, rml=None, hide=False,**kwargs) -> None:
-        """_summary_
-
+        """Initialize the class with a rml file
         Args:
-            rml (_type_, optional): Rml file with the beamline template. Defaults to None.
-            hide (bool, optional): force hiding of GUI leftovers. Defaults to False.
+            rml (RMLFile/string, optional): string pointing to an rml file with the beamline template, or an RMLFile class object. Defaults to None.
+            hide (bool, optional): force hiding of GUI leftovers, xvfb needs to be installed. Defaults to False.
 
         Raises:
-            Exception: _description_
+            Exception: If the rml file is not defined an exception is raised
         """
         if rml is not None:
             if isinstance(rml,RMLFile):
@@ -239,6 +253,11 @@ class Simulate():
 
     @property
     def possible_exports(self):
+        """A list of the files that can be exported by RAY-UI
+
+        Returns:
+            list: list of the names of the possible exports for RAY-UI
+        """        
         self._possible_exports = ['AnglePhiDistribution',
                                 'AnglePsiDistribution',
                                 'BeamPropertiesPlotSnapshot',
@@ -262,6 +281,12 @@ class Simulate():
     
     @property
     def possible_exports_without_analysis(self):
+        """A list of the files that can be exported by RAY-UI when the 
+        analysis option is turned off
+
+        Returns:
+            list: list of the names of the possible exports for RAY-UI when analysis is off
+        """        
         self._possible_exports_without_analysis = ['RawRaysIncoming',
                                 'RawRaysOutgoing'
                              ]
@@ -269,10 +294,14 @@ class Simulate():
 
     @property 
     def rml(self):
+        """RMLFile object instantiated in init
+        """        
         return self._rml
 
     @property 
     def simulation_name(self):
+        """A string to append to the folder where the simulations will be executed.
+        """        
         return self._simulation_name
     
     @simulation_name.setter
@@ -281,6 +310,12 @@ class Simulate():
 
     @property 
     def analyze(self):
+        """Turn on or off the RAY-UI analysis of the results. 
+        The analysis of the results takes time, so turn it on only if needed
+
+        Returns:
+            bool: True: analysis on, False: analysis off
+        """        
         return self._analyze
     
     @analyze.setter
@@ -291,6 +326,13 @@ class Simulate():
         
     @property 
     def repeat(self):
+        """The simulations can be repeated an arbitrary number of times
+        If the statitcs are not good enough using 2 millions of rays is suggested
+        to repeat them instead of increasing the number of rays
+
+        Returns:
+            int: the number of repetition of the simulations, by default is 1
+        """        
         return self._repeat
     
     @repeat.setter
@@ -301,6 +343,12 @@ class Simulate():
 
     @property 
     def path(self):
+        """The path where to execute the simlations
+
+        Returns:
+            string: by default the path is the current path from which
+            the program is executed
+        """        
         return self._path
 
     @path.setter
@@ -325,6 +373,13 @@ class Simulate():
 
     @property 
     def exports(self):
+        """The files to export once the simulation is complete.
+        for a list of possible files check self.possible_exports
+        and self.possible_exports_without_analysis.
+
+        It is expeceted a list of dictionaries, and for each dictionary the key is the element 
+        to be exported and the valuee are the files to be exported
+        """        
         return self._exports
 
     @exports.setter
@@ -355,7 +410,11 @@ class Simulate():
         self._exports_list = self.compose_exports_list(value, verbose=False)
         
     @property
-    def params(self):       
+    def params(self):
+        """The parameters to scan, as a list of dictionaries.
+        For each dictionary the keys are the parameters elements of the beamline, and the values are the 
+        values to be assigned.
+        """               
         return self.param
 
     @params.setter
@@ -370,7 +429,11 @@ class Simulate():
         _ = self.sp._extract_param(verbose=False)
         _ =self.sp._calc_loop()
 
-    def rml_list(self):    
+    def rml_list(self):
+        """This function creates the folder structure and the rml files to simulate.
+        It requires the param to be set. Useful if one wants to create the simulation files 
+        for a manual check before starting the simulations.
+        """            
         result = []
         self.sim_list_path = []
         self.sim_path = os.path.join(self.path, self.prefix+'_'+self.simulation_name)
@@ -441,7 +504,15 @@ class Simulate():
             #print('missing_simulations',missing_simulations)
         return missing_simulations
 
-    def run(self,recipe=None,/,multiprocessing=True, force=False):#, **kwargs):
+    def run(self,recipe=None,/,multiprocessing=True, force=False):
+        """This method starts the simulations. params and exports need to be defined.
+
+        Args:
+            recipe (SimulationRecipe, optional): If using a recipee pass it as a parameter. Defaults to None.
+            multiprocessing (boolint, optional): If True all the cpus are used. If an integer n is provided, n cpus are used. Defaults to True.
+            force (bool, optional): If True all the simlations are performed, even if the export files already exist. If False only the simlations for which are missing some exports are performed. Defaults to False.
+
+        """             
         if recipe is not None:
             if isinstance(recipe,SimulationRecipe):
                 self.params = recipe.params(self)

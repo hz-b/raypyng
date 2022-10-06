@@ -1,6 +1,6 @@
 [project]
-name = "raypyng_test"
-version = "0.0.13"
+name = "raypyng"
+version = "0.0.5"
 authors = [
   { name="Simone Vadilonga, Ruslan Ovsyannikov", email="simone.vadilonga@helmholtz-berlin.de" },
 ]
@@ -13,13 +13,13 @@ classifiers = [
     "License :: OSI Approved :: MIT License"
 ]
 
-#dependencies = [
-            #'numpy>=1.22.0',
-            #'psutil>=5.9.1',
-            #'schwimmbad>=0.3.0',
-            #'joblib>=1.1.0'
-            
-#]
+dependencies = [
+            'numpy>=1.22.0',
+            'psutil>=5.9.1',
+            'schwimmbad>=0.3.0',
+            'joblib>=1.1.0',
+            'matplotlib>=3.5.1'
+]
 
 [project.urls]
 "Homepage" = "https://gitlab.helmholtz-berlin.de/RAY/raypyng"
