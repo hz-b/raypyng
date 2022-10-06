@@ -7,6 +7,7 @@ import numpy as np
 from .runner import RayUIAPI,RayUIRunner
 from .recipes import SimulationRecipe
 from .multiprocessing import RunPool
+from .postprocessing import PostProcess
 
 ################################################################
 class SimulationParams():
@@ -524,19 +525,23 @@ class Simulate():
         exports = []
         missing_simulations= self.check_simulations(force=force).items()
         for ind,rml in missing_simulations:
+            print("DEBUG:: missing sim:", rml)
             filenames_hide_analyze.append([rml.filename, self._hide, self._analyze])
             sim_index = ind%int(len(missing_simulations)/self.repeat)
             exports.append(self.generate_export_params(sim_index,self.sim_list_path[ind]))
             rml.write()
         with RunPool(multiprocessing) as pool:
             pool.map(run_rml_func,zip(filenames_hide_analyze,exports))
+        if len(missing_simulations) != 0 and self.analyze==False:
+            pp = PostProcess()
+            pp.cleanup(self.sim_path, self.repeat, self.exports_list)
 
     def generate_export_params(self,simulation_index,rml):
         folder = os.path.dirname(rml)
         #filename = os.path.basename(rml)
         #sim_number = filename.split("_")[0]
         return [ (d[0], d[1], folder, str(simulation_index)+'_') for d in self.exports_list]
-
+         
 def run_rml_func(_tuple):
     filenames_hide_analyze,exports = _tuple
     rml_filename = filenames_hide_analyze[0]
@@ -544,11 +549,14 @@ def run_rml_func(_tuple):
     analyze      = filenames_hide_analyze[2]
     runner = RayUIRunner(hide=hide)
     api    = RayUIAPI(runner)
+    pp     = PostProcess()
     runner.run()
     api.load(rml_filename)
     api.trace(analyze=analyze)
     for e in exports:
         api.export(*e)
+        if analyze==False:
+            pp.postprocess_RawRays(e[0], e[1], e[2], e[3])
     #time.sleep(0.1) # testing file creation issue
     try: 
         api.quit()
