@@ -14,10 +14,10 @@ elisa = sim.rml.beamline
 
 
 # define the values of the parameters to scan 
-energy    = np.arange(200, 2001,200)
-SlitSize  = np.array([0.1,0.05])
+energy    = np.arange(200, 10201,1000)
+SlitSize  = np.array([0.1])
 cff       = np.array([2.25])
-nrays     = 20
+nrays     = 10000
 
 # define a list of dictionaries with the parameters to scan
 params = [  
@@ -39,7 +39,7 @@ sim.params=params
 sim.simulation_name = 'noAnalyze_test'
 
 # repeat the simulations as many time as needed
-sim.repeat = 1
+sim.repeat = 2
 
 #this is defined at the current working directory by default
 #sim.path = '/home/simone/Documents/RAYPYNG/raypyng' 
