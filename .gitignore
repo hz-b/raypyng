@@ -17,3 +17,11 @@ test/
 # Ignore distribution on pip
 dist
 src/raypyng_test.egg-info
+.vscode/configurationCache.log
+.vscode/dryrun.log
+.vscode/targets.log
+src/raypyng.egg-info/dependency_links.txt
+src/raypyng.egg-info/PKG-INFO
+src/raypyng.egg-info/requires.txt
+src/raypyng.egg-info/SOURCES.txt
+src/raypyng.egg-info/top_level.txt
