@@ -454,6 +454,7 @@ class Simulate():
         exports = []
         missing_simulations= self.check_simulations(force=force).items()
         for ind,rml in missing_simulations:
+            print("DEBUG:: missing sim:", rml)
             filenames_hide_analyze.append([rml.filename, self._hide, self._analyze])
             sim_index = ind%int(len(missing_simulations)/self.repeat)
             exports.append(self.generate_export_params(sim_index,self.sim_list_path[ind]))
