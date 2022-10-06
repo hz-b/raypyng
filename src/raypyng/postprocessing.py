@@ -59,7 +59,7 @@ class PostProcess():
         Args:
             rays (np.array): contains rays information
         """        
-        return(rays.size)
+        return(rays.shape[0])
     
     def _save_file(self, filename:str, array:np.array):
         """This function is used to save files, 
@@ -105,13 +105,13 @@ class PostProcess():
             pass
         elif rays.shape[0]==15: # if only one ray survived
             #print('one')
-            ray_properties[0] = self._extract_intensity(rays[0])
+            ray_properties[0] = 1
             ray_properties[1] = self._extract_bandwidth_fwhm(rays[9])
             ray_properties[2] = self._extract_focus_fwhm(rays[3])
             ray_properties[3] = self._extract_focus_fwhm(rays[4])
         else:
             #print('normal')
-            ray_properties[0] = self._extract_intensity(rays[0])
+            ray_properties[0] = self._extract_intensity(rays)
             ray_properties[1] = self._extract_bandwidth_fwhm(rays[:,9])
             ray_properties[2] = self._extract_focus_fwhm(rays[:,3])
             ray_properties[3] = self._extract_focus_fwhm(rays[:,4])
@@ -134,21 +134,20 @@ class PostProcess():
             for r in range(repeat):
                 dir_path_round=os.path.join(dir_path,"round_"+str(r))
                 files = self._list_files(dir_path_round, d[0]+"_analyzed_rays"+self.format_saved_files)
-                for fm in files:
-                    print("DEBUG:: files", fm)
                 for f_ind, f in enumerate(files):
                     if r == 0 and f_ind==0:
                         analyzed_rays = self._load_file(f)
+                        analyzed_rays = np.reshape(analyzed_rays,(1,analyzed_rays.shape[0]))
                     elif r==0 and f_ind!=0:
                         tmp=self._load_file(f)
-                        analyzed_rays = np.concatenate((analyzed_rays, tmp), axis=1)
+                        tmp = np.reshape(tmp,(1,tmp.shape[0]))
+                        analyzed_rays = np.concatenate((analyzed_rays, tmp), axis=0)
                     elif r>=1:
                         tmp=self._load_file(f)
                         tmp=tmp.reshape((tmp.shape[0]))
-                        analyzed_rays[:,f_ind] += tmp
+                        analyzed_rays[f_ind,:] += tmp
                     else:
                         pass
-                    #os.remove(f)
             fn = os.path.join(dir_path, d[0])
             analyzed_rays = analyzed_rays/repeat
             self._save_file(fn,analyzed_rays)
