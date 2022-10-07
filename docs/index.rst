@@ -36,6 +36,14 @@ RayUIRunner
    :special-members:
    :inherited-members:
 
+PostProcessing
+==================
+.. autoclass:: raypyng.postprocessing.PostProcess
+   :members:
+   :private-members:
+   :special-members:
+   :inherited-members:
+
 .. Multiprocessing
 .. ==================
 .. .. automodule:: raypyng.multiprocessing

@@ -61,7 +61,7 @@
 
 
 \title{RayPyNG}
-\date{Sep 23, 2022}
+\date{Oct 07, 2022}
 \release{}
 \author{Simone Vadilonga, Ruslan Ovsyannikov}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -740,6 +740,252 @@ Open one instance of RAY\sphinxhyphen{}UI using subprocess
 \sphinxstyleliteralstrong{\sphinxupquote{RayPyRunnerError}} \textendash{} if the RAY\sphinxhyphen{}UI executable is not found raise an error
 
 \end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+
+
+\chapter{PostProcessing}
+\label{\detokenize{index:postprocessing}}\index{PostProcess (class in raypyng.postprocessing)@\spxentry{PostProcess}\spxextra{class in raypyng.postprocessing}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.postprocessing.}}\sphinxbfcode{\sphinxupquote{PostProcess}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+class to post\sphinxhyphen{}process the data.
+At the moment works only if the exported data are RawRaysOutgoing
+\index{\_\_init\_\_() (raypyng.postprocessing.PostProcess method)@\spxentry{\_\_init\_\_()}\spxextra{raypyng.postprocessing.PostProcess method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess.__init__}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_\_init\_\_}}}{}{{ $\rightarrow$ None}}
+\pysigstopsignatures
+\end{fulllineitems}
+
+\index{\_\_weakref\_\_ (raypyng.postprocessing.PostProcess attribute)@\spxentry{\_\_weakref\_\_}\spxextra{raypyng.postprocessing.PostProcess attribute}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess.__weakref__}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{\_\_weakref\_\_}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+list of weak references to the object (if defined)
+
+\end{fulllineitems}
+
+\index{\_extract\_bandwidth\_fwhm() (raypyng.postprocessing.PostProcess method)@\spxentry{\_extract\_bandwidth\_fwhm()}\spxextra{raypyng.postprocessing.PostProcess method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess._extract_bandwidth_fwhm}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_extract\_bandwidth\_fwhm}}}{\emph{\DUrole{n}{rays\_bw}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{array}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+calculate the fwhm of the rays\_bw.
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{(}}\sphinxstyleliteralstrong{\sphinxupquote{np}} (\sphinxstyleliteralemphasis{\sphinxupquote{rays\_bw}}) \textendash{} array): the energy of the x\sphinxhyphen{}rays
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+fwhm
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+float
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{\_extract\_focus\_fwhm() (raypyng.postprocessing.PostProcess method)@\spxentry{\_extract\_focus\_fwhm()}\spxextra{raypyng.postprocessing.PostProcess method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess._extract_focus_fwhm}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_extract\_focus\_fwhm}}}{\emph{\DUrole{n}{rays\_pos}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{array}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+calculate the fwhm of rays\_pos
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{rays\_pos}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.array}}) \textendash{} contains positions of the x\sphinxhyphen{}rays
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+fwhm
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+float
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{\_extract\_intensity() (raypyng.postprocessing.PostProcess method)@\spxentry{\_extract\_intensity()}\spxextra{raypyng.postprocessing.PostProcess method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess._extract_intensity}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_extract\_intensity}}}{\emph{\DUrole{n}{rays}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{array}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+calculate how many rays there are
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{rays}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.array}}) \textendash{} contains rays information
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{\_list\_files() (raypyng.postprocessing.PostProcess method)@\spxentry{\_list\_files()}\spxextra{raypyng.postprocessing.PostProcess method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess._list_files}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_list\_files}}}{\emph{\DUrole{n}{dir\_path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{end\_filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+List all the files in dir\_path ending with end\_filename
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{dir\_path}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} path to a folder
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{end\_filename}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} the listed files end with end\_filename
+
+\end{itemize}
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+list of files in dir\_path ending eith end\_filename
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+res (list)
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{\_load\_file() (raypyng.postprocessing.PostProcess method)@\spxentry{\_load\_file()}\spxextra{raypyng.postprocessing.PostProcess method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess._load_file}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_load\_file}}}{\emph{\DUrole{n}{filepath}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Load a .npy file and returns the array
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{filepath}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} the path to the file to load
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+The loaded numpy array
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+arr (np.array)
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{\_save\_file() (raypyng.postprocessing.PostProcess method)@\spxentry{\_save\_file()}\spxextra{raypyng.postprocessing.PostProcess method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess._save_file}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_save\_file}}}{\emph{\DUrole{n}{filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{array}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{array}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+This function is used to save files,
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{filename}} (\sphinxstyleliteralemphasis{\sphinxupquote{\_type\_}}) \textendash{} file name(path)
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{array}} (\sphinxstyleliteralemphasis{\sphinxupquote{\_type\_}}) \textendash{} array to save
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{cleanup() (raypyng.postprocessing.PostProcess method)@\spxentry{cleanup()}\spxextra{raypyng.postprocessing.PostProcess method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess.cleanup}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{cleanup}}}{\emph{\DUrole{n}{dir\_path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{repeat}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{int}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{1}}, \emph{\DUrole{n}{exp\_elements}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}list\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+This functions reads all the temporary files created by self.postptocess\_RawRays()
+saves one file for each exported element in dir\_path, and deletes the temporary files.
+If more than one round of simulations was done, the values are averaged.
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{dir\_path}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} The path to the folder to cleanup. Defaults to None.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{repeat}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} number of rounds of simulations. Defaults to 1.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{exp\_elements}} (\sphinxstyleliteralemphasis{\sphinxupquote{list}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} the exported elements names as str. Defaults to None.
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{postprocess\_RawRays() (raypyng.postprocessing.PostProcess method)@\spxentry{postprocess\_RawRays()}\spxextra{raypyng.postprocessing.PostProcess method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess.postprocess_RawRays}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{postprocess\_RawRays}}}{\emph{\DUrole{n}{exported\_element}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{exported\_object}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{dir\_path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{sim\_number}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+The method looks in the folder dir\_path for a file with the filename:
+filename = os.path.join(dir\_path,sim\_number+exported\_element + ‘\sphinxhyphen{}’ + exported\_object+’.csv’)
+for each file it calculates the number of rays, the bandwidth, and the horizontal and vertical focus size,
+it saves it in an array that is composed by {[}n\_rays,bandwidth,hor\_focus,vert\_focus{]}, that is then saved to
+os.path.join(dir\_path, sim\_number+exported\_element+’\_analyzed\_rays.npy’)
+:param exported\_element: a list of containing the exported elements name as str. Defaults to None.
+:type exported\_element: list, optional
+:param exported\_object: the exported opbject, tested only with RawRaysOutgoing. Defaults to None.
+:type exported\_object: str, optional
+:param dir\_path: the folder where the file to process is located. Defaults to None.
+:type dir\_path: str, optional
+:param sim\_number: the prefix of the file, that is the simulation number with a \_prepended, ie “{\color{red}\bfseries{}0\_}”. Defaults to None.
+:type sim\_number: str, optional
 
 \end{fulllineitems}
 

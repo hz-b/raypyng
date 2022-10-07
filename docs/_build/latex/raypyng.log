@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.7.22)  23 SEP 2022 15:08
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.7.22)  7 OCT 2022 17:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -826,78 +826,140 @@ n-dent pa-ram-e-ters
 Chapter 3.
 [5
 
-] (./raypyng.ind [6]
+] [6]
+Chapter 4.
+[7
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 974--989
+\T1/qtm/m/n/10 The method looks in the folder dir_path for a file with the file
+-name: file-name =
+ []
+
+(./raypyng.ind [8]
 Underfull \hbox (badness 5036) in paragraph at lines 8--10
 []\T1/txtt/m/n/10 __detect_ray_path() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.r
 unner.RayUIRunner
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 12--13
+Underfull \hbox (badness 10000) in paragraph at lines 10--12
+[]\T1/txtt/m/n/10 __init__() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.postproces
+sing.PostProcess
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 14--15
 []\T1/txtt/m/n/10 __init__() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.simulate.S
 imulationParams
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 17--18
+Underfull \hbox (badness 10000) in paragraph at lines 21--22
 []\T1/txtt/m/n/10 _calc_loop() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.simulate
 .SimulationParams
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 18--20
+Underfull \hbox (badness 10000) in paragraph at lines 22--24
 []\T1/txtt/m/n/10 _check_if_enabled()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 20--22
+Underfull \hbox (badness 10000) in paragraph at lines 24--26
 []\T1/txtt/m/n/10 _check_param() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.simula
 te.SimulationParams
  []
 
 
-Overfull \hbox (3.83226pt too wide) in paragraph at lines 24--26
+Underfull \hbox (badness 10000) in paragraph at lines 28--30
+[]\T1/txtt/m/n/10 _extract_bandwidth_fwhm()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 30--32
+[]\T1/txtt/m/n/10 _extract_focus_fwhm()
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 32--34
+[]\T1/txtt/m/n/10 _extract_intensity()
+ []
+
+
+Overfull \hbox (3.83226pt too wide) in paragraph at lines 34--36
 []\T1/txtt/m/n/10 _extract_param() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.simu
 late.SimulationParams
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 28--30
+Underfull \hbox (badness 10000) in paragraph at lines 36--38
+[]\T1/txtt/m/n/10 _list_files() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.postpro
+cessing.PostProcess
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 38--40
+[]\T1/txtt/m/n/10 _load_file() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.postproc
+essing.PostProcess
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 41--43
+[]\T1/txtt/m/n/10 _save_file() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.postproc
+essing.PostProcess
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 44--46
 []\T1/txtt/m/n/10 _write_value_to_param()
  []
 
 
-Underfull \hbox (badness 5417) in paragraph at lines 53--54
+Underfull \hbox (badness 10000) in paragraph at lines 53--54
+[]\T1/txtt/m/n/10 cleanup() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.postprocess
+ing.PostProcess
+ []
+
+
+Underfull \hbox (badness 5417) in paragraph at lines 73--74
 []\T1/txtt/m/n/10 possible_exports \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.simu
 late.Simulate prop-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 54--56
+Underfull \hbox (badness 10000) in paragraph at lines 74--76
 []\T1/txtt/m/n/10 possible_exports_without_analysis
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 70--71
+Underfull \hbox (badness 10000) in paragraph at lines 77--79
+[]\T1/txtt/m/n/10 postprocess_RawRays()
+ []
+
+[9
+
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 93--94
 []\T1/txtt/m/n/10 simulation_name \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.simul
 ate.Simulate prop-
  []
 
-[7
-
+[10
 
 ]) (./raypyng.aux)
 Package rerunfilecheck Info: File `raypyng.out' has not changed.
-(rerunfilecheck)             Checksum: 09A53AFAD0F1035615F45104E6395572;374.
+(rerunfilecheck)             Checksum: 172350E2C8990E7DDAB6F225107BE035;487.
  ) 
 Here is how much of TeX's memory you used:
- 15085 strings out of 478287
- 247307 string characters out of 5849289
- 557713 words of memory out of 5000000
- 32869 multiletter control sequences out of 15000+600000
+ 15113 strings out of 478287
+ 248097 string characters out of 5849289
+ 558179 words of memory out of 5000000
+ 32882 multiletter control sequences out of 15000+600000
  514774 words of font info for 67 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
- 70i,11n,76p,533b,651s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 70i,12n,76p,863b,651s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/tex-gyre/q-ec.enc}{/usr/share/texmf/fonts/e
 nc/dvips/tex-gyre/q-ts1.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvb.pfb></
@@ -907,10 +969,10 @@ pe1/public/tex-gyre/qtmb.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qtmr
 e/texmf-dist/fonts/type1/public/txfonts/t1xbtt.pfb></usr/share/texlive/texmf-di
 st/fonts/type1/public/txfonts/t1xtt.pfb></usr/share/texlive/texmf-dist/fonts/ty
 pe1/public/txfonts/t1xtt.pfb>
-Output written on raypyng.pdf (11 pages, 163129 bytes).
+Output written on raypyng.pdf (14 pages, 173303 bytes).
 PDF statistics:
- 207 PDF objects out of 1000 (max. 8388607)
- 176 compressed objects within 2 object streams
- 51 named destinations out of 1000 (max. 500000)
- 53 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 250 PDF objects out of 1000 (max. 8388607)
+ 215 compressed objects within 3 object streams
+ 66 named destinations out of 1000 (max. 500000)
+ 61 words of extra memory for PDF output out of 10000 (max. 10000000)
 
