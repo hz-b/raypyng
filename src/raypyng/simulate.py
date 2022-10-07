@@ -3,7 +3,7 @@ from .rml import ObjectElement,ParamElement, BeamlineElement
 import itertools
 import os 
 import numpy as np
-#from collections.abc import MutableMapping,MutableSequence
+
 from .runner import RayUIAPI,RayUIRunner
 from .recipes import SimulationRecipe
 from .multiprocessing import RunPool
@@ -454,7 +454,6 @@ class Simulate():
                 result.append(RMLFile(rml_path))
 
             # create csv file with simulations recap
-            #print("DEBUG::",sim_folder)
             with open(os.path.join(sim_folder,'looper.csv'), 'w') as f:
                 header = 'n '
                 for par in self.sp.param_to_simulate:
@@ -525,9 +524,9 @@ class Simulate():
         exports = []
         missing_simulations= self.check_simulations(force=force).items()
         for ind,rml in missing_simulations:
-            print("DEBUG:: missing sim:", rml)
+            filename = os.path.basename(rml.filename)
             filenames_hide_analyze.append([rml.filename, self._hide, self._analyze])
-            sim_index = ind%int(len(missing_simulations)/self.repeat)
+            sim_index = int(filename[:filename.index("_")])
             exports.append(self.generate_export_params(sim_index,self.sim_list_path[ind]))
             rml.write()
         with RunPool(multiprocessing) as pool:
