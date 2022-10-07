@@ -18,7 +18,8 @@ dependencies = [
             'psutil>=5.9.1',
             'schwimmbad>=0.3.0',
             'joblib>=1.1.0',
-            'matplotlib>=3.5.1'
+            'matplotlib>=3.5.1',
+            'natsort>=8.2.0 '
 ]
 
 [project.urls]
