@@ -557,6 +557,7 @@ def run_rml_func(_tuple):
         if analyze==False:
             pp.postprocess_RawRays(e[0], e[1], e[2], e[3])
     #time.sleep(0.1) # testing file creation issue
+    api.save(rml_filename)
     try: 
         api.quit()
     except Exception as e:
