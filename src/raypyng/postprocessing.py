@@ -4,6 +4,8 @@ import os
 import warnings
 from natsort import natsorted, ns
 
+from .rml import RMLFile
+
 
 class PostProcess():
     """class to post-process the data. 
@@ -81,8 +83,24 @@ class PostProcess():
         """        
         arr = np.loadtxt(filepath)
         return arr
+    
+    def extract_nrays_from_source(self, rml_filename):
+        """Extract photon flux from rml file, find source automatically
 
-    def postprocess_RawRays(self,exported_element:str=None, exported_object:str=None, dir_path:str=None, sim_number:str=None):
+        Args:
+            rml_filename (str): the rml file to use to extract the photon flux
+
+        Returns:
+            str: the photon flux
+        """        
+        s = RMLFile(rml_filename)
+        for oe in s.beamline.children():
+                if hasattr(oe,"photonEnergy"):
+                    source = oe
+                    break
+        return source.photonFlux.cdata
+    
+    def postprocess_RawRays(self,exported_element:str=None, exported_object:str=None, dir_path:str=None, sim_number:str=None, rml_filename:str=None):
         """The method looks in the folder dir_path for a file with the filename:
         filename = os.path.join(dir_path,sim_number+exported_element + '-' + exported_object+'.csv')
         for each file it calculates the number of rays, the bandwidth, and the horizontal and vertical focus size,
@@ -94,6 +112,7 @@ class PostProcess():
             dir_path (str, optional): the folder where the file to process is located. Defaults to None.
             sim_number (str, optional): the prefix of the file, that is the simulation number with a _prepended, ie "0_". Defaults to None.
         """        
+        n_rays_abs = self.extract_nrays_from_source(rml_filename)
         filename = os.path.join(dir_path,sim_number+exported_element + '-' + exported_object+'.csv')
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
