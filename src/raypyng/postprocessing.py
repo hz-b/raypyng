@@ -95,7 +95,7 @@ class PostProcess():
         """        
         s = RMLFile(rml_filename)
         for oe in s.beamline.children():
-                if hasattr(oe,"photonEnergy"):
+                if hasattr(oe,"photonFlux"):
                     source = oe
                     break
         return source.photonFlux.cdata
@@ -117,23 +117,22 @@ class PostProcess():
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             rays = np.loadtxt(filename, skiprows=2)
-        ray_properties = np.zeros((4,1))
-        #print(filename, 'rays', rays.shape)
+        ray_properties = np.zeros((5,1))
         if rays.shape[0]==0: # if no rays survived
-            #print('zero')
+            ray_properties[0] = float(n_rays_abs)
             pass
         elif rays.shape[0]==15: # if only one ray survived
-            #print('one')
-            ray_properties[0] = 1
-            ray_properties[1] = self._extract_bandwidth_fwhm(rays[9])
-            ray_properties[2] = self._extract_focus_fwhm(rays[3])
-            ray_properties[3] = self._extract_focus_fwhm(rays[4])
+            ray_properties[0] = float(n_rays_abs)
+            ray_properties[1] = 1
+            ray_properties[2] = self._extract_bandwidth_fwhm(rays[9])
+            ray_properties[3] = self._extract_focus_fwhm(rays[3])
+            ray_properties[4] = self._extract_focus_fwhm(rays[4])
         else:
-            #print('normal')
-            ray_properties[0] = self._extract_intensity(rays)
-            ray_properties[1] = self._extract_bandwidth_fwhm(rays[:,9])
-            ray_properties[2] = self._extract_focus_fwhm(rays[:,3])
-            ray_properties[3] = self._extract_focus_fwhm(rays[:,4])
+            ray_properties[0] = float(n_rays_abs)
+            ray_properties[1] = self._extract_intensity(rays)
+            ray_properties[2] = self._extract_bandwidth_fwhm(rays[:,9])
+            ray_properties[3] = self._extract_focus_fwhm(rays[:,3])
+            ray_properties[4] = self._extract_focus_fwhm(rays[:,4])
         
         new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays')
         self._save_file(new_filename, ray_properties)
