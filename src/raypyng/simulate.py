@@ -551,7 +551,6 @@ def run_rml_func(_tuple):
     pp     = PostProcess()
     runner.run()
     api.load(rml_filename)
-    print("DEBUG:: rml_filename", rml_filename)
     api.trace(analyze=analyze)
     for e in exports:
         api.export(*e)
