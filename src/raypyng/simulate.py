@@ -552,12 +552,13 @@ def run_rml_func(_tuple):
     runner.run()
     api.load(rml_filename)
     api.trace(analyze=analyze)
+    api.save(rml_filename)
+    #print("DEBUG:: exports", exports)
     for e in exports:
         api.export(*e)
         if analyze==False:
             pp.postprocess_RawRays(e[0], e[1], e[2], e[3], rml_filename)
     #time.sleep(0.1) # testing file creation issue
-    api.save(rml_filename)
     try: 
         api.quit()
     except Exception as e:
