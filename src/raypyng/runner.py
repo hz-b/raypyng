@@ -177,6 +177,9 @@ class RayUIAPI:
     def load(self,rml_path,**kwargs):
         return self._cmd_io("load",rml_path,**kwargs)
 
+    def save(self,rml_path,**kwargs):
+        return self._cmd_io("save",rml_path,**kwargs)
+
     def trace(self,analyze=True,**kwargs):
         # if analyze:
         #     cmd = "trace"
