@@ -210,6 +210,9 @@ class PostProcessAnalyzed():
         number of simulations and returns the flux at the optical element in 
         percentage and in number of photons, and the flux produced
         by the dipole.
+        It requires ScalarBeamProperties to be exported for the desired optical element,
+        if the source is a dipole it requires ScalarElementProperties to be exported for the Dipole
+
 
         Args:
             folder_name (str): the path to the folder where the simulations are
@@ -274,8 +277,6 @@ class PostProcessAnalyzed():
         bw            = np.zeros(nsimulations)
         foc_x         = np.zeros(nsimulations)
         foc_y         = np.zeros(nsimulations)
-
-        #k=0
         n0=0
         for j in range(rounds):
             for n in range(nsimulations):
