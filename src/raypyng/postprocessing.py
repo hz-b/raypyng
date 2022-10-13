@@ -13,6 +13,7 @@ class PostProcess():
     """
     def __init__(self) -> None:
         self.format_saved_files = '.dat'
+        self.source = None
         pass
 
     def _list_files(self,dir_path:str, end_filename:str):
@@ -63,14 +64,18 @@ class PostProcess():
         """        
         return(rays.shape[0])
     
-    def _save_file(self, filename:str, array:np.array):
+    def _save_file(self, filename:str, array:np.array, header:str=None):
         """This function is used to save files, 
 
         Args:
-            filename (_type_): file name(path)
-            array (_type_): array to save
+            filename (str): file name(path)
+            array (np.array): array to save 
+            header (str): header for the file
         """        
-        np.savetxt(filename+self.format_saved_files,array)
+        if header != None:
+            np.savetxt(filename+self.format_saved_files,array, header=header)
+        else:
+            np.savetxt(filename+self.format_saved_files,array)
 
     def _load_file(self,filepath):
         """Load a .npy file and returns the array
@@ -96,9 +101,9 @@ class PostProcess():
         s = RMLFile(rml_filename)
         for oe in s.beamline.children():
                 if hasattr(oe,"photonFlux"):
-                    source = oe
+                    self.source = oe
                     break
-        return source.photonFlux.cdata
+        return self.source.photonFlux.cdata, self.source.numberRays.cdata
     
     def postprocess_RawRays(self,exported_element:str=None, exported_object:str=None, dir_path:str=None, sim_number:str=None, rml_filename:str=None):
         """The method looks in the folder dir_path for a file with the filename:
@@ -112,27 +117,49 @@ class PostProcess():
             dir_path (str, optional): the folder where the file to process is located. Defaults to None.
             sim_number (str, optional): the prefix of the file, that is the simulation number with a _prepended, ie "0_". Defaults to None.
         """        
-        n_rays_abs = self.extract_nrays_from_source(rml_filename)
+        source_photon_flux, source_n_rays  = self.extract_nrays_from_source(rml_filename)
+        
+        source_photon_flux = float(source_photon_flux)
+        source_n_rays      = float(source_n_rays)
         filename = os.path.join(dir_path,sim_number+exported_element + '-' + exported_object+'.csv')
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             rays = np.loadtxt(filename, skiprows=2)
-        ray_properties = np.zeros((5,1))
+        ray_properties = np.zeros((7,1))
         if rays.shape[0]==0: # if no rays survived
-            ray_properties[0] = float(n_rays_abs)
+            # source photon flux
+            ray_properties[0] = source_photon_flux
             pass
         elif rays.shape[0]==15: # if only one ray survived
-            ray_properties[0] = float(n_rays_abs)
+            # source photon flux
+            ray_properties[0] = source_photon_flux
+            # number of rays reaching the oe
             ray_properties[1] = 1
-            ray_properties[2] = self._extract_bandwidth_fwhm(rays[9])
-            ray_properties[3] = self._extract_focus_fwhm(rays[3])
-            ray_properties[4] = self._extract_focus_fwhm(rays[4])
+            # percentage of survived photons
+            ray_properties[2] = ray_properties[1]/source_n_rays*100
+            # photon flux reaching the oe
+            ray_properties[3] = source_photon_flux/100*ray_properties[2]
+            # bandwidth of the rays reaching the OE
+            ray_properties[4] = self._extract_bandwidth_fwhm(rays[9])
+            # horizontal focus
+            ray_properties[5] = self._extract_focus_fwhm(rays[3])
+            # vertical focus
+            ray_properties[6] = self._extract_focus_fwhm(rays[4])
         else:
-            ray_properties[0] = float(n_rays_abs)
+            # source photon flux
+            ray_properties[0] = source_photon_flux
+            # number of rays reaching the oe
             ray_properties[1] = self._extract_intensity(rays)
-            ray_properties[2] = self._extract_bandwidth_fwhm(rays[:,9])
-            ray_properties[3] = self._extract_focus_fwhm(rays[:,3])
-            ray_properties[4] = self._extract_focus_fwhm(rays[:,4])
+            # percentage of survived photons
+            ray_properties[2] = ray_properties[1]/source_n_rays*100
+            # photon flux reaching the oe
+            ray_properties[3] = source_photon_flux/100*ray_properties[2]
+            # bandwidth of the rays reaching the oe
+            ray_properties[4] = self._extract_bandwidth_fwhm(rays[:,9])
+            # horizontal focus
+            ray_properties[5] = self._extract_focus_fwhm(rays[:,3])
+            # vertical focus
+            ray_properties[6] = self._extract_focus_fwhm(rays[:,4])
         
         new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays')
         self._save_file(new_filename, ray_properties)
@@ -148,6 +175,7 @@ class PostProcess():
             repeat (int, optional): number of rounds of simulations. Defaults to 1.
             exp_elements (list, optional): the exported elements names as str. Defaults to None.
         """        
+        header = "SourcePhotonFlux\t\t NumberRaysSurvived\t\t  PercentageRaysSurvived   PhotonFlux\t\t\t\tBandwidth\t\t\t\t HorizontalFocusFWHM\t  VerticalFocusFWHM"
         for d in exp_elements:
             for r in range(repeat):
                 dir_path_round=os.path.join(dir_path,"round_"+str(r))
@@ -168,7 +196,123 @@ class PostProcess():
                         pass
             fn = os.path.join(dir_path, d[0])
             analyzed_rays = analyzed_rays/repeat
-            self._save_file(fn,analyzed_rays)
+            self._save_file(fn,analyzed_rays,header=header)
 
+class PostProcessAnalyzed():
+    """class to analyze the data exported by RAY-UI
+    """
+    def __init__(self) -> None:
+        pass
+
+    def retrieve_flux_beamline(self, folder_name,source,oe,nsimulations,rounds=1,current=0.3):
+        """This function takes as arguments the name of the 
+        simulation folder, the exported objet in RAY-UI and there
+        number of simulations and returns the flux at the optical element in 
+        percentage and in number of photons, and the flux produced
+        by the dipole.
+        It requires ScalarBeamProperties to be exported for the desired optical element,
+        if the source is a dipole it requires ScalarElementProperties to be exported for the Dipole
+
+
+        Args:
+            folder_name (str): the path to the folder where the simulations are
+            source (str): the source name
+            oe (str): the optical element name
+            nsimulations (int): the number of simulations
+            rounds (int): the number of rounds of simulations
+            current (float, optional): the ring current in Ampere. Defaults to 0.3.
+
+        Returns:
+            if the source is a Dipole:
+                photon_flux (np.array) : the photon flux at the optical element
+                flux_percent (np.array) : the photon flux in percentage relative to the source
+                source_Photon_flux (np.array) : the photon flux of the source
+            else:
+                flux_percent (np.array) : the photon flux in percentage relative to the source
+        """        
+        scale_factor = current/0.1
+        flux_percent = np.zeros(nsimulations)
+        if source == 'Dipole':
+            flux         = np.zeros(nsimulations)
+            flux_dipole  = np.zeros(nsimulations)
+        for n in range(nsimulations):
+            try:
+                for r in range(rounds):
+                    temp = np.loadtxt(folder_name+'/round_'+str(r)+'/'+str(n)+'_'+oe+'-ScalarBeamProperties.csv',skiprows = 2)
+                    flux_percent[n] += temp[25]/rounds
+                    if source == 'Dipole':
+                        dipole_abs_flux = np.loadtxt(folder_name+'/round_'+str(r)+'/'+str(n)+'_Dipole-ScalarElementProperties.csv',skiprows = 2)
+                        flux[n]         += (dipole_abs_flux[12]*temp[25]/100)/rounds
+                        flux_dipole[n]  += dipole_abs_flux[12]/rounds
+                
+            except OSError:
+                print('######################')
+                print(n, 'NOT FOUND:\n'+folder_name+'/round_'+str(r)+'/'+str(n)+'_'+oe+'-ScalarBeamProperties.csv')
+                continue
+        flux_percent = np.array(flux_percent)
+        if source == 'Dipole':
+            flux = np.array(flux)
+            flux_dipole = np.array(flux_dipole)
+            return flux*scale_factor, flux_percent*scale_factor, flux_dipole*scale_factor
+        return flux_percent*scale_factor
+
+    def retrieve_bw_and_focusSize(self,folder_name:str,oe:str,nsimulations:int,rounds:int):
+        """Extract the bandwidth and focus size if RAY-UI was run in analyze mode.
+        It requires ScalarBeamProperties to be exported for the desired optical element
+
+        Args:
+            folder_name (str): the path to the folder where the simulations are 
+            oe (str): the optical element name
+            nsimulations (int): the number of simulations
+            rounds (int): the number of rounds of simulations
+
+        Returns:
+            bw np.array: the bandwidth
+            foc_x np.array: the horizontal focus
+            foc_y np.array: the vertical focus
+        """        
+        bw_ind        =10
+        fx_ind        =4
+        fy_ind        =7
+        bw            = np.zeros(nsimulations)
+        foc_x         = np.zeros(nsimulations)
+        foc_y         = np.zeros(nsimulations)
+        n0=0
+        for j in range(rounds):
+            for n in range(nsimulations):
+                try:
+                    temp = np.loadtxt(folder_name+'/round_'+str(j)+
+                                    '/'+str(n)+'_'+oe+'-ScalarBeamProperties.csv',
+                                    skiprows = 2)
+                    bw[n]     += (temp[bw_ind])/rounds
+                    foc_x[n]  += (temp[fx_ind])/rounds
+                    foc_y[n]  += (temp[fy_ind])/rounds
+                    if n0==(nsimulations-1):
+                        n0=0
+                    else:
+                        n0+=1
+                    
+                except OSError:
+                    print('######################')
+                    print('NOT FOUND:\n'+folder_name+'/round_'+str(j)+
+                                    '/'+str(n)+'_'+oe+'-ScalarBeamProperties.csv')
+                    bw[n]     += 0
+                    foc_x[n]  += 0
+                    foc_y[n]  += 0
+        return bw,foc_x,foc_y
+
+    def moving_average(self, x, w):
+        """Computes the morivng average with window w on the array x
+
+        Args:
+            x (array): the array to average
+            w (int): the window for the moving average
+
+        Returns:
+            np.array: the x array once the moving average was applied
+        """        
+        if w == 0:
+            return x
+        return np.convolve(x, np.ones(w), 'valid') / w
 
 

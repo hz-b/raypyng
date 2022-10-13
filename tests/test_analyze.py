@@ -9,12 +9,9 @@ sim = Simulate(rml_file, hide=True)
 
 rml=sim.rml
 elisa = sim.rml.beamline
-#sp = SimulationParams(rml) 
-
-
 
 # define the values of the parameters to scan 
-energy    = np.arange(200, 10201,1000)
+energy    = np.arange(200, 7201,250)
 SlitSize  = np.array([0.1])
 cff       = np.array([2.25])
 nrays     = 10000
@@ -29,30 +26,20 @@ params = [
             {elisa.PG.cFactor:cff},
             {elisa.Dipole.numberRays:nrays}
         ]
-# set the paramters in the siumulationParams class
-#sp.params=params
 
 #and then plug them into the Simulation class
 sim.params=params
 
 # sim.simulation_folder = '/home/simone/Documents/RAYPYNG/raypyng/test'
-sim.simulation_name = 'noAnalyze_test'
+sim.simulation_name = 'test_Analyze'
 
 # repeat the simulations as many time as needed
-sim.repeat = 2
+sim.repeat = 1
 
-#this is defined at the current working directory by default
-#sim.path = '/home/simone/Documents/RAYPYNG/raypyng' 
-
-# this is defined as RAYPy_simulation by default
-#sim.prefix = 'asdasd_'
-
-sim.analyze = False # don't let RAY-UI analyze the results
-sim.raypyng_analysis=True # let raypyng analyze the results
-
+sim.analyze = True # let RAY-UI analyze the results
 ## This must be a list of dictionaries
-sim.exports  =  [{elisa.Dipole:'RawRaysOutgoing'},
-                {elisa.DetectorAtFocus:['RawRaysOutgoing']}
+sim.exports  =  [{elisa.Dipole:['ScalarElementProperties']},
+                {elisa.DetectorAtFocus:['ScalarBeamProperties']}
                 ]
 
 
@@ -61,7 +48,7 @@ sim.exports  =  [{elisa.Dipole:'RawRaysOutgoing'},
 
 #uncomment to run the simulations
 #sim.run(multiprocessing=5, force=True)
-sim.run(multiprocessing=5, force=False)
+sim.run(multiprocessing=5, force=True)
 #sim.run(force=True)
 
 

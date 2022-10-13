@@ -1,3 +1,4 @@
+import raypyng
 from .rml import RMLFile
 from .rml import ObjectElement,ParamElement, BeamlineElement
 import itertools
@@ -30,6 +31,7 @@ class SimulationParams():
             raise Exception("rml file must be defined")
         
         self.param = param_list
+
         
     @property 
     def rml(self):
@@ -183,7 +185,7 @@ class SimulationParams():
         if verbose:
             print('You have defined:')
             print(len(self.ind_par), ' independent parameters')
-            print(len(self.ind_par), ' dependent parameters or set parameters')
+            print(len(self.dep_par), ' dependent parameters or set parameters')
             print(len(self.simulations_param_list), ' simulations')
         return (self.param_to_simulate, self.simulations_param_list)
     
@@ -250,6 +252,8 @@ class Simulate():
         self._hide = hide
         self.analyze = True
         self._repeat = 1
+        self.raypyng_analysis = True
+
 
     @property
     def possible_exports(self):
@@ -323,6 +327,21 @@ class Simulate():
         if not isinstance(value, bool):
             raise ValueError ('Only bool are allowed')
         self._analyze = value
+
+    @property 
+    def raypyng_analysis(self):
+        """Turn on or off the RAYPyNG analysis of the results. 
+
+        Returns:
+            bool: True: analysis on, False: analysis off
+        """        
+        return self._raypyng_analysis
+    
+    @raypyng_analysis.setter
+    def raypyng_analysis(self,value):
+        if not isinstance(value, bool):
+            raise ValueError ('Only bool are allowed')
+        self._raypyng_analysis = value
         
     @property 
     def repeat(self):
@@ -429,6 +448,25 @@ class Simulate():
         _ = self.sp._extract_param(verbose=False)
         _ =self.sp._calc_loop()
 
+    def save_parameters_to_file(self, dir):
+        """save all the user input parameters to file. It takes the values
+        from the SimulationParams class
+
+        Args:
+            dir (str): the folder where to save the parameters
+        """        
+        # do it first for indipendent parameters
+        for i,p in enumerate(self.sp.ind_par):
+            filename = str(p.get_full_path().lstrip("lab.beamline."))
+            filename = "input_param_"+filename.replace(".", "_")
+            filename += ".dat"
+            np.savetxt(os.path.join(dir,filename),self.sp.ind_param_values[i])
+        for i,p in enumerate(self.sp.dep_par):
+            filename = str(p.get_full_path().lstrip("lab.beamline."))
+            filename = "input_param_"+filename.replace(".", "_")
+            filename += ".dat"
+            np.savetxt(os.path.join(dir,filename),list(self.sp.dep_value_dependency[i].values()))
+    
     def rml_list(self):
         """This function creates the folder structure and the rml files to simulate.
         It requires the param to be set. Useful if one wants to create the simulation files 
@@ -440,6 +478,7 @@ class Simulate():
         # check if simulation folder exists, otherwise create it
         if not os.path.exists(self.sim_path):
             os.makedirs(self.sim_path)
+        self.save_parameters_to_file(self.sim_path)
         for r in range(0,self.repeat):
             sim_folder = os.path.join(self.sim_path,'round_'+str(r))
             if not os.path.exists(sim_folder):
@@ -525,20 +564,18 @@ class Simulate():
         missing_simulations= self.check_simulations(force=force).items()
         for ind,rml in missing_simulations:
             filename = os.path.basename(rml.filename)
-            filenames_hide_analyze.append([rml.filename, self._hide, self._analyze])
+            filenames_hide_analyze.append([rml.filename, self._hide, self._analyze, self.raypyng_analysis])
             sim_index = int(filename[:filename.index("_")])
             exports.append(self.generate_export_params(sim_index,self.sim_list_path[ind]))
             rml.write()
         with RunPool(multiprocessing) as pool:
             pool.map(run_rml_func,zip(filenames_hide_analyze,exports))
-        if len(missing_simulations) != 0 and self.analyze==False:
+        if len(missing_simulations) != 0 and self.analyze==False and self.raypyng_analysis==True:
             pp = PostProcess()
             pp.cleanup(self.sim_path, self.repeat, self.exports_list)
 
     def generate_export_params(self,simulation_index,rml):
         folder = os.path.dirname(rml)
-        #filename = os.path.basename(rml)
-        #sim_number = filename.split("_")[0]
         return [ (d[0], d[1], folder, str(simulation_index)+'_') for d in self.exports_list]
          
 def run_rml_func(_tuple):
@@ -546,6 +583,7 @@ def run_rml_func(_tuple):
     rml_filename = filenames_hide_analyze[0]
     hide         = filenames_hide_analyze[1]
     analyze      = filenames_hide_analyze[2]
+    raypyng_analysis = filenames_hide_analyze[3]
     runner = RayUIRunner(hide=hide)
     api    = RayUIAPI(runner)
     pp     = PostProcess()
@@ -556,7 +594,7 @@ def run_rml_func(_tuple):
     #print("DEBUG:: exports", exports)
     for e in exports:
         api.export(*e)
-        if analyze==False:
+        if analyze==False and raypyng_analysis == True:
             pp.postprocess_RawRays(e[0], e[1], e[2], e[3], rml_filename)
     #time.sleep(0.1) # testing file creation issue
     try: 
