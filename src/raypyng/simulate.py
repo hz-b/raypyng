@@ -1,3 +1,4 @@
+import raypyng
 from .rml import RMLFile
 from .rml import ObjectElement,ParamElement, BeamlineElement
 import itertools
@@ -323,6 +324,21 @@ class Simulate():
         if not isinstance(value, bool):
             raise ValueError ('Only bool are allowed')
         self._analyze = value
+
+    @property 
+    def raypyng_analysis(self):
+        """Turn on or off the RAYPyNG analysis of the results. 
+
+        Returns:
+            bool: True: analysis on, False: analysis off
+        """        
+        return self._raypyng_analysis
+    
+    @raypyng_analysis.setter
+    def raypyng_analysis(self,value):
+        if not isinstance(value, bool):
+            raise ValueError ('Only bool are allowed')
+        self._raypyng_analysis = value
         
     @property 
     def repeat(self):
@@ -545,13 +561,13 @@ class Simulate():
         missing_simulations= self.check_simulations(force=force).items()
         for ind,rml in missing_simulations:
             filename = os.path.basename(rml.filename)
-            filenames_hide_analyze.append([rml.filename, self._hide, self._analyze])
+            filenames_hide_analyze.append([rml.filename, self._hide, self._analyze, self.raypyng_analysis])
             sim_index = int(filename[:filename.index("_")])
             exports.append(self.generate_export_params(sim_index,self.sim_list_path[ind]))
             rml.write()
         with RunPool(multiprocessing) as pool:
             pool.map(run_rml_func,zip(filenames_hide_analyze,exports))
-        if len(missing_simulations) != 0 and self.analyze==False:
+        if len(missing_simulations) != 0 and self.analyze==False and self.raypyng_analysis==True:
             pp = PostProcess()
             pp.cleanup(self.sim_path, self.repeat, self.exports_list)
 
@@ -564,6 +580,7 @@ def run_rml_func(_tuple):
     rml_filename = filenames_hide_analyze[0]
     hide         = filenames_hide_analyze[1]
     analyze      = filenames_hide_analyze[2]
+    raypyng_analysis = filenames_hide_analyze[3]
     runner = RayUIRunner(hide=hide)
     api    = RayUIAPI(runner)
     pp     = PostProcess()
@@ -574,7 +591,7 @@ def run_rml_func(_tuple):
     #print("DEBUG:: exports", exports)
     for e in exports:
         api.export(*e)
-        if analyze==False:
+        if analyze==False and raypyng_analysis == True:
             pp.postprocess_RawRays(e[0], e[1], e[2], e[3], rml_filename)
     #time.sleep(0.1) # testing file creation issue
     try: 
