@@ -573,6 +573,7 @@ class Simulate():
         if len(missing_simulations) != 0 and self.analyze==False and self.raypyng_analysis==True:
             pp = PostProcess()
             pp.cleanup(self.sim_path, self.repeat, self.exports_list)
+        return True
 
     def generate_export_params(self,simulation_index,rml):
         folder = os.path.dirname(rml)
