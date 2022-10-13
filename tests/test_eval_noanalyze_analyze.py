@@ -81,4 +81,6 @@ ax.set_ylabel('FWHM [a.u.]')
 ax.set_title('Vertical Focus')
 
 plt.tight_layout()
+plt.savefig("plot_comparison_analyze_NoAnalyze_modes.png")
 plt.show()
+
