@@ -9,7 +9,6 @@ sim = Simulate(rml_file, hide=True)
 
 rml=sim.rml
 elisa = sim.rml.beamline
-#sp = SimulationParams(rml) 
 
 
 
@@ -29,8 +28,6 @@ params = [
             {elisa.PG.cFactor:cff},
             {elisa.Dipole.numberRays:nrays}
         ]
-# set the paramters in the siumulationParams class
-#sp.params=params
 
 #and then plug them into the Simulation class
 sim.params=params
@@ -41,20 +38,16 @@ sim.simulation_name = 'test_noAnalyze'
 # repeat the simulations as many time as needed
 sim.repeat = 1
 
-sim.analyze = False
+sim.analyze = False # don't let RAY-UI analyze the results
+sim.raypyng_analysis=True # let raypyng analyze the results
+
 ## This must be a list of dictionaries
 sim.exports  =  [{elisa.Dipole:'RawRaysOutgoing'},
                 {elisa.DetectorAtFocus:['RawRaysOutgoing']}
                 ]
 
-
-# create the rml files
-#sim.rml_list()
-
 #uncomment to run the simulations
-#sim.run(multiprocessing=5, force=True)
 sim.run(multiprocessing=5, force=True)
-#sim.run(force=True)
 
 
 
