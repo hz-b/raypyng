@@ -1,4 +1,4 @@
-from raypyng import Simulate, multiprocessing
+from raypyng import Simulate
 import numpy as np
 import os
 
@@ -9,8 +9,6 @@ sim = Simulate(rml_file, hide=True)
 
 rml=sim.rml
 elisa = sim.rml.beamline
-
-
 
 # define the values of the parameters to scan 
 energy    = np.arange(200, 7201,250)
@@ -33,21 +31,25 @@ params = [
 sim.params=params
 
 # sim.simulation_folder = '/home/simone/Documents/RAYPYNG/raypyng/test'
-sim.simulation_name = 'test_noAnalyze'
+sim.simulation_name = 'test_Analyze'
 
 # repeat the simulations as many time as needed
 sim.repeat = 1
 
-sim.analyze = False # don't let RAY-UI analyze the results
-sim.raypyng_analysis=True # let raypyng analyze the results
-
+sim.analyze = True # let RAY-UI analyze the results
 ## This must be a list of dictionaries
-sim.exports  =  [{elisa.Dipole:'RawRaysOutgoing'},
-                {elisa.DetectorAtFocus:['RawRaysOutgoing']}
+sim.exports  =  [{elisa.Dipole:['ScalarElementProperties']},
+                {elisa.DetectorAtFocus:['ScalarBeamProperties']}
                 ]
 
+
+# create the rml files
+#sim.rml_list()
+
 #uncomment to run the simulations
+#sim.run(multiprocessing=5, force=True)
 sim.run(multiprocessing=5, force=True)
+#sim.run(force=True)
 
 
 
