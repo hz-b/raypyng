@@ -198,5 +198,120 @@ class PostProcess():
             analyzed_rays = analyzed_rays/repeat
             self._save_file(fn,analyzed_rays,header=header)
 
+class PostProcessAnalyzed():
+    """class to analyze the data exported by RAY-UI
+    """
+    def __init__(self) -> None:
+        pass
+
+    def retrieve_flux_beamline(self, folder_name,source,oe,nsimulations,rounds=1,current=0.3):
+        """This function takes as arguments the name of the 
+        simulation folder, the exported objet in RAY-UI and there
+        number of simulations and returns the flux at the optical element in 
+        percentage and in number of photons, and the flux produced
+        by the dipole.
+
+        Args:
+            folder_name (str): the path to the folder where the simulations are
+            source (str): the source name
+            oe (str): the optical element name
+            nsimulations (int): the number of simulations
+            rounds (int): the number of rounds of simulations
+            current (float, optional): the ring current in Ampere. Defaults to 0.3.
+
+        Returns:
+            if the source is a Dipole:
+                photon_flux (np.array) : the photon flux at the optical element
+                flux_percent (np.array) : the photon flux in percentage relative to the source
+                source_Photon_flux (np.array) : the photon flux of the source
+            else:
+                flux_percent (np.array) : the photon flux in percentage relative to the source
+        """        
+        scale_factor = current/0.1
+        flux_percent = np.zeros(nsimulations)
+        if source == 'Dipole':
+            flux         = np.zeros(nsimulations)
+            flux_dipole  = np.zeros(nsimulations)
+        for n in range(nsimulations):
+            try:
+                for r in range(rounds):
+                    temp = np.loadtxt(folder_name+'/round_'+str(r)+'/'+str(n)+'_'+oe+'-ScalarBeamProperties.csv',skiprows = 2)
+                    flux_percent[n] += temp[25]/rounds
+                    if source == 'Dipole':
+                        dipole_abs_flux = np.loadtxt(folder_name+'/round_'+str(r)+'/'+str(n)+'_Dipole-ScalarElementProperties.csv',skiprows = 2)
+                        flux[n]         += (dipole_abs_flux[12]*temp[25]/100)/rounds
+                        flux_dipole[n]  += dipole_abs_flux[12]/rounds
+                
+            except OSError:
+                print('######################')
+                print(n, 'NOT FOUND:\n'+folder_name+'/round_'+str(r)+'/'+str(n)+'_'+oe+'-ScalarBeamProperties.csv')
+                continue
+        flux_percent = np.array(flux_percent)
+        if source == 'Dipole':
+            flux = np.array(flux)
+            flux_dipole = np.array(flux_dipole)
+            return flux*scale_factor, flux_percent*scale_factor, flux_dipole*scale_factor
+        return flux_percent*scale_factor
+
+    def retrieve_bw_and_focusSize(self,folder_name:str,oe:str,nsimulations:int,rounds:int):
+        """Extract the bandwidth and focus size if RAY-UI was run in analyze mode.
+        It requires ScalarBeamProperties to be exported for the desired optical element
+
+        Args:
+            folder_name (str): the path to the folder where the simulations are 
+            oe (str): the optical element name
+            nsimulations (int): the number of simulations
+            rounds (int): the number of rounds of simulations
+
+        Returns:
+            bw np.array: the bandwidth
+            foc_x np.array: the horizontal focus
+            foc_y np.array: the vertical focus
+        """        
+        bw_ind        =10
+        fx_ind        =4
+        fy_ind        =7
+        bw            = np.zeros(nsimulations)
+        foc_x         = np.zeros(nsimulations)
+        foc_y         = np.zeros(nsimulations)
+
+        #k=0
+        n0=0
+        for j in range(rounds):
+            for n in range(nsimulations):
+                try:
+                    temp = np.loadtxt(folder_name+'/round_'+str(j)+
+                                    '/'+str(n)+'_'+oe+'-ScalarBeamProperties.csv',
+                                    skiprows = 2)
+                    bw[n]     += (temp[bw_ind])/rounds
+                    foc_x[n]  += (temp[fx_ind])/rounds
+                    foc_y[n]  += (temp[fy_ind])/rounds
+                    if n0==(nsimulations-1):
+                        n0=0
+                    else:
+                        n0+=1
+                    
+                except OSError:
+                    print('######################')
+                    print('NOT FOUND:\n'+folder_name+'/round_'+str(j)+
+                                    '/'+str(n)+'_'+oe+'-ScalarBeamProperties.csv')
+                    bw[n]     += 0
+                    foc_x[n]  += 0
+                    foc_y[n]  += 0
+        return bw,foc_x,foc_y
+
+    def moving_average(self, x, w):
+        """Computes the morivng average with window w on the array x
+
+        Args:
+            x (array): the array to average
+            w (int): the window for the moving average
+
+        Returns:
+            np.array: the x array once the moving average was applied
+        """        
+        if w == 0:
+            return x
+        return np.convolve(x, np.ones(w), 'valid') / w
 
 
