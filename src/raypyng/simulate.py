@@ -31,6 +31,7 @@ class SimulationParams():
             raise Exception("rml file must be defined")
         
         self.param = param_list
+
         
     @property 
     def rml(self):
@@ -251,6 +252,8 @@ class Simulate():
         self._hide = hide
         self.analyze = True
         self._repeat = 1
+        self.raypyng_analysis = True
+
 
     @property
     def possible_exports(self):
