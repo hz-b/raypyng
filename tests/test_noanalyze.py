@@ -14,7 +14,7 @@ elisa = sim.rml.beamline
 
 
 # define the values of the parameters to scan 
-energy    = np.arange(200, 10201,1000)
+energy    = np.arange(200, 7201,250)
 SlitSize  = np.array([0.1])
 cff       = np.array([2.25])
 nrays     = 10000
@@ -53,7 +53,7 @@ sim.exports  =  [{elisa.Dipole:'RawRaysOutgoing'},
 
 #uncomment to run the simulations
 #sim.run(multiprocessing=5, force=True)
-sim.run(multiprocessing=5, force=False)
+sim.run(multiprocessing=5, force=True)
 #sim.run(force=True)
 
 
