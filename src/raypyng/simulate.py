@@ -441,13 +441,11 @@ class Simulate():
             filename = str(p.get_full_path().lstrip("lab.beamline."))
             filename = "input_param_"+filename.replace(".", "_")
             filename += ".dat"
-            print(i, os.path.join(dir,filename), self.sp.ind_param_values[i])
             np.savetxt(os.path.join(dir,filename),self.sp.ind_param_values[i])
         for i,p in enumerate(self.sp.dep_par):
             filename = str(p.get_full_path().lstrip("lab.beamline."))
             filename = "input_param_"+filename.replace(".", "_")
             filename += ".dat"
-            print(i, os.path.join(dir,filename), list(self.sp.dep_value_dependency[i].values()))
             np.savetxt(os.path.join(dir,filename),list(self.sp.dep_value_dependency[i].values()))
     
     def rml_list(self):
