@@ -13,6 +13,7 @@ class PostProcess():
     """
     def __init__(self) -> None:
         self.format_saved_files = '.dat'
+        self.source = None
         pass
 
     def _list_files(self,dir_path:str, end_filename:str):
@@ -63,14 +64,18 @@ class PostProcess():
         """        
         return(rays.shape[0])
     
-    def _save_file(self, filename:str, array:np.array):
+    def _save_file(self, filename:str, array:np.array, header:str=None):
         """This function is used to save files, 
 
         Args:
-            filename (_type_): file name(path)
-            array (_type_): array to save
+            filename (str): file name(path)
+            array (np.array): array to save 
+            header (str): header for the file
         """        
-        np.savetxt(filename+self.format_saved_files,array)
+        if header != None:
+            np.savetxt(filename+self.format_saved_files,array, header=header)
+        else:
+            np.savetxt(filename+self.format_saved_files,array)
 
     def _load_file(self,filepath):
         """Load a .npy file and returns the array
@@ -96,9 +101,9 @@ class PostProcess():
         s = RMLFile(rml_filename)
         for oe in s.beamline.children():
                 if hasattr(oe,"photonFlux"):
-                    source = oe
+                    self.source = oe
                     break
-        return source.photonFlux.cdata
+        return self.source.photonFlux.cdata, self.source.numberRays.cdata
     
     def postprocess_RawRays(self,exported_element:str=None, exported_object:str=None, dir_path:str=None, sim_number:str=None, rml_filename:str=None):
         """The method looks in the folder dir_path for a file with the filename:
@@ -112,27 +117,49 @@ class PostProcess():
             dir_path (str, optional): the folder where the file to process is located. Defaults to None.
             sim_number (str, optional): the prefix of the file, that is the simulation number with a _prepended, ie "0_". Defaults to None.
         """        
-        n_rays_abs = self.extract_nrays_from_source(rml_filename)
+        source_photon_flux, source_n_rays  = self.extract_nrays_from_source(rml_filename)
+        
+        source_photon_flux = float(source_photon_flux)
+        source_n_rays      = float(source_n_rays)
         filename = os.path.join(dir_path,sim_number+exported_element + '-' + exported_object+'.csv')
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             rays = np.loadtxt(filename, skiprows=2)
-        ray_properties = np.zeros((5,1))
+        ray_properties = np.zeros((7,1))
         if rays.shape[0]==0: # if no rays survived
-            ray_properties[0] = float(n_rays_abs)
+            # source photon flux
+            ray_properties[0] = source_photon_flux
             pass
         elif rays.shape[0]==15: # if only one ray survived
-            ray_properties[0] = float(n_rays_abs)
+            # source photon flux
+            ray_properties[0] = source_photon_flux
+            # number of rays reaching the oe
             ray_properties[1] = 1
-            ray_properties[2] = self._extract_bandwidth_fwhm(rays[9])
-            ray_properties[3] = self._extract_focus_fwhm(rays[3])
-            ray_properties[4] = self._extract_focus_fwhm(rays[4])
+            # percentage of survived photons
+            ray_properties[2] = ray_properties[1]/source_n_rays*100
+            # photon flux reaching the oe
+            ray_properties[3] = source_photon_flux/100*ray_properties[2]
+            # bandwidth of the rays reaching the OE
+            ray_properties[4] = self._extract_bandwidth_fwhm(rays[9])
+            # horizontal focus
+            ray_properties[5] = self._extract_focus_fwhm(rays[3])
+            # vertical focus
+            ray_properties[6] = self._extract_focus_fwhm(rays[4])
         else:
-            ray_properties[0] = float(n_rays_abs)
+            # source photon flux
+            ray_properties[0] = source_photon_flux
+            # number of rays reaching the oe
             ray_properties[1] = self._extract_intensity(rays)
-            ray_properties[2] = self._extract_bandwidth_fwhm(rays[:,9])
-            ray_properties[3] = self._extract_focus_fwhm(rays[:,3])
-            ray_properties[4] = self._extract_focus_fwhm(rays[:,4])
+            # percentage of survived photons
+            ray_properties[2] = ray_properties[1]/source_n_rays*100
+            # photon flux reaching the oe
+            ray_properties[3] = source_photon_flux/100*ray_properties[2]
+            # bandwidth of the rays reaching the oe
+            ray_properties[4] = self._extract_bandwidth_fwhm(rays[:,9])
+            # horizontal focus
+            ray_properties[5] = self._extract_focus_fwhm(rays[:,3])
+            # vertical focus
+            ray_properties[6] = self._extract_focus_fwhm(rays[:,4])
         
         new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays')
         self._save_file(new_filename, ray_properties)
@@ -148,6 +175,7 @@ class PostProcess():
             repeat (int, optional): number of rounds of simulations. Defaults to 1.
             exp_elements (list, optional): the exported elements names as str. Defaults to None.
         """        
+        header = "SourcePhotonFlux\t\t NumberRaysSurvived\t\t  PercentageRaysSurvived   PhotonFlux\t\t\t\tBandwidth\t\t\t\t HorizontalFocusFWHM\t  VerticalFocusFWHM"
         for d in exp_elements:
             for r in range(repeat):
                 dir_path_round=os.path.join(dir_path,"round_"+str(r))
@@ -168,7 +196,7 @@ class PostProcess():
                         pass
             fn = os.path.join(dir_path, d[0])
             analyzed_rays = analyzed_rays/repeat
-            self._save_file(fn,analyzed_rays)
+            self._save_file(fn,analyzed_rays,header=header)
 
 
 
