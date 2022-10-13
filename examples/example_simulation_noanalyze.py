@@ -47,7 +47,9 @@ sim.repeat = 2
 # this is defined as RAYPy_simulation by default
 #sim.prefix = 'asdasd_'
 
-sim.analyze = False
+sim.analyze = False # don't let RAY-UI analyze the results
+sim.raypyng_analysis=True # let raypyng analyze the results
+
 ## This must be a list of dictionaries
 sim.exports  =  [{elisa.Dipole:'RawRaysOutgoing'},
                 {elisa.DetectorAtFocus:['RawRaysOutgoing']}
