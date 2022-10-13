@@ -1,17 +1,22 @@
 import unittest
 
-from raypyng import Simulate
 import numpy as np
 import os
 import shutil
+import pathlib as pl
 
+import sys
+sys.path.insert(1, '../src')
+
+from raypyng.simulate import Simulate
+
+unittest.TestLoader.sortTestMethodsUsing = None
 
 class TestAnalyze(unittest.TestCase):
     
-    def dummy(self):
-        self.assertEqual(1,1)
-    
-    def test_produced_files(self):
+    def test0_produced_files(self):
+        """The name is test0 beecause it has to run before the others
+        """
         dirpath = "RAYPy_Simulation_test_Analyze"
         if os.path.exists(dirpath) and os.path.isdir(dirpath):
             shutil.rmtree(dirpath)
@@ -56,11 +61,64 @@ class TestAnalyze(unittest.TestCase):
         sim.exports  =  [{elisa.Dipole:['ScalarElementProperties']},
                         {elisa.DetectorAtFocus:['ScalarBeamProperties']}
                         ]
-        sim.run(multiprocessing=5, force=True)
-        self.assertEqual(1,1)
+        result = sim.run(multiprocessing=5, force=True)
+        self.assertTrue(result)
+
+    def test_input_Dipole_file(self):
+        dirpath = "RAYPy_Simulation_test_Analyze"
+        file = 'input_param_Dipole_numberRays.dat'
+        path = os.path.join(dirpath,file)
+        path = pl.Path(path)
+        self.assertTrue(path.is_file())
+
+        file = 'input_param_Dipole_photonEnergy.dat'
+        path = os.path.join(dirpath,file)
+        path = pl.Path(path)
+        self.assertTrue(path.is_file())
+    
+    def test_input_ExitSlit_file(self):
+        dirpath = "RAYPy_Simulation_test_Analyze"
+        file = 'input_param_ExitSlit_totalHeight.dat'
+        path = os.path.join(dirpath,file)
+        path = pl.Path(path)
+        self.assertTrue(path.is_file())
+
+    def test_input_PG_file(self):
+        dirpath = "RAYPy_Simulation_test_Analyze"
+        file = 'input_param_PG_cFactor.dat'
+        path = os.path.join(dirpath,file)
+        path = pl.Path(path)
+        self.assertTrue(path.is_file())
+    
+    def test_round_folder(self):
+        dirpath = "RAYPy_Simulation_test_Analyze"
+        for i in range(2):
+            path = os.path.join(dirpath,'round_'+str(i))
+            path = pl.Path(path)
+            self.assertTrue(path.is_dir())
+    
+    def test_round_folders_csv(self):
+        dirpath = "RAYPy_Simulation_test_Analyze"
+        for i in range(2):
+            path = os.path.join(dirpath,'round_'+str(i))
+            f = find_files_in_folder(path)
+            self.assertEqual(17,len(f))
+    
+    def test_round_folders_rml(self):
+        dirpath = "RAYPy_Simulation_test_Analyze"
+        for i in range(2):
+            path = os.path.join(dirpath,'round_'+str(i))
+            f = find_files_in_folder(path, suffix='.rml')
+            self.assertEqual(8,len(f))
+
+
+def find_files_in_folder(path_to_dir, suffix=".csv" ):
+     filenames = os.listdir(path_to_dir)
+     return [ filename for filename in filenames if filename.endswith( suffix ) ]
+
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(verbosity=2)
 
 
 
