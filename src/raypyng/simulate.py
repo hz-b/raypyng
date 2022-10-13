@@ -183,7 +183,7 @@ class SimulationParams():
         if verbose:
             print('You have defined:')
             print(len(self.ind_par), ' independent parameters')
-            print(len(self.ind_par), ' dependent parameters or set parameters')
+            print(len(self.dep_par), ' dependent parameters or set parameters')
             print(len(self.simulations_param_list), ' simulations')
         return (self.param_to_simulate, self.simulations_param_list)
     
@@ -429,6 +429,27 @@ class Simulate():
         _ = self.sp._extract_param(verbose=False)
         _ =self.sp._calc_loop()
 
+    def save_parameters_to_file(self, dir):
+        """save all the user input parameters to file. It takes the values
+        from the SimulationParams class
+
+        Args:
+            dir (str): the folder where to save the parameters
+        """        
+        # do it first for indipendent parameters
+        for i,p in enumerate(self.sp.ind_par):
+            filename = str(p.get_full_path().lstrip("lab.beamline."))
+            filename = "input_param_"+filename.replace(".", "_")
+            filename += ".dat"
+            print(i, os.path.join(dir,filename), self.sp.ind_param_values[i])
+            np.savetxt(os.path.join(dir,filename),self.sp.ind_param_values[i])
+        for i,p in enumerate(self.sp.dep_par):
+            filename = str(p.get_full_path().lstrip("lab.beamline."))
+            filename = "input_param_"+filename.replace(".", "_")
+            filename += ".dat"
+            print(i, os.path.join(dir,filename), list(self.sp.dep_value_dependency[i].values()))
+            np.savetxt(os.path.join(dir,filename),list(self.sp.dep_value_dependency[i].values()))
+    
     def rml_list(self):
         """This function creates the folder structure and the rml files to simulate.
         It requires the param to be set. Useful if one wants to create the simulation files 
@@ -440,6 +461,7 @@ class Simulate():
         # check if simulation folder exists, otherwise create it
         if not os.path.exists(self.sim_path):
             os.makedirs(self.sim_path)
+        self.save_parameters_to_file(self.sim_path)
         for r in range(0,self.repeat):
             sim_folder = os.path.join(self.sim_path,'round_'+str(r))
             if not os.path.exists(sim_folder):
@@ -537,8 +559,6 @@ class Simulate():
 
     def generate_export_params(self,simulation_index,rml):
         folder = os.path.dirname(rml)
-        #filename = os.path.basename(rml)
-        #sim_number = filename.split("_")[0]
         return [ (d[0], d[1], folder, str(simulation_index)+'_') for d in self.exports_list]
          
 def run_rml_func(_tuple):
