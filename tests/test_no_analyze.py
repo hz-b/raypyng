@@ -10,7 +10,6 @@ sys.path.insert(1, '../src')
 
 from raypyng.simulate import Simulate
 
-unittest.TestLoader.sortTestMethodsUsing = None
 
 class TestNoAnalyze(unittest.TestCase):
     
@@ -67,7 +66,8 @@ class TestNoAnalyze(unittest.TestCase):
                         ]
 
         #uncomment to run the simulations
-        sim.run(multiprocessing=5, force=True)
+        result = sim.run(multiprocessing=5, force=True)
+        self.assertTrue(result)
 
     def test_input_Dipole_file(self):
         dirpath = "RAYPy_Simulation_test_NoAnalyze"

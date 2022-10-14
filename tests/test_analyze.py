@@ -10,7 +10,6 @@ sys.path.insert(1, '../src')
 
 from raypyng.simulate import Simulate
 
-unittest.TestLoader.sortTestMethodsUsing = None
 
 class TestAnalyze(unittest.TestCase):
     
@@ -59,7 +58,7 @@ class TestAnalyze(unittest.TestCase):
         sim.analyze = True # let RAY-UI analyze the results
         ## This must be a list of dictionaries
         sim.exports  =  [{elisa.Dipole:['ScalarElementProperties']},
-                        {elisa.DetectorAtFocus:['ScalarBeamProperties']}
+                         {elisa.DetectorAtFocus:['ScalarBeamProperties']}
                         ]
         result = sim.run(multiprocessing=5, force=True)
         self.assertTrue(result)
