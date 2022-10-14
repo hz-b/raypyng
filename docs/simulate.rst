@@ -1,5 +1,5 @@
-Simulate
-==================
+.. Simulate
+.. ==================
 .. autoclass:: raypyng.simulate.Simulate
    :members:
    :private-members:
