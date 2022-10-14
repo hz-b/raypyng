@@ -11,12 +11,12 @@ sys.path.insert(1, '../src')
 from raypyng.simulate import Simulate
 
 
-class TestAnalyze(unittest.TestCase):
+class TestNoAnalyze(unittest.TestCase):
     
     def test0_produced_files(self):
         """The name is test0 beecause it has to run before the others
         """
-        dirpath = "RAYPy_Simulation_test_Analyze"
+        dirpath = "RAYPy_Simulation_test_NoAnalyze"
         if os.path.exists(dirpath) and os.path.isdir(dirpath):
             shutil.rmtree(dirpath)
             
@@ -28,6 +28,8 @@ class TestAnalyze(unittest.TestCase):
 
         rml=sim.rml
         elisa = sim.rml.beamline
+
+
 
         # define the values of the parameters to scan 
         energy    = np.arange(200, 7201,1000)
@@ -50,21 +52,25 @@ class TestAnalyze(unittest.TestCase):
         sim.params=params
 
         # sim.simulation_folder = '/home/simone/Documents/RAYPYNG/raypyng/test'
-        sim.simulation_name = 'test_Analyze'
+        sim.simulation_name = 'test_NoAnalyze'
 
         # repeat the simulations as many time as needed
         sim.repeat = 2
 
-        sim.analyze = True # let RAY-UI analyze the results
+        sim.analyze = False # don't let RAY-UI analyze the results
+        sim.raypyng_analysis=True # let raypyng analyze the results
+
         ## This must be a list of dictionaries
-        sim.exports  =  [{elisa.Dipole:['ScalarElementProperties']},
-                         {elisa.DetectorAtFocus:['ScalarBeamProperties']}
+        sim.exports  =  [{elisa.Dipole:'RawRaysOutgoing'},
+                        {elisa.DetectorAtFocus:['RawRaysOutgoing']}
                         ]
+
+        #uncomment to run the simulations
         result = sim.run(multiprocessing=5, force=True)
         self.assertTrue(result)
 
     def test_input_Dipole_file(self):
-        dirpath = "RAYPy_Simulation_test_Analyze"
+        dirpath = "RAYPy_Simulation_test_NoAnalyze"
         file = 'input_param_Dipole_numberRays.dat'
         path = os.path.join(dirpath,file)
         path = pl.Path(path)
@@ -76,39 +82,61 @@ class TestAnalyze(unittest.TestCase):
         self.assertTrue(path.is_file())
     
     def test_input_ExitSlit_file(self):
-        dirpath = "RAYPy_Simulation_test_Analyze"
+        dirpath = "RAYPy_Simulation_test_NoAnalyze"
         file = 'input_param_ExitSlit_totalHeight.dat'
         path = os.path.join(dirpath,file)
         path = pl.Path(path)
         self.assertTrue(path.is_file())
 
     def test_input_PG_file(self):
-        dirpath = "RAYPy_Simulation_test_Analyze"
+        dirpath = "RAYPy_Simulation_test_NoAnalyze"
         file = 'input_param_PG_cFactor.dat'
         path = os.path.join(dirpath,file)
         path = pl.Path(path)
         self.assertTrue(path.is_file())
     
     def test_round_folder(self):
-        dirpath = "RAYPy_Simulation_test_Analyze"
+        dirpath = "RAYPy_Simulation_test_NoAnalyze"
         for i in range(2):
             path = os.path.join(dirpath,'round_'+str(i))
             path = pl.Path(path)
             self.assertTrue(path.is_dir())
     
     def test_round_folders_csv(self):
-        dirpath = "RAYPy_Simulation_test_Analyze"
+        dirpath = "RAYPy_Simulation_test_NoAnalyze"
         for i in range(2):
             path = os.path.join(dirpath,'round_'+str(i))
             f = find_files_in_folder(path)
             self.assertEqual(17,len(f))
     
     def test_round_folders_rml(self):
-        dirpath = "RAYPy_Simulation_test_Analyze"
+        dirpath = "RAYPy_Simulation_test_NoAnalyze"
         for i in range(2):
             path = os.path.join(dirpath,'round_'+str(i))
             f = find_files_in_folder(path, suffix='.rml')
             self.assertEqual(8,len(f))
+    
+    def test_round_folders_rml(self):
+        dirpath = "RAYPy_Simulation_test_NoAnalyze"
+        for i in range(2):
+            path = os.path.join(dirpath,'round_'+str(i))
+            f = find_files_in_folder(path, suffix='.dat')
+            self.assertEqual(16,len(f))
+
+    def test_input_Dipole_file(self):
+        dirpath = "RAYPy_Simulation_test_NoAnalyze"
+        file = 'Dipole.dat'
+        path = os.path.join(dirpath,file)
+        path = pl.Path(path)
+        self.assertTrue(path.is_file())
+ 
+    def test_input_DetectorAtFocus_file(self):
+        dirpath = "RAYPy_Simulation_test_NoAnalyze"
+        file = 'DetectorAtFocus.dat'
+        path = os.path.join(dirpath,file)
+        path = pl.Path(path)
+        self.assertTrue(path.is_file())
+
 
 
 def find_files_in_folder(path_to_dir, suffix=".csv" ):
@@ -117,7 +145,7 @@ def find_files_in_folder(path_to_dir, suffix=".csv" ):
 
 
 if __name__ == '__main__':
-    unittest.main(verbosity=2)
+    unittest.main(verbosity=0)
 
 
 
