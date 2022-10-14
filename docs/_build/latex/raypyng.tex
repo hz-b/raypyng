@@ -61,7 +61,7 @@
 
 
 \title{RayPyNG}
-\date{Oct 07, 2022}
+\date{Oct 14, 2022}
 \release{}
 \author{Simone Vadilonga, Ruslan Ovsyannikov}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -250,6 +250,28 @@ list
 
 \end{fulllineitems}
 
+\index{raypyng\_analysis (raypyng.simulate.Simulate property)@\spxentry{raypyng\_analysis}\spxextra{raypyng.simulate.Simulate property}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.raypyng_analysis}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{raypyng\_analysis}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+Turn on or off the RAYPyNG analysis of the results.
+\begin{quote}\begin{description}
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+True: analysis on, False: analysis off
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+bool
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
 \index{repeat (raypyng.simulate.Simulate property)@\spxentry{repeat}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
@@ -324,6 +346,25 @@ This method starts the simulations. params and exports need to be defined.
 \sphinxstyleliteralstrong{\sphinxupquote{force}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} If True all the simlations are performed, even if the export files already exist. If False only the simlations for which are missing some exports are performed. Defaults to False.
 
 \end{itemize}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{save\_parameters\_to\_file() (raypyng.simulate.Simulate method)@\spxentry{save\_parameters\_to\_file()}\spxextra{raypyng.simulate.Simulate method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.save_parameters_to_file}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{save\_parameters\_to\_file}}}{\emph{\DUrole{n}{dir}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+save all the user input parameters to file. It takes the values
+from the SimulationParams class
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{dir}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} the folder where to save the parameters
 
 \end{description}\end{quote}
 
@@ -914,7 +955,7 @@ arr (np.array)
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess._save_file}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_save\_file}}}{\emph{\DUrole{n}{filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{array}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{array}}}{}
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_save\_file}}}{\emph{\DUrole{n}{filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{array}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{array}}, \emph{\DUrole{n}{header}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 This function is used to save files,
@@ -922,11 +963,15 @@ This function is used to save files,
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{filename}} (\sphinxstyleliteralemphasis{\sphinxupquote{\_type\_}}) \textendash{} file name(path)
+\sphinxstyleliteralstrong{\sphinxupquote{filename}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} file name(path)
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{array}} (\sphinxstyleliteralemphasis{\sphinxupquote{\_type\_}}) \textendash{} array to save
+\sphinxstyleliteralstrong{\sphinxupquote{array}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.array}}) \textendash{} array to save
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{header}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} header for the file
 
 \end{itemize}
 
@@ -965,12 +1010,38 @@ If more than one round of simulations was done, the values are averaged.
 
 \end{fulllineitems}
 
+\index{extract\_nrays\_from\_source() (raypyng.postprocessing.PostProcess method)@\spxentry{extract\_nrays\_from\_source()}\spxextra{raypyng.postprocessing.PostProcess method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess.extract_nrays_from_source}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{extract\_nrays\_from\_source}}}{\emph{\DUrole{n}{rml\_filename}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Extract photon flux from rml file, find source automatically
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{rml\_filename}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} the rml file to use to extract the photon flux
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+the photon flux
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+str
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
 \index{postprocess\_RawRays() (raypyng.postprocessing.PostProcess method)@\spxentry{postprocess\_RawRays()}\spxextra{raypyng.postprocessing.PostProcess method}}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess.postprocess_RawRays}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{postprocess\_RawRays}}}{\emph{\DUrole{n}{exported\_element}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{exported\_object}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{dir\_path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{sim\_number}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{postprocess\_RawRays}}}{\emph{\DUrole{n}{exported\_element}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{exported\_object}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{dir\_path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{sim\_number}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{rml\_filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 The method looks in the folder dir\_path for a file with the filename:
