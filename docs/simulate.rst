@@ -1,13 +1,13 @@
-.. Simulate
-.. ==================
+Simulation
+==================
 .. autoclass:: raypyng.simulate.Simulate
    :members:
    :private-members:
    :special-members:
    :inherited-members:
 
-SimulationParams
-==================
+.. SimulationParams
+-- ==================
 .. autoclass:: raypyng.simulate.SimulationParams
    :members:
    :private-members:
