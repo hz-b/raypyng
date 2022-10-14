@@ -25,3 +25,4 @@ dependencies = [
 [project.urls]
 "Homepage" = "https://gitlab.helmholtz-berlin.de/RAY/raypyng"
 "Bug Tracker" = "https://gitlab.helmholtz-berlin.de/RAY/raypyng/-/issues"
+"Documentation" = "https://raypyng.readthedocs.io"
