@@ -7,7 +7,7 @@ Simulation
    :inherited-members:
 
 .. SimulationParams
--- ==================
+.. ==================
 .. autoclass:: raypyng.simulate.SimulationParams
    :members:
    :private-members:
