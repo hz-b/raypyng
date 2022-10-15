@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.7.22)  15 OCT 2022 23:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.7.22)  15 OCT 2022 23:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -985,7 +985,7 @@ ate.Simulate prop-
 
 ]) (./raypyng.aux)
 Package rerunfilecheck Info: File `raypyng.out' has not changed.
-(rerunfilecheck)             Checksum: 6D8F763E658BEE51785FE14431260BBE;4068.
+(rerunfilecheck)             Checksum: 2BF8E5DA5571B4AE1F16E30AC3376F57;4068.
  ) 
 Here is how much of TeX's memory you used:
  14822 strings out of 478287
@@ -1007,7 +1007,7 @@ lic/txfonts/t1xbtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfont
 s/t1xtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb
 ></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/tcxtt.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on raypyng.pdf (36 pages, 230526 bytes).
+Output written on raypyng.pdf (36 pages, 230523 bytes).
 PDF statistics:
  527 PDF objects out of 1000 (max. 8388607)
  463 compressed objects within 5 object streams

@@ -1,11 +1,13 @@
 How To Guides
 **************
+
 To simplify the scripting, especially when repetitive, 
 there is the possibility to write recipe for raypyng, to 
 perform simulations, and automatize some tasks.
 
 Recipe Template
 ------------------
+
 This the template to use to write a recipe. 
 At the beginning of the file import 
 :code:`SimulationRecipe` from :code:`raypyng` 
@@ -72,8 +74,9 @@ in :code:`simulation_name()`
 
             return self.sim_folder
 
-How to write a recipe
-----------------------
+How To Write a Recipe
+---------------------
+
 An example of how to write a recipe that exports 
 file for each element present in the beamline automatically.  
  
