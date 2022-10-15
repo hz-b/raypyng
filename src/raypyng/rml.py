@@ -21,9 +21,6 @@ class ParamElement(XmlElement):
 
     def __dir__(self):
         """enumerating child objects by its attibute name
-
-        Returns:
-            _type_: _description_
         """
         children_names = [x._name for x in self._children]
         attr_name = list(self._attributes.keys())
@@ -86,6 +83,11 @@ class RMLFile:
         return xml.serialize(self._root).strip()
 
     def write(self,file:str=None):
+        """Write the rml to :code:`file`
+
+        Args:
+            file (str, optional): filename . Defaults to None.
+        """        
         if file is None:
             file = self._filename
         with open(file,"w") as f:

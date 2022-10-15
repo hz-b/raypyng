@@ -21,12 +21,6 @@
 \contentsline {chapter}{\numberline {6}RML}{21}{chapter.6}%
 \contentsline {section}{\numberline {6.1}RMLFile}{21}{section.6.1}%
 \contentsline {section}{\numberline {6.2}BeamlineElement}{21}{section.6.2}%
-\contentsline {section}{\numberline {6.3}ObjectElement}{21}{section.6.3}%
-\contentsline {section}{\numberline {6.4}ParamElement}{21}{section.6.4}%
-\contentsline {section}{\numberline {6.5}Attributes}{21}{section.6.5}%
-\contentsline {section}{\numberline {6.6}Dictionaries}{21}{section.6.6}%
-\contentsline {section}{\numberline {6.7}Elements}{22}{section.6.7}%
-\contentsline {section}{\numberline {6.8}Parser}{22}{section.6.8}%
-\contentsline {section}{\numberline {6.9}Collections}{23}{section.6.9}%
-\contentsline {chapter}{Python Module Index}{25}{section*.63}%
-\contentsline {chapter}{Index}{27}{section*.64}%
+\contentsline {section}{\numberline {6.3}ObjectElement}{22}{section.6.3}%
+\contentsline {section}{\numberline {6.4}ParamElement}{22}{section.6.4}%
+\contentsline {chapter}{Index}{25}{section*.57}%

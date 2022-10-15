@@ -10,12 +10,6 @@ class XmlElement:
 
     Raises:
         AttributeError: _description_
-
-    Returns:
-        _type_: _description_
-
-    Yields:
-        _type_: _description_
     """
     #####################################
     def __init__(self, name:str, attributes:typing.MutableMapping, parent=None, **kwargs):
@@ -49,12 +43,22 @@ class XmlElement:
         self._parent = parent
 
     def get_full_path(self):
+        """Returns the full path of the xml object
+
+        Returns:
+            str: path of the xml object
+        """        
         if self._parent is None:
             return self.resolvable_name()
         else:
             return self._parent.get_full_path()+"."+self.resolvable_name()
 
     def resolvable_name(self):
+        """Returns the name of the objects, removing lab.beamline.
+
+        Returns:
+            str: name of the object
+        """        
         if self._parent is None:
             return self._name
         else:

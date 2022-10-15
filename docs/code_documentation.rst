@@ -37,58 +37,23 @@ RMLFile
 ==================
 .. autoclass:: raypyng.rml.RMLFile
    :members:
+   :inherited-members:
 
 BeamlineElement
 ==================
 .. autoclass:: raypyng.rml.BeamlineElement
    :members:
+   :inherited-members:
 
 ObjectElement
 ==================
 .. autoclass:: raypyng.rml.ObjectElement
    :members:
+   :inherited-members:
 
 ParamElement
 ==================
 .. autoclass:: raypyng.rml.ParamElement
    :members:
-
-Attributes
-==================
-.. automodule:: raypyng.xmltools.attributes
-   :members:
-
-Dictionaries
-==================
-.. automodule:: raypyng.xmltools.dictionaries
-   :members:
-
-Elements
-==================
-.. automodule:: raypyng.xmltools.elements
-  :members:
-
-Parser
-==================
-.. automodule:: raypyng.xmltools.parser
-   :members:
-
-Collections
-==================
-.. automodule:: raypyng.collections
-   :members:
-
-.. Config
-.. ==================
-.. .. automodule:: raypyng.config
-..    :members:
-
-.. Errors
-.. ==================
-.. .. automodule:: raypyng.errors
-..    :members:
-
-
-
-
+   :inherited-members:
 

@@ -72,7 +72,7 @@ to increase the number of rays with the photon energy
     sim.params=params
 
 The simulations files and the results will be saved in a folder called `RAYPy_simulation_` 
-plus a name of your choice, that can be set. This folder will be saved, by default, 
+and a name of your choice, that can be set. This folder will be saved, by default, 
 in the folder where the program is executed, but it can eventually be modified
 
 .. code-block:: python

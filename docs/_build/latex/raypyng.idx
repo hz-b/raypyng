@@ -30,41 +30,25 @@
 \indexentry{run() (raypyng.runner.RayUIRunner method)@\spxentry{run()}\spxextra{raypyng.runner.RayUIRunner method}|hyperpage}{19}
 \indexentry{RMLFile (class in raypyng.rml)@\spxentry{RMLFile}\spxextra{class in raypyng.rml}|hyperpage}{21}
 \indexentry{read() (raypyng.rml.RMLFile method)@\spxentry{read()}\spxextra{raypyng.rml.RMLFile method}|hyperpage}{21}
+\indexentry{write() (raypyng.rml.RMLFile method)@\spxentry{write()}\spxextra{raypyng.rml.RMLFile method}|hyperpage}{21}
 \indexentry{BeamlineElement (class in raypyng.rml)@\spxentry{BeamlineElement}\spxextra{class in raypyng.rml}|hyperpage}{21}
-\indexentry{ObjectElement (class in raypyng.rml)@\spxentry{ObjectElement}\spxextra{class in raypyng.rml}|hyperpage}{21}
-\indexentry{ParamElement (class in raypyng.rml)@\spxentry{ParamElement}\spxextra{class in raypyng.rml}|hyperpage}{21}
-\indexentry{module@\spxentry{module}!raypyng.xmltools.attributes@\spxentry{raypyng.xmltools.attributes}|hyperpage}{21}
-\indexentry{raypyng.xmltools.attributes@\spxentry{raypyng.xmltools.attributes}!module@\spxentry{module}|hyperpage}{21}
-\indexentry{module@\spxentry{module}!raypyng.xmltools.dictionaries@\spxentry{raypyng.xmltools.dictionaries}|hyperpage}{21}
-\indexentry{raypyng.xmltools.dictionaries@\spxentry{raypyng.xmltools.dictionaries}!module@\spxentry{module}|hyperpage}{21}
-\indexentry{SafeValueDict (class in raypyng.xmltools.dictionaries)@\spxentry{SafeValueDict}\spxextra{class in raypyng.xmltools.dictionaries}|hyperpage}{21}
-\indexentry{SafeValueList (class in raypyng.xmltools.dictionaries)@\spxentry{SafeValueList}\spxextra{class in raypyng.xmltools.dictionaries}|hyperpage}{21}
-\indexentry{sanitizeName() (in module raypyng.xmltools.dictionaries)@\spxentry{sanitizeName()}\spxextra{in module raypyng.xmltools.dictionaries}|hyperpage}{21}
-\indexentry{module@\spxentry{module}!raypyng.xmltools.elements@\spxentry{raypyng.xmltools.elements}|hyperpage}{22}
-\indexentry{raypyng.xmltools.elements@\spxentry{raypyng.xmltools.elements}!module@\spxentry{module}|hyperpage}{22}
-\indexentry{XmlAttributedNameElement (class in raypyng.xmltools.elements)@\spxentry{XmlAttributedNameElement}\spxextra{class in raypyng.xmltools.elements}|hyperpage}{22}
-\indexentry{XmlElement (class in raypyng.xmltools.elements)@\spxentry{XmlElement}\spxextra{class in raypyng.xmltools.elements}|hyperpage}{22}
-\indexentry{add\_cdata() (raypyng.xmltools.elements.XmlElement method)@\spxentry{add\_cdata()}\spxextra{raypyng.xmltools.elements.XmlElement method}|hyperpage}{22}
-\indexentry{add\_child() (raypyng.xmltools.elements.XmlElement method)@\spxentry{add\_child()}\spxextra{raypyng.xmltools.elements.XmlElement method}|hyperpage}{22}
-\indexentry{get\_attribute() (raypyng.xmltools.elements.XmlElement method)@\spxentry{get\_attribute()}\spxextra{raypyng.xmltools.elements.XmlElement method}|hyperpage}{22}
-\indexentry{get\_elements() (raypyng.xmltools.elements.XmlElement method)@\spxentry{get\_elements()}\spxextra{raypyng.xmltools.elements.XmlElement method}|hyperpage}{22}
-\indexentry{module@\spxentry{module}!raypyng.xmltools.parser@\spxentry{raypyng.xmltools.parser}|hyperpage}{22}
-\indexentry{raypyng.xmltools.parser@\spxentry{raypyng.xmltools.parser}!module@\spxentry{module}|hyperpage}{22}
-\indexentry{Handler (class in raypyng.xmltools.parser)@\spxentry{Handler}\spxextra{class in raypyng.xmltools.parser}|hyperpage}{22}
-\indexentry{characters() (raypyng.xmltools.parser.Handler method)@\spxentry{characters()}\spxextra{raypyng.xmltools.parser.Handler method}|hyperpage}{22}
-\indexentry{endElement() (raypyng.xmltools.parser.Handler method)@\spxentry{endElement()}\spxextra{raypyng.xmltools.parser.Handler method}|hyperpage}{22}
-\indexentry{startElement() (raypyng.xmltools.parser.Handler method)@\spxentry{startElement()}\spxextra{raypyng.xmltools.parser.Handler method}|hyperpage}{23}
-\indexentry{module@\spxentry{module}!raypyng.collections@\spxentry{raypyng.collections}|hyperpage}{23}
-\indexentry{raypyng.collections@\spxentry{raypyng.collections}!module@\spxentry{module}|hyperpage}{23}
-\indexentry{MappedDict (class in raypyng.collections)@\spxentry{MappedDict}\spxextra{class in raypyng.collections}|hyperpage}{23}
-\indexentry{original() (raypyng.collections.MappedDict method)@\spxentry{original()}\spxextra{raypyng.collections.MappedDict method}|hyperpage}{23}
-\indexentry{MappedList (class in raypyng.collections)@\spxentry{MappedList}\spxextra{class in raypyng.collections}|hyperpage}{23}
-\indexentry{append() (raypyng.collections.MappedList method)@\spxentry{append()}\spxextra{raypyng.collections.MappedList method}|hyperpage}{23}
-\indexentry{clear() (raypyng.collections.MappedList method)@\spxentry{clear()}\spxextra{raypyng.collections.MappedList method}|hyperpage}{23}
-\indexentry{count() (raypyng.collections.MappedList method)@\spxentry{count()}\spxextra{raypyng.collections.MappedList method}|hyperpage}{23}
-\indexentry{extend() (raypyng.collections.MappedList method)@\spxentry{extend()}\spxextra{raypyng.collections.MappedList method}|hyperpage}{23}
-\indexentry{index() (raypyng.collections.MappedList method)@\spxentry{index()}\spxextra{raypyng.collections.MappedList method}|hyperpage}{23}
-\indexentry{insert() (raypyng.collections.MappedList method)@\spxentry{insert()}\spxextra{raypyng.collections.MappedList method}|hyperpage}{23}
-\indexentry{pop() (raypyng.collections.MappedList method)@\spxentry{pop()}\spxextra{raypyng.collections.MappedList method}|hyperpage}{23}
-\indexentry{remove() (raypyng.collections.MappedList method)@\spxentry{remove()}\spxextra{raypyng.collections.MappedList method}|hyperpage}{23}
-\indexentry{reverse() (raypyng.collections.MappedList method)@\spxentry{reverse()}\spxextra{raypyng.collections.MappedList method}|hyperpage}{23}
+\indexentry{add\_cdata() (raypyng.rml.BeamlineElement method)@\spxentry{add\_cdata()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{21}
+\indexentry{add\_child() (raypyng.rml.BeamlineElement method)@\spxentry{add\_child()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{21}
+\indexentry{get\_attribute() (raypyng.rml.BeamlineElement method)@\spxentry{get\_attribute()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{21}
+\indexentry{get\_elements() (raypyng.rml.BeamlineElement method)@\spxentry{get\_elements()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{21}
+\indexentry{get\_full\_path() (raypyng.rml.BeamlineElement method)@\spxentry{get\_full\_path()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{21}
+\indexentry{resolvable\_name() (raypyng.rml.BeamlineElement method)@\spxentry{resolvable\_name()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{21}
+\indexentry{ObjectElement (class in raypyng.rml)@\spxentry{ObjectElement}\spxextra{class in raypyng.rml}|hyperpage}{22}
+\indexentry{add\_cdata() (raypyng.rml.ObjectElement method)@\spxentry{add\_cdata()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{22}
+\indexentry{add\_child() (raypyng.rml.ObjectElement method)@\spxentry{add\_child()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{22}
+\indexentry{get\_attribute() (raypyng.rml.ObjectElement method)@\spxentry{get\_attribute()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{22}
+\indexentry{get\_elements() (raypyng.rml.ObjectElement method)@\spxentry{get\_elements()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{22}
+\indexentry{get\_full\_path() (raypyng.rml.ObjectElement method)@\spxentry{get\_full\_path()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{22}
+\indexentry{resolvable\_name() (raypyng.rml.ObjectElement method)@\spxentry{resolvable\_name()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{22}
+\indexentry{ParamElement (class in raypyng.rml)@\spxentry{ParamElement}\spxextra{class in raypyng.rml}|hyperpage}{22}
+\indexentry{add\_cdata() (raypyng.rml.ParamElement method)@\spxentry{add\_cdata()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{22}
+\indexentry{add\_child() (raypyng.rml.ParamElement method)@\spxentry{add\_child()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{22}
+\indexentry{get\_attribute() (raypyng.rml.ParamElement method)@\spxentry{get\_attribute()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{22}
+\indexentry{get\_elements() (raypyng.rml.ParamElement method)@\spxentry{get\_elements()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{22}
+\indexentry{get\_full\_path() (raypyng.rml.ParamElement method)@\spxentry{get\_full\_path()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{23}
+\indexentry{resolvable\_name() (raypyng.rml.ParamElement method)@\spxentry{resolvable\_name()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{23}

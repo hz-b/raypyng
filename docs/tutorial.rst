@@ -4,10 +4,10 @@ Tutorial
 Minimal example
 ===============
 raypyng is not able to create a beamline from scratch. To do so, use RAY-UI, 
-create a beamline, and save it. What you save is `.rml` file, which you have to 
-pass as an argument to the `Simulate` simulate class. In the following example, we 
-use the file for a beamline called `elisa`, and the file is saved in `rml/elisa.rml`. 
-The `hide` parameter can be set to true only if `xvfb` is installed.
+create a beamline, and save it. What you save is :code:`.rml` file, which you have to 
+pass as an argument to the :code:`Simulate` class. In the following example, we 
+use the file for a beamline called `elisa`, and the file is saved in :code:`rml/elisa.rml`. 
+The :code:`hide` parameter can be set to true only if `xvfb` is installed.
 
 .. code-block:: python
 
@@ -72,7 +72,7 @@ to increase the number of rays with the photon energy
     sim.params=params
 
 The simulations files and the results will be saved in a folder called `RAYPy_simulation_` 
-plus a name of your choice, that can be set. This folder will be saved, by default, 
+and a name of your choice, that can be set. This folder will be saved, by default, 
 in the folder where the program is executed, but it can eventually be modified
 
 .. code-block:: python
