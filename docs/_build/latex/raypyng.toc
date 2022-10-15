@@ -10,20 +10,23 @@
 \contentsline {subsection}{\numberline {2.2.2}Analysis performed by raypyng}{8}{subsection.2.2.2}%
 \contentsline {section}{\numberline {2.3}Recipes}{8}{section.2.3}%
 \contentsline {section}{\numberline {2.4}List of examples available and short explanation}{8}{section.2.4}%
-\contentsline {chapter}{\numberline {3}Simulation}{11}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Simulate}{11}{section.3.1}%
-\contentsline {section}{\numberline {3.2}SimulationParams}{13}{section.3.2}%
-\contentsline {chapter}{\numberline {4}Recipes}{15}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Resolving Power}{15}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Flux}{15}{section.4.2}%
-\contentsline {chapter}{\numberline {5}Process simulation files}{17}{chapter.5}%
-\contentsline {section}{\numberline {5.1}PostProcess rays analyzed by raypyng}{17}{section.5.1}%
-\contentsline {section}{\numberline {5.2}PostProcess rays analyzed by RAY\sphinxhyphen {}UI}{18}{section.5.2}%
-\contentsline {chapter}{\numberline {6}RAY\sphinxhyphen {}UI API}{21}{chapter.6}%
-\contentsline {section}{\numberline {6.1}RayUIRunner}{21}{section.6.1}%
-\contentsline {chapter}{\numberline {7}RML}{23}{chapter.7}%
-\contentsline {section}{\numberline {7.1}RMLFile}{23}{section.7.1}%
-\contentsline {section}{\numberline {7.2}BeamlineElement}{23}{section.7.2}%
-\contentsline {section}{\numberline {7.3}ObjectElement}{24}{section.7.3}%
-\contentsline {section}{\numberline {7.4}ParamElement}{24}{section.7.4}%
-\contentsline {chapter}{Index}{27}{section*.59}%
+\contentsline {chapter}{\numberline {3}How To Guides}{11}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Recipe Template}{11}{section.3.1}%
+\contentsline {section}{\numberline {3.2}How to write a recipe}{12}{section.3.2}%
+\contentsline {chapter}{\numberline {4}Simulation}{15}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Simulate}{15}{section.4.1}%
+\contentsline {section}{\numberline {4.2}SimulationParams}{17}{section.4.2}%
+\contentsline {chapter}{\numberline {5}Recipes}{19}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Resolving Power}{19}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Flux}{19}{section.5.2}%
+\contentsline {chapter}{\numberline {6}Process simulation files}{21}{chapter.6}%
+\contentsline {section}{\numberline {6.1}PostProcess rays analyzed by raypyng}{21}{section.6.1}%
+\contentsline {section}{\numberline {6.2}PostProcess rays analyzed by RAY\sphinxhyphen {}UI}{22}{section.6.2}%
+\contentsline {chapter}{\numberline {7}RAY\sphinxhyphen {}UI API}{25}{chapter.7}%
+\contentsline {section}{\numberline {7.1}RayUIRunner}{25}{section.7.1}%
+\contentsline {chapter}{\numberline {8}RML}{27}{chapter.8}%
+\contentsline {section}{\numberline {8.1}RMLFile}{27}{section.8.1}%
+\contentsline {section}{\numberline {8.2}BeamlineElement}{27}{section.8.2}%
+\contentsline {section}{\numberline {8.3}ObjectElement}{28}{section.8.3}%
+\contentsline {section}{\numberline {8.4}ParamElement}{28}{section.8.4}%
+\contentsline {chapter}{Index}{31}{section*.59}%

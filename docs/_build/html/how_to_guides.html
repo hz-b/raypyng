@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How To Guides &mdash; RayPyNG  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Simulation" href="code_documentation.html" />
+    <link rel="prev" title="Tutorial" href="tutorial.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> RayPyNG
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install_raypyng.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How To Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#recipe-template">Recipe Template</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-write-a-recipe">How to write a recipe</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="code_documentation.html">Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_documentation.html#recipes">Recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_documentation.html#process-simulation-files">Process simulation files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_documentation.html#ray-ui-api">RAY-UI API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_documentation.html#rml">RML</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">RayPyNG</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>How To Guides</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/how_to_guides.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="how-to-guides">
+<h1>How To Guides<a class="headerlink" href="#how-to-guides" title="Permalink to this heading"></a></h1>
+<p>To simplify the scripting, especially when repetitive,
+there is the possibility to write recipe for raypyng, to
+perform simulations, and automatize some tasks.</p>
+<section id="recipe-template">
+<h2>Recipe Template<a class="headerlink" href="#recipe-template" title="Permalink to this heading"></a></h2>
+<p>This the template to use to write a recipe.
+At the beginning of the file import
+<code class="code docutils literal notranslate"><span class="pre">SimulationRecipe</span></code> from <code class="code docutils literal notranslate"><span class="pre">raypyng</span></code>
+and define a the Simulation class as an empty dummy.
+This will ensure that you have access to all the methods of the
+<code class="code docutils literal notranslate"><span class="pre">Simulation</span></code> class.</p>
+<p>A recipe should containe at least the <code class="code docutils literal notranslate"><span class="pre">__init__()</span></code>
+method and three more methods: <code class="code docutils literal notranslate"><span class="pre">params()</span></code>,
+and <code class="code docutils literal notranslate"><span class="pre">simulation_name()</span></code>,
+and they must have as an argument the simulate class.</p>
+<p>Compose the simulation parameters in the <code class="code docutils literal notranslate"><span class="pre">params</span></code> method:
+The simulation parameter must return a list of dictionaries,
+where the keys of the dictionaries are parameters of on abject
+present in the beamline, instances of <code class="code docutils literal notranslate"><span class="pre">ParamElement</span></code> class.
+The items of the dictionary must be the values that the parameter should
+assume for the simulations.</p>
+<p>Compose the simulation parameters in the <code class="code docutils literal notranslate"><span class="pre">params()</span></code> method:
+The <code class="code docutils literal notranslate"><span class="pre">params()</span></code> method must return a list of dictionaries.
+The keys of the dictionaries are parameters of on abject
+present in the beamline, instances of <code class="code docutils literal notranslate"><span class="pre">ParamElement</span></code> class.
+The items of the dictionary must be the values that the parameter should
+assume for the simulations.</p>
+<p>Compose the export parameters in the <code class="code docutils literal notranslate"><span class="pre">exports()</span></code> method:
+The The <code class="code docutils literal notranslate"><span class="pre">exports()</span></code> method must return a list of dictionaries,
+method must return a list of dictionaries.
+The keys of the dictionaries are parameters of on abject
+present in the beamline, instances of <code class="code docutils literal notranslate"><span class="pre">ParamElement</span></code> class.
+The items of the dictionary is the name of the file that you want to export
+(print the output of <code class="code docutils literal notranslate"><span class="pre">Simulation.possible_exports</span></code> and
+<code class="code docutils literal notranslate"><span class="pre">possible_exports_without_analysis</span></code>.</p>
+<p>Define the name to give to the simulation folder
+in <code class="code docutils literal notranslate"><span class="pre">simulation_name()</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">raypyng.recipes</span> <span class="kn">import</span> <span class="n">SimulationRecipe</span>
+
+<span class="k">class</span> <span class="nc">Simulate</span><span class="p">:</span> <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">MyRecipe</span><span class="p">(</span><span class="n">SimulationRecipe</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">return</span> <span class="n">params</span>
+
+    <span class="k">def</span> <span class="nf">exports</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
+
+        <span class="n">exports</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">return</span> <span class="n">exports</span>
+
+    <span class="k">def</span> <span class="nf">simulation_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sim_folder</span> <span class="o">=</span> <span class="o">...</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_folder</span>
+</pre></div>
+</div>
+</section>
+<section id="how-to-write-a-recipe">
+<h2>How to write a recipe<a class="headerlink" href="#how-to-write-a-recipe" title="Permalink to this heading"></a></h2>
+<p>An example of how to write a recipe that exports
+file for each element present in the beamline automatically.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ExportEachElement</span><span class="p">(</span><span class="n">SimulationRecipe</span><span class="p">):</span>
+<span class="sd">&quot;&quot;&quot;At one defined energy export a file for each</span>
+<span class="sd">optical elements</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">energy</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span><span class="o">/</span><span class="p">,</span><span class="n">nrays</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">sim_folder</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Args:</span>
+<span class="sd">        energy_range (np.array, list): the energies to simulate in eV</span>
+<span class="sd">        nrays (int): number of rays for the source</span>
+<span class="sd">        sim_folder (str, optional): the name of the simulation folder. If None, the rml filename will be used. Defaults to None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">energy</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">)):</span>
+       <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;The energy must be an a int or float, while it is a&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">energy</span><span class="p">))</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="n">energy</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">nrays</span>  <span class="o">=</span> <span class="n">nrays</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sim_folder</span> <span class="o">=</span> <span class="n">sim_folder</span>
+
+<span class="k">def</span> <span class="nf">params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># find source and add to param with defined user energy range</span>
+    <span class="n">found_source</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">oe</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">rml</span><span class="o">.</span><span class="n">beamline</span><span class="o">.</span><span class="n">children</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">oe</span><span class="p">,</span><span class="s2">&quot;photonEnergy&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">oe</span>
+            <span class="n">found_source</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">break</span>
+    <span class="k">if</span> <span class="n">found_source</span><span class="o">!=</span><span class="kc">True</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;I did not find the source&#39;</span><span class="p">)</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">photonEnergy</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">})</span>
+
+    <span class="c1"># set reflectivity to 100%</span>
+    <span class="k">for</span> <span class="n">oe</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">rml</span><span class="o">.</span><span class="n">beamline</span><span class="o">.</span><span class="n">children</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">par</span> <span class="ow">in</span> <span class="n">oe</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">par</span><span class="o">.</span><span class="n">reflectivityType</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+    <span class="c1"># all done, return resulting params</span>
+    <span class="k">return</span> <span class="n">params</span>
+
+<span class="k">def</span> <span class="nf">exports</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
+    <span class="c1"># find all the elements in the beamline</span>
+    <span class="n">oe_list</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">oe</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">rml</span><span class="o">.</span><span class="n">beamline</span><span class="o">.</span><span class="n">children</span><span class="p">():</span>
+        <span class="n">oe_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">oe</span><span class="p">)</span>
+    <span class="c1"># compose the export list of dictionaries</span>
+    <span class="n">exports</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">oe</span> <span class="ow">in</span> <span class="n">oe_list</span><span class="p">:</span>
+        <span class="n">exports</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">oe</span><span class="p">:</span><span class="s1">&#39;RawRaysOutgoing&#39;</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">exports</span>
+
+<span class="k">def</span> <span class="nf">simulation_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_folder</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;ExportEachElement&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_folder</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">raypyng</span> <span class="kn">import</span> <span class="n">Simulate</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="kn">import</span> <span class="nn">os</span>
+
+    <span class="n">rml_file</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;rml_file.rml&#39;</span><span class="p">)</span>
+    <span class="n">sim</span>      <span class="o">=</span> <span class="n">Simulate</span><span class="p">(</span><span class="n">rml_file</span><span class="p">,</span> <span class="n">hide</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+    <span class="n">sim</span><span class="o">.</span><span class="n">analyze</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">myRecipe</span> <span class="o">=</span> <span class="n">ExportEachElement</span><span class="p">(</span><span class="n">energy</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">nrays</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span><span class="n">sim_folder</span><span class="o">=</span><span class="s1">&#39;MyRecipeTest&#39;</span><span class="p">)</span>
+
+    <span class="c1"># test resolving power simulations</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">myRecipe</span><span class="p">,</span> <span class="n">multiprocessing</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial.html" class="btn btn-neutral float-left" title="Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="code_documentation.html" class="btn btn-neutral float-right" title="Simulation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Simone Vadilonga, Ruslan Ovsyannikov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -18,6 +18,7 @@ More information at `this link
 
    install_raypyng
    tutorial
+   how_to_guides
    code_documentation
    
 

@@ -5,107 +5,107 @@
 \let\spxextra \sphinxstyleindexextra
 
   \bigletter A
-  \item \spxentry{add\_cdata()}\spxextra{raypyng.rml.BeamlineElement method}, \hyperpage{23}
-  \item \spxentry{add\_cdata()}\spxextra{raypyng.rml.ObjectElement method}, \hyperpage{24}
-  \item \spxentry{add\_cdata()}\spxextra{raypyng.rml.ParamElement method}, \hyperpage{24}
-  \item \spxentry{add\_child()}\spxextra{raypyng.rml.BeamlineElement method}, \hyperpage{23}
-  \item \spxentry{add\_child()}\spxextra{raypyng.rml.ObjectElement method}, \hyperpage{24}
-  \item \spxentry{add\_child()}\spxextra{raypyng.rml.ParamElement method}, \hyperpage{24}
-  \item \spxentry{analyze}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{11}
+  \item \spxentry{add\_cdata()}\spxextra{raypyng.rml.BeamlineElement method}, \hyperpage{27}
+  \item \spxentry{add\_cdata()}\spxextra{raypyng.rml.ObjectElement method}, \hyperpage{28}
+  \item \spxentry{add\_cdata()}\spxextra{raypyng.rml.ParamElement method}, \hyperpage{28}
+  \item \spxentry{add\_child()}\spxextra{raypyng.rml.BeamlineElement method}, \hyperpage{27}
+  \item \spxentry{add\_child()}\spxextra{raypyng.rml.ObjectElement method}, \hyperpage{28}
+  \item \spxentry{add\_child()}\spxextra{raypyng.rml.ParamElement method}, \hyperpage{28}
+  \item \spxentry{analyze}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{15}
 
   \indexspace
   \bigletter B
-  \item \spxentry{BeamlineElement}\spxextra{class in raypyng.rml}, \hyperpage{23}
+  \item \spxentry{BeamlineElement}\spxextra{class in raypyng.rml}, \hyperpage{27}
 
   \indexspace
   \bigletter C
-  \item \spxentry{cleanup()}\spxextra{raypyng.postprocessing.PostProcess method}, \hyperpage{17}
+  \item \spxentry{cleanup()}\spxextra{raypyng.postprocessing.PostProcess method}, \hyperpage{21}
 
   \indexspace
   \bigletter E
-  \item \spxentry{exports}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{11}
+  \item \spxentry{exports}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{15}
   \item \spxentry{extract\_nrays\_from\_source()}\spxextra{raypyng.postprocessing.PostProcess method}, 
-		\hyperpage{17}
+		\hyperpage{21}
 
   \indexspace
   \bigletter F
-  \item \spxentry{Flux}\spxextra{class in raypyng.recipes}, \hyperpage{15}
+  \item \spxentry{Flux}\spxextra{class in raypyng.recipes}, \hyperpage{19}
 
   \indexspace
   \bigletter G
-  \item \spxentry{get\_attribute()}\spxextra{raypyng.rml.BeamlineElement method}, \hyperpage{23}
-  \item \spxentry{get\_attribute()}\spxextra{raypyng.rml.ObjectElement method}, \hyperpage{24}
-  \item \spxentry{get\_attribute()}\spxextra{raypyng.rml.ParamElement method}, \hyperpage{24}
-  \item \spxentry{get\_elements()}\spxextra{raypyng.rml.BeamlineElement method}, \hyperpage{23}
-  \item \spxentry{get\_elements()}\spxextra{raypyng.rml.ObjectElement method}, \hyperpage{24}
-  \item \spxentry{get\_elements()}\spxextra{raypyng.rml.ParamElement method}, \hyperpage{24}
-  \item \spxentry{get\_full\_path()}\spxextra{raypyng.rml.BeamlineElement method}, \hyperpage{23}
-  \item \spxentry{get\_full\_path()}\spxextra{raypyng.rml.ObjectElement method}, \hyperpage{24}
-  \item \spxentry{get\_full\_path()}\spxextra{raypyng.rml.ParamElement method}, \hyperpage{25}
+  \item \spxentry{get\_attribute()}\spxextra{raypyng.rml.BeamlineElement method}, \hyperpage{27}
+  \item \spxentry{get\_attribute()}\spxextra{raypyng.rml.ObjectElement method}, \hyperpage{28}
+  \item \spxentry{get\_attribute()}\spxextra{raypyng.rml.ParamElement method}, \hyperpage{28}
+  \item \spxentry{get\_elements()}\spxextra{raypyng.rml.BeamlineElement method}, \hyperpage{27}
+  \item \spxentry{get\_elements()}\spxextra{raypyng.rml.ObjectElement method}, \hyperpage{28}
+  \item \spxentry{get\_elements()}\spxextra{raypyng.rml.ParamElement method}, \hyperpage{28}
+  \item \spxentry{get\_full\_path()}\spxextra{raypyng.rml.BeamlineElement method}, \hyperpage{27}
+  \item \spxentry{get\_full\_path()}\spxextra{raypyng.rml.ObjectElement method}, \hyperpage{28}
+  \item \spxentry{get\_full\_path()}\spxextra{raypyng.rml.ParamElement method}, \hyperpage{29}
 
   \indexspace
   \bigletter I
-  \item \spxentry{isrunning}\spxextra{raypyng.runner.RayUIRunner property}, \hyperpage{21}
+  \item \spxentry{isrunning}\spxextra{raypyng.runner.RayUIRunner property}, \hyperpage{25}
 
   \indexspace
   \bigletter K
-  \item \spxentry{kill()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{21}
+  \item \spxentry{kill()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{25}
 
   \indexspace
   \bigletter M
   \item \spxentry{moving\_average()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}, 
-		\hyperpage{18}
+		\hyperpage{22}
 
   \indexspace
   \bigletter O
-  \item \spxentry{ObjectElement}\spxextra{class in raypyng.rml}, \hyperpage{24}
+  \item \spxentry{ObjectElement}\spxextra{class in raypyng.rml}, \hyperpage{28}
 
   \indexspace
   \bigletter P
-  \item \spxentry{ParamElement}\spxextra{class in raypyng.rml}, \hyperpage{24}
-  \item \spxentry{params}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{11}
-  \item \spxentry{params}\spxextra{raypyng.simulate.SimulationParams property}, \hyperpage{13}
-  \item \spxentry{path}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{11}
-  \item \spxentry{pid}\spxextra{raypyng.runner.RayUIRunner property}, \hyperpage{21}
-  \item \spxentry{possible\_exports}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{11}
+  \item \spxentry{ParamElement}\spxextra{class in raypyng.rml}, \hyperpage{28}
+  \item \spxentry{params}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{15}
+  \item \spxentry{params}\spxextra{raypyng.simulate.SimulationParams property}, \hyperpage{17}
+  \item \spxentry{path}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{15}
+  \item \spxentry{pid}\spxextra{raypyng.runner.RayUIRunner property}, \hyperpage{25}
+  \item \spxentry{possible\_exports}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{15}
   \item \spxentry{possible\_exports\_without\_analysis}\spxextra{raypyng.simulate.Simulate property}, 
-		\hyperpage{11}
-  \item \spxentry{PostProcess}\spxextra{class in raypyng.postprocessing}, \hyperpage{17}
+		\hyperpage{15}
+  \item \spxentry{PostProcess}\spxextra{class in raypyng.postprocessing}, \hyperpage{21}
   \item \spxentry{postprocess\_RawRays()}\spxextra{raypyng.postprocessing.PostProcess method}, 
-		\hyperpage{17}
-  \item \spxentry{PostProcessAnalyzed}\spxextra{class in raypyng.postprocessing}, \hyperpage{18}
+		\hyperpage{21}
+  \item \spxentry{PostProcessAnalyzed}\spxextra{class in raypyng.postprocessing}, \hyperpage{22}
 
   \indexspace
   \bigletter R
-  \item \spxentry{raypyng\_analysis}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{12}
-  \item \spxentry{RayUIRunner}\spxextra{class in raypyng.runner}, \hyperpage{21}
-  \item \spxentry{read()}\spxextra{raypyng.rml.RMLFile method}, \hyperpage{23}
-  \item \spxentry{repeat}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{12}
-  \item \spxentry{resolvable\_name()}\spxextra{raypyng.rml.BeamlineElement method}, \hyperpage{23}
-  \item \spxentry{resolvable\_name()}\spxextra{raypyng.rml.ObjectElement method}, \hyperpage{24}
-  \item \spxentry{resolvable\_name()}\spxextra{raypyng.rml.ParamElement method}, \hyperpage{25}
-  \item \spxentry{ResolvingPower}\spxextra{class in raypyng.recipes}, \hyperpage{15}
+  \item \spxentry{raypyng\_analysis}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{16}
+  \item \spxentry{RayUIRunner}\spxextra{class in raypyng.runner}, \hyperpage{25}
+  \item \spxentry{read()}\spxextra{raypyng.rml.RMLFile method}, \hyperpage{27}
+  \item \spxentry{repeat}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{16}
+  \item \spxentry{resolvable\_name()}\spxextra{raypyng.rml.BeamlineElement method}, \hyperpage{27}
+  \item \spxentry{resolvable\_name()}\spxextra{raypyng.rml.ObjectElement method}, \hyperpage{28}
+  \item \spxentry{resolvable\_name()}\spxextra{raypyng.rml.ParamElement method}, \hyperpage{29}
+  \item \spxentry{ResolvingPower}\spxextra{class in raypyng.recipes}, \hyperpage{19}
   \item \spxentry{retrieve\_bw\_and\_focusSize()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}, 
-		\hyperpage{18}
+		\hyperpage{22}
   \item \spxentry{retrieve\_flux\_beamline()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}, 
-		\hyperpage{18}
-  \item \spxentry{rml}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{12}
-  \item \spxentry{rml}\spxextra{raypyng.simulate.SimulationParams property}, \hyperpage{13}
-  \item \spxentry{rml\_list()}\spxextra{raypyng.simulate.Simulate method}, \hyperpage{12}
-  \item \spxentry{RMLFile}\spxextra{class in raypyng.rml}, \hyperpage{23}
-  \item \spxentry{run()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{21}
-  \item \spxentry{run()}\spxextra{raypyng.simulate.Simulate method}, \hyperpage{12}
+		\hyperpage{22}
+  \item \spxentry{rml}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{16}
+  \item \spxentry{rml}\spxextra{raypyng.simulate.SimulationParams property}, \hyperpage{17}
+  \item \spxentry{rml\_list()}\spxextra{raypyng.simulate.Simulate method}, \hyperpage{16}
+  \item \spxentry{RMLFile}\spxextra{class in raypyng.rml}, \hyperpage{27}
+  \item \spxentry{run()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{25}
+  \item \spxentry{run()}\spxextra{raypyng.simulate.Simulate method}, \hyperpage{16}
 
   \indexspace
   \bigletter S
   \item \spxentry{save\_parameters\_to\_file()}\spxextra{raypyng.simulate.Simulate method}, 
-		\hyperpage{12}
-  \item \spxentry{Simulate}\spxextra{class in raypyng.simulate}, \hyperpage{11}
-  \item \spxentry{simulation\_name}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{12}
-  \item \spxentry{SimulationParams}\spxextra{class in raypyng.simulate}, \hyperpage{13}
+		\hyperpage{16}
+  \item \spxentry{Simulate}\spxextra{class in raypyng.simulate}, \hyperpage{15}
+  \item \spxentry{simulation\_name}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{16}
+  \item \spxentry{SimulationParams}\spxextra{class in raypyng.simulate}, \hyperpage{17}
 
   \indexspace
   \bigletter W
-  \item \spxentry{write()}\spxextra{raypyng.rml.RMLFile method}, \hyperpage{23}
+  \item \spxentry{write()}\spxextra{raypyng.rml.RMLFile method}, \hyperpage{27}
 
 \end{sphinxtheindex}

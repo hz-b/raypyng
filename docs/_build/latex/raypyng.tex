@@ -531,6 +531,179 @@ experimental and it may fail.
 \sphinxstepscope
 
 
+\chapter{How To Guides}
+\label{\detokenize{how_to_guides:how-to-guides}}\label{\detokenize{how_to_guides::doc}}
+\sphinxAtStartPar
+To simplify the scripting, especially when repetitive,
+there is the possibility to write recipe for raypyng, to
+perform simulations, and automatize some tasks.
+
+
+\section{Recipe Template}
+\label{\detokenize{how_to_guides:recipe-template}}
+\sphinxAtStartPar
+This the template to use to write a recipe.
+At the beginning of the file import
+\sphinxcode{\sphinxupquote{SimulationRecipe}} from \sphinxcode{\sphinxupquote{raypyng}}
+and define a the Simulation class as an empty dummy.
+This will ensure that you have access to all the methods of the
+\sphinxcode{\sphinxupquote{Simulation}} class.
+
+\sphinxAtStartPar
+A recipe should containe at least the \sphinxcode{\sphinxupquote{\_\_init\_\_()}}
+method and three more methods: \sphinxcode{\sphinxupquote{params()}},
+and \sphinxcode{\sphinxupquote{simulation\_name()}},
+and they must have as an argument the simulate class.
+
+\sphinxAtStartPar
+Compose the simulation parameters in the \sphinxcode{\sphinxupquote{params}} method:
+The simulation parameter must return a list of dictionaries,
+where the keys of the dictionaries are parameters of on abject
+present in the beamline, instances of \sphinxcode{\sphinxupquote{ParamElement}} class.
+The items of the dictionary must be the values that the parameter should
+assume for the simulations.
+
+\sphinxAtStartPar
+Compose the simulation parameters in the \sphinxcode{\sphinxupquote{params()}} method:
+The \sphinxcode{\sphinxupquote{params()}} method must return a list of dictionaries.
+The keys of the dictionaries are parameters of on abject
+present in the beamline, instances of \sphinxcode{\sphinxupquote{ParamElement}} class.
+The items of the dictionary must be the values that the parameter should
+assume for the simulations.
+
+\sphinxAtStartPar
+Compose the export parameters in the \sphinxcode{\sphinxupquote{exports()}} method:
+The The \sphinxcode{\sphinxupquote{exports()}} method must return a list of dictionaries,
+method must return a list of dictionaries.
+The keys of the dictionaries are parameters of on abject
+present in the beamline, instances of \sphinxcode{\sphinxupquote{ParamElement}} class.
+The items of the dictionary is the name of the file that you want to export
+(print the output of \sphinxcode{\sphinxupquote{Simulation.possible\_exports}} and
+\sphinxcode{\sphinxupquote{possible\_exports\_without\_analysis}}.
+
+\sphinxAtStartPar
+Define the name to give to the simulation folder
+in \sphinxcode{\sphinxupquote{simulation\_name()}}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{raypyng}\PYG{n+nn}{.}\PYG{n+nn}{recipes} \PYG{k+kn}{import} \PYG{n}{SimulationRecipe}
+
+\PYG{k}{class} \PYG{n+nc}{Simulate}\PYG{p}{:} \PYG{k}{pass}
+
+\PYG{k}{class} \PYG{n+nc}{MyRecipe}\PYG{p}{(}\PYG{n}{SimulationRecipe}\PYG{p}{)}\PYG{p}{:}
+    \PYG{k}{def} \PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{)}\PYG{p}{:}
+        \PYG{k}{pass}
+
+    \PYG{k}{def} \PYG{n+nf}{params}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,}\PYG{n}{sim}\PYG{p}{:}\PYG{n}{Simulate}\PYG{p}{)}\PYG{p}{:}
+
+        \PYG{n}{params} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+
+        \PYG{k}{return} \PYG{n}{params}
+
+    \PYG{k}{def} \PYG{n+nf}{exports}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,}\PYG{n}{sim}\PYG{p}{:}\PYG{n}{Simulate}\PYG{p}{)}\PYG{p}{:}
+
+        \PYG{n}{exports} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+
+        \PYG{k}{return} \PYG{n}{exports}
+
+    \PYG{k}{def} \PYG{n+nf}{simulation\PYGZus{}name}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,}\PYG{n}{sim}\PYG{p}{:}\PYG{n}{Simulate}\PYG{p}{)}\PYG{p}{:}
+
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{sim\PYGZus{}folder} \PYG{o}{=} \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}
+
+        \PYG{k}{return} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{sim\PYGZus{}folder}
+\end{sphinxVerbatim}
+
+
+\section{How to write a recipe}
+\label{\detokenize{how_to_guides:how-to-write-a-recipe}}
+\sphinxAtStartPar
+An example of how to write a recipe that exports
+file for each element present in the beamline automatically.
+\begin{quote}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{ExportEachElement}\PYG{p}{(}\PYG{n}{SimulationRecipe}\PYG{p}{)}\PYG{p}{:}
+\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}At one defined energy export a file for each}
+\PYG{l+s+sd}{optical elements}
+\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{k}{def} \PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{energy}\PYG{p}{:}\PYG{n+nb}{float}\PYG{p}{,}\PYG{o}{/}\PYG{p}{,}\PYG{n}{nrays}\PYG{p}{:}\PYG{n+nb}{int}\PYG{o}{=}\PYG{k+kc}{None}\PYG{p}{,}\PYG{n}{sim\PYGZus{}folder}\PYG{p}{:}\PYG{n+nb}{str}\PYG{o}{=}\PYG{k+kc}{None}\PYG{p}{)}\PYG{p}{:}
+    \PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Args:}
+\PYG{l+s+sd}{        energy\PYGZus{}range (np.array, list): the energies to simulate in eV}
+\PYG{l+s+sd}{        nrays (int): number of rays for the source}
+\PYG{l+s+sd}{        sim\PYGZus{}folder (str, optional): the name of the simulation folder. If None, the rml filename will be used. Defaults to None.}
+
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+    \PYG{k}{if} \PYG{o+ow}{not} \PYG{n+nb}{isinstance}\PYG{p}{(}\PYG{n}{energy}\PYG{p}{,} \PYG{p}{(}\PYG{n+nb}{int}\PYG{p}{,}\PYG{n+nb}{float}\PYG{p}{)}\PYG{p}{)}\PYG{p}{:}
+       \PYG{k}{raise} \PYG{n+ne}{TypeError}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{The energy must be an a int or float, while it is a}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{n+nb}{type}\PYG{p}{(}\PYG{n}{energy}\PYG{p}{)}\PYG{p}{)}
+
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{energy} \PYG{o}{=} \PYG{n}{energy}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{nrays}  \PYG{o}{=} \PYG{n}{nrays}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{sim\PYGZus{}folder} \PYG{o}{=} \PYG{n}{sim\PYGZus{}folder}
+
+\PYG{k}{def} \PYG{n+nf}{params}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,}\PYG{n}{sim}\PYG{p}{:}\PYG{n}{Simulate}\PYG{p}{)}\PYG{p}{:}
+    \PYG{n}{params} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+
+    \PYG{c+c1}{\PYGZsh{} find source and add to param with defined user energy range}
+    \PYG{n}{found\PYGZus{}source} \PYG{o}{=} \PYG{k+kc}{False}
+    \PYG{k}{for} \PYG{n}{oe} \PYG{o+ow}{in} \PYG{n}{sim}\PYG{o}{.}\PYG{n}{rml}\PYG{o}{.}\PYG{n}{beamline}\PYG{o}{.}\PYG{n}{children}\PYG{p}{(}\PYG{p}{)}\PYG{p}{:}
+        \PYG{k}{if} \PYG{n+nb}{hasattr}\PYG{p}{(}\PYG{n}{oe}\PYG{p}{,}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{photonEnergy}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{source} \PYG{o}{=} \PYG{n}{oe}
+            \PYG{n}{found\PYGZus{}source} \PYG{o}{=} \PYG{k+kc}{True}
+            \PYG{k}{break}
+    \PYG{k}{if} \PYG{n}{found\PYGZus{}source}\PYG{o}{!=}\PYG{k+kc}{True}\PYG{p}{:}
+        \PYG{k}{raise} \PYG{n+ne}{AttributeError}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{I did not find the source}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{params}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{p}{\PYGZob{}}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{source}\PYG{o}{.}\PYG{n}{photonEnergy}\PYG{p}{:}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{energy}\PYG{p}{\PYGZcb{}}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} set reflectivity to 100\PYGZpc{}}
+    \PYG{k}{for} \PYG{n}{oe} \PYG{o+ow}{in} \PYG{n}{sim}\PYG{o}{.}\PYG{n}{rml}\PYG{o}{.}\PYG{n}{beamline}\PYG{o}{.}\PYG{n}{children}\PYG{p}{(}\PYG{p}{)}\PYG{p}{:}
+            \PYG{k}{for} \PYG{n}{par} \PYG{o+ow}{in} \PYG{n}{oe}\PYG{p}{:}
+                \PYG{k}{try}\PYG{p}{:}
+                    \PYG{n}{params}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{p}{\PYGZob{}}\PYG{n}{par}\PYG{o}{.}\PYG{n}{reflectivityType}\PYG{p}{:}\PYG{l+m+mi}{0}\PYG{p}{\PYGZcb{}}\PYG{p}{)}
+                \PYG{k}{except}\PYG{p}{:}
+                    \PYG{k}{pass}
+
+    \PYG{c+c1}{\PYGZsh{} all done, return resulting params}
+    \PYG{k}{return} \PYG{n}{params}
+
+\PYG{k}{def} \PYG{n+nf}{exports}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,}\PYG{n}{sim}\PYG{p}{:}\PYG{n}{Simulate}\PYG{p}{)}\PYG{p}{:}
+    \PYG{c+c1}{\PYGZsh{} find all the elements in the beamline}
+    \PYG{n}{oe\PYGZus{}list}\PYG{o}{=}\PYG{p}{[}\PYG{p}{]}
+    \PYG{k}{for} \PYG{n}{oe} \PYG{o+ow}{in} \PYG{n}{sim}\PYG{o}{.}\PYG{n}{rml}\PYG{o}{.}\PYG{n}{beamline}\PYG{o}{.}\PYG{n}{children}\PYG{p}{(}\PYG{p}{)}\PYG{p}{:}
+        \PYG{n}{oe\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{oe}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{} compose the export list of dictionaries}
+    \PYG{n}{exports} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+    \PYG{k}{for} \PYG{n}{oe} \PYG{o+ow}{in} \PYG{n}{oe\PYGZus{}list}\PYG{p}{:}
+        \PYG{n}{exports}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{p}{\PYGZob{}}\PYG{n}{oe}\PYG{p}{:}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{RawRaysOutgoing}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{\PYGZcb{}}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{exports}
+
+\PYG{k}{def} \PYG{n+nf}{simulation\PYGZus{}name}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,}\PYG{n}{sim}\PYG{p}{:}\PYG{n}{Simulate}\PYG{p}{)}\PYG{p}{:}
+    \PYG{k}{if} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{sim\PYGZus{}folder} \PYG{o+ow}{is} \PYG{k+kc}{None}\PYG{p}{:}
+        \PYG{k}{return} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{ExportEachElement}\PYG{l+s+s1}{\PYGZsq{}}
+    \PYG{k}{else}\PYG{p}{:}
+        \PYG{k}{return} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{sim\PYGZus{}folder}
+\PYG{k}{if} \PYG{n+nv+vm}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{==} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZus{}\PYGZus{}main\PYGZus{}\PYGZus{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:}
+    \PYG{k+kn}{from} \PYG{n+nn}{raypyng} \PYG{k+kn}{import} \PYG{n}{Simulate}
+    \PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+    \PYG{k+kn}{import} \PYG{n+nn}{os}
+
+    \PYG{n}{rml\PYGZus{}file} \PYG{o}{=} \PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{rml\PYGZus{}file.rml}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{sim}      \PYG{o}{=} \PYG{n}{Simulate}\PYG{p}{(}\PYG{n}{rml\PYGZus{}file}\PYG{p}{,} \PYG{n}{hide}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+
+
+    \PYG{n}{sim}\PYG{o}{.}\PYG{n}{analyze} \PYG{o}{=} \PYG{k+kc}{False}
+
+    \PYG{n}{myRecipe} \PYG{o}{=} \PYG{n}{ExportEachElement}\PYG{p}{(}\PYG{n}{energy}\PYG{o}{=}\PYG{l+m+mi}{1000}\PYG{p}{,}\PYG{n}{nrays}\PYG{o}{=}\PYG{l+m+mi}{10000}\PYG{p}{,}\PYG{n}{sim\PYGZus{}folder}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{MyRecipeTest}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} test resolving power simulations}
+    \PYG{n}{sim}\PYG{o}{.}\PYG{n}{run}\PYG{p}{(}\PYG{n}{myRecipe}\PYG{p}{,} \PYG{n}{multiprocessing}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{force}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\end{sphinxVerbatim}
+\end{quote}
+
+\sphinxstepscope
+
+
 \chapter{Simulation}
 \label{\detokenize{code_documentation:simulation}}\label{\detokenize{code_documentation::doc}}
 
