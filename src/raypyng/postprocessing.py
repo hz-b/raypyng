@@ -78,7 +78,7 @@ class PostProcess():
             np.savetxt(filename+self.format_saved_files,array)
 
     def _load_file(self,filepath):
-        """Load a .npy file and returns the array
+        """Load a :code:`.npy` file and returns the array
 
         Args:
             filepath (str): the path to the file to load
@@ -107,15 +107,16 @@ class PostProcess():
     
     def postprocess_RawRays(self,exported_element:str=None, exported_object:str=None, dir_path:str=None, sim_number:str=None, rml_filename:str=None):
         """The method looks in the folder dir_path for a file with the filename:
-        filename = os.path.join(dir_path,sim_number+exported_element + '-' + exported_object+'.csv')
+        :code:`filename = os.path.join(dir_path,sim_number+exported_element + '-' + exported_object+'.csv')`
         for each file it calculates the number of rays, the bandwidth, and the horizontal and vertical focus size,
-        it saves it in an array that is composed by [n_rays,bandwidth,hor_focus,vert_focus], that is then saved to
-        os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays.npy')
+        it saves it in an array that is composed by :code:`[n_rays,bandwidth,hor_focus,vert_focus]`, that is then saved to
+        :code:`os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays.npy')`
+        
         Args:
             exported_element (list, optional): a list of containing the exported elements name as str. Defaults to None.
-            exported_object (str, optional): the exported opbject, tested only with RawRaysOutgoing. Defaults to None.
+            exported_object (str, optional): the exported object, tested only with RawRaysOutgoing. Defaults to None.
             dir_path (str, optional): the folder where the file to process is located. Defaults to None.
-            sim_number (str, optional): the prefix of the file, that is the simulation number with a _prepended, ie "0_". Defaults to None.
+            sim_number (str, optional): the prefix of the file, that is the simulation number with a _prepended, ie `0_`. Defaults to None.
         """        
         source_photon_flux, source_n_rays  = self.extract_nrays_from_source(rml_filename)
         
@@ -166,7 +167,7 @@ class PostProcess():
         return 
 
     def cleanup(self,dir_path:str=None, repeat:int=1, exp_elements:list=None):
-        """This functions reads all the temporary files created by self.postptocess_RawRays()
+        """This functions reads all the temporary files created by :code:`self.postptocess_RawRays()`
         saves one file for each exported element in dir_path, and deletes the temporary files.
         If more than one round of simulations was done, the values are averaged.
 
@@ -212,7 +213,6 @@ class PostProcessAnalyzed():
         by the dipole.
         It requires ScalarBeamProperties to be exported for the desired optical element,
         if the source is a dipole it requires ScalarElementProperties to be exported for the Dipole
-
 
         Args:
             folder_name (str): the path to the folder where the simulations are

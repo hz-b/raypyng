@@ -39,9 +39,10 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="install_raypyng.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="simulate.html">Simulation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="simulate.html#rayuirunner">RayUIRunner</a></li>
-<li class="toctree-l1"><a class="reference internal" href="simulate.html#postprocessing">PostProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_documentation.html">Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_documentation.html#process-simulation-files">Process simulation files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_documentation.html#ray-ui-api">RAY-UI API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_documentation.html#rml">RML</a></li>
 </ul>
 
         </div>
@@ -72,19 +73,41 @@
 
 <div class="genindex-jumpbox">
  <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#E"><strong>E</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#K"><strong>K</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
+ | <a href="#X"><strong>X</strong></a>
  
 </div>
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="simulate.html#raypyng.simulate.Simulate.analyze">analyze (raypyng.simulate.Simulate property)</a>
+      <li><a href="code_documentation.html#raypyng.xmltools.elements.XmlElement.add_cdata">add_cdata() (raypyng.xmltools.elements.XmlElement method)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.xmltools.elements.XmlElement.add_child">add_child() (raypyng.xmltools.elements.XmlElement method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code_documentation.html#raypyng.simulate.Simulate.analyze">analyze (raypyng.simulate.Simulate property)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.collections.MappedList.append">append() (raypyng.collections.MappedList method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code_documentation.html#raypyng.rml.BeamlineElement">BeamlineElement (class in raypyng.rml)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -92,7 +115,15 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="simulate.html#raypyng.postprocessing.PostProcess.cleanup">cleanup() (raypyng.postprocessing.PostProcess method)</a>
+      <li><a href="code_documentation.html#raypyng.xmltools.parser.Handler.characters">characters() (raypyng.xmltools.parser.Handler method)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.postprocessing.PostProcess.cleanup">cleanup() (raypyng.postprocessing.PostProcess method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code_documentation.html#raypyng.collections.MappedList.clear">clear() (raypyng.collections.MappedList method)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.collections.MappedList.count">count() (raypyng.collections.MappedList method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -100,11 +131,35 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="simulate.html#raypyng.simulate.Simulate.exports">exports (raypyng.simulate.Simulate property)</a>
+      <li><a href="code_documentation.html#raypyng.xmltools.parser.Handler.endElement">endElement() (raypyng.xmltools.parser.Handler method)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.simulate.Simulate.exports">exports (raypyng.simulate.Simulate property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="simulate.html#raypyng.postprocessing.PostProcess.extract_nrays_from_source">extract_nrays_from_source() (raypyng.postprocessing.PostProcess method)</a>
+      <li><a href="code_documentation.html#raypyng.collections.MappedList.extend">extend() (raypyng.collections.MappedList method)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.postprocessing.PostProcess.extract_nrays_from_source">extract_nrays_from_source() (raypyng.postprocessing.PostProcess method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code_documentation.html#raypyng.xmltools.elements.XmlElement.get_attribute">get_attribute() (raypyng.xmltools.elements.XmlElement method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code_documentation.html#raypyng.xmltools.elements.XmlElement.get_elements">get_elements() (raypyng.xmltools.elements.XmlElement method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code_documentation.html#raypyng.xmltools.parser.Handler">Handler (class in raypyng.xmltools.parser)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -112,7 +167,13 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="simulate.html#raypyng.runner.RayUIRunner.isrunning">isrunning (raypyng.runner.RayUIRunner property)</a>
+      <li><a href="code_documentation.html#raypyng.collections.MappedList.index">index() (raypyng.collections.MappedList method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code_documentation.html#raypyng.collections.MappedList.insert">insert() (raypyng.collections.MappedList method)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.runner.RayUIRunner.isrunning">isrunning (raypyng.runner.RayUIRunner property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -120,7 +181,48 @@
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="simulate.html#raypyng.runner.RayUIRunner.kill">kill() (raypyng.runner.RayUIRunner method)</a>
+      <li><a href="code_documentation.html#raypyng.runner.RayUIRunner.kill">kill() (raypyng.runner.RayUIRunner method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code_documentation.html#raypyng.collections.MappedDict">MappedDict (class in raypyng.collections)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.collections.MappedList">MappedList (class in raypyng.collections)</a>
+</li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="code_documentation.html#module-raypyng.collections">raypyng.collections</a>
+</li>
+        <li><a href="code_documentation.html#module-raypyng.xmltools.attributes">raypyng.xmltools.attributes</a>
+</li>
+        <li><a href="code_documentation.html#module-raypyng.xmltools.dictionaries">raypyng.xmltools.dictionaries</a>
+</li>
+        <li><a href="code_documentation.html#module-raypyng.xmltools.elements">raypyng.xmltools.elements</a>
+</li>
+        <li><a href="code_documentation.html#module-raypyng.xmltools.parser">raypyng.xmltools.parser</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code_documentation.html#raypyng.postprocessing.PostProcessAnalyzed.moving_average">moving_average() (raypyng.postprocessing.PostProcessAnalyzed method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code_documentation.html#raypyng.rml.ObjectElement">ObjectElement (class in raypyng.rml)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code_documentation.html#raypyng.collections.MappedDict.original">original() (raypyng.collections.MappedDict method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -128,25 +230,31 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="simulate.html#raypyng.simulate.Simulate.params">params (raypyng.simulate.Simulate property)</a>
+      <li><a href="code_documentation.html#raypyng.rml.ParamElement">ParamElement (class in raypyng.rml)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.simulate.Simulate.params">params (raypyng.simulate.Simulate property)</a>
 
       <ul>
-        <li><a href="simulate.html#raypyng.simulate.SimulationParams.params">(raypyng.simulate.SimulationParams property)</a>
+        <li><a href="code_documentation.html#raypyng.simulate.SimulationParams.params">(raypyng.simulate.SimulationParams property)</a>
 </li>
       </ul></li>
-      <li><a href="simulate.html#raypyng.simulate.Simulate.path">path (raypyng.simulate.Simulate property)</a>
+      <li><a href="code_documentation.html#raypyng.simulate.Simulate.path">path (raypyng.simulate.Simulate property)</a>
 </li>
-      <li><a href="simulate.html#raypyng.runner.RayUIRunner.pid">pid (raypyng.runner.RayUIRunner property)</a>
+      <li><a href="code_documentation.html#raypyng.runner.RayUIRunner.pid">pid (raypyng.runner.RayUIRunner property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="simulate.html#raypyng.simulate.Simulate.possible_exports">possible_exports (raypyng.simulate.Simulate property)</a>
+      <li><a href="code_documentation.html#raypyng.collections.MappedList.pop">pop() (raypyng.collections.MappedList method)</a>
 </li>
-      <li><a href="simulate.html#raypyng.simulate.Simulate.possible_exports_without_analysis">possible_exports_without_analysis (raypyng.simulate.Simulate property)</a>
+      <li><a href="code_documentation.html#raypyng.simulate.Simulate.possible_exports">possible_exports (raypyng.simulate.Simulate property)</a>
 </li>
-      <li><a href="simulate.html#raypyng.postprocessing.PostProcess">PostProcess (class in raypyng.postprocessing)</a>
+      <li><a href="code_documentation.html#raypyng.simulate.Simulate.possible_exports_without_analysis">possible_exports_without_analysis (raypyng.simulate.Simulate property)</a>
 </li>
-      <li><a href="simulate.html#raypyng.postprocessing.PostProcess.postprocess_RawRays">postprocess_RawRays() (raypyng.postprocessing.PostProcess method)</a>
+      <li><a href="code_documentation.html#raypyng.postprocessing.PostProcess">PostProcess (class in raypyng.postprocessing)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.postprocessing.PostProcess.postprocess_RawRays">postprocess_RawRays() (raypyng.postprocessing.PostProcess method)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.postprocessing.PostProcessAnalyzed">PostProcessAnalyzed (class in raypyng.postprocessing)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -154,26 +262,73 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="simulate.html#raypyng.simulate.Simulate.raypyng_analysis">raypyng_analysis (raypyng.simulate.Simulate property)</a>
-</li>
-      <li><a href="simulate.html#raypyng.runner.RayUIRunner">RayUIRunner (class in raypyng.runner)</a>
-</li>
-      <li><a href="simulate.html#raypyng.simulate.Simulate.repeat">repeat (raypyng.simulate.Simulate property)</a>
-</li>
-      <li><a href="simulate.html#raypyng.simulate.Simulate.rml">rml (raypyng.simulate.Simulate property)</a>
+      <li>
+    raypyng.collections
 
       <ul>
-        <li><a href="simulate.html#raypyng.simulate.SimulationParams.rml">(raypyng.simulate.SimulationParams property)</a>
+        <li><a href="code_documentation.html#module-raypyng.collections">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="simulate.html#raypyng.simulate.Simulate.rml_list">rml_list() (raypyng.simulate.Simulate method)</a>
-</li>
-      <li><a href="simulate.html#raypyng.runner.RayUIRunner.run">run() (raypyng.runner.RayUIRunner method)</a>
+      <li>
+    raypyng.xmltools.attributes
 
       <ul>
-        <li><a href="simulate.html#raypyng.simulate.Simulate.run">(raypyng.simulate.Simulate method)</a>
+        <li><a href="code_documentation.html#module-raypyng.xmltools.attributes">module</a>
+</li>
+      </ul></li>
+      <li>
+    raypyng.xmltools.dictionaries
+
+      <ul>
+        <li><a href="code_documentation.html#module-raypyng.xmltools.dictionaries">module</a>
+</li>
+      </ul></li>
+      <li>
+    raypyng.xmltools.elements
+
+      <ul>
+        <li><a href="code_documentation.html#module-raypyng.xmltools.elements">module</a>
+</li>
+      </ul></li>
+      <li>
+    raypyng.xmltools.parser
+
+      <ul>
+        <li><a href="code_documentation.html#module-raypyng.xmltools.parser">module</a>
+</li>
+      </ul></li>
+      <li><a href="code_documentation.html#raypyng.simulate.Simulate.raypyng_analysis">raypyng_analysis (raypyng.simulate.Simulate property)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.runner.RayUIRunner">RayUIRunner (class in raypyng.runner)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code_documentation.html#raypyng.rml.RMLFile.read">read() (raypyng.rml.RMLFile method)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.collections.MappedList.remove">remove() (raypyng.collections.MappedList method)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.simulate.Simulate.repeat">repeat (raypyng.simulate.Simulate property)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.postprocessing.PostProcessAnalyzed.retrieve_bw_and_focusSize">retrieve_bw_and_focusSize() (raypyng.postprocessing.PostProcessAnalyzed method)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.postprocessing.PostProcessAnalyzed.retrieve_flux_beamline">retrieve_flux_beamline() (raypyng.postprocessing.PostProcessAnalyzed method)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.collections.MappedList.reverse">reverse() (raypyng.collections.MappedList method)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.simulate.Simulate.rml">rml (raypyng.simulate.Simulate property)</a>
+
+      <ul>
+        <li><a href="code_documentation.html#raypyng.simulate.SimulationParams.rml">(raypyng.simulate.SimulationParams property)</a>
+</li>
+      </ul></li>
+      <li><a href="code_documentation.html#raypyng.simulate.Simulate.rml_list">rml_list() (raypyng.simulate.Simulate method)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.rml.RMLFile">RMLFile (class in raypyng.rml)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.runner.RayUIRunner.run">run() (raypyng.runner.RayUIRunner method)</a>
+
+      <ul>
+        <li><a href="code_documentation.html#raypyng.simulate.Simulate.run">(raypyng.simulate.Simulate method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -182,15 +337,35 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="simulate.html#raypyng.simulate.Simulate.save_parameters_to_file">save_parameters_to_file() (raypyng.simulate.Simulate method)</a>
+      <li><a href="code_documentation.html#raypyng.xmltools.dictionaries.SafeValueDict">SafeValueDict (class in raypyng.xmltools.dictionaries)</a>
 </li>
-      <li><a href="simulate.html#raypyng.simulate.Simulate">Simulate (class in raypyng.simulate)</a>
+      <li><a href="code_documentation.html#raypyng.xmltools.dictionaries.SafeValueList">SafeValueList (class in raypyng.xmltools.dictionaries)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.xmltools.dictionaries.sanitizeName">sanitizeName() (in module raypyng.xmltools.dictionaries)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.simulate.Simulate.save_parameters_to_file">save_parameters_to_file() (raypyng.simulate.Simulate method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="simulate.html#raypyng.simulate.Simulate.simulation_name">simulation_name (raypyng.simulate.Simulate property)</a>
+      <li><a href="code_documentation.html#raypyng.simulate.Simulate">Simulate (class in raypyng.simulate)</a>
 </li>
-      <li><a href="simulate.html#raypyng.simulate.SimulationParams">SimulationParams (class in raypyng.simulate)</a>
+      <li><a href="code_documentation.html#raypyng.simulate.Simulate.simulation_name">simulation_name (raypyng.simulate.Simulate property)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.simulate.SimulationParams">SimulationParams (class in raypyng.simulate)</a>
+</li>
+      <li><a href="code_documentation.html#raypyng.xmltools.parser.Handler.startElement">startElement() (raypyng.xmltools.parser.Handler method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="X">X</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code_documentation.html#raypyng.xmltools.elements.XmlAttributedNameElement">XmlAttributedNameElement (class in raypyng.xmltools.elements)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code_documentation.html#raypyng.xmltools.elements.XmlElement">XmlElement (class in raypyng.xmltools.elements)</a>
 </li>
   </ul></td>
 </tr></table>

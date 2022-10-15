@@ -83,7 +83,11 @@
 
 
 \sphinxAtStartPar
-raypyng provides a simple API to work with RAY\sphinxhyphen{}UI, a software for optical simulation of synchrotron beamlines and x\sphinxhyphen{}ray systems developed by Helmholtz\sphinxhyphen{}Zentrum Berlin.
+raypyng provides a simple API to work with RAY\sphinxhyphen{}UI,
+a software for optical simulation of synchrotron
+beamlines and x\sphinxhyphen{}ray systems developed by
+Helmholtz\sphinxhyphen{}Zentrum Berlin.
+More information at \sphinxhref{https://www.helmholtz-berlin.de/forschung/oe/wi/optik-strahlrohre/arbeitsgebiete/ray\_en.html}{this link}.
 
 \sphinxstepscope
 
@@ -105,13 +109,13 @@ and run the installer.
 \label{\detokenize{install_raypyng:install-xvfb}}
 \sphinxAtStartPar
 xvfb is a virtual X11 framebuffer server that let you run RAY\sphinxhyphen{}UI headless
-\begin{description}
-\sphinxlineitem{Install xvfb:}
+
+\sphinxAtStartPar
+Install xvfb:
+
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 sudo apt install xvfb
 \end{sphinxVerbatim}
-
-\end{description}
 
 \begin{sphinxadmonition}{note}{Note:}
 \sphinxAtStartPar
@@ -124,8 +128,8 @@ runs an app on a new virtual X11 server.
 \label{\detokenize{install_raypyng:install-raypyng}}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-You will need Python 3.8 or newer. From a shell (“Terminal” on OSX,
-“Command Prompt” on Windows), check your current Python version.
+You will need Python 3.8 or newer. From a shell (“Terminal” on OSX),
+check your current Python version.
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 python3 \PYGZhy{}\PYGZhy{}version
@@ -528,10 +532,13 @@ experimental and it may fail.
 
 
 \chapter{Simulation}
-\label{\detokenize{simulate:simulation}}\label{\detokenize{simulate::doc}}\index{Simulate (class in raypyng.simulate)@\spxentry{Simulate}\spxextra{class in raypyng.simulate}}
+\label{\detokenize{code_documentation:simulation}}\label{\detokenize{code_documentation::doc}}
+
+\section{Simulate}
+\label{\detokenize{code_documentation:simulate}}\index{Simulate (class in raypyng.simulate)@\spxentry{Simulate}\spxextra{class in raypyng.simulate}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.simulate.Simulate}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.simulate.}}\sphinxbfcode{\sphinxupquote{Simulate}}}{\emph{\DUrole{n}{rml}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{hide}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
 \pysigstopsignatures
@@ -540,7 +547,7 @@ A class that takes care of performing the simulations with RAY\sphinxhyphen{}UI
 \index{analyze (raypyng.simulate.Simulate property)@\spxentry{analyze}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.analyze}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.simulate.Simulate.analyze}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{analyze}}}
 \pysigstopsignatures
@@ -563,7 +570,7 @@ bool
 \index{exports (raypyng.simulate.Simulate property)@\spxentry{exports}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.exports}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.simulate.Simulate.exports}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{exports}}}
 \pysigstopsignatures
@@ -581,7 +588,7 @@ to be exported and the valuee are the files to be exported
 \index{params (raypyng.simulate.Simulate property)@\spxentry{params}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.params}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.simulate.Simulate.params}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{params}}}
 \pysigstopsignatures
@@ -595,7 +602,7 @@ values to be assigned.
 \index{path (raypyng.simulate.Simulate property)@\spxentry{path}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.path}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.simulate.Simulate.path}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{path}}}
 \pysigstopsignatures
@@ -618,7 +625,7 @@ string
 \index{possible\_exports (raypyng.simulate.Simulate property)@\spxentry{possible\_exports}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.possible_exports}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.simulate.Simulate.possible_exports}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{possible\_exports}}}
 \pysigstopsignatures
@@ -640,7 +647,7 @@ list
 \index{possible\_exports\_without\_analysis (raypyng.simulate.Simulate property)@\spxentry{possible\_exports\_without\_analysis}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.possible_exports_without_analysis}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.simulate.Simulate.possible_exports_without_analysis}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{possible\_exports\_without\_analysis}}}
 \pysigstopsignatures
@@ -663,7 +670,7 @@ list
 \index{raypyng\_analysis (raypyng.simulate.Simulate property)@\spxentry{raypyng\_analysis}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.raypyng_analysis}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.simulate.Simulate.raypyng_analysis}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{raypyng\_analysis}}}
 \pysigstopsignatures
@@ -685,7 +692,7 @@ bool
 \index{repeat (raypyng.simulate.Simulate property)@\spxentry{repeat}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.repeat}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.simulate.Simulate.repeat}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{repeat}}}
 \pysigstopsignatures
@@ -709,7 +716,7 @@ int
 \index{rml (raypyng.simulate.Simulate property)@\spxentry{rml}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.rml}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.simulate.Simulate.rml}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{rml}}}
 \pysigstopsignatures
@@ -721,7 +728,7 @@ RMLFile object instantiated in init
 \index{rml\_list() (raypyng.simulate.Simulate method)@\spxentry{rml\_list()}\spxextra{raypyng.simulate.Simulate method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.rml_list}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.simulate.Simulate.rml_list}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{rml\_list}}}{}{}
 \pysigstopsignatures
@@ -735,7 +742,7 @@ for a manual check before starting the simulations.
 \index{run() (raypyng.simulate.Simulate method)@\spxentry{run()}\spxextra{raypyng.simulate.Simulate method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.run}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.simulate.Simulate.run}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{run}}}{\emph{\DUrole{n}{recipe}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{o}{/}}, \emph{\DUrole{n}{multiprocessing}\DUrole{o}{=}\DUrole{default_value}{True}}, \emph{\DUrole{n}{force}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
 \pysigstopsignatures
@@ -764,7 +771,7 @@ This method starts the simulations. params and exports need to be defined.
 \index{save\_parameters\_to\_file() (raypyng.simulate.Simulate method)@\spxentry{save\_parameters\_to\_file()}\spxextra{raypyng.simulate.Simulate method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.save_parameters_to_file}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.simulate.Simulate.save_parameters_to_file}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{save\_parameters\_to\_file}}}{\emph{\DUrole{n}{dir}}}{}
 \pysigstopsignatures
@@ -783,7 +790,7 @@ from the SimulationParams class
 \index{simulation\_name (raypyng.simulate.Simulate property)@\spxentry{simulation\_name}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.simulation_name}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.simulate.Simulate.simulation_name}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{simulation\_name}}}
 \pysigstopsignatures
@@ -795,10 +802,13 @@ A string to append to the folder where the simulations will be executed.
 
 \end{fulllineitems}
 
-\index{SimulationParams (class in raypyng.simulate)@\spxentry{SimulationParams}\spxextra{class in raypyng.simulate}}
+
+
+\section{SimulationParams}
+\label{\detokenize{code_documentation:simulationparams}}\index{SimulationParams (class in raypyng.simulate)@\spxentry{SimulationParams}\spxextra{class in raypyng.simulate}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.simulate.SimulationParams}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.simulate.SimulationParams}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.simulate.}}\sphinxbfcode{\sphinxupquote{SimulationParams}}}{\emph{\DUrole{n}{rml}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{param\_list}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
 \pysigstopsignatures
@@ -808,7 +818,7 @@ and returns the the list of simulations that is requested by the user.
 \index{params (raypyng.simulate.SimulationParams property)@\spxentry{params}\spxextra{raypyng.simulate.SimulationParams property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.simulate.SimulationParams.params}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.simulate.SimulationParams.params}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{params}}}
 \pysigstopsignatures
@@ -822,7 +832,7 @@ values to be assigned.
 \index{rml (raypyng.simulate.SimulationParams property)@\spxentry{rml}\spxextra{raypyng.simulate.SimulationParams property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.simulate.SimulationParams.rml}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.simulate.SimulationParams.rml}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{rml}}}
 \pysigstopsignatures
@@ -836,100 +846,14 @@ RMLFile object instantiated in init
 
 
 
-\chapter{RayUIRunner}
-\label{\detokenize{simulate:rayuirunner}}\index{RayUIRunner (class in raypyng.runner)@\spxentry{RayUIRunner}\spxextra{class in raypyng.runner}}
+\chapter{Process simulation files}
+\label{\detokenize{code_documentation:process-simulation-files}}
+
+\section{PostProcess rays analyzed by raypyng}
+\label{\detokenize{code_documentation:postprocess-rays-analyzed-by-raypyng}}\index{PostProcess (class in raypyng.postprocessing)@\spxentry{PostProcess}\spxextra{class in raypyng.postprocessing}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.runner.RayUIRunner}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.runner.}}\sphinxbfcode{\sphinxupquote{RayUIRunner}}}{\emph{\DUrole{n}{ray\_path}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{ray\_binary}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}rayui.sh\textquotesingle{}}}, \emph{\DUrole{n}{background}\DUrole{o}{=}\DUrole{default_value}{True}}, \emph{\DUrole{n}{hide}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-RayUIRunner class implements all logic to start a RayUI process
-\index{isrunning (raypyng.runner.RayUIRunner property)@\spxentry{isrunning}\spxextra{raypyng.runner.RayUIRunner property}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.runner.RayUIRunner.isrunning}}
-\pysigstartsignatures
-\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{isrunning}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Check weather a process is running and rerutn a boolean
-\begin{quote}\begin{description}
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-returns True if the process is running, otherwise False
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-bool
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{kill() (raypyng.runner.RayUIRunner method)@\spxentry{kill()}\spxextra{raypyng.runner.RayUIRunner method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.runner.RayUIRunner.kill}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{kill}}}{}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-kill a RAY\sphinxhyphen{}UI process
-
-\end{fulllineitems}
-
-\index{pid (raypyng.runner.RayUIRunner property)@\spxentry{pid}\spxextra{raypyng.runner.RayUIRunner property}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.runner.RayUIRunner.pid}}
-\pysigstartsignatures
-\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{pid}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Get process id of the RayUI process
-\begin{quote}\begin{description}
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-PID of the process if it running, None otherwise
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\_type\_
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{run() (raypyng.runner.RayUIRunner method)@\spxentry{run()}\spxextra{raypyng.runner.RayUIRunner method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.runner.RayUIRunner.run}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{run}}}{}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-Open one instance of RAY\sphinxhyphen{}UI using subprocess
-\begin{quote}\begin{description}
-\sphinxlineitem{Raises}
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{RayPyRunnerError}} \textendash{} if the RAY\sphinxhyphen{}UI executable is not found raise an error
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-
-\end{fulllineitems}
-
-
-
-\chapter{PostProcessing}
-\label{\detokenize{simulate:postprocessing}}\index{PostProcess (class in raypyng.postprocessing)@\spxentry{PostProcess}\spxextra{class in raypyng.postprocessing}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.postprocessing.PostProcess}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.postprocessing.PostProcess}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.postprocessing.}}\sphinxbfcode{\sphinxupquote{PostProcess}}}
 \pysigstopsignatures
@@ -939,12 +863,12 @@ At the moment works only if the exported data are RawRaysOutgoing
 \index{cleanup() (raypyng.postprocessing.PostProcess method)@\spxentry{cleanup()}\spxextra{raypyng.postprocessing.PostProcess method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.postprocessing.PostProcess.cleanup}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.postprocessing.PostProcess.cleanup}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{cleanup}}}{\emph{\DUrole{n}{dir\_path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{repeat}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{int}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{1}}, \emph{\DUrole{n}{exp\_elements}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}list\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-This functions reads all the temporary files created by self.postptocess\_RawRays()
+This functions reads all the temporary files created by \sphinxcode{\sphinxupquote{self.postptocess\_RawRays()}}
 saves one file for each exported element in dir\_path, and deletes the temporary files.
 If more than one round of simulations was done, the values are averaged.
 \begin{quote}\begin{description}
@@ -970,7 +894,7 @@ If more than one round of simulations was done, the values are averaged.
 \index{extract\_nrays\_from\_source() (raypyng.postprocessing.PostProcess method)@\spxentry{extract\_nrays\_from\_source()}\spxextra{raypyng.postprocessing.PostProcess method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.postprocessing.PostProcess.extract_nrays_from_source}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.postprocessing.PostProcess.extract_nrays_from_source}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{extract\_nrays\_from\_source}}}{\emph{\DUrole{n}{rml\_filename}}}{}
 \pysigstopsignatures
@@ -996,24 +920,37 @@ str
 \index{postprocess\_RawRays() (raypyng.postprocessing.PostProcess method)@\spxentry{postprocess\_RawRays()}\spxextra{raypyng.postprocessing.PostProcess method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{simulate:raypyng.postprocessing.PostProcess.postprocess_RawRays}}
+\phantomsection\label{\detokenize{code_documentation:raypyng.postprocessing.PostProcess.postprocess_RawRays}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{postprocess\_RawRays}}}{\emph{\DUrole{n}{exported\_element}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{exported\_object}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{dir\_path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{sim\_number}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{rml\_filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 The method looks in the folder dir\_path for a file with the filename:
-filename = os.path.join(dir\_path,sim\_number+exported\_element + ‘\sphinxhyphen{}’ + exported\_object+’.csv’)
+\sphinxcode{\sphinxupquote{filename = os.path.join(dir\_path,sim\_number+exported\_element + \textquotesingle{}\sphinxhyphen{}\textquotesingle{} + exported\_object+\textquotesingle{}.csv\textquotesingle{})}}
 for each file it calculates the number of rays, the bandwidth, and the horizontal and vertical focus size,
-it saves it in an array that is composed by {[}n\_rays,bandwidth,hor\_focus,vert\_focus{]}, that is then saved to
-os.path.join(dir\_path, sim\_number+exported\_element+’\_analyzed\_rays.npy’)
-:param exported\_element: a list of containing the exported elements name as str. Defaults to None.
-:type exported\_element: list, optional
-:param exported\_object: the exported opbject, tested only with RawRaysOutgoing. Defaults to None.
-:type exported\_object: str, optional
-:param dir\_path: the folder where the file to process is located. Defaults to None.
-:type dir\_path: str, optional
-:param sim\_number: the prefix of the file, that is the simulation number with a \_prepended, ie “{\color{red}\bfseries{}0\_}”. Defaults to None.
-:type sim\_number: str, optional
+it saves it in an array that is composed by \sphinxcode{\sphinxupquote{{[}n\_rays,bandwidth,hor\_focus,vert\_focus{]}}}, that is then saved to
+\sphinxcode{\sphinxupquote{os.path.join(dir\_path, sim\_number+exported\_element+\textquotesingle{}\_analyzed\_rays.npy\textquotesingle{})}}
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{exported\_element}} (\sphinxstyleliteralemphasis{\sphinxupquote{list}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} a list of containing the exported elements name as str. Defaults to None.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{exported\_object}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} the exported object, tested only with RawRaysOutgoing. Defaults to None.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{dir\_path}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} the folder where the file to process is located. Defaults to None.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{sim\_number}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} the prefix of the file, that is the simulation number with a \_prepended, ie \sphinxtitleref{0\_}. Defaults to None.
+
+\end{itemize}
+
+\end{description}\end{quote}
 
 \end{fulllineitems}
 
@@ -1022,6 +959,711 @@ os.path.join(dir\_path, sim\_number+exported\_element+’\_analyzed\_rays.npy’
 
 
 
+\section{PostProcess rays analyzed by RAY\sphinxhyphen{}UI}
+\label{\detokenize{code_documentation:postprocess-rays-analyzed-by-ray-ui}}\index{PostProcessAnalyzed (class in raypyng.postprocessing)@\spxentry{PostProcessAnalyzed}\spxextra{class in raypyng.postprocessing}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.postprocessing.PostProcessAnalyzed}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.postprocessing.}}\sphinxbfcode{\sphinxupquote{PostProcessAnalyzed}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+class to analyze the data exported by RAY\sphinxhyphen{}UI
+\index{moving\_average() (raypyng.postprocessing.PostProcessAnalyzed method)@\spxentry{moving\_average()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.postprocessing.PostProcessAnalyzed.moving_average}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{moving\_average}}}{\emph{\DUrole{n}{x}}, \emph{\DUrole{n}{w}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Computes the morivng average with window w on the array x
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{x}} (\sphinxstyleliteralemphasis{\sphinxupquote{array}}) \textendash{} the array to average
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{w}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} the window for the moving average
+
+\end{itemize}
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+the x array once the moving average was applied
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+np.array
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{retrieve\_bw\_and\_focusSize() (raypyng.postprocessing.PostProcessAnalyzed method)@\spxentry{retrieve\_bw\_and\_focusSize()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.postprocessing.PostProcessAnalyzed.retrieve_bw_and_focusSize}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{retrieve\_bw\_and\_focusSize}}}{\emph{\DUrole{n}{folder\_name}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{oe}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{nsimulations}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{int}}, \emph{\DUrole{n}{rounds}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{int}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Extract the bandwidth and focus size if RAY\sphinxhyphen{}UI was run in analyze mode.
+It requires ScalarBeamProperties to be exported for the desired optical element
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{folder\_name}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} the path to the folder where the simulations are
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{oe}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} the optical element name
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{nsimulations}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} the number of simulations
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{rounds}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} the number of rounds of simulations
+
+\end{itemize}
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+the bandwidth
+foc\_x np.array: the horizontal focus
+foc\_y np.array: the vertical focus
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+bw np.array
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{retrieve\_flux\_beamline() (raypyng.postprocessing.PostProcessAnalyzed method)@\spxentry{retrieve\_flux\_beamline()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.postprocessing.PostProcessAnalyzed.retrieve_flux_beamline}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{retrieve\_flux\_beamline}}}{\emph{\DUrole{n}{folder\_name}}, \emph{\DUrole{n}{source}}, \emph{\DUrole{n}{oe}}, \emph{\DUrole{n}{nsimulations}}, \emph{\DUrole{n}{rounds}\DUrole{o}{=}\DUrole{default_value}{1}}, \emph{\DUrole{n}{current}\DUrole{o}{=}\DUrole{default_value}{0.3}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+This function takes as arguments the name of the
+simulation folder, the exported objet in RAY\sphinxhyphen{}UI and there
+number of simulations and returns the flux at the optical element in
+percentage and in number of photons, and the flux produced
+by the dipole.
+It requires ScalarBeamProperties to be exported for the desired optical element,
+if the source is a dipole it requires ScalarElementProperties to be exported for the Dipole
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{folder\_name}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} the path to the folder where the simulations are
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{source}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} the source name
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{oe}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} the optical element name
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{nsimulations}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} the number of simulations
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{rounds}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} the number of rounds of simulations
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{current}} (\sphinxstyleliteralemphasis{\sphinxupquote{float}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} the ring current in Ampere. Defaults to 0.3.
+
+\end{itemize}
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+\begin{description}
+\sphinxlineitem{photon\_flux (np.array)}{[}the photon flux at the optical element{]}
+\sphinxAtStartPar
+flux\_percent (np.array) : the photon flux in percentage relative to the source
+source\_Photon\_flux (np.array) : the photon flux of the source
+
+\sphinxlineitem{else:}
+\sphinxAtStartPar
+flux\_percent (np.array) : the photon flux in percentage relative to the source
+
+\end{description}
+
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+if the source is a Dipole
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+
+
+\chapter{RAY\sphinxhyphen{}UI API}
+\label{\detokenize{code_documentation:ray-ui-api}}
+
+\section{RayUIRunner}
+\label{\detokenize{code_documentation:rayuirunner}}\index{RayUIRunner (class in raypyng.runner)@\spxentry{RayUIRunner}\spxextra{class in raypyng.runner}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.runner.RayUIRunner}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.runner.}}\sphinxbfcode{\sphinxupquote{RayUIRunner}}}{\emph{\DUrole{n}{ray\_path}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{ray\_binary}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}rayui.sh\textquotesingle{}}}, \emph{\DUrole{n}{background}\DUrole{o}{=}\DUrole{default_value}{True}}, \emph{\DUrole{n}{hide}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+RayUIRunner class implements all logic to start a RayUI process
+\index{isrunning (raypyng.runner.RayUIRunner property)@\spxentry{isrunning}\spxextra{raypyng.runner.RayUIRunner property}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.runner.RayUIRunner.isrunning}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{isrunning}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+Check weather a process is running and rerutn a boolean
+\begin{quote}\begin{description}
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+returns True if the process is running, otherwise False
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+bool
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{kill() (raypyng.runner.RayUIRunner method)@\spxentry{kill()}\spxextra{raypyng.runner.RayUIRunner method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.runner.RayUIRunner.kill}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{kill}}}{}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+kill a RAY\sphinxhyphen{}UI process
+
+\end{fulllineitems}
+
+\index{pid (raypyng.runner.RayUIRunner property)@\spxentry{pid}\spxextra{raypyng.runner.RayUIRunner property}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.runner.RayUIRunner.pid}}
+\pysigstartsignatures
+\pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{pid}}}
+\pysigstopsignatures
+\sphinxAtStartPar
+Get process id of the RayUI process
+\begin{quote}\begin{description}
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+PID of the process if it running, None otherwise
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+\_type\_
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{run() (raypyng.runner.RayUIRunner method)@\spxentry{run()}\spxextra{raypyng.runner.RayUIRunner method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.runner.RayUIRunner.run}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{run}}}{}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Open one instance of RAY\sphinxhyphen{}UI using subprocess
+\begin{quote}\begin{description}
+\sphinxlineitem{Raises}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{RayPyRunnerError}} \textendash{} if the RAY\sphinxhyphen{}UI executable is not found raise an error
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+
+
+\chapter{RML}
+\label{\detokenize{code_documentation:rml}}
+
+\section{RMLFile}
+\label{\detokenize{code_documentation:rmlfile}}\index{RMLFile (class in raypyng.rml)@\spxentry{RMLFile}\spxextra{class in raypyng.rml}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.rml.RMLFile}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.rml.}}\sphinxbfcode{\sphinxupquote{RMLFile}}}{\emph{\DUrole{n}{filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{o}{/}}, \emph{\DUrole{n}{template}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Read/Write wrapper for the Ray RML files
+\index{read() (raypyng.rml.RMLFile method)@\spxentry{read()}\spxextra{raypyng.rml.RMLFile method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.rml.RMLFile.read}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{read}}}{\emph{\DUrole{n}{file}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+read rml file
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{file}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} file name to read. If set to None will use template file name defined during initilizatino of the class. Defaults to None.
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+
+
+\section{BeamlineElement}
+\label{\detokenize{code_documentation:beamlineelement}}\index{BeamlineElement (class in raypyng.rml)@\spxentry{BeamlineElement}\spxextra{class in raypyng.rml}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.rml.BeamlineElement}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.rml.}}\sphinxbfcode{\sphinxupquote{BeamlineElement}}}{\emph{\DUrole{n}{name}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{attributes}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{dict}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
+\pysigstopsignatures
+\end{fulllineitems}
+
+
+
+\section{ObjectElement}
+\label{\detokenize{code_documentation:objectelement}}\index{ObjectElement (class in raypyng.rml)@\spxentry{ObjectElement}\spxextra{class in raypyng.rml}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.rml.ObjectElement}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.rml.}}\sphinxbfcode{\sphinxupquote{ObjectElement}}}{\emph{\DUrole{n}{name}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{attributes}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{dict}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
+\pysigstopsignatures
+\end{fulllineitems}
+
+
+
+\section{ParamElement}
+\label{\detokenize{code_documentation:paramelement}}\index{ParamElement (class in raypyng.rml)@\spxentry{ParamElement}\spxextra{class in raypyng.rml}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.rml.ParamElement}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.rml.}}\sphinxbfcode{\sphinxupquote{ParamElement}}}{\emph{\DUrole{n}{name}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{attributes}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{dict}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
+\pysigstopsignatures
+\end{fulllineitems}
+
+
+
+\section{Attributes}
+\label{\detokenize{code_documentation:module-raypyng.xmltools.attributes}}\label{\detokenize{code_documentation:attributes}}\index{module@\spxentry{module}!raypyng.xmltools.attributes@\spxentry{raypyng.xmltools.attributes}}\index{raypyng.xmltools.attributes@\spxentry{raypyng.xmltools.attributes}!module@\spxentry{module}}
+
+\section{Dictionaries}
+\label{\detokenize{code_documentation:module-raypyng.xmltools.dictionaries}}\label{\detokenize{code_documentation:dictionaries}}\index{module@\spxentry{module}!raypyng.xmltools.dictionaries@\spxentry{raypyng.xmltools.dictionaries}}\index{raypyng.xmltools.dictionaries@\spxentry{raypyng.xmltools.dictionaries}!module@\spxentry{module}}\index{SafeValueDict (class in raypyng.xmltools.dictionaries)@\spxentry{SafeValueDict}\spxextra{class in raypyng.xmltools.dictionaries}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.xmltools.dictionaries.SafeValueDict}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.xmltools.dictionaries.}}\sphinxbfcode{\sphinxupquote{SafeValueDict}}}{\emph{\DUrole{n}{dict}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
+\pysigstopsignatures
+\end{fulllineitems}
+
+\index{SafeValueList (class in raypyng.xmltools.dictionaries)@\spxentry{SafeValueList}\spxextra{class in raypyng.xmltools.dictionaries}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.xmltools.dictionaries.SafeValueList}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.xmltools.dictionaries.}}\sphinxbfcode{\sphinxupquote{SafeValueList}}}{\emph{\DUrole{n}{initlist}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
+\pysigstopsignatures
+\end{fulllineitems}
+
+\index{sanitizeName() (in module raypyng.xmltools.dictionaries)@\spxentry{sanitizeName()}\spxextra{in module raypyng.xmltools.dictionaries}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.xmltools.dictionaries.sanitizeName}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{raypyng.xmltools.dictionaries.}}\sphinxbfcode{\sphinxupquote{sanitizeName}}}{\emph{\DUrole{n}{name}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}}{{ $\rightarrow$ str}}
+\pysigstopsignatures
+\sphinxAtStartPar
+convert name into python attribute safe name
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{name}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} \_description\_
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+\_description\_
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+str
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+
+\section{Elements}
+\label{\detokenize{code_documentation:module-raypyng.xmltools.elements}}\label{\detokenize{code_documentation:elements}}\index{module@\spxentry{module}!raypyng.xmltools.elements@\spxentry{raypyng.xmltools.elements}}\index{raypyng.xmltools.elements@\spxentry{raypyng.xmltools.elements}!module@\spxentry{module}}\index{XmlAttributedNameElement (class in raypyng.xmltools.elements)@\spxentry{XmlAttributedNameElement}\spxextra{class in raypyng.xmltools.elements}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.xmltools.elements.XmlAttributedNameElement}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.xmltools.elements.}}\sphinxbfcode{\sphinxupquote{XmlAttributedNameElement}}}{\emph{\DUrole{n}{name\_attribute}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{name}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{attributes}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{dict}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
+\pysigstopsignatures
+\end{fulllineitems}
+
+\index{XmlElement (class in raypyng.xmltools.elements)@\spxentry{XmlElement}\spxextra{class in raypyng.xmltools.elements}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.xmltools.elements.XmlElement}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.xmltools.elements.}}\sphinxbfcode{\sphinxupquote{XmlElement}}}{\emph{\DUrole{n}{name}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{attributes}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{MutableMapping}}, \emph{\DUrole{n}{parent}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Representation of an XML element in its raw form
+\begin{quote}\begin{description}
+\sphinxlineitem{Raises}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{AttributeError}} \textendash{} \_description\_
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+\_description\_
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+\_type\_
+
+\sphinxlineitem{Yields}
+\sphinxAtStartPar
+\sphinxstyleemphasis{\_type\_} \textendash{} \_description\_
+
+\end{description}\end{quote}
+\index{add\_cdata() (raypyng.xmltools.elements.XmlElement method)@\spxentry{add\_cdata()}\spxextra{raypyng.xmltools.elements.XmlElement method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.xmltools.elements.XmlElement.add_cdata}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{add\_cdata}}}{\emph{\DUrole{n}{cdata}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Store cdata
+
+\end{fulllineitems}
+
+\index{add\_child() (raypyng.xmltools.elements.XmlElement method)@\spxentry{add\_child()}\spxextra{raypyng.xmltools.elements.XmlElement method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.xmltools.elements.XmlElement.add_child}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{add\_child}}}{\emph{\DUrole{n}{element}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Store child elements.
+
+\end{fulllineitems}
+
+\index{get\_attribute() (raypyng.xmltools.elements.XmlElement method)@\spxentry{get\_attribute()}\spxextra{raypyng.xmltools.elements.XmlElement method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.xmltools.elements.XmlElement.get_attribute}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{get\_attribute}}}{\emph{\DUrole{n}{key}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Get attributes by key
+
+\end{fulllineitems}
+
+\index{get\_elements() (raypyng.xmltools.elements.XmlElement method)@\spxentry{get\_elements()}\spxextra{raypyng.xmltools.elements.XmlElement method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.xmltools.elements.XmlElement.get_elements}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{get\_elements}}}{\emph{\DUrole{n}{name}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Find a child element by name
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+
+
+\section{Parser}
+\label{\detokenize{code_documentation:module-raypyng.xmltools.parser}}\label{\detokenize{code_documentation:parser}}\index{module@\spxentry{module}!raypyng.xmltools.parser@\spxentry{raypyng.xmltools.parser}}\index{raypyng.xmltools.parser@\spxentry{raypyng.xmltools.parser}!module@\spxentry{module}}\index{Handler (class in raypyng.xmltools.parser)@\spxentry{Handler}\spxextra{class in raypyng.xmltools.parser}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.xmltools.parser.Handler}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.xmltools.parser.}}\sphinxbfcode{\sphinxupquote{Handler}}}{\emph{\DUrole{n}{known\_classes}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
+\pysigstopsignatures\index{characters() (raypyng.xmltools.parser.Handler method)@\spxentry{characters()}\spxextra{raypyng.xmltools.parser.Handler method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.xmltools.parser.Handler.characters}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{characters}}}{\emph{\DUrole{n}{cdata}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+adds character data to the current element
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{cdata}} (\sphinxstyleliteralemphasis{\sphinxupquote{\_type\_}}) \textendash{} \_description\_
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{endElement() (raypyng.xmltools.parser.Handler method)@\spxentry{endElement()}\spxextra{raypyng.xmltools.parser.Handler method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.xmltools.parser.Handler.endElement}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{endElement}}}{\emph{\DUrole{n}{name}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+called the end of an element in non\sphinxhyphen{}namespace mode.
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{name}} (\sphinxstyleliteralemphasis{\sphinxupquote{\_type\_}}) \textendash{} \_description\_
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{startElement() (raypyng.xmltools.parser.Handler method)@\spxentry{startElement()}\spxextra{raypyng.xmltools.parser.Handler method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.xmltools.parser.Handler.startElement}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{startElement}}}{\emph{\DUrole{n}{name}}, \emph{\DUrole{n}{attributes}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+called on the start of an element in non\sphinxhyphen{}namespace mode.
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{name}} (\sphinxstyleliteralemphasis{\sphinxupquote{\_type\_}}) \textendash{} \_description\_
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{attributes}} (\sphinxstyleliteralemphasis{\sphinxupquote{\_type\_}}) \textendash{} \_description\_
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+
+
+\section{Collections}
+\label{\detokenize{code_documentation:module-raypyng.collections}}\label{\detokenize{code_documentation:collections}}\index{module@\spxentry{module}!raypyng.collections@\spxentry{raypyng.collections}}\index{raypyng.collections@\spxentry{raypyng.collections}!module@\spxentry{module}}\index{MappedDict (class in raypyng.collections)@\spxentry{MappedDict}\spxextra{class in raypyng.collections}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.collections.MappedDict}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.collections.}}\sphinxbfcode{\sphinxupquote{MappedDict}}}{\emph{\DUrole{n}{func}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}Callable\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{dict}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+MappedDict class implements a dictionary which will apply the given
+function to each value added to it and also will keep a track of original
+values.
+\index{original() (raypyng.collections.MappedDict method)@\spxentry{original()}\spxextra{raypyng.collections.MappedDict method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.collections.MappedDict.original}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{original}}}{}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+prodives acccess to the original, unmodified data
+\begin{quote}\begin{description}
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+dictionary with original data
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+dict
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+\index{MappedList (class in raypyng.collections)@\spxentry{MappedList}\spxextra{class in raypyng.collections}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.collections.MappedList}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.collections.}}\sphinxbfcode{\sphinxupquote{MappedList}}}{\emph{\DUrole{n}{func}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}Callable\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{initlist}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+MappedList class implements a list which will apply the given
+function to each value added to it and also will keep a track of original
+values.
+\index{append() (raypyng.collections.MappedList method)@\spxentry{append()}\spxextra{raypyng.collections.MappedList method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.collections.MappedList.append}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{append}}}{\emph{\DUrole{n}{item}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+S.append(value) \textendash{} append value to the end of the sequence
+
+\end{fulllineitems}
+
+\index{clear() (raypyng.collections.MappedList method)@\spxentry{clear()}\spxextra{raypyng.collections.MappedList method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.collections.MappedList.clear}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{clear}}}{}{{ $\rightarrow$ None \sphinxhyphen{}\sphinxhyphen{} remove all items from S}}
+\pysigstopsignatures
+\end{fulllineitems}
+
+\index{count() (raypyng.collections.MappedList method)@\spxentry{count()}\spxextra{raypyng.collections.MappedList method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.collections.MappedList.count}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{count}}}{\emph{\DUrole{n}{value}}}{{ $\rightarrow$ integer \sphinxhyphen{}\sphinxhyphen{} return number of occurrences of value}}
+\pysigstopsignatures
+\end{fulllineitems}
+
+\index{extend() (raypyng.collections.MappedList method)@\spxentry{extend()}\spxextra{raypyng.collections.MappedList method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.collections.MappedList.extend}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{extend}}}{\emph{\DUrole{n}{other}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+S.extend(iterable) \textendash{} extend sequence by appending elements from the iterable
+
+\end{fulllineitems}
+
+\index{index() (raypyng.collections.MappedList method)@\spxentry{index()}\spxextra{raypyng.collections.MappedList method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.collections.MappedList.index}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{index}}}{\emph{\DUrole{n}{value}}\sphinxoptional{, \emph{\DUrole{n}{start}}\sphinxoptional{, \emph{\DUrole{n}{stop}}}}}{{ $\rightarrow$ integer \sphinxhyphen{}\sphinxhyphen{} return first index of value.}}
+\pysigstopsignatures
+\sphinxAtStartPar
+Raises ValueError if the value is not present.
+
+\sphinxAtStartPar
+Supporting start and stop arguments is optional, but
+recommended.
+
+\end{fulllineitems}
+
+\index{insert() (raypyng.collections.MappedList method)@\spxentry{insert()}\spxextra{raypyng.collections.MappedList method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.collections.MappedList.insert}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{insert}}}{\emph{\DUrole{n}{i}}, \emph{\DUrole{n}{item}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+S.insert(index, value) \textendash{} insert value before index
+
+\end{fulllineitems}
+
+\index{pop() (raypyng.collections.MappedList method)@\spxentry{pop()}\spxextra{raypyng.collections.MappedList method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.collections.MappedList.pop}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{pop}}}{\sphinxoptional{\emph{\DUrole{n}{index}}}}{{ $\rightarrow$ item \sphinxhyphen{}\sphinxhyphen{} remove and return item at index (default last).}}
+\pysigstopsignatures
+\sphinxAtStartPar
+Raise IndexError if list is empty or index is out of range.
+
+\end{fulllineitems}
+
+\index{remove() (raypyng.collections.MappedList method)@\spxentry{remove()}\spxextra{raypyng.collections.MappedList method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.collections.MappedList.remove}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{remove}}}{\emph{\DUrole{n}{item}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+S.remove(value) \textendash{} remove first occurrence of value.
+Raise ValueError if the value is not present.
+
+\end{fulllineitems}
+
+\index{reverse() (raypyng.collections.MappedList method)@\spxentry{reverse()}\spxextra{raypyng.collections.MappedList method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.collections.MappedList.reverse}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{reverse}}}{}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+S.reverse() \textendash{} reverse \sphinxstyleemphasis{IN PLACE}
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+
+
+\renewcommand{\indexname}{Python Module Index}
+\begin{sphinxtheindex}
+\let\bigletter\sphinxstyleindexlettergroup
+\bigletter{r}
+\item\relax\sphinxstyleindexentry{raypyng.collections}\sphinxstyleindexpageref{code_documentation:\detokenize{module-raypyng.collections}}
+\item\relax\sphinxstyleindexentry{raypyng.xmltools.attributes}\sphinxstyleindexpageref{code_documentation:\detokenize{module-raypyng.xmltools.attributes}}
+\item\relax\sphinxstyleindexentry{raypyng.xmltools.dictionaries}\sphinxstyleindexpageref{code_documentation:\detokenize{module-raypyng.xmltools.dictionaries}}
+\item\relax\sphinxstyleindexentry{raypyng.xmltools.elements}\sphinxstyleindexpageref{code_documentation:\detokenize{module-raypyng.xmltools.elements}}
+\item\relax\sphinxstyleindexentry{raypyng.xmltools.parser}\sphinxstyleindexpageref{code_documentation:\detokenize{module-raypyng.xmltools.parser}}
+\end{sphinxtheindex}
 
 \renewcommand{\indexname}{Index}
 \printindex

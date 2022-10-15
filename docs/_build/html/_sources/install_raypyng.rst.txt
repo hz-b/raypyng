@@ -15,21 +15,22 @@ Install xvfb
 xvfb is a virtual X11 framebuffer server that let you run RAY-UI headless
 
 Install xvfb:
-  .. code-block:: bash
 
-    sudo apt install xvfb
+.. code-block:: bash
+
+  sudo apt install xvfb
 
 
 .. note::
 
-    xvfb-run script is a part of the xvfb distribution and 
-    runs an app on a new virtual X11 server.
+  xvfb-run script is a part of the xvfb distribution and 
+  runs an app on a new virtual X11 server.
 
 
 Install raypyng
 ---------------
-* You will need Python 3.8 or newer. From a shell ("Terminal" on OSX,
-  "Command Prompt" on Windows), check your current Python version.
+* You will need Python 3.8 or newer. From a shell ("Terminal" on OSX), 
+  check your current Python version.
 
   .. code-block:: bash
 

@@ -5,56 +5,132 @@
 \let\spxextra \sphinxstyleindexextra
 
   \bigletter A
+  \item \spxentry{add\_cdata()}\spxextra{raypyng.xmltools.elements.XmlElement method}, 
+		\hyperpage{22}
+  \item \spxentry{add\_child()}\spxextra{raypyng.xmltools.elements.XmlElement method}, 
+		\hyperpage{22}
   \item \spxentry{analyze}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{11}
+  \item \spxentry{append()}\spxextra{raypyng.collections.MappedList method}, \hyperpage{23}
+
+  \indexspace
+  \bigletter B
+  \item \spxentry{BeamlineElement}\spxextra{class in raypyng.rml}, \hyperpage{21}
 
   \indexspace
   \bigletter C
-  \item \spxentry{cleanup()}\spxextra{raypyng.postprocessing.PostProcess method}, \hyperpage{17}
+  \item \spxentry{characters()}\spxextra{raypyng.xmltools.parser.Handler method}, \hyperpage{22}
+  \item \spxentry{cleanup()}\spxextra{raypyng.postprocessing.PostProcess method}, \hyperpage{15}
+  \item \spxentry{clear()}\spxextra{raypyng.collections.MappedList method}, \hyperpage{23}
+  \item \spxentry{count()}\spxextra{raypyng.collections.MappedList method}, \hyperpage{23}
 
   \indexspace
   \bigletter E
+  \item \spxentry{endElement()}\spxextra{raypyng.xmltools.parser.Handler method}, \hyperpage{22}
   \item \spxentry{exports}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{11}
+  \item \spxentry{extend()}\spxextra{raypyng.collections.MappedList method}, \hyperpage{23}
   \item \spxentry{extract\_nrays\_from\_source()}\spxextra{raypyng.postprocessing.PostProcess method}, 
-		\hyperpage{17}
+		\hyperpage{15}
+
+  \indexspace
+  \bigletter G
+  \item \spxentry{get\_attribute()}\spxextra{raypyng.xmltools.elements.XmlElement method}, 
+		\hyperpage{22}
+  \item \spxentry{get\_elements()}\spxextra{raypyng.xmltools.elements.XmlElement method}, 
+		\hyperpage{22}
+
+  \indexspace
+  \bigletter H
+  \item \spxentry{Handler}\spxextra{class in raypyng.xmltools.parser}, \hyperpage{22}
 
   \indexspace
   \bigletter I
-  \item \spxentry{isrunning}\spxextra{raypyng.runner.RayUIRunner property}, \hyperpage{15}
+  \item \spxentry{index()}\spxextra{raypyng.collections.MappedList method}, \hyperpage{23}
+  \item \spxentry{insert()}\spxextra{raypyng.collections.MappedList method}, \hyperpage{23}
+  \item \spxentry{isrunning}\spxextra{raypyng.runner.RayUIRunner property}, \hyperpage{19}
 
   \indexspace
   \bigletter K
-  \item \spxentry{kill()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{15}
+  \item \spxentry{kill()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{19}
+
+  \indexspace
+  \bigletter M
+  \item \spxentry{MappedDict}\spxextra{class in raypyng.collections}, \hyperpage{23}
+  \item \spxentry{MappedList}\spxextra{class in raypyng.collections}, \hyperpage{23}
+  \item \spxentry{module}
+    \subitem \spxentry{raypyng.collections}, \hyperpage{23}
+    \subitem \spxentry{raypyng.xmltools.attributes}, \hyperpage{21}
+    \subitem \spxentry{raypyng.xmltools.dictionaries}, \hyperpage{21}
+    \subitem \spxentry{raypyng.xmltools.elements}, \hyperpage{22}
+    \subitem \spxentry{raypyng.xmltools.parser}, \hyperpage{22}
+  \item \spxentry{moving\_average()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}, 
+		\hyperpage{16}
+
+  \indexspace
+  \bigletter O
+  \item \spxentry{ObjectElement}\spxextra{class in raypyng.rml}, \hyperpage{21}
+  \item \spxentry{original()}\spxextra{raypyng.collections.MappedDict method}, \hyperpage{23}
 
   \indexspace
   \bigletter P
+  \item \spxentry{ParamElement}\spxextra{class in raypyng.rml}, \hyperpage{21}
   \item \spxentry{params}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{11}
-  \item \spxentry{params}\spxextra{raypyng.simulate.SimulationParams property}, \hyperpage{12}
+  \item \spxentry{params}\spxextra{raypyng.simulate.SimulationParams property}, \hyperpage{13}
   \item \spxentry{path}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{11}
-  \item \spxentry{pid}\spxextra{raypyng.runner.RayUIRunner property}, \hyperpage{15}
+  \item \spxentry{pid}\spxextra{raypyng.runner.RayUIRunner property}, \hyperpage{19}
+  \item \spxentry{pop()}\spxextra{raypyng.collections.MappedList method}, \hyperpage{23}
   \item \spxentry{possible\_exports}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{11}
   \item \spxentry{possible\_exports\_without\_analysis}\spxextra{raypyng.simulate.Simulate property}, 
 		\hyperpage{11}
-  \item \spxentry{PostProcess}\spxextra{class in raypyng.postprocessing}, \hyperpage{17}
+  \item \spxentry{PostProcess}\spxextra{class in raypyng.postprocessing}, \hyperpage{15}
   \item \spxentry{postprocess\_RawRays()}\spxextra{raypyng.postprocessing.PostProcess method}, 
-		\hyperpage{17}
+		\hyperpage{15}
+  \item \spxentry{PostProcessAnalyzed}\spxextra{class in raypyng.postprocessing}, \hyperpage{16}
 
   \indexspace
   \bigletter R
+  \item \spxentry{raypyng.collections}
+    \subitem \spxentry{module}, \hyperpage{23}
+  \item \spxentry{raypyng.xmltools.attributes}
+    \subitem \spxentry{module}, \hyperpage{21}
+  \item \spxentry{raypyng.xmltools.dictionaries}
+    \subitem \spxentry{module}, \hyperpage{21}
+  \item \spxentry{raypyng.xmltools.elements}
+    \subitem \spxentry{module}, \hyperpage{22}
+  \item \spxentry{raypyng.xmltools.parser}
+    \subitem \spxentry{module}, \hyperpage{22}
   \item \spxentry{raypyng\_analysis}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{12}
-  \item \spxentry{RayUIRunner}\spxextra{class in raypyng.runner}, \hyperpage{15}
+  \item \spxentry{RayUIRunner}\spxextra{class in raypyng.runner}, \hyperpage{19}
+  \item \spxentry{read()}\spxextra{raypyng.rml.RMLFile method}, \hyperpage{21}
+  \item \spxentry{remove()}\spxextra{raypyng.collections.MappedList method}, \hyperpage{23}
   \item \spxentry{repeat}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{12}
+  \item \spxentry{retrieve\_bw\_and\_focusSize()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}, 
+		\hyperpage{16}
+  \item \spxentry{retrieve\_flux\_beamline()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}, 
+		\hyperpage{16}
+  \item \spxentry{reverse()}\spxextra{raypyng.collections.MappedList method}, \hyperpage{23}
   \item \spxentry{rml}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{12}
-  \item \spxentry{rml}\spxextra{raypyng.simulate.SimulationParams property}, \hyperpage{12}
+  \item \spxentry{rml}\spxextra{raypyng.simulate.SimulationParams property}, \hyperpage{13}
   \item \spxentry{rml\_list()}\spxextra{raypyng.simulate.Simulate method}, \hyperpage{12}
-  \item \spxentry{run()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{15}
+  \item \spxentry{RMLFile}\spxextra{class in raypyng.rml}, \hyperpage{21}
+  \item \spxentry{run()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{19}
   \item \spxentry{run()}\spxextra{raypyng.simulate.Simulate method}, \hyperpage{12}
 
   \indexspace
   \bigletter S
+  \item \spxentry{SafeValueDict}\spxextra{class in raypyng.xmltools.dictionaries}, \hyperpage{21}
+  \item \spxentry{SafeValueList}\spxextra{class in raypyng.xmltools.dictionaries}, \hyperpage{21}
+  \item \spxentry{sanitizeName()}\spxextra{in module raypyng.xmltools.dictionaries}, \hyperpage{21}
   \item \spxentry{save\_parameters\_to\_file()}\spxextra{raypyng.simulate.Simulate method}, 
 		\hyperpage{12}
   \item \spxentry{Simulate}\spxextra{class in raypyng.simulate}, \hyperpage{11}
   \item \spxentry{simulation\_name}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{12}
-  \item \spxentry{SimulationParams}\spxextra{class in raypyng.simulate}, \hyperpage{12}
+  \item \spxentry{SimulationParams}\spxextra{class in raypyng.simulate}, \hyperpage{13}
+  \item \spxentry{startElement()}\spxextra{raypyng.xmltools.parser.Handler method}, \hyperpage{23}
+
+  \indexspace
+  \bigletter X
+  \item \spxentry{XmlAttributedNameElement}\spxextra{class in raypyng.xmltools.elements}, 
+		\hyperpage{22}
+  \item \spxentry{XmlElement}\spxextra{class in raypyng.xmltools.elements}, \hyperpage{22}
 
 \end{sphinxtheindex}
