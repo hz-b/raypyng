@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.7.22)  15 OCT 2022 23:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.7.22)  16 OCT 2022 00:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -810,7 +810,7 @@ LaTeX Font Info:    Font shape `TS1/txtt/m/it' in size <10> not available
 ]
 Chapter 3.
 
-Underfull \hbox (badness 5147) in paragraph at lines 600--605
+Underfull \hbox (badness 5147) in paragraph at lines 599--604
 []\T1/qtm/m/n/10 A recipe should con-taine at least the \T1/txtt/m/n/10 __init_
 _() \T1/qtm/m/n/10 method and three more meth-ods: \T1/txtt/m/n/10 params()\T1/
 qtm/m/n/10 , and
@@ -821,7 +821,7 @@ qtm/m/n/10 , and
 ]
 Chapter 4.
 [15] [16] [17]
-Underfull \hbox (badness 10000) in paragraph at lines 1197--1199
+Underfull \hbox (badness 10000) in paragraph at lines 1196--1198
 []\T1/txtt/bx/n/10 exported_object \T1/qtm/m/n/10 (\T1/txtt/m/sl/10 str, option
 al\T1/qtm/m/n/10 ) ^^U the ex-ported ob-ject, tested only with
  []
@@ -990,10 +990,10 @@ lic/txfonts/t1xbtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfont
 s/t1xtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb
 ></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/tcxtt.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on raypyng.pdf (28 pages, 226255 bytes).
+Output written on raypyng.pdf (28 pages, 226085 bytes).
 PDF statistics:
- 495 PDF objects out of 1000 (max. 8388607)
- 439 compressed objects within 5 object streams
+ 501 PDF objects out of 1000 (max. 8388607)
+ 445 compressed objects within 5 object streams
  119 named destinations out of 1000 (max. 500000)
  293 words of extra memory for PDF output out of 10000 (max. 10000000)
 

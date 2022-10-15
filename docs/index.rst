@@ -5,12 +5,13 @@
 
 Welcome to raypyng's documentation!
 ===================================
-raypyng provides a simple API to work with RAY-UI, 
+raypyng provides a simple API to work with 
+`RAY_UI
+<https://www.helmholtz-berlin.de/forschung/oe/wi/optik-strahlrohre/arbeitsgebiete/ray_en.html>`_, 
 a software for optical simulation of synchrotron 
 beamlines and x-ray systems developed by 
 Helmholtz-Zentrum Berlin.
-More information at `this link
-<https://www.helmholtz-berlin.de/forschung/oe/wi/optik-strahlrohre/arbeitsgebiete/ray_en.html>`_.
+
 
 .. toctree::
    :maxdepth: 2

@@ -61,7 +61,7 @@
 
 
 \title{RayPyNG}
-\date{Oct 15, 2022}
+\date{Oct 16, 2022}
 \release{}
 \author{Simone Vadilonga, Ruslan Ovsyannikov}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -83,11 +83,11 @@
 
 
 \sphinxAtStartPar
-raypyng provides a simple API to work with RAY\sphinxhyphen{}UI,
+raypyng provides a simple API to work with
+\sphinxhref{https://www.helmholtz-berlin.de/forschung/oe/wi/optik-strahlrohre/arbeitsgebiete/ray\_en.html}{RAY\_UI},
 a software for optical simulation of synchrotron
 beamlines and x\sphinxhyphen{}ray systems developed by
 Helmholtz\sphinxhyphen{}Zentrum Berlin.
-More information at \sphinxhref{https://www.helmholtz-berlin.de/forschung/oe/wi/optik-strahlrohre/arbeitsgebiete/ray\_en.html}{this link}.
 
 \sphinxstepscope
 
@@ -384,12 +384,6 @@ RAYPy\PYGZus{}simulation\PYGZus{}mySimulation
 │   └── 0\PYGZus{}*.dat (only if raypyng analyzes the results)
 │   └── ...
 │   └── looper.py
-├── round\PYGZus{}0
-│   ├── 0\PYGZus{}*.rml
-│   └── 0\PYGZus{}*.csv
-│   └── 0\PYGZus{}*.dat (only if raypyng analyzes the results)
-│   └── ...
-│   └── looper.py
 ...
 ├── round\PYGZus{}n
 │   ├── 0\PYGZus{}*.rml
@@ -539,27 +533,31 @@ In the example folder, the following examples are available:
 \begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxtitleref{example\_simulation\_analyze.py} simulate a beamline,
+\sphinxhref{https://github.com/hz-b/raypyng/blob/main/examples/example\_simulation\_analyze.py}{example\_simulation\_analyze.py} simulate a beamline,
 let Ray\sphinxhyphen{}UI do the analysis
 
 \item {} 
 \sphinxAtStartPar
-\sphinxtitleref{example\_simulation\_noanalyze.py} simulate a beamline,
+\sphinxhref{https://github.com/hz-b/raypyng/blob/main/examples/example\_simulation\_noanalyze.py}{example\_simulation\_noanalyze.py}
+simulate a beamline,
 let raypyng do the analysis
 
 \item {} 
 \sphinxAtStartPar
-\sphinxtitleref{example\_eval\_noanalyze\_and\_analyze.py} plots the results
+\sphinxhref{https://github.com/hz-b/raypyng/blob/main/examples/example\_eval\_noanalyze\_and\_analyze.py}{example\_eval\_noanalyze\_and\_analyze.py}
+plots the results
 of the two previous simulations
 
 \item {} 
 \sphinxAtStartPar
-\sphinxtitleref{example\_simulation\_Flux.py} simulations using the flux recipe,
+\sphinxhref{https://github.com/hz-b/raypyng/blob/main/examples/example\_simulation\_Flux.py}{example\_simulation\_Flux.py}
+simulations using the flux recipe,
 useful if you intend to simulate the flux of your beamline
 
 \item {} 
 \sphinxAtStartPar
-\sphinxtitleref{example\_simulation\_RP.py} simulations using the resolving power
+\sphinxhref{https://github.com/hz-b/raypyng/blob/main/examples/example\_simulation\_RP.py}{example\_simulation\_RP.py}
+simulations using the resolving power
 (RP) recipe, useful if you intend to simulate the RP of your beamline.
 The reflectivity of every optical element is switched to 100\% and not
 calculated using the substrate and coating(s) material(s). The
@@ -567,7 +565,8 @@ information about the Flux of the beamline is therefore not reliable.
 
 \item {} 
 \sphinxAtStartPar
-\sphinxtitleref{example\_beamwaist.py}: raypyng can plot the beam waist of
+\sphinxhref{https://github.com/hz-b/raypyng/blob/main/examples/example\_beamwaist.py}{example\_beamwaist.py}
+raypyng can plot the beam waist of
 the x\sphinxhyphen{}rays across your beamline. It performs simulations using the beam waist recipe,
 and it exports the RawRaysOutgoing file from each optical element. It then uses a
 simple geometrical x\sphinxhyphen{}ray tracer to propagate each ray until the next optical

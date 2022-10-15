@@ -169,12 +169,6 @@ Expect this folders and subfolders to be created:
     │   └── 0_*.dat (only if raypyng analyzes the results)
     │   └── ...
     │   └── looper.py
-    ├── round_0          
-    │   ├── 0_*.rml
-    │   └── 0_*.csv
-    │   └── 0_*.dat (only if raypyng analyzes the results)
-    │   └── ...
-    │   └── looper.py
     ...
     ├── round_n          
     │   ├── 0_*.rml
@@ -259,20 +253,31 @@ List of available examples
 ===========================
 In the example folder, the following examples are available:
 
-- `example_simulation_analyze.py` simulate a beamline, 
+- `example_simulation_analyze.py
+  <https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_analyze.py>`_ simulate a beamline, 
   let Ray-UI do the analysis
-- `example_simulation_noanalyze.py` simulate a beamline, 
+- `example_simulation_noanalyze.py
+  <https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_noanalyze.py>`_ 
+  simulate a beamline, 
   let raypyng do the analysis
-- `example_eval_noanalyze_and_analyze.py` plots the results 
+- `example_eval_noanalyze_and_analyze.py
+  <https://github.com/hz-b/raypyng/blob/main/examples/example_eval_noanalyze_and_analyze.py>`_
+  plots the results 
   of the two previous simulations
-- `example_simulation_Flux.py` simulations using the flux recipe,
+- `example_simulation_Flux.py
+  <https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_Flux.py>`_
+  simulations using the flux recipe,
   useful if you intend to simulate the flux of your beamline
-- `example_simulation_RP.py` simulations using the resolving power 
+- `example_simulation_RP.py
+  <https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_RP.py>`_
+  simulations using the resolving power 
   (RP) recipe, useful if you intend to simulate the RP of your beamline. 
   The reflectivity of every optical element is switched to 100% and not 
   calculated using the substrate and coating(s) material(s). The 
   information about the Flux of the beamline is therefore not reliable.
-- `example_beamwaist.py`: raypyng can plot the beam waist of 
+- `example_beamwaist.py
+  <https://github.com/hz-b/raypyng/blob/main/examples/example_beamwaist.py>`_
+  raypyng can plot the beam waist of 
   the x-rays across your beamline. It performs simulations using the beam waist recipe, 
   and it exports the RawRaysOutgoing file from each optical element. It then uses a 
   simple geometrical x-ray tracer to propagate each ray until the next optical 
