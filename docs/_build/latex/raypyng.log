@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.7.22)  15 OCT 2022 16:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.7.22)  15 OCT 2022 16:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -813,21 +813,25 @@ Chapter 3.
 
 ]
 Chapter 4.
+[15] [16
 
-Underfull \hbox (badness 10000) in paragraph at lines 940--942
+]
+Chapter 5.
+
+Underfull \hbox (badness 10000) in paragraph at lines 979--981
 []\T1/txtt/bx/n/10 exported_object \T1/qtm/m/n/10 (\T1/txtt/m/sl/10 str, option
 al\T1/qtm/m/n/10 ) ^^U the ex-ported ob-ject, tested only with
  []
 
-[15] [16] [17] [18
-
-]
-Chapter 5.
-[19] [20
+[17] [18] [19] [20
 
 ]
 Chapter 6.
-[21] [22] (./raypyng.ind [23] [24
+[21] [22
+
+]
+Chapter 7.
+[23] [24] (./raypyng.ind [25] [26
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 22--23
@@ -841,142 +845,142 @@ Underfull \hbox (badness 10000) in paragraph at lines 27--29
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 32--33
+Underfull \hbox (badness 10000) in paragraph at lines 36--37
 []\T1/txtt/m/n/10 get_attribute() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.rml.B
 eamlineElement
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 33--34
+Underfull \hbox (badness 10000) in paragraph at lines 37--38
 []\T1/txtt/m/n/10 get_attribute() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.rml.O
 bjectElement
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 34--35
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
 []\T1/txtt/m/n/10 get_attribute() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.rml.P
 aramElement
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 35--36
+Underfull \hbox (badness 10000) in paragraph at lines 39--40
 []\T1/txtt/m/n/10 get_elements() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.rml.Be
 amlineElement
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 38--39
+Underfull \hbox (badness 10000) in paragraph at lines 42--43
 []\T1/txtt/m/n/10 get_full_path() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.rml.B
 eamlineElement
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 39--40
+Underfull \hbox (badness 10000) in paragraph at lines 43--44
 []\T1/txtt/m/n/10 get_full_path() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.rml.O
 bjectElement
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 40--41
+Underfull \hbox (badness 10000) in paragraph at lines 44--45
 []\T1/txtt/m/n/10 get_full_path() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.rml.P
 aramElement
  []
 
 
-Overfull \hbox (41.34225pt too wide) in paragraph at lines 52--54
+Overfull \hbox (41.34225pt too wide) in paragraph at lines 56--58
 []\T1/txtt/m/n/10 moving_average() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.post
 processing.PostProcessAnalyzed
  []
 
 
-Underfull \hbox (badness 5417) in paragraph at lines 66--67
+Underfull \hbox (badness 5417) in paragraph at lines 70--71
 []\T1/txtt/m/n/10 possible_exports \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.simu
 late.Simulate prop-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 67--69
+Underfull \hbox (badness 10000) in paragraph at lines 71--73
 []\T1/txtt/m/n/10 possible_exports_without_analysis
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 70--72
+Underfull \hbox (badness 10000) in paragraph at lines 74--76
 []\T1/txtt/m/n/10 postprocess_RawRays()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 72--73
+Underfull \hbox (badness 10000) in paragraph at lines 76--77
 []\T1/txtt/m/n/10 PostProcessAnalyzed \T1/qtm/m/n/10 (\T1/qtm/m/it/10 class in
  []
 
 
-Underfull \hbox (badness 5417) in paragraph at lines 76--77
+Underfull \hbox (badness 5417) in paragraph at lines 80--81
 []\T1/txtt/m/n/10 raypyng_analysis \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.simu
 late.Simulate prop-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 80--81
+Underfull \hbox (badness 10000) in paragraph at lines 84--85
 []\T1/txtt/m/n/10 resolvable_name() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.rml
 .BeamlineElement
  []
 
+[27
 
-Underfull \hbox (badness 10000) in paragraph at lines 81--82
+]
+Underfull \hbox (badness 10000) in paragraph at lines 85--86
 []\T1/txtt/m/n/10 resolvable_name() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.rml
 .ObjectElement
  []
 
-[25
 
-]
-Underfull \hbox (badness 10000) in paragraph at lines 82--83
+Underfull \hbox (badness 10000) in paragraph at lines 86--87
 []\T1/txtt/m/n/10 resolvable_name() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.rml
 .ParamElement
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 83--85
+Underfull \hbox (badness 10000) in paragraph at lines 88--90
 []\T1/txtt/m/n/10 retrieve_bw_and_focusSize()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 83--85
+Underfull \hbox (badness 10000) in paragraph at lines 88--90
 \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.postprocessing.PostProcessAnalyzed
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 85--87
+Underfull \hbox (badness 10000) in paragraph at lines 90--92
 []\T1/txtt/m/n/10 retrieve_flux_beamline()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 85--87
+Underfull \hbox (badness 10000) in paragraph at lines 90--92
 \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.postprocessing.PostProcessAnalyzed
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 96--98
+Underfull \hbox (badness 10000) in paragraph at lines 101--103
 []\T1/txtt/m/n/10 save_parameters_to_file()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 99--100
+Underfull \hbox (badness 10000) in paragraph at lines 104--105
 []\T1/txtt/m/n/10 simulation_name \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.simul
 ate.Simulate prop-
  []
 
-[26
+[28
 
 ]) (./raypyng.aux)
 Package rerunfilecheck Info: File `raypyng.out' has not changed.
-(rerunfilecheck)             Checksum: 885CFBDE332EE69B79419DE987D75334;3361.
+(rerunfilecheck)             Checksum: 62FF8D470DCF56A52A61E64A3320F79E;3648.
  ) 
 Here is how much of TeX's memory you used:
- 14793 strings out of 478287
- 237304 string characters out of 5849289
- 586865 words of memory out of 5000000
- 32508 multiletter control sequences out of 15000+600000
+ 14808 strings out of 478287
+ 237589 string characters out of 5849289
+ 587049 words of memory out of 5000000
+ 32516 multiletter control sequences out of 15000+600000
  527087 words of font info for 76 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
  70i,11n,76p,1046b,706s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -992,10 +996,10 @@ lic/txfonts/t1xbtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfont
 s/t1xtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb
 ></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/tcxtt.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on raypyng.pdf (30 pages, 218410 bytes).
+Output written on raypyng.pdf (32 pages, 220964 bytes).
 PDF statistics:
- 460 PDF objects out of 1000 (max. 8388607)
- 402 compressed objects within 5 object streams
- 110 named destinations out of 1000 (max. 500000)
- 221 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 493 PDF objects out of 1000 (max. 8388607)
+ 433 compressed objects within 5 object streams
+ 117 named destinations out of 1000 (max. 500000)
+ 245 words of extra memory for PDF output out of 10000 (max. 10000000)
 

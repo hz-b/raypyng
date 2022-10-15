@@ -206,10 +206,10 @@ install it in this environment alongside raypyng and run it from there:
 \label{\detokenize{tutorial:minimal-example}}
 \sphinxAtStartPar
 raypyng is not able to create a beamline from scratch. To do so, use RAY\sphinxhyphen{}UI,
-create a beamline, and save it. What you save is \sphinxtitleref{.rml} file, which you have to
-pass as an argument to the \sphinxtitleref{Simulate} simulate class. In the following example, we
-use the file for a beamline called \sphinxtitleref{elisa}, and the file is saved in \sphinxtitleref{rml/elisa.rml}.
-The \sphinxtitleref{hide} parameter can be set to true only if \sphinxtitleref{xvfb} is installed.
+create a beamline, and save it. What you save is \sphinxcode{\sphinxupquote{.rml}} file, which you have to
+pass as an argument to the \sphinxcode{\sphinxupquote{Simulate}} class. In the following example, we
+use the file for a beamline called \sphinxtitleref{elisa}, and the file is saved in \sphinxcode{\sphinxupquote{rml/elisa.rml}}.
+The \sphinxcode{\sphinxupquote{hide}} parameter can be set to true only if \sphinxtitleref{xvfb} is installed.
 
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{k+kn}{from} \PYG{n+nn}{raypyng} \PYG{k+kn}{import} \PYG{n}{Simulate}
@@ -841,6 +841,46 @@ RMLFile object instantiated in init
 
 \end{fulllineitems}
 
+
+\end{fulllineitems}
+
+
+
+\chapter{Recipes}
+\label{\detokenize{code_documentation:recipes}}
+\sphinxAtStartPar
+raypyng provides some recipes to make simulations,
+that simplify the syntax in the script.
+Two recipes are provided, one to make \sphinxhref{https://github.com/hz-b/raypyng/blob/main/examples/example\_simulation\_RP.py}{Resolving Power} simulations,
+one to make \sphinxhref{https://github.com/hz-b/raypyng/blob/main/examples/example\_simulation\_Flux.py}{Flux}
+simulations.
+
+
+\section{Resolving Power}
+\label{\detokenize{code_documentation:id1}}\index{ResolvingPower (class in raypyng.recipes)@\spxentry{ResolvingPower}\spxextra{class in raypyng.recipes}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.recipes.ResolvingPower}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.recipes.}}\sphinxbfcode{\sphinxupquote{ResolvingPower}}}{\emph{\DUrole{n}{energy\_range}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{range}}, \emph{\DUrole{n}{exported\_object}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{{\hyperref[\detokenize{code_documentation:raypyng.rml.ObjectElement}]{\sphinxcrossref{ObjectElement}}}}}, \emph{\DUrole{o}{/}}, \emph{\DUrole{o}{*}\DUrole{n}{args}}, \emph{\DUrole{n}{source}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}{\hyperref[\detokenize{code_documentation:raypyng.rml.ObjectElement}]{\sphinxcrossref{ObjectElement}}}\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{sim\_folder}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Resolving Power Simulations, reflectivity is automatically switched off for all elements
+
+\end{fulllineitems}
+
+
+
+\section{Flux}
+\label{\detokenize{code_documentation:id2}}\index{Flux (class in raypyng.recipes)@\spxentry{Flux}\spxextra{class in raypyng.recipes}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{code_documentation:raypyng.recipes.Flux}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.recipes.}}\sphinxbfcode{\sphinxupquote{Flux}}}{\emph{\DUrole{n}{energy\_range}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{range}}, \emph{\DUrole{n}{exported\_object}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{{\hyperref[\detokenize{code_documentation:raypyng.rml.ObjectElement}]{\sphinxcrossref{ObjectElement}}}}}, \emph{\DUrole{o}{/}}, \emph{\DUrole{o}{*}\DUrole{n}{args}}, \emph{\DUrole{n}{source}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}{\hyperref[\detokenize{code_documentation:raypyng.rml.ObjectElement}]{\sphinxcrossref{ObjectElement}}}\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{sim\_folder}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Flux simulations, reflectivity is automatically switched on for all elements
 
 \end{fulllineitems}
 

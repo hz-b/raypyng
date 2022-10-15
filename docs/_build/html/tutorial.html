@@ -53,6 +53,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="code_documentation.html">Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_documentation.html#recipes">Recipes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code_documentation.html#process-simulation-files">Process simulation files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code_documentation.html#ray-ui-api">RAY-UI API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code_documentation.html#rml">RML</a></li>
@@ -87,10 +88,10 @@
 <section id="minimal-example">
 <h2>Minimal example<a class="headerlink" href="#minimal-example" title="Permalink to this heading"></a></h2>
 <p>raypyng is not able to create a beamline from scratch. To do so, use RAY-UI,
-create a beamline, and save it. What you save is <cite>.rml</cite> file, which you have to
-pass as an argument to the <cite>Simulate</cite> simulate class. In the following example, we
-use the file for a beamline called <cite>elisa</cite>, and the file is saved in <cite>rml/elisa.rml</cite>.
-The <cite>hide</cite> parameter can be set to true only if <cite>xvfb</cite> is installed.</p>
+create a beamline, and save it. What you save is <code class="code docutils literal notranslate"><span class="pre">.rml</span></code> file, which you have to
+pass as an argument to the <code class="code docutils literal notranslate"><span class="pre">Simulate</span></code> class. In the following example, we
+use the file for a beamline called <cite>elisa</cite>, and the file is saved in <code class="code docutils literal notranslate"><span class="pre">rml/elisa.rml</span></code>.
+The <code class="code docutils literal notranslate"><span class="pre">hide</span></code> parameter can be set to true only if <cite>xvfb</cite> is installed.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">raypyng</span> <span class="kn">import</span> <span class="n">Simulate</span>
 <span class="n">rml_file</span> <span class="o">=</span> <span class="s1">&#39;rml/elisa.rml&#39;</span>
 

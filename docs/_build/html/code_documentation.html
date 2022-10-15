@@ -46,6 +46,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#simulationparams">SimulationParams</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="#recipes">Recipes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Resolving Power</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">Flux</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="#process-simulation-files">Process simulation files</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#postprocess-rays-analyzed-by-raypyng">PostProcess rays analyzed by raypyng</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#postprocess-rays-analyzed-by-ray-ui">PostProcess rays analyzed by RAY-UI</a></li>
@@ -94,7 +99,7 @@
 <h2>Simulate<a class="headerlink" href="#simulate" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.simulate.</span></span><span class="sig-name descname"><span class="pre">Simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hide</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.simulate.Simulate" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.simulate.</span></span><span class="sig-name descname"><span class="pre">Simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hide</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ray_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.simulate.Simulate" title="Permalink to this definition"></a></dt>
 <dd><p>A class that takes care of performing the simulations with RAY-UI</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.analyze">
@@ -274,6 +279,32 @@ values to be assigned.</p>
 <dd><p>RMLFile object instantiated in init</p>
 </dd></dl>
 
+</dd></dl>
+
+</section>
+</section>
+<section id="recipes">
+<h1>Recipes<a class="headerlink" href="#recipes" title="Permalink to this heading"></a></h1>
+<p>raypyng provides some recipes to make simulations,
+that simplify the syntax in the script.
+Two recipes are provided, one to make <a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_RP.py">Resolving Power</a> simulations,
+one to make <a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_Flux.py">Flux</a>
+simulations.</p>
+<section id="id1">
+<h2>Resolving Power<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="raypyng.recipes.ResolvingPower">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.recipes.</span></span><span class="sig-name descname"><span class="pre">ResolvingPower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exported_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#raypyng.rml.ObjectElement" title="raypyng.rml.ObjectElement"><span class="pre">ObjectElement</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#raypyng.rml.ObjectElement" title="raypyng.rml.ObjectElement"><span class="pre">ObjectElement</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.recipes.ResolvingPower" title="Permalink to this definition"></a></dt>
+<dd><p>Resolving Power Simulations, reflectivity is automatically switched off for all elements</p>
+</dd></dl>
+
+</section>
+<section id="id2">
+<h2>Flux<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="raypyng.recipes.Flux">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.recipes.</span></span><span class="sig-name descname"><span class="pre">Flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exported_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#raypyng.rml.ObjectElement" title="raypyng.rml.ObjectElement"><span class="pre">ObjectElement</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#raypyng.rml.ObjectElement" title="raypyng.rml.ObjectElement"><span class="pre">ObjectElement</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.recipes.Flux" title="Permalink to this definition"></a></dt>
+<dd><p>Flux simulations, reflectivity is automatically switched on for all elements</p>
 </dd></dl>
 
 </section>

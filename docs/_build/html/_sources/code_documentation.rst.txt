@@ -11,6 +11,27 @@ SimulationParams
 .. autoclass:: raypyng.simulate.SimulationParams
    :members:
 
+Recipes
+*********
+raypyng provides some recipes to make simulations, 
+that simplify the syntax in the script. 
+Two recipes are provided, one to make `Resolving Power
+<https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_RP.py>`_ simulations, 
+one to make `Flux
+<https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_Flux.py>`_
+simulations. 
+
+Resolving Power
+=================
+.. autoclass:: raypyng.recipes.ResolvingPower
+   :members:
+
+Flux
+=================
+.. autoclass:: raypyng.recipes.Flux
+   :members:
+
+
 Process simulation files
 ************************
 

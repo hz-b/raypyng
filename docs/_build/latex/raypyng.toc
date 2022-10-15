@@ -13,14 +13,17 @@
 \contentsline {chapter}{\numberline {3}Simulation}{11}{chapter.3}%
 \contentsline {section}{\numberline {3.1}Simulate}{11}{section.3.1}%
 \contentsline {section}{\numberline {3.2}SimulationParams}{13}{section.3.2}%
-\contentsline {chapter}{\numberline {4}Process simulation files}{15}{chapter.4}%
-\contentsline {section}{\numberline {4.1}PostProcess rays analyzed by raypyng}{15}{section.4.1}%
-\contentsline {section}{\numberline {4.2}PostProcess rays analyzed by RAY\sphinxhyphen {}UI}{16}{section.4.2}%
-\contentsline {chapter}{\numberline {5}RAY\sphinxhyphen {}UI API}{19}{chapter.5}%
-\contentsline {section}{\numberline {5.1}RayUIRunner}{19}{section.5.1}%
-\contentsline {chapter}{\numberline {6}RML}{21}{chapter.6}%
-\contentsline {section}{\numberline {6.1}RMLFile}{21}{section.6.1}%
-\contentsline {section}{\numberline {6.2}BeamlineElement}{21}{section.6.2}%
-\contentsline {section}{\numberline {6.3}ObjectElement}{22}{section.6.3}%
-\contentsline {section}{\numberline {6.4}ParamElement}{22}{section.6.4}%
-\contentsline {chapter}{Index}{25}{section*.57}%
+\contentsline {chapter}{\numberline {4}Recipes}{15}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Resolving Power}{15}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Flux}{15}{section.4.2}%
+\contentsline {chapter}{\numberline {5}Process simulation files}{17}{chapter.5}%
+\contentsline {section}{\numberline {5.1}PostProcess rays analyzed by raypyng}{17}{section.5.1}%
+\contentsline {section}{\numberline {5.2}PostProcess rays analyzed by RAY\sphinxhyphen {}UI}{18}{section.5.2}%
+\contentsline {chapter}{\numberline {6}RAY\sphinxhyphen {}UI API}{21}{chapter.6}%
+\contentsline {section}{\numberline {6.1}RayUIRunner}{21}{section.6.1}%
+\contentsline {chapter}{\numberline {7}RML}{23}{chapter.7}%
+\contentsline {section}{\numberline {7.1}RMLFile}{23}{section.7.1}%
+\contentsline {section}{\numberline {7.2}BeamlineElement}{23}{section.7.2}%
+\contentsline {section}{\numberline {7.3}ObjectElement}{24}{section.7.3}%
+\contentsline {section}{\numberline {7.4}ParamElement}{24}{section.7.4}%
+\contentsline {chapter}{Index}{27}{section*.59}%

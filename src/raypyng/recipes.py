@@ -1,5 +1,4 @@
-#from .simulate import Simulate
-from .rml import ObjectElement,ParamElement, BeamlineElement
+from .rml import ObjectElement
 import numpy as np
 
 
@@ -17,6 +16,14 @@ class ResolvingPower(SimulationRecipe):
     """Resolving Power Simulations, reflectivity is automatically switched off for all elements
     """
     def __init__(self, energy_range:range, exported_object:ObjectElement,/, *args,source:ObjectElement=None,sim_folder:str=None):
+        """init
+
+        Args:
+            energy_range (np.array, list): the energies to simulate in eV
+            exported_object (ObjectElement): the object to export
+            source (ObjectElement, optional): the source object. If None is provided, an automatic recogniton of the source will be tried. Defaults to None.
+            sim_folder (str, optional): the name of the simulation folder. If None, the rml filename will be used. Defaults to None.
+        """        
     
         if not isinstance(source, ObjectElement) and source != None:
             raise TypeError('The source must be an ObjectElement part of a beamline, while it is a', type(source))
@@ -89,6 +96,14 @@ class Flux(SimulationRecipe):
     """Flux simulations, reflectivity is automatically switched on for all elements
     """
     def __init__(self, energy_range:range, exported_object:ObjectElement,/, *args,source:ObjectElement=None,sim_folder:str=None):
+        """init
+
+        Args:
+            energy_range (np.array, list): the energies to simulate in eV
+            exported_object (ObjectElement): the object to export
+            source (ObjectElement, optional): the source object. If None is provided, an automatic recogniton of the source will be tried. Defaults to None.
+            sim_folder (str, optional): the name of the simulation folder. If None, the rml filename will be used. Defaults to None.
+        """        
     
         if not isinstance(source, ObjectElement) and source != None:
             raise TypeError('The source must be an ObjectElement part of a beamline, while it is a', type(source))
@@ -163,6 +178,15 @@ class BeamWaist(SimulationRecipe):
     optical elements, including image planes
     """
     def __init__(self, energy:float,/,source:ObjectElement=None,nrays:int=None,sim_folder:str=None):
+        """_summary_
+
+        Args:
+            energy_range (np.array, list): the energies to simulate in eV
+            source (ObjectElement, optional): the source object. If None is provided, an automatic recogniton of the source will be tried. Defaults to None.
+            nrays (int): number of rays for the source
+            sim_folder (str, optional): the name of the simulation folder. If None, the rml filename will be used. Defaults to None.
+        
+        """        
     
         if not isinstance(energy, (int,float)):
            raise TypeError('The energy must be an a int or float, while it is a', type(energy))
