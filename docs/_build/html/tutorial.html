@@ -43,21 +43,22 @@
 <li class="toctree-l1"><a class="reference internal" href="install_raypyng.html">Install</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#minimal-example">Minimal example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#exports">Exports</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#simulation-output">Simulation Output</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#analysis-performed-by-ray-ui">Analysis performed by RAY-UI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#analysis-performed-by-raypyng">Analysis performed by raypyng</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#recipes">Recipes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#list-of-examples-available-and-short-explanation">List of examples available and short explanation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#recipes">Recipes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Resolving Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Flux</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#list-of-available-examples">List of available examples</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="how_to_guides.html">How To Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code_documentation.html">Simulation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code_documentation.html#recipes">Recipes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code_documentation.html#process-simulation-files">Process simulation files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code_documentation.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code_documentation.html#ray-ui-api">RAY-UI API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code_documentation.html#rml">RML</a></li>
 </ul>
 
         </div>
@@ -214,8 +215,35 @@ To let RAY-UI analyze the results, one has to set:</p>
 </div>
 <p>where the <cite>multiprocessing</cite> parameter can be set either to False or to an int, corresponding to the number of parallel instances of RAY-UI to be used. Generally speaking, the number of instances of RAY-UI must be lower than the number of cores available. If the simulation uses many rays, monitor the RAM usage of your computer. If the computation uses all the possible RAM of the computer the program may get blocked or not execute correctly.</p>
 </section>
-<section id="exports">
-<h2>Exports<a class="headerlink" href="#exports" title="Permalink to this heading"></a></h2>
+<section id="simulation-output">
+<h2>Simulation Output<a class="headerlink" href="#simulation-output" title="Permalink to this heading"></a></h2>
+<p>Expect this folders and subfolders to be created:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>RAYPy_simulation_mySimulation
+├── round_0
+│   ├── 0_*.rml
+│   └── 0_*.csv
+│   └── 0_*.dat (only if raypyng analyzes the results)
+│   └── ...
+│   └── looper.py
+├── round_0
+│   ├── 0_*.rml
+│   └── 0_*.csv
+│   └── 0_*.dat (only if raypyng analyzes the results)
+│   └── ...
+│   └── looper.py
+...
+├── round_n
+│   ├── 0_*.rml
+│   └── 0_*.csv
+│   └── 0_*.dat (only if raypyng analyzes the results)
+│   └── ...
+│   └── looper.py
+├── input_param_1.dat
+...
+├── input_param_k.dat
+├── output_simulation.dat (only if raypyng analyzes the results)
+</pre></div>
+</div>
 <section id="analysis-performed-by-ray-ui">
 <h3>Analysis performed by RAY-UI<a class="headerlink" href="#analysis-performed-by-ray-ui" title="Permalink to this heading"></a></h3>
 <p>If you decided to let RAY-UI do the analysis, you should expect the following files to be
@@ -232,6 +260,7 @@ that can be opened by RAY-UI.</p></li>
 <li><p>inside each <cite>round_n</cite> folder you will find your exported files, one for
 each simulation. If for instance, you exported the <cite>ScalarElementProperties</cite> of the Dipole,
 you will have a list of files <cite>0_Dipole-ScalarElementProperties.csv</cite></p></li>
+<li><p><cite>looper.csv</cite> each simulation and its parameters.</p></li>
 </ul>
 </section>
 <section id="analysis-performed-by-raypyng">
@@ -264,15 +293,26 @@ and saves a corresponding file, for instance <cite>0_Dipole_analyzed_rays.dat</c
 <li><p>In the simulation folder, all the for each exported element
 is united (and in case of more rounds of simulations averaged)
 in one single file. For the dipole, the file is called <cite>Dipole.dat</cite></p></li>
+<li><p><cite>looper.csv</cite> each simulation and its parameters.</p></li>
 </ul>
 </section>
 </section>
 <section id="recipes">
 <h2>Recipes<a class="headerlink" href="#recipes" title="Permalink to this heading"></a></h2>
-<p>Documentation is still not available, see the examples.</p>
+<p>raypyng provides some recipes to make simulations,
+that simplify the syntax in the script.
+Two recipes are provided, one to make <a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_RP.py">Resolving Power</a> simulations,
+one to make <a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_Flux.py">Flux</a>
+simulations.</p>
+<section id="id1">
+<h3>Resolving Power<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
 </section>
-<section id="list-of-examples-available-and-short-explanation">
-<h2>List of examples available and short explanation<a class="headerlink" href="#list-of-examples-available-and-short-explanation" title="Permalink to this heading"></a></h2>
+<section id="id2">
+<h3>Flux<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+</section>
+</section>
+<section id="list-of-available-examples">
+<h2>List of available examples<a class="headerlink" href="#list-of-available-examples" title="Permalink to this heading"></a></h2>
 <p>In the example folder, the following examples are available:</p>
 <ul class="simple">
 <li><p><cite>example_simulation_analyze.py</cite> simulate a beamline,

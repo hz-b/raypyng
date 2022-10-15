@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simulation &mdash; RayPyNG  documentation</title>
+  <title>API &mdash; RayPyNG  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -42,30 +42,33 @@
 <li class="toctree-l1"><a class="reference internal" href="install_raypyng.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="how_to_guides.html">How To Guides</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Simulation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#simulate">Simulate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#simulationparams">SimulationParams</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#simulation">Simulation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#simulate">Simulate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#simulationparams">SimulationParams</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#recipes">Recipes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">Resolving Power</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">Flux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#recipes">Recipes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#resolving-power">Resolving Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flux">Flux</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#process-simulation-files">Process simulation files</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#postprocess-rays-analyzed-by-raypyng">PostProcess rays analyzed by raypyng</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#postprocess-rays-analyzed-by-ray-ui">PostProcess rays analyzed by RAY-UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#process-simulation-files">Process simulation files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#postprocess-rays-analyzed-by-raypyng">PostProcess rays analyzed by raypyng</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#postprocess-rays-analyzed-by-ray-ui">PostProcess rays analyzed by RAY-UI</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#ray-ui-api">RAY-UI API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#rayuirunner">RayUIRunner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ray-ui-api">RAY-UI API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rayuirunner">RayUIRunner</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#rml">RML</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#rmlfile">RMLFile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#beamlineelement">BeamlineElement</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#objectelement">ObjectElement</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#paramelement">ParamElement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rml">RML</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rmlfile">RMLFile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#beamlineelement">BeamlineElement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#objectelement">ObjectElement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#paramelement">ParamElement</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -84,7 +87,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Simulation</li>
+      <li>API</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/code_documentation.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -94,10 +97,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="simulation">
-<h1>Simulation<a class="headerlink" href="#simulation" title="Permalink to this heading"></a></h1>
+  <section id="api">
+<h1>API<a class="headerlink" href="#api" title="Permalink to this heading"></a></h1>
+<section id="simulation">
+<h2>Simulation<a class="headerlink" href="#simulation" title="Permalink to this heading"></a></h2>
 <section id="simulate">
-<h2>Simulate<a class="headerlink" href="#simulate" title="Permalink to this heading"></a></h2>
+<h3>Simulate<a class="headerlink" href="#simulate" title="Permalink to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.simulate.</span></span><span class="sig-name descname"><span class="pre">Simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hide</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ray_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.simulate.Simulate" title="Permalink to this definition"></a></dt>
@@ -260,7 +265,7 @@ from the SimulationParams class</p>
 
 </section>
 <section id="simulationparams">
-<h2>SimulationParams<a class="headerlink" href="#simulationparams" title="Permalink to this heading"></a></h2>
+<h3>SimulationParams<a class="headerlink" href="#simulationparams" title="Permalink to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.simulate.SimulationParams">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.simulate.</span></span><span class="sig-name descname"><span class="pre">SimulationParams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.simulate.SimulationParams" title="Permalink to this definition"></a></dt>
@@ -285,14 +290,9 @@ values to be assigned.</p>
 </section>
 </section>
 <section id="recipes">
-<h1>Recipes<a class="headerlink" href="#recipes" title="Permalink to this heading"></a></h1>
-<p>raypyng provides some recipes to make simulations,
-that simplify the syntax in the script.
-Two recipes are provided, one to make <a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_RP.py">Resolving Power</a> simulations,
-one to make <a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_Flux.py">Flux</a>
-simulations.</p>
-<section id="id1">
-<h2>Resolving Power<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<h2>Recipes<a class="headerlink" href="#recipes" title="Permalink to this heading"></a></h2>
+<section id="resolving-power">
+<h3>Resolving Power<a class="headerlink" href="#resolving-power" title="Permalink to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.recipes.ResolvingPower">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.recipes.</span></span><span class="sig-name descname"><span class="pre">ResolvingPower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exported_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#raypyng.rml.ObjectElement" title="raypyng.rml.ObjectElement"><span class="pre">ObjectElement</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#raypyng.rml.ObjectElement" title="raypyng.rml.ObjectElement"><span class="pre">ObjectElement</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.recipes.ResolvingPower" title="Permalink to this definition"></a></dt>
@@ -300,8 +300,8 @@ simulations.</p>
 </dd></dl>
 
 </section>
-<section id="id2">
-<h2>Flux<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<section id="flux">
+<h3>Flux<a class="headerlink" href="#flux" title="Permalink to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.recipes.Flux">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.recipes.</span></span><span class="sig-name descname"><span class="pre">Flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exported_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#raypyng.rml.ObjectElement" title="raypyng.rml.ObjectElement"><span class="pre">ObjectElement</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#raypyng.rml.ObjectElement" title="raypyng.rml.ObjectElement"><span class="pre">ObjectElement</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.recipes.Flux" title="Permalink to this definition"></a></dt>
@@ -311,9 +311,9 @@ simulations.</p>
 </section>
 </section>
 <section id="process-simulation-files">
-<h1>Process simulation files<a class="headerlink" href="#process-simulation-files" title="Permalink to this heading"></a></h1>
+<h2>Process simulation files<a class="headerlink" href="#process-simulation-files" title="Permalink to this heading"></a></h2>
 <section id="postprocess-rays-analyzed-by-raypyng">
-<h2>PostProcess rays analyzed by raypyng<a class="headerlink" href="#postprocess-rays-analyzed-by-raypyng" title="Permalink to this heading"></a></h2>
+<h3>PostProcess rays analyzed by raypyng<a class="headerlink" href="#postprocess-rays-analyzed-by-raypyng" title="Permalink to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.postprocessing.PostProcess">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.postprocessing.</span></span><span class="sig-name descname"><span class="pre">PostProcess</span></span><a class="headerlink" href="#raypyng.postprocessing.PostProcess" title="Permalink to this definition"></a></dt>
@@ -377,7 +377,7 @@ it saves it in an array that is composed by <code class="code docutils literal n
 
 </section>
 <section id="postprocess-rays-analyzed-by-ray-ui">
-<h2>PostProcess rays analyzed by RAY-UI<a class="headerlink" href="#postprocess-rays-analyzed-by-ray-ui" title="Permalink to this heading"></a></h2>
+<h3>PostProcess rays analyzed by RAY-UI<a class="headerlink" href="#postprocess-rays-analyzed-by-ray-ui" title="Permalink to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.postprocessing.PostProcessAnalyzed">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.postprocessing.</span></span><span class="sig-name descname"><span class="pre">PostProcessAnalyzed</span></span><a class="headerlink" href="#raypyng.postprocessing.PostProcessAnalyzed" title="Permalink to this definition"></a></dt>
@@ -469,9 +469,9 @@ source_Photon_flux (np.array) : the photon flux of the source</p>
 </section>
 </section>
 <section id="ray-ui-api">
-<h1>RAY-UI API<a class="headerlink" href="#ray-ui-api" title="Permalink to this heading"></a></h1>
+<h2>RAY-UI API<a class="headerlink" href="#ray-ui-api" title="Permalink to this heading"></a></h2>
 <section id="rayuirunner">
-<h2>RayUIRunner<a class="headerlink" href="#rayuirunner" title="Permalink to this heading"></a></h2>
+<h3>RayUIRunner<a class="headerlink" href="#rayuirunner" title="Permalink to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.runner.RayUIRunner">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.runner.</span></span><span class="sig-name descname"><span class="pre">RayUIRunner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ray_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ray_binary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rayui.sh'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hide</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.runner.RayUIRunner" title="Permalink to this definition"></a></dt>
@@ -526,9 +526,9 @@ source_Photon_flux (np.array) : the photon flux of the source</p>
 </section>
 </section>
 <section id="rml">
-<h1>RML<a class="headerlink" href="#rml" title="Permalink to this heading"></a></h1>
+<h2>RML<a class="headerlink" href="#rml" title="Permalink to this heading"></a></h2>
 <section id="rmlfile">
-<h2>RMLFile<a class="headerlink" href="#rmlfile" title="Permalink to this heading"></a></h2>
+<h3>RMLFile<a class="headerlink" href="#rmlfile" title="Permalink to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.rml.RMLFile">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.rml.</span></span><span class="sig-name descname"><span class="pre">RMLFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.rml.RMLFile" title="Permalink to this definition"></a></dt>
@@ -559,7 +559,7 @@ source_Photon_flux (np.array) : the photon flux of the source</p>
 
 </section>
 <section id="beamlineelement">
-<h2>BeamlineElement<a class="headerlink" href="#beamlineelement" title="Permalink to this heading"></a></h2>
+<h3>BeamlineElement<a class="headerlink" href="#beamlineelement" title="Permalink to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.rml.BeamlineElement">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.rml.</span></span><span class="sig-name descname"><span class="pre">BeamlineElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.rml.BeamlineElement" title="Permalink to this definition"></a></dt>
@@ -619,7 +619,7 @@ source_Photon_flux (np.array) : the photon flux of the source</p>
 
 </section>
 <section id="objectelement">
-<h2>ObjectElement<a class="headerlink" href="#objectelement" title="Permalink to this heading"></a></h2>
+<h3>ObjectElement<a class="headerlink" href="#objectelement" title="Permalink to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.rml.ObjectElement">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.rml.</span></span><span class="sig-name descname"><span class="pre">ObjectElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.rml.ObjectElement" title="Permalink to this definition"></a></dt>
@@ -679,7 +679,7 @@ source_Photon_flux (np.array) : the photon flux of the source</p>
 
 </section>
 <section id="paramelement">
-<h2>ParamElement<a class="headerlink" href="#paramelement" title="Permalink to this heading"></a></h2>
+<h3>ParamElement<a class="headerlink" href="#paramelement" title="Permalink to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.rml.ParamElement">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.rml.</span></span><span class="sig-name descname"><span class="pre">ParamElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.rml.ParamElement" title="Permalink to this definition"></a></dt>
@@ -737,6 +737,7 @@ source_Photon_flux (np.array) : the photon flux of the source</p>
 
 </dd></dl>
 
+</section>
 </section>
 </section>
 

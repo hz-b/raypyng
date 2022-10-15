@@ -156,8 +156,38 @@ Finally, the simulations can be run using
 
 where the `multiprocessing` parameter can be set either to False or to an int, corresponding to the number of parallel instances of RAY-UI to be used. Generally speaking, the number of instances of RAY-UI must be lower than the number of cores available. If the simulation uses many rays, monitor the RAM usage of your computer. If the computation uses all the possible RAM of the computer the program may get blocked or not execute correctly.
 
-Exports
-=======
+Simulation Output
+=================
+Expect this folders and subfolders to be created:
+
+::
+
+    RAYPy_simulation_mySimulation
+    ├── round_0          
+    │   ├── 0_*.rml
+    │   └── 0_*.csv
+    │   └── 0_*.dat (only if raypyng analyzes the results)
+    │   └── ...
+    │   └── looper.py
+    ├── round_0          
+    │   ├── 0_*.rml
+    │   └── 0_*.csv
+    │   └── 0_*.dat (only if raypyng analyzes the results)
+    │   └── ...
+    │   └── looper.py
+    ...
+    ├── round_n          
+    │   ├── 0_*.rml
+    │   └── 0_*.csv
+    │   └── 0_*.dat (only if raypyng analyzes the results)
+    │   └── ...
+    │   └── looper.py
+    ├── input_param_1.dat
+    ...
+    ├── input_param_k.dat
+    ├── output_simulation.dat (only if raypyng analyzes the results)
+
+
 
 Analysis performed by RAY-UI 
 ------------------------------ 
@@ -175,6 +205,7 @@ saved in your simulation folder:
 - inside each `round_n` folder you will find your exported files, one for 
   each simulation. If for instance, you exported the `ScalarElementProperties` of the Dipole, 
   you will have a list of files `0_Dipole-ScalarElementProperties.csv`
+- `looper.csv` each simulation and its parameters.
 
 Analysis performed by raypyng
 -------------------------------
@@ -193,25 +224,39 @@ be saved in your simulation folder:
   have a list of files `0_Dipole-RawRaysOutgoing.csv`
 - for each `RawRaysOutgoing` file, raypyng calculates some properties, 
   and saves a corresponding file, for instance `0_Dipole_analyzed_rays.dat`. Each of these files contains the following information:
-  
+
   - SourcePhotonFlux
   - NumberRaysSurvived     
   - PercentageRaysSurvived   
   - PhotonFlux        
   - Bandwidth        
-  - HorizontalFocusFWHM   
+  - HorizontalFocusFWHM     
   - VerticalFocusFWHM
 
 - In the simulation folder, all the for each exported element 
   is united (and in case of more rounds of simulations averaged) 
   in one single file. For the dipole, the file is called `Dipole.dat`
-  
+- `looper.csv` each simulation and its parameters.
+
 Recipes
 ========
-Documentation is still not available, see the examples.
+raypyng provides some recipes to make simulations, 
+that simplify the syntax in the script. 
+Two recipes are provided, one to make `Resolving Power
+<https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_RP.py>`_ simulations, 
+one to make `Flux
+<https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_Flux.py>`_
+simulations. 
 
-List of examples available and short explanation
-============================================================
+Resolving Power 
+----------------
+
+Flux
+-----
+
+
+List of available examples 
+===========================
 In the example folder, the following examples are available:
 
 - `example_simulation_analyze.py` simulate a beamline, 
@@ -233,3 +278,5 @@ In the example folder, the following examples are available:
   simple geometrical x-ray tracer to propagate each ray until the next optical 
   element and plots the results (both top view and side view). This is still 
   experimental and it may fail.   
+
+  

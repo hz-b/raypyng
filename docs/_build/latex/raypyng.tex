@@ -371,8 +371,38 @@ Finally, the simulations can be run using
 where the \sphinxtitleref{multiprocessing} parameter can be set either to False or to an int, corresponding to the number of parallel instances of RAY\sphinxhyphen{}UI to be used. Generally speaking, the number of instances of RAY\sphinxhyphen{}UI must be lower than the number of cores available. If the simulation uses many rays, monitor the RAM usage of your computer. If the computation uses all the possible RAM of the computer the program may get blocked or not execute correctly.
 
 
-\section{Exports}
-\label{\detokenize{tutorial:exports}}
+\section{Simulation Output}
+\label{\detokenize{tutorial:simulation-output}}
+\sphinxAtStartPar
+Expect this folders and subfolders to be created:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+RAYPy\PYGZus{}simulation\PYGZus{}mySimulation
+├── round\PYGZus{}0
+│   ├── 0\PYGZus{}*.rml
+│   └── 0\PYGZus{}*.csv
+│   └── 0\PYGZus{}*.dat (only if raypyng analyzes the results)
+│   └── ...
+│   └── looper.py
+├── round\PYGZus{}0
+│   ├── 0\PYGZus{}*.rml
+│   └── 0\PYGZus{}*.csv
+│   └── 0\PYGZus{}*.dat (only if raypyng analyzes the results)
+│   └── ...
+│   └── looper.py
+...
+├── round\PYGZus{}n
+│   ├── 0\PYGZus{}*.rml
+│   └── 0\PYGZus{}*.csv
+│   └── 0\PYGZus{}*.dat (only if raypyng analyzes the results)
+│   └── ...
+│   └── looper.py
+├── input\PYGZus{}param\PYGZus{}1.dat
+...
+├── input\PYGZus{}param\PYGZus{}k.dat
+├── output\PYGZus{}simulation.dat (only if raypyng analyzes the results)
+\end{sphinxVerbatim}
+
 
 \subsection{Analysis performed by RAY\sphinxhyphen{}UI}
 \label{\detokenize{tutorial:analysis-performed-by-ray-ui}}
@@ -402,6 +432,10 @@ that can be opened by RAY\sphinxhyphen{}UI.
 inside each \sphinxtitleref{round\_n} folder you will find your exported files, one for
 each simulation. If for instance, you exported the \sphinxtitleref{ScalarElementProperties} of the Dipole,
 you will have a list of files \sphinxtitleref{0\_Dipole\sphinxhyphen{}ScalarElementProperties.csv}
+
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{looper.csv} each simulation and its parameters.
 
 \end{itemize}
 
@@ -475,17 +509,31 @@ In the simulation folder, all the for each exported element
 is united (and in case of more rounds of simulations averaged)
 in one single file. For the dipole, the file is called \sphinxtitleref{Dipole.dat}
 
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{looper.csv} each simulation and its parameters.
+
 \end{itemize}
 
 
 \section{Recipes}
 \label{\detokenize{tutorial:recipes}}
 \sphinxAtStartPar
-Documentation is still not available, see the examples.
+raypyng provides some recipes to make simulations,
+that simplify the syntax in the script.
+Two recipes are provided, one to make \sphinxhref{https://github.com/hz-b/raypyng/blob/main/examples/example\_simulation\_RP.py}{Resolving Power} simulations,
+one to make \sphinxhref{https://github.com/hz-b/raypyng/blob/main/examples/example\_simulation\_Flux.py}{Flux}
+simulations.
 
 
-\section{List of examples available and short explanation}
-\label{\detokenize{tutorial:list-of-examples-available-and-short-explanation}}
+\subsection{Resolving Power}
+\label{\detokenize{tutorial:id1}}
+
+\subsection{Flux}
+\label{\detokenize{tutorial:id2}}
+
+\section{List of available examples}
+\label{\detokenize{tutorial:list-of-available-examples}}
 \sphinxAtStartPar
 In the example folder, the following examples are available:
 \begin{itemize}
@@ -704,10 +752,13 @@ file for each element present in the beamline automatically.
 \sphinxstepscope
 
 
-\chapter{Simulation}
-\label{\detokenize{code_documentation:simulation}}\label{\detokenize{code_documentation::doc}}
+\chapter{API}
+\label{\detokenize{code_documentation:api}}\label{\detokenize{code_documentation::doc}}
 
-\section{Simulate}
+\section{Simulation}
+\label{\detokenize{code_documentation:simulation}}
+
+\subsection{Simulate}
 \label{\detokenize{code_documentation:simulate}}\index{Simulate (class in raypyng.simulate)@\spxentry{Simulate}\spxextra{class in raypyng.simulate}}
 
 \begin{fulllineitems}
@@ -977,7 +1028,7 @@ A string to append to the folder where the simulations will be executed.
 
 
 
-\section{SimulationParams}
+\subsection{SimulationParams}
 \label{\detokenize{code_documentation:simulationparams}}\index{SimulationParams (class in raypyng.simulate)@\spxentry{SimulationParams}\spxextra{class in raypyng.simulate}}
 
 \begin{fulllineitems}
@@ -1019,18 +1070,11 @@ RMLFile object instantiated in init
 
 
 
-\chapter{Recipes}
+\section{Recipes}
 \label{\detokenize{code_documentation:recipes}}
-\sphinxAtStartPar
-raypyng provides some recipes to make simulations,
-that simplify the syntax in the script.
-Two recipes are provided, one to make \sphinxhref{https://github.com/hz-b/raypyng/blob/main/examples/example\_simulation\_RP.py}{Resolving Power} simulations,
-one to make \sphinxhref{https://github.com/hz-b/raypyng/blob/main/examples/example\_simulation\_Flux.py}{Flux}
-simulations.
 
-
-\section{Resolving Power}
-\label{\detokenize{code_documentation:id1}}\index{ResolvingPower (class in raypyng.recipes)@\spxentry{ResolvingPower}\spxextra{class in raypyng.recipes}}
+\subsection{Resolving Power}
+\label{\detokenize{code_documentation:resolving-power}}\index{ResolvingPower (class in raypyng.recipes)@\spxentry{ResolvingPower}\spxextra{class in raypyng.recipes}}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{code_documentation:raypyng.recipes.ResolvingPower}}
@@ -1044,8 +1088,8 @@ Resolving Power Simulations, reflectivity is automatically switched off for all 
 
 
 
-\section{Flux}
-\label{\detokenize{code_documentation:id2}}\index{Flux (class in raypyng.recipes)@\spxentry{Flux}\spxextra{class in raypyng.recipes}}
+\subsection{Flux}
+\label{\detokenize{code_documentation:flux}}\index{Flux (class in raypyng.recipes)@\spxentry{Flux}\spxextra{class in raypyng.recipes}}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{code_documentation:raypyng.recipes.Flux}}
@@ -1059,10 +1103,10 @@ Flux simulations, reflectivity is automatically switched on for all elements
 
 
 
-\chapter{Process simulation files}
+\section{Process simulation files}
 \label{\detokenize{code_documentation:process-simulation-files}}
 
-\section{PostProcess rays analyzed by raypyng}
+\subsection{PostProcess rays analyzed by raypyng}
 \label{\detokenize{code_documentation:postprocess-rays-analyzed-by-raypyng}}\index{PostProcess (class in raypyng.postprocessing)@\spxentry{PostProcess}\spxextra{class in raypyng.postprocessing}}
 
 \begin{fulllineitems}
@@ -1172,7 +1216,7 @@ it saves it in an array that is composed by \sphinxcode{\sphinxupquote{{[}n\_ray
 
 
 
-\section{PostProcess rays analyzed by RAY\sphinxhyphen{}UI}
+\subsection{PostProcess rays analyzed by RAY\sphinxhyphen{}UI}
 \label{\detokenize{code_documentation:postprocess-rays-analyzed-by-ray-ui}}\index{PostProcessAnalyzed (class in raypyng.postprocessing)@\spxentry{PostProcessAnalyzed}\spxextra{class in raypyng.postprocessing}}
 
 \begin{fulllineitems}
@@ -1330,10 +1374,10 @@ if the source is a Dipole
 
 
 
-\chapter{RAY\sphinxhyphen{}UI API}
+\section{RAY\sphinxhyphen{}UI API}
 \label{\detokenize{code_documentation:ray-ui-api}}
 
-\section{RayUIRunner}
+\subsection{RayUIRunner}
 \label{\detokenize{code_documentation:rayuirunner}}\index{RayUIRunner (class in raypyng.runner)@\spxentry{RayUIRunner}\spxextra{class in raypyng.runner}}
 
 \begin{fulllineitems}
@@ -1422,10 +1466,10 @@ Open one instance of RAY\sphinxhyphen{}UI using subprocess
 
 
 
-\chapter{RML}
+\section{RML}
 \label{\detokenize{code_documentation:rml}}
 
-\section{RMLFile}
+\subsection{RMLFile}
 \label{\detokenize{code_documentation:rmlfile}}\index{RMLFile (class in raypyng.rml)@\spxentry{RMLFile}\spxextra{class in raypyng.rml}}
 
 \begin{fulllineitems}
@@ -1476,7 +1520,7 @@ Write the rml to \sphinxcode{\sphinxupquote{file}}
 
 
 
-\section{BeamlineElement}
+\subsection{BeamlineElement}
 \label{\detokenize{code_documentation:beamlineelement}}\index{BeamlineElement (class in raypyng.rml)@\spxentry{BeamlineElement}\spxextra{class in raypyng.rml}}
 
 \begin{fulllineitems}
@@ -1580,7 +1624,7 @@ str
 
 
 
-\section{ObjectElement}
+\subsection{ObjectElement}
 \label{\detokenize{code_documentation:objectelement}}\index{ObjectElement (class in raypyng.rml)@\spxentry{ObjectElement}\spxextra{class in raypyng.rml}}
 
 \begin{fulllineitems}
@@ -1684,7 +1728,7 @@ str
 
 
 
-\section{ParamElement}
+\subsection{ParamElement}
 \label{\detokenize{code_documentation:paramelement}}\index{ParamElement (class in raypyng.rml)@\spxentry{ParamElement}\spxextra{class in raypyng.rml}}
 
 \begin{fulllineitems}
