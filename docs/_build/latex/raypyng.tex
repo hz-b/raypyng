@@ -61,7 +61,7 @@
 
 
 \title{RayPyNG}
-\date{Oct 14, 2022}
+\date{Oct 15, 2022}
 \release{}
 \author{Simone Vadilonga, Ruslan Ovsyannikov}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -82,12 +82,455 @@
 \phantomsection\label{\detokenize{index::doc}}
 
 
+\sphinxAtStartPar
+raypyng provides a simple API to work with RAY\sphinxhyphen{}UI, a software for optical simulation of synchrotron beamlines and x\sphinxhyphen{}ray systems developed by Helmholtz\sphinxhyphen{}Zentrum Berlin.
 
-\chapter{Simulate}
-\label{\detokenize{index:simulate}}\index{Simulate (class in raypyng.simulate)@\spxentry{Simulate}\spxextra{class in raypyng.simulate}}
+\sphinxstepscope
+
+
+\chapter{Install}
+\label{\detokenize{install_raypyng:install}}\label{\detokenize{install_raypyng::doc}}
+\sphinxAtStartPar
+raypyng will work only if using a linux or a MacOS distribustion.
+
+
+\section{Install RAY\sphinxhyphen{}UI}
+\label{\detokenize{install_raypyng:install-ray-ui}}
+\sphinxAtStartPar
+Download the RAY\sphinxhyphen{}UI installer from  \sphinxhref{https://www.helmholtz-berlin.de/forschung/oe/wi/optik-strahlrohre/arbeitsgebiete/ray\_en.html}{this link},
+and run the installer.
+
+
+\section{Install xvfb}
+\label{\detokenize{install_raypyng:install-xvfb}}
+\sphinxAtStartPar
+xvfb is a virtual X11 framebuffer server that let you run RAY\sphinxhyphen{}UI headless
+\begin{description}
+\sphinxlineitem{Install xvfb:}
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+sudo apt install xvfb
+\end{sphinxVerbatim}
+
+\end{description}
+
+\begin{sphinxadmonition}{note}{Note:}
+\sphinxAtStartPar
+xvfb\sphinxhyphen{}run script is a part of the xvfb distribuion and
+runs an app on a new virtual X11 server.
+\end{sphinxadmonition}
+
+
+\section{Install raypyng}
+\label{\detokenize{install_raypyng:install-raypyng}}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+You will need Python 3.8 or newer. From a shell (“Terminal” on OSX,
+“Command Prompt” on Windows), check your current Python version.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+python3 \PYGZhy{}\PYGZhy{}version
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+If that version is less than 3.8, you must update it.
+
+\sphinxAtStartPar
+We recommend install bluesky into a “virtual environment” so this
+installation will not interfere with any existing Python software:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+python3 \PYGZhy{}m venv \PYGZti{}/raypyng\PYGZhy{}tutorial
+\PYG{n+nb}{source} \PYGZti{}/raypyng\PYGZhy{}tutorial/bin/activate
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Alternatively, if you are a
+\sphinxhref{https://conda.io/docs/user-guide/install/download.html}{conda} user,
+you can create a conda environment:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+conda create \PYGZhy{}n raypyng\PYGZhy{}tutorial \PYG{l+s+s2}{\PYGZdq{}python\PYGZgt{}=3.8\PYGZdq{}}
+conda activate raypyng\PYGZhy{}tutorial
+\end{sphinxVerbatim}
+
+\item {} 
+\sphinxAtStartPar
+Install the latest versions of raypyng and ophyd. Also install IPython
+(a Python interpreter designed by scientists for scientists).
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+python3 \PYGZhy{}m pip install \PYGZhy{}\PYGZhy{}upgrade raypyng ipython
+\end{sphinxVerbatim}
+
+\item {} 
+\sphinxAtStartPar
+Start IPython:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{ipython} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZhy{}}\PYG{n}{matplotlib}\PYG{o}{=}\PYG{n}{qt5}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The flag \sphinxcode{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}matplotlib=qt5}} is necessary for live\sphinxhyphen{}updating plots to work.
+
+\sphinxAtStartPar
+Or, if you wish you use raypyng from a Jupyter notebook, install a kernel like
+so:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{ipython} \PYG{n}{kernel} \PYG{n}{install} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZhy{}}\PYG{n}{user} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZhy{}}\PYG{n}{name}\PYG{o}{=}\PYG{n}{raypyng}\PYG{o}{\PYGZhy{}}\PYG{n}{tutorial} \PYG{o}{\PYGZhy{}}\PYG{o}{\PYGZhy{}}\PYG{n}{display}\PYG{o}{\PYGZhy{}}\PYG{n}{name} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Python (raypyng)}\PYG{l+s+s2}{\PYGZdq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+You may start Jupyter from any environment where it is already installed, or
+install it in this environment alongside raypyng and run it from there:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{pip} \PYG{n}{install} \PYG{n}{notebook}
+\PYG{n}{jupyter} \PYG{n}{notebook}
+\end{sphinxVerbatim}
+
+\end{itemize}
+
+\sphinxstepscope
+
+
+\chapter{Tutorial}
+\label{\detokenize{tutorial:tutorial}}\label{\detokenize{tutorial::doc}}
+
+\section{Minimal example}
+\label{\detokenize{tutorial:minimal-example}}
+\sphinxAtStartPar
+raypyng is not able to create a beamline from scratch. To do so, use RAY\sphinxhyphen{}UI,
+create a beamline, and save it. What you save is \sphinxtitleref{.rml} file, that you have to
+pass as an argumet to the \sphinxtitleref{Simulate} simulate class. In the following example we
+use the file for a beamline called \sphinxtitleref{elisa}, and the file is saved in \sphinxtitleref{rml/elisa.rml}.
+The \sphinxtitleref{hide} parameter can be set to true only if \sphinxtitleref{xvfb} is installed.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{raypyng} \PYG{k+kn}{import} \PYG{n}{Simulate}
+\PYG{n}{rml\PYGZus{}file} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{rml/elisa.rml}\PYG{l+s+s1}{\PYGZsq{}}
+
+\PYG{n}{sim} \PYG{o}{=} \PYG{n}{Simulate}\PYG{p}{(}\PYG{n}{rml\PYGZus{}file}\PYG{p}{,} \PYG{n}{hide}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n}{elisa} \PYG{o}{=} \PYG{n}{sim}\PYG{o}{.}\PYG{n}{rml}\PYG{o}{.}\PYG{n}{beamline}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The elements of the beamline are now available as python objects, as well as
+their properties. If working in ipython, tab autocompletion is available.
+For instance to acess the source, a dipole in this case:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} this is the dipole object}
+\PYG{n}{elisa}\PYG{o}{.}\PYG{n}{Dipole}
+\PYG{c+c1}{\PYGZsh{} to acess its parameter, for instance the photonFlux}
+\PYG{n}{elisa}\PYG{o}{.}\PYG{n}{Dipole}\PYG{o}{.}\PYG{n}{photonFlux}
+\PYG{c+c1}{\PYGZsh{} to acess the value}
+\PYG{n}{elisa}\PYG{o}{.}\PYG{n}{Dipole}\PYG{o}{.}\PYG{n}{photonFlux}\PYG{o}{.}\PYG{n}{cdata}
+\PYG{c+c1}{\PYGZsh{} to modify the value}
+\PYG{n}{elisa}\PYG{o}{.}\PYG{n}{Dipole}\PYG{o}{.}\PYG{n}{photonFlux}\PYG{o}{.}\PYG{n}{cdata} \PYG{o}{=} \PYG{l+m+mi}{10}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+To perform simulation, any number of parameters can varied.
+For instance one can vary the photon energy of the source, and set a
+certain aperture of the exit slits:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} define the values of the parameters to scan}
+\PYG{n}{energy}    \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{200}\PYG{p}{,} \PYG{l+m+mi}{7201}\PYG{p}{,}\PYG{l+m+mi}{250}\PYG{p}{)}
+\PYG{n}{SlitSize}  \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{p}{[}\PYG{l+m+mf}{0.1}\PYG{p}{]}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} define a list of dictionaries with the parameters to scan}
+\PYG{n}{params} \PYG{o}{=} \PYG{p}{[}
+            \PYG{p}{\PYGZob{}}\PYG{n}{elisa}\PYG{o}{.}\PYG{n}{Dipole}\PYG{o}{.}\PYG{n}{photonEnergy}\PYG{p}{:}\PYG{n}{energy}\PYG{p}{\PYGZcb{}}\PYG{p}{,}
+            \PYG{p}{\PYGZob{}}\PYG{n}{elisa}\PYG{o}{.}\PYG{n}{ExitSlit}\PYG{o}{.}\PYG{n}{totalHeight}\PYG{p}{:}\PYG{n}{SlitSize}\PYG{p}{\PYGZcb{}}
+        \PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{}and then plug them into the Simulation class}
+\PYG{n}{sim}\PYG{o}{.}\PYG{n}{params}\PYG{o}{=}\PYG{n}{params}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+It is also possible to define coupled parameters. If for instance one wants
+to increase the number of rays with the photon energy
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} define the values of the parameters to scan}
+\PYG{n}{energy}    \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{200}\PYG{p}{,} \PYG{l+m+mi}{7201}\PYG{p}{,}\PYG{l+m+mi}{250}\PYG{p}{)}
+\PYG{n}{nrays}     \PYG{o}{=} \PYG{n}{energy}\PYG{o}{*}\PYG{l+m+mi}{100}
+\PYG{n}{SlitSize}  \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{p}{[}\PYG{l+m+mf}{0.1}\PYG{p}{]}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} define a list of dictionaries with the parameters to scan}
+\PYG{n}{params} \PYG{o}{=} \PYG{p}{[}
+            \PYG{p}{\PYGZob{}}\PYG{n}{elisa}\PYG{o}{.}\PYG{n}{Dipole}\PYG{o}{.}\PYG{n}{photonEnergy}\PYG{p}{:}\PYG{n}{energy}\PYG{p}{,} \PYG{n}{elisa}\PYG{o}{.}\PYG{n}{Dipole}\PYG{o}{.}\PYG{n}{numberRays}\PYG{p}{:}\PYG{n}{nrays}\PYG{p}{\PYGZcb{}}\PYG{p}{,}
+            \PYG{p}{\PYGZob{}}\PYG{n}{elisa}\PYG{o}{.}\PYG{n}{ExitSlit}\PYG{o}{.}\PYG{n}{totalHeight}\PYG{p}{:}\PYG{n}{SlitSize}\PYG{p}{\PYGZcb{}}
+        \PYG{p}{]}
+
+\PYG{c+c1}{\PYGZsh{}and then plug them into the Simulation class}
+\PYG{n}{sim}\PYG{o}{.}\PYG{n}{params}\PYG{o}{=}\PYG{n}{params}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The simulations files and the results will be saved in a folder called \sphinxtitleref{RAYPy\_simulation\_}
+plusa name at your choce, that can be set. This folder will be saved, by default,
+in the folder where the program is executed, but it can be eventually be modified
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{sim}\PYG{o}{.}\PYG{n}{simulation\PYGZus{}folder} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{/home/raypy/Documents/simulations}\PYG{l+s+s1}{\PYGZsq{}}
+\PYG{n}{sim}\PYG{o}{.}\PYG{n}{simulation\PYGZus{}name} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{test}\PYG{l+s+s1}{\PYGZsq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This will create a simulation folder with the following path and name
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{o}{/}\PYG{n}{home}\PYG{o}{/}\PYG{n}{raypy}\PYG{o}{/}\PYG{n}{Documents}\PYG{o}{/}\PYG{n}{simulations}\PYG{o}{/}\PYG{n}{RAYPy\PYGZus{}simulation\PYGZus{}test}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Sometimes, instead of using millions of rays, it is more convenient to repeat the simulations and average the results
+The we can set which parameters of which optical elements can be exported. The number of rounds of simulations can be set like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} repeat the simulations as many time as needed}
+\PYG{n}{sim}\PYG{o}{.}\PYG{n}{repeat} \PYG{o}{=} \PYG{l+m+mi}{1}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+One can decide weather want RAY\sphinxhyphen{}UI or raypyng to do a prelimanary analysis of the results.
+To let RAY\sphinxhyphen{}UI analyze the results, one has to set:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{sim}\PYG{o}{.}\PYG{n}{analyze} \PYG{o}{=} \PYG{k+kc}{True} \PYG{c+c1}{\PYGZsh{} let RAY\PYGZhy{}UI analyze the results}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+In this case the following exports are available:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{sim}\PYG{o}{.}\PYG{n}{possible\PYGZus{}exports}\PYG{p}{)}
+\PYG{o}{\PYGZgt{}} \PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{AnglePhiDistribution}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+\PYG{o}{\PYGZgt{}} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{AnglePsiDistribution}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+\PYG{o}{\PYGZgt{}} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{BeamPropertiesPlotSnapshot}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+\PYG{o}{\PYGZgt{}} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{EnergyDistribution}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+\PYG{o}{\PYGZgt{}} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{FootprintAbsorbedRays}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+\PYG{o}{\PYGZgt{}} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{FootprintAllRays}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+\PYG{o}{\PYGZgt{}} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{FootprintOutgoingRays}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+\PYG{o}{\PYGZgt{}} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{FootprintPlotSnapshot}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+\PYG{o}{\PYGZgt{}} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{FootprintWastedRays}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+\PYG{o}{\PYGZgt{}} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{IntensityPlotSnapshot}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+\PYG{o}{\PYGZgt{}} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{IntensityX}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+\PYG{o}{\PYGZgt{}} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{IntensityYZ}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+\PYG{o}{\PYGZgt{}} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{PathlengthDistribution}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+\PYG{o}{\PYGZgt{}} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{RawRaysBeam}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+\PYG{o}{\PYGZgt{}} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{RawRaysIncoming}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+\PYG{o}{\PYGZgt{}} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{RawRaysOutgoing}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+\PYG{o}{\PYGZgt{}} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{ScalarBeamProperties}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}
+\PYG{o}{\PYGZgt{}} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{ScalarElementProperties}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+To let raypyng analyze the results set:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{sim}\PYG{o}{.}\PYG{n}{analyze} \PYG{o}{=} \PYG{k+kc}{False} \PYG{c+c1}{\PYGZsh{} don\PYGZsq{}t let RAY\PYGZhy{}UI analyze the results}
+\PYG{n}{sim}\PYG{o}{.}\PYG{n}{raypyng\PYGZus{}analysis}\PYG{o}{=}\PYG{k+kc}{True} \PYG{c+c1}{\PYGZsh{} let raypyng analyze the results}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+In this case only these exports are possible
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{sim}\PYG{o}{.}\PYG{n}{possible\PYGZus{}exports\PYGZus{}without\PYGZus{}analysis}\PYG{p}{)}
+\PYG{o}{\PYGZgt{}} \PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{RawRaysIncoming}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{RawRaysOutgoing}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The exports are available for each optical element in the beamline, ImagePlanes included, and can be set like this:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{} This must be a list of dictionaries}
+\PYG{n}{sim}\PYG{o}{.}\PYG{n}{exports}  \PYG{o}{=}  \PYG{p}{[}\PYG{p}{\PYGZob{}}\PYG{n}{elisa}\PYG{o}{.}\PYG{n}{Dipole}\PYG{p}{:}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{ScalarElementProperties}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{]}\PYG{p}{\PYGZcb{}}\PYG{p}{,}
+                \PYG{p}{\PYGZob{}}\PYG{n}{elisa}\PYG{o}{.}\PYG{n}{DetectorAtFocus}\PYG{p}{:}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{ScalarBeamProperties}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{]}\PYG{p}{\PYGZcb{}}
+                \PYG{p}{]}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Finally the simulations can be run using
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{sim}\PYG{o}{.}\PYG{n}{run}\PYG{p}{(}\PYG{n}{multiprocessing}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{force}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+where the \sphinxtitleref{multiprocessing} parameter can be set either to False or to an int, corresponding to the number of parallel instances of RAY\sphinxhyphen{}UI to be used. Generally speaking the number of instances of RAY\sphinxhyphen{}UI must be lower than the number of cores available. If simulation using many rays, monitor the RAM usage of your computer. If the computation uses all the possible RAM of the computer the program may get blocked or not execute correctly.
+
+
+\section{Exports}
+\label{\detokenize{tutorial:exports}}
+
+\subsection{Analysis perfomed by RAY\sphinxhyphen{}UI}
+\label{\detokenize{tutorial:analysis-perfomed-by-ray-ui}}
+\sphinxAtStartPar
+If you decided to let RAY\sphinxhyphen{}UI doing the analysis, you should expect the following files to be
+saved in your simulation folder:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+one file for each parameter you set with the values that you passed to the program.
+If for instance you input the Dipole numberRays, you will find a file called
+\sphinxtitleref{input\_param\_Dipole\_numberRays.dat}
+
+\item {} 
+\sphinxAtStartPar
+one folder called \sphinxtitleref{round\_n} for each repetition of the simulations.
+For instance if you set \sphinxcode{\sphinxupquote{sim.repeat=2}} you will have two folders \sphinxtitleref{round\_0} and \sphinxtitleref{round\_1}
+
+\item {} 
+\sphinxAtStartPar
+inside each \sphinxtitleref{round\_n} folder you will find the beamline files modified
+with the parameters you set in \sphinxtitleref{sim.params}, these are the \sphinxtitleref{.rml} files,
+that can be opened by RAY\sphinxhyphen{}UI.
+
+\item {} 
+\sphinxAtStartPar
+inside each \sphinxtitleref{round\_n} folder you will find your exported files, one for
+each simulation. If for instance you exported the \sphinxtitleref{ScalarElementProperties} of the Dipole,
+you will have a list of files \sphinxtitleref{0\_Dipole\sphinxhyphen{}ScalarElementProperties.csv}
+
+\end{itemize}
+
+
+\subsection{Analysis perfomed by raypyng}
+\label{\detokenize{tutorial:analysis-perfomed-by-raypyng}}
+\sphinxAtStartPar
+If you decided to let raypyng doing the analysis, you should expect the following files to
+be saved in your simulation folder:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+one file for each parameter you set with the values that you passed to the program.
+If for instance you input the Dipole numberRays, you will find a file called
+\sphinxtitleref{input\_param\_Dipole\_numberRays.dat}
+
+\item {} 
+\sphinxAtStartPar
+one folder called \sphinxtitleref{round\_n} for each repetition of the simulations.
+For instance if you set \sphinxcode{\sphinxupquote{sim.repeat=2}} you will have two folders \sphinxtitleref{round\_0} and \sphinxtitleref{round\_1}
+
+\item {} 
+\sphinxAtStartPar
+inside each \sphinxtitleref{round\_n} folder you will find the beamline files modified with the parameters
+you set in \sphinxtitleref{sim.params}, these are the \sphinxtitleref{.rml} files, that can be opened by RAY\sphinxhyphen{}UI.
+
+\item {} 
+\sphinxAtStartPar
+inside each \sphinxtitleref{round\_n} folder you will find your exported files, one for each simulation.
+If for instance you exported the \sphinxtitleref{RawRaysOutgoing} of the Dipole, you will
+have a list of files \sphinxtitleref{0\_Dipole\sphinxhyphen{}RawRaysOutgoing.csv}
+
+\item {} 
+\sphinxAtStartPar
+for each \sphinxtitleref{RawRaysOutgoing} file, raypyng calculates some properties,
+and saves a corresponding file, for instance \sphinxtitleref{0\_Dipole\_analyzed\_rays.dat}. Each of these files contains the followin informations:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+SourcePhotonFlux
+
+\item {} 
+\sphinxAtStartPar
+NumberRaysSurvived
+
+\item {} 
+\sphinxAtStartPar
+PercentageRaysSurvived
+
+\item {} 
+\sphinxAtStartPar
+PhotonFlux
+
+\item {} 
+\sphinxAtStartPar
+Bandwidth
+
+\item {} 
+\sphinxAtStartPar
+HorizontalFocusFWHM
+
+\item {} 
+\sphinxAtStartPar
+VerticalFocusFWHM
+
+\end{itemize}
+
+\item {} 
+\sphinxAtStartPar
+In the simulation folder, all the for each exported element
+is united (and in case of more rounds of simulations averaged) in one single file. For the dipole the fill is called \sphinxtitleref{Dipole.dat}
+
+\end{itemize}
+
+
+\subsection{Recipees}
+\label{\detokenize{tutorial:recipees}}
+\sphinxAtStartPar
+Documentation still not available, see the examples.
+
+
+\subsection{List of examples avalable and short explanation}
+\label{\detokenize{tutorial:list-of-examples-avalable-and-short-explanation}}
+\sphinxAtStartPar
+In the example folder, the following examples are available:
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{example\_simulation\_analyze.py} simulate a beamline,
+let Ray\sphinxhyphen{}UI do the analysis
+
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{example\_simulation\_noanalyze.py} simulate a beamline,
+let Ray\sphinxhyphen{}UI do the analysis
+
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{example\_eval\_noanalyze\_and\_analyze.py} plot the results
+of the two previous simulations
+
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{example\_simulation\_Flux.py} simulations using the flux recipee,
+useful if you intent is to simulate the flux of your beamline
+
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{example\_simulation\_RP.py} simulations using the resolving power
+(RP) recipee, useful if you intent is to simulate the RP of your beamline.
+The reflectivity of every optical element is switched to 100\% and not
+calculated using the substrate and coiating(s) material(s). The
+information about the Flux of the beamline are therefore not reliable.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxtitleref{example\_beamwaist.py}: raypyng is able to plot the beamwaist of
+the x\sphinxhyphen{}rays across your beamline. It performs simulations using the beamwaist recipee,
+and it exports the raw raysoutgoing from each optical element. It then uses a
+simple geometrical x\sphinxhyphen{}ray tracer to propagate each ray until the next optical
+element, and plots the results (both top view and side view). This is still
+experimental and it may fail.
+
+\end{itemize}
+
+\sphinxstepscope
+
+
+\chapter{Simulation}
+\label{\detokenize{simulate:simulation}}\label{\detokenize{simulate::doc}}\index{Simulate (class in raypyng.simulate)@\spxentry{Simulate}\spxextra{class in raypyng.simulate}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.simulate.}}\sphinxbfcode{\sphinxupquote{Simulate}}}{\emph{\DUrole{n}{rml}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{hide}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
 \pysigstopsignatures
@@ -96,7 +539,7 @@ A class that takes care of performing the simulations with RAY\sphinxhyphen{}UI
 \index{\_\_init\_\_() (raypyng.simulate.Simulate method)@\spxentry{\_\_init\_\_()}\spxextra{raypyng.simulate.Simulate method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.__init__}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.__init__}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_\_init\_\_}}}{\emph{\DUrole{n}{rml}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{hide}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{{ $\rightarrow$ None}}
 \pysigstopsignatures
@@ -118,7 +561,7 @@ Initialize the class with a rml file
 \index{\_\_weakref\_\_ (raypyng.simulate.Simulate attribute)@\spxentry{\_\_weakref\_\_}\spxextra{raypyng.simulate.Simulate attribute}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.__weakref__}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.__weakref__}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{\_\_weakref\_\_}}}
 \pysigstopsignatures
@@ -130,7 +573,7 @@ list of weak references to the object (if defined)
 \index{analyze (raypyng.simulate.Simulate property)@\spxentry{analyze}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.analyze}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.analyze}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{analyze}}}
 \pysigstopsignatures
@@ -153,7 +596,7 @@ bool
 \index{exports (raypyng.simulate.Simulate property)@\spxentry{exports}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.exports}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.exports}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{exports}}}
 \pysigstopsignatures
@@ -171,7 +614,7 @@ to be exported and the valuee are the files to be exported
 \index{params (raypyng.simulate.Simulate property)@\spxentry{params}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.params}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.params}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{params}}}
 \pysigstopsignatures
@@ -185,7 +628,7 @@ values to be assigned.
 \index{path (raypyng.simulate.Simulate property)@\spxentry{path}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.path}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.path}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{path}}}
 \pysigstopsignatures
@@ -208,7 +651,7 @@ string
 \index{possible\_exports (raypyng.simulate.Simulate property)@\spxentry{possible\_exports}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.possible_exports}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.possible_exports}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{possible\_exports}}}
 \pysigstopsignatures
@@ -230,7 +673,7 @@ list
 \index{possible\_exports\_without\_analysis (raypyng.simulate.Simulate property)@\spxentry{possible\_exports\_without\_analysis}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.possible_exports_without_analysis}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.possible_exports_without_analysis}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{possible\_exports\_without\_analysis}}}
 \pysigstopsignatures
@@ -253,7 +696,7 @@ list
 \index{raypyng\_analysis (raypyng.simulate.Simulate property)@\spxentry{raypyng\_analysis}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.raypyng_analysis}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.raypyng_analysis}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{raypyng\_analysis}}}
 \pysigstopsignatures
@@ -275,7 +718,7 @@ bool
 \index{repeat (raypyng.simulate.Simulate property)@\spxentry{repeat}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.repeat}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.repeat}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{repeat}}}
 \pysigstopsignatures
@@ -299,7 +742,7 @@ int
 \index{rml (raypyng.simulate.Simulate property)@\spxentry{rml}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.rml}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.rml}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{rml}}}
 \pysigstopsignatures
@@ -311,7 +754,7 @@ RMLFile object instantiated in init
 \index{rml\_list() (raypyng.simulate.Simulate method)@\spxentry{rml\_list()}\spxextra{raypyng.simulate.Simulate method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.rml_list}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.rml_list}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{rml\_list}}}{}{}
 \pysigstopsignatures
@@ -325,7 +768,7 @@ for a manual check before starting the simulations.
 \index{run() (raypyng.simulate.Simulate method)@\spxentry{run()}\spxextra{raypyng.simulate.Simulate method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.run}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.run}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{run}}}{\emph{\DUrole{n}{recipe}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{o}{/}}, \emph{\DUrole{n}{multiprocessing}\DUrole{o}{=}\DUrole{default_value}{True}}, \emph{\DUrole{n}{force}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
 \pysigstopsignatures
@@ -354,7 +797,7 @@ This method starts the simulations. params and exports need to be defined.
 \index{save\_parameters\_to\_file() (raypyng.simulate.Simulate method)@\spxentry{save\_parameters\_to\_file()}\spxextra{raypyng.simulate.Simulate method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.save_parameters_to_file}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.save_parameters_to_file}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{save\_parameters\_to\_file}}}{\emph{\DUrole{n}{dir}}}{}
 \pysigstopsignatures
@@ -373,7 +816,7 @@ from the SimulationParams class
 \index{simulation\_name (raypyng.simulate.Simulate property)@\spxentry{simulation\_name}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.Simulate.simulation_name}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.Simulate.simulation_name}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{simulation\_name}}}
 \pysigstopsignatures
@@ -385,13 +828,10 @@ A string to append to the folder where the simulations will be executed.
 
 \end{fulllineitems}
 
-
-
-\chapter{SimulationParams}
-\label{\detokenize{index:simulationparams}}\index{SimulationParams (class in raypyng.simulate)@\spxentry{SimulationParams}\spxextra{class in raypyng.simulate}}
+\index{SimulationParams (class in raypyng.simulate)@\spxentry{SimulationParams}\spxextra{class in raypyng.simulate}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.SimulationParams}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.simulate.}}\sphinxbfcode{\sphinxupquote{SimulationParams}}}{\emph{\DUrole{n}{rml}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{param\_list}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
 \pysigstopsignatures
@@ -401,7 +841,7 @@ and returns the the list of simulations that is requested by the user.
 \index{\_\_init\_\_() (raypyng.simulate.SimulationParams method)@\spxentry{\_\_init\_\_()}\spxextra{raypyng.simulate.SimulationParams method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams.__init__}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.SimulationParams.__init__}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_\_init\_\_}}}{\emph{\DUrole{n}{rml}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{param\_list}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{{ $\rightarrow$ None}}
 \pysigstopsignatures
@@ -426,7 +866,7 @@ and returns the the list of simulations that is requested by the user.
 \index{\_\_weakref\_\_ (raypyng.simulate.SimulationParams attribute)@\spxentry{\_\_weakref\_\_}\spxextra{raypyng.simulate.SimulationParams attribute}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams.__weakref__}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.SimulationParams.__weakref__}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{\_\_weakref\_\_}}}
 \pysigstopsignatures
@@ -438,7 +878,7 @@ list of weak references to the object (if defined)
 \index{\_calc\_loop() (raypyng.simulate.SimulationParams method)@\spxentry{\_calc\_loop()}\spxextra{raypyng.simulate.SimulationParams method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams._calc_loop}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.SimulationParams._calc_loop}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_calc\_loop}}}{\emph{\DUrole{n}{verbose}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{bool}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{True}}}{}
 \pysigstopsignatures
@@ -461,7 +901,7 @@ self.param\_to\_simulate (list)
 \index{\_check\_if\_enabled() (raypyng.simulate.SimulationParams method)@\spxentry{\_check\_if\_enabled()}\spxextra{raypyng.simulate.SimulationParams method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams._check_if_enabled}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.SimulationParams._check_if_enabled}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_check\_if\_enabled}}}{\emph{\DUrole{n}{param}}}{}
 \pysigstopsignatures
@@ -487,7 +927,7 @@ True if the parameter is enabled, False otherwise
 \index{\_check\_param() (raypyng.simulate.SimulationParams method)@\spxentry{\_check\_param()}\spxextra{raypyng.simulate.SimulationParams method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams._check_param}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.SimulationParams._check_param}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_check\_param}}}{}{}
 \pysigstopsignatures
@@ -500,7 +940,7 @@ items of the dictionaries to lists, otherwise raise an exception.
 \index{\_enable\_param() (raypyng.simulate.SimulationParams method)@\spxentry{\_enable\_param()}\spxextra{raypyng.simulate.SimulationParams method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams._enable_param}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.SimulationParams._enable_param}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_enable\_param}}}{\emph{\DUrole{n}{param}}}{}
 \pysigstopsignatures
@@ -518,7 +958,7 @@ Set enabled to True in a beamline object, and auto to False
 \index{\_extract\_param() (raypyng.simulate.SimulationParams method)@\spxentry{\_extract\_param()}\spxextra{raypyng.simulate.SimulationParams method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams._extract_param}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.SimulationParams._extract_param}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_extract\_param}}}{\emph{\DUrole{n}{verbose}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{bool}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{False}}}{}
 \pysigstopsignatures
@@ -548,7 +988,7 @@ self.ind\_param\_values (list)
 \index{\_write\_value\_to\_param() (raypyng.simulate.SimulationParams method)@\spxentry{\_write\_value\_to\_param()}\spxextra{raypyng.simulate.SimulationParams method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams._write_value_to_param}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.SimulationParams._write_value_to_param}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_write\_value\_to\_param}}}{\emph{\DUrole{n}{param}}, \emph{\DUrole{n}{value}}}{}
 \pysigstopsignatures
@@ -574,7 +1014,7 @@ and auto is F
 \index{params (raypyng.simulate.SimulationParams property)@\spxentry{params}\spxextra{raypyng.simulate.SimulationParams property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams.params}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.SimulationParams.params}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{params}}}
 \pysigstopsignatures
@@ -588,7 +1028,7 @@ values to be assigned.
 \index{rml (raypyng.simulate.SimulationParams property)@\spxentry{rml}\spxextra{raypyng.simulate.SimulationParams property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.simulate.SimulationParams.rml}}
+\phantomsection\label{\detokenize{simulate:raypyng.simulate.SimulationParams.rml}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{rml}}}
 \pysigstopsignatures
@@ -603,10 +1043,10 @@ RMLFile object instantiated in init
 
 
 \chapter{RayUIRunner}
-\label{\detokenize{index:rayuirunner}}\index{RayUIRunner (class in raypyng.runner)@\spxentry{RayUIRunner}\spxextra{class in raypyng.runner}}
+\label{\detokenize{simulate:rayuirunner}}\index{RayUIRunner (class in raypyng.runner)@\spxentry{RayUIRunner}\spxextra{class in raypyng.runner}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.runner.RayUIRunner}}
+\phantomsection\label{\detokenize{simulate:raypyng.runner.RayUIRunner}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.runner.}}\sphinxbfcode{\sphinxupquote{RayUIRunner}}}{\emph{\DUrole{n}{ray\_path}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{ray\_binary}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}rayui.sh\textquotesingle{}}}, \emph{\DUrole{n}{background}\DUrole{o}{=}\DUrole{default_value}{True}}, \emph{\DUrole{n}{hide}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
 \pysigstopsignatures
@@ -615,7 +1055,7 @@ RayUIRunner class implements all logic to start a RayUI process
 \index{\_\_detect\_ray\_path() (raypyng.runner.RayUIRunner method)@\spxentry{\_\_detect\_ray\_path()}\spxextra{raypyng.runner.RayUIRunner method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.runner.RayUIRunner.__detect_ray_path}}
+\phantomsection\label{\detokenize{simulate:raypyng.runner.RayUIRunner.__detect_ray_path}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_\_detect\_ray\_path}}}{}{{ $\rightarrow$ str}}
 \pysigstopsignatures
@@ -641,7 +1081,7 @@ str
 \index{\_\_init\_\_() (raypyng.runner.RayUIRunner method)@\spxentry{\_\_init\_\_()}\spxextra{raypyng.runner.RayUIRunner method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.runner.RayUIRunner.__init__}}
+\phantomsection\label{\detokenize{simulate:raypyng.runner.RayUIRunner.__init__}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_\_init\_\_}}}{\emph{\DUrole{n}{ray\_path}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{ray\_binary}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}rayui.sh\textquotesingle{}}}, \emph{\DUrole{n}{background}\DUrole{o}{=}\DUrole{default_value}{True}}, \emph{\DUrole{n}{hide}\DUrole{o}{=}\DUrole{default_value}{False}}}{{ $\rightarrow$ None}}
 \pysigstopsignatures
@@ -650,7 +1090,7 @@ str
 \index{\_\_weakref\_\_ (raypyng.runner.RayUIRunner attribute)@\spxentry{\_\_weakref\_\_}\spxextra{raypyng.runner.RayUIRunner attribute}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.runner.RayUIRunner.__weakref__}}
+\phantomsection\label{\detokenize{simulate:raypyng.runner.RayUIRunner.__weakref__}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{\_\_weakref\_\_}}}
 \pysigstopsignatures
@@ -662,7 +1102,7 @@ list of weak references to the object (if defined)
 \index{\_readline() (raypyng.runner.RayUIRunner method)@\spxentry{\_readline()}\spxextra{raypyng.runner.RayUIRunner method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.runner.RayUIRunner._readline}}
+\phantomsection\label{\detokenize{simulate:raypyng.runner.RayUIRunner._readline}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_readline}}}{}{{ $\rightarrow$ str}}
 \pysigstopsignatures
@@ -684,7 +1124,7 @@ str
 \index{\_write() (raypyng.runner.RayUIRunner method)@\spxentry{\_write()}\spxextra{raypyng.runner.RayUIRunner method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.runner.RayUIRunner._write}}
+\phantomsection\label{\detokenize{simulate:raypyng.runner.RayUIRunner._write}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_write}}}{\emph{\DUrole{n}{instr}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{endline}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}\textbackslash{}n\textquotesingle{}}}}{}
 \pysigstopsignatures
@@ -713,7 +1153,7 @@ Write command to RayUI interface
 \index{isrunning (raypyng.runner.RayUIRunner property)@\spxentry{isrunning}\spxextra{raypyng.runner.RayUIRunner property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.runner.RayUIRunner.isrunning}}
+\phantomsection\label{\detokenize{simulate:raypyng.runner.RayUIRunner.isrunning}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{isrunning}}}
 \pysigstopsignatures
@@ -735,7 +1175,7 @@ bool
 \index{kill() (raypyng.runner.RayUIRunner method)@\spxentry{kill()}\spxextra{raypyng.runner.RayUIRunner method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.runner.RayUIRunner.kill}}
+\phantomsection\label{\detokenize{simulate:raypyng.runner.RayUIRunner.kill}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{kill}}}{}{}
 \pysigstopsignatures
@@ -747,7 +1187,7 @@ kill a RAY\sphinxhyphen{}UI process
 \index{pid (raypyng.runner.RayUIRunner property)@\spxentry{pid}\spxextra{raypyng.runner.RayUIRunner property}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.runner.RayUIRunner.pid}}
+\phantomsection\label{\detokenize{simulate:raypyng.runner.RayUIRunner.pid}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{property\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{pid}}}
 \pysigstopsignatures
@@ -769,7 +1209,7 @@ PID of the process if it running, None otherwise
 \index{run() (raypyng.runner.RayUIRunner method)@\spxentry{run()}\spxextra{raypyng.runner.RayUIRunner method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.runner.RayUIRunner.run}}
+\phantomsection\label{\detokenize{simulate:raypyng.runner.RayUIRunner.run}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{run}}}{}{}
 \pysigstopsignatures
@@ -790,10 +1230,10 @@ Open one instance of RAY\sphinxhyphen{}UI using subprocess
 
 
 \chapter{PostProcessing}
-\label{\detokenize{index:postprocessing}}\index{PostProcess (class in raypyng.postprocessing)@\spxentry{PostProcess}\spxextra{class in raypyng.postprocessing}}
+\label{\detokenize{simulate:postprocessing}}\index{PostProcess (class in raypyng.postprocessing)@\spxentry{PostProcess}\spxextra{class in raypyng.postprocessing}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess}}
+\phantomsection\label{\detokenize{simulate:raypyng.postprocessing.PostProcess}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.postprocessing.}}\sphinxbfcode{\sphinxupquote{PostProcess}}}
 \pysigstopsignatures
@@ -803,7 +1243,7 @@ At the moment works only if the exported data are RawRaysOutgoing
 \index{\_\_init\_\_() (raypyng.postprocessing.PostProcess method)@\spxentry{\_\_init\_\_()}\spxextra{raypyng.postprocessing.PostProcess method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess.__init__}}
+\phantomsection\label{\detokenize{simulate:raypyng.postprocessing.PostProcess.__init__}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_\_init\_\_}}}{}{{ $\rightarrow$ None}}
 \pysigstopsignatures
@@ -812,7 +1252,7 @@ At the moment works only if the exported data are RawRaysOutgoing
 \index{\_\_weakref\_\_ (raypyng.postprocessing.PostProcess attribute)@\spxentry{\_\_weakref\_\_}\spxextra{raypyng.postprocessing.PostProcess attribute}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess.__weakref__}}
+\phantomsection\label{\detokenize{simulate:raypyng.postprocessing.PostProcess.__weakref__}}
 \pysigstartsignatures
 \pysigline{\sphinxbfcode{\sphinxupquote{\_\_weakref\_\_}}}
 \pysigstopsignatures
@@ -824,7 +1264,7 @@ list of weak references to the object (if defined)
 \index{\_extract\_bandwidth\_fwhm() (raypyng.postprocessing.PostProcess method)@\spxentry{\_extract\_bandwidth\_fwhm()}\spxextra{raypyng.postprocessing.PostProcess method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess._extract_bandwidth_fwhm}}
+\phantomsection\label{\detokenize{simulate:raypyng.postprocessing.PostProcess._extract_bandwidth_fwhm}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_extract\_bandwidth\_fwhm}}}{\emph{\DUrole{n}{rays\_bw}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{array}}}{}
 \pysigstopsignatures
@@ -850,7 +1290,7 @@ float
 \index{\_extract\_focus\_fwhm() (raypyng.postprocessing.PostProcess method)@\spxentry{\_extract\_focus\_fwhm()}\spxextra{raypyng.postprocessing.PostProcess method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess._extract_focus_fwhm}}
+\phantomsection\label{\detokenize{simulate:raypyng.postprocessing.PostProcess._extract_focus_fwhm}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_extract\_focus\_fwhm}}}{\emph{\DUrole{n}{rays\_pos}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{array}}}{}
 \pysigstopsignatures
@@ -876,7 +1316,7 @@ float
 \index{\_extract\_intensity() (raypyng.postprocessing.PostProcess method)@\spxentry{\_extract\_intensity()}\spxextra{raypyng.postprocessing.PostProcess method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess._extract_intensity}}
+\phantomsection\label{\detokenize{simulate:raypyng.postprocessing.PostProcess._extract_intensity}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_extract\_intensity}}}{\emph{\DUrole{n}{rays}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{array}}}{}
 \pysigstopsignatures
@@ -894,7 +1334,7 @@ calculate how many rays there are
 \index{\_list\_files() (raypyng.postprocessing.PostProcess method)@\spxentry{\_list\_files()}\spxextra{raypyng.postprocessing.PostProcess method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess._list_files}}
+\phantomsection\label{\detokenize{simulate:raypyng.postprocessing.PostProcess._list_files}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_list\_files}}}{\emph{\DUrole{n}{dir\_path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{end\_filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}}{}
 \pysigstopsignatures
@@ -927,7 +1367,7 @@ res (list)
 \index{\_load\_file() (raypyng.postprocessing.PostProcess method)@\spxentry{\_load\_file()}\spxextra{raypyng.postprocessing.PostProcess method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess._load_file}}
+\phantomsection\label{\detokenize{simulate:raypyng.postprocessing.PostProcess._load_file}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_load\_file}}}{\emph{\DUrole{n}{filepath}}}{}
 \pysigstopsignatures
@@ -953,7 +1393,7 @@ arr (np.array)
 \index{\_save\_file() (raypyng.postprocessing.PostProcess method)@\spxentry{\_save\_file()}\spxextra{raypyng.postprocessing.PostProcess method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess._save_file}}
+\phantomsection\label{\detokenize{simulate:raypyng.postprocessing.PostProcess._save_file}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{\_save\_file}}}{\emph{\DUrole{n}{filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{array}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{array}}, \emph{\DUrole{n}{header}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
 \pysigstopsignatures
@@ -982,7 +1422,7 @@ This function is used to save files,
 \index{cleanup() (raypyng.postprocessing.PostProcess method)@\spxentry{cleanup()}\spxextra{raypyng.postprocessing.PostProcess method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess.cleanup}}
+\phantomsection\label{\detokenize{simulate:raypyng.postprocessing.PostProcess.cleanup}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{cleanup}}}{\emph{\DUrole{n}{dir\_path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{repeat}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{int}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{1}}, \emph{\DUrole{n}{exp\_elements}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}list\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
 \pysigstopsignatures
@@ -1013,7 +1453,7 @@ If more than one round of simulations was done, the values are averaged.
 \index{extract\_nrays\_from\_source() (raypyng.postprocessing.PostProcess method)@\spxentry{extract\_nrays\_from\_source()}\spxextra{raypyng.postprocessing.PostProcess method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess.extract_nrays_from_source}}
+\phantomsection\label{\detokenize{simulate:raypyng.postprocessing.PostProcess.extract_nrays_from_source}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{extract\_nrays\_from\_source}}}{\emph{\DUrole{n}{rml\_filename}}}{}
 \pysigstopsignatures
@@ -1039,7 +1479,7 @@ str
 \index{postprocess\_RawRays() (raypyng.postprocessing.PostProcess method)@\spxentry{postprocess\_RawRays()}\spxextra{raypyng.postprocessing.PostProcess method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{index:raypyng.postprocessing.PostProcess.postprocess_RawRays}}
+\phantomsection\label{\detokenize{simulate:raypyng.postprocessing.PostProcess.postprocess_RawRays}}
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{postprocess\_RawRays}}}{\emph{\DUrole{n}{exported\_element}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{exported\_object}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{dir\_path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{sim\_number}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{rml\_filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
 \pysigstopsignatures

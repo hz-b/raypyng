@@ -3,13 +3,16 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to RayPyNG's documentation!
+Welcome to raypyng's documentation!
 ===================================
+raypyng provides a simple API to work with RAY-UI, a software for optical simulation of synchrotron beamlines and x-ray systems developed by Helmholtz-Zentrum Berlin.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   install_raypyng
+   tutorial
    simulate
    
 
