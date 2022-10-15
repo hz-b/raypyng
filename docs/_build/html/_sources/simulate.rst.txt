@@ -2,33 +2,21 @@ Simulation
 ==================
 .. autoclass:: raypyng.simulate.Simulate
    :members:
-   :private-members:
-   :special-members:
-   :inherited-members:
 
 .. SimulationParams
 .. ==================
 .. autoclass:: raypyng.simulate.SimulationParams
    :members:
-   :private-members:
-   :special-members:
-   :inherited-members:
 
 RayUIRunner
 ==================
 .. autoclass:: raypyng.runner.RayUIRunner
    :members:
-   :private-members:
-   :special-members:
-   :inherited-members:
 
 PostProcessing
 ==================
 .. autoclass:: raypyng.postprocessing.PostProcess
    :members:
-   :private-members:
-   :special-members:
-   :inherited-members:
 
 .. Multiprocessing
 .. ==================

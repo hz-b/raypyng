@@ -4,100 +4,57 @@
 \let\spxentry \sphinxstyleindexentry
 \let\spxextra \sphinxstyleindexextra
 
-  \bigletter {\sphinxsymbolsname}
-  \item \spxentry{\_\_detect\_ray\_path()}\spxextra{raypyng.runner.RayUIRunner method}, 
-		\hyperpage{13}
-  \item \spxentry{\_\_init\_\_()}\spxextra{raypyng.postprocessing.PostProcess method}, 
-		\hyperpage{15}
-  \item \spxentry{\_\_init\_\_()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{13}
-  \item \spxentry{\_\_init\_\_()}\spxextra{raypyng.simulate.Simulate method}, \hyperpage{9}
-  \item \spxentry{\_\_init\_\_()}\spxextra{raypyng.simulate.SimulationParams method}, 
-		\hyperpage{11}
-  \item \spxentry{\_\_weakref\_\_}\spxextra{raypyng.postprocessing.PostProcess attribute}, 
-		\hyperpage{15}
-  \item \spxentry{\_\_weakref\_\_}\spxextra{raypyng.runner.RayUIRunner attribute}, \hyperpage{13}
-  \item \spxentry{\_\_weakref\_\_}\spxextra{raypyng.simulate.Simulate attribute}, \hyperpage{9}
-  \item \spxentry{\_\_weakref\_\_}\spxextra{raypyng.simulate.SimulationParams attribute}, 
-		\hyperpage{11}
-  \item \spxentry{\_calc\_loop()}\spxextra{raypyng.simulate.SimulationParams method}, 
-		\hyperpage{11}
-  \item \spxentry{\_check\_if\_enabled()}\spxextra{raypyng.simulate.SimulationParams method}, 
-		\hyperpage{11}
-  \item \spxentry{\_check\_param()}\spxextra{raypyng.simulate.SimulationParams method}, 
-		\hyperpage{11}
-  \item \spxentry{\_enable\_param()}\spxextra{raypyng.simulate.SimulationParams method}, 
-		\hyperpage{11}
-  \item \spxentry{\_extract\_bandwidth\_fwhm()}\spxextra{raypyng.postprocessing.PostProcess method}, 
-		\hyperpage{15}
-  \item \spxentry{\_extract\_focus\_fwhm()}\spxextra{raypyng.postprocessing.PostProcess method}, 
-		\hyperpage{15}
-  \item \spxentry{\_extract\_intensity()}\spxextra{raypyng.postprocessing.PostProcess method}, 
-		\hyperpage{15}
-  \item \spxentry{\_extract\_param()}\spxextra{raypyng.simulate.SimulationParams method}, 
-		\hyperpage{11}
-  \item \spxentry{\_list\_files()}\spxextra{raypyng.postprocessing.PostProcess method}, 
-		\hyperpage{15}
-  \item \spxentry{\_load\_file()}\spxextra{raypyng.postprocessing.PostProcess method}, 
-		\hyperpage{16}
-  \item \spxentry{\_readline()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{13}
-  \item \spxentry{\_save\_file()}\spxextra{raypyng.postprocessing.PostProcess method}, 
-		\hyperpage{16}
-  \item \spxentry{\_write()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{13}
-  \item \spxentry{\_write\_value\_to\_param()}\spxextra{raypyng.simulate.SimulationParams method}, 
-		\hyperpage{12}
-
-  \indexspace
   \bigletter A
-  \item \spxentry{analyze}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{9}
+  \item \spxentry{analyze}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{11}
 
   \indexspace
   \bigletter C
-  \item \spxentry{cleanup()}\spxextra{raypyng.postprocessing.PostProcess method}, \hyperpage{16}
+  \item \spxentry{cleanup()}\spxextra{raypyng.postprocessing.PostProcess method}, \hyperpage{17}
 
   \indexspace
   \bigletter E
-  \item \spxentry{exports}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{9}
+  \item \spxentry{exports}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{11}
   \item \spxentry{extract\_nrays\_from\_source()}\spxextra{raypyng.postprocessing.PostProcess method}, 
-		\hyperpage{16}
+		\hyperpage{17}
 
   \indexspace
   \bigletter I
-  \item \spxentry{isrunning}\spxextra{raypyng.runner.RayUIRunner property}, \hyperpage{13}
+  \item \spxentry{isrunning}\spxextra{raypyng.runner.RayUIRunner property}, \hyperpage{15}
 
   \indexspace
   \bigletter K
-  \item \spxentry{kill()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{14}
+  \item \spxentry{kill()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{15}
 
   \indexspace
   \bigletter P
-  \item \spxentry{params}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{9}
+  \item \spxentry{params}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{11}
   \item \spxentry{params}\spxextra{raypyng.simulate.SimulationParams property}, \hyperpage{12}
-  \item \spxentry{path}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{9}
-  \item \spxentry{pid}\spxextra{raypyng.runner.RayUIRunner property}, \hyperpage{14}
-  \item \spxentry{possible\_exports}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{9}
+  \item \spxentry{path}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{11}
+  \item \spxentry{pid}\spxextra{raypyng.runner.RayUIRunner property}, \hyperpage{15}
+  \item \spxentry{possible\_exports}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{11}
   \item \spxentry{possible\_exports\_without\_analysis}\spxextra{raypyng.simulate.Simulate property}, 
-		\hyperpage{10}
-  \item \spxentry{PostProcess}\spxextra{class in raypyng.postprocessing}, \hyperpage{15}
+		\hyperpage{11}
+  \item \spxentry{PostProcess}\spxextra{class in raypyng.postprocessing}, \hyperpage{17}
   \item \spxentry{postprocess\_RawRays()}\spxextra{raypyng.postprocessing.PostProcess method}, 
-		\hyperpage{16}
+		\hyperpage{17}
 
   \indexspace
   \bigletter R
-  \item \spxentry{raypyng\_analysis}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{10}
-  \item \spxentry{RayUIRunner}\spxextra{class in raypyng.runner}, \hyperpage{13}
-  \item \spxentry{repeat}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{10}
-  \item \spxentry{rml}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{10}
+  \item \spxentry{raypyng\_analysis}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{12}
+  \item \spxentry{RayUIRunner}\spxextra{class in raypyng.runner}, \hyperpage{15}
+  \item \spxentry{repeat}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{12}
+  \item \spxentry{rml}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{12}
   \item \spxentry{rml}\spxextra{raypyng.simulate.SimulationParams property}, \hyperpage{12}
-  \item \spxentry{rml\_list()}\spxextra{raypyng.simulate.Simulate method}, \hyperpage{10}
-  \item \spxentry{run()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{14}
-  \item \spxentry{run()}\spxextra{raypyng.simulate.Simulate method}, \hyperpage{10}
+  \item \spxentry{rml\_list()}\spxextra{raypyng.simulate.Simulate method}, \hyperpage{12}
+  \item \spxentry{run()}\spxextra{raypyng.runner.RayUIRunner method}, \hyperpage{15}
+  \item \spxentry{run()}\spxextra{raypyng.simulate.Simulate method}, \hyperpage{12}
 
   \indexspace
   \bigletter S
   \item \spxentry{save\_parameters\_to\_file()}\spxextra{raypyng.simulate.Simulate method}, 
-		\hyperpage{10}
-  \item \spxentry{Simulate}\spxextra{class in raypyng.simulate}, \hyperpage{9}
-  \item \spxentry{simulation\_name}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{11}
-  \item \spxentry{SimulationParams}\spxextra{class in raypyng.simulate}, \hyperpage{11}
+		\hyperpage{12}
+  \item \spxentry{Simulate}\spxextra{class in raypyng.simulate}, \hyperpage{11}
+  \item \spxentry{simulation\_name}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{12}
+  \item \spxentry{SimulationParams}\spxextra{class in raypyng.simulate}, \hyperpage{12}
 
 \end{sphinxtheindex}

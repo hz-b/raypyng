@@ -44,12 +44,12 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#minimal-example">Minimal example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exports">Exports</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#analysis-perfomed-by-ray-ui">Analysis perfomed by RAY-UI</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#analysis-perfomed-by-raypyng">Analysis perfomed by raypyng</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#recipees">Recipees</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#list-of-examples-avalable-and-short-explanation">List of examples avalable and short explanation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analysis-performed-by-ray-ui">Analysis performed by RAY-UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analysis-performed-by-raypyng">Analysis performed by raypyng</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#recipes">Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#list-of-examples-available-and-short-explanation">List of examples available and short explanation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="simulate.html">Simulation</a></li>
@@ -86,8 +86,8 @@
 <section id="minimal-example">
 <h2>Minimal example<a class="headerlink" href="#minimal-example" title="Permalink to this heading"></a></h2>
 <p>raypyng is not able to create a beamline from scratch. To do so, use RAY-UI,
-create a beamline, and save it. What you save is <cite>.rml</cite> file, that you have to
-pass as an argumet to the <cite>Simulate</cite> simulate class. In the following example we
+create a beamline, and save it. What you save is <cite>.rml</cite> file, which you have to
+pass as an argument to the <cite>Simulate</cite> simulate class. In the following example, we
 use the file for a beamline called <cite>elisa</cite>, and the file is saved in <cite>rml/elisa.rml</cite>.
 The <cite>hide</cite> parameter can be set to true only if <cite>xvfb</cite> is installed.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">raypyng</span> <span class="kn">import</span> <span class="n">Simulate</span>
@@ -99,20 +99,20 @@ The <cite>hide</cite> parameter can be set to true only if <cite>xvfb</cite> is 
 </div>
 <p>The elements of the beamline are now available as python objects, as well as
 their properties. If working in ipython, tab autocompletion is available.
-For instance to acess the source, a dipole in this case:</p>
+For instance to access the source, a dipole in this case:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># this is the dipole object</span>
 <span class="n">elisa</span><span class="o">.</span><span class="n">Dipole</span>
-<span class="c1"># to acess its parameter, for instance the photonFlux</span>
+<span class="c1"># to acess its parameter, for instance, the photonFlux</span>
 <span class="n">elisa</span><span class="o">.</span><span class="n">Dipole</span><span class="o">.</span><span class="n">photonFlux</span>
-<span class="c1"># to acess the value</span>
+<span class="c1"># to access the value</span>
 <span class="n">elisa</span><span class="o">.</span><span class="n">Dipole</span><span class="o">.</span><span class="n">photonFlux</span><span class="o">.</span><span class="n">cdata</span>
 <span class="c1"># to modify the value</span>
 <span class="n">elisa</span><span class="o">.</span><span class="n">Dipole</span><span class="o">.</span><span class="n">photonFlux</span><span class="o">.</span><span class="n">cdata</span> <span class="o">=</span> <span class="mi">10</span>
 </pre></div>
 </div>
-<p>To perform simulation, any number of parameters can varied.
-For instance one can vary the photon energy of the source, and set a
-certain aperture of the exit slits:</p>
+<p>To perform a simulation, any number of parameters can be varied.
+For instance, one can vary the photon energy of the source, and set a
+a certain aperture of the exit slits:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># define the values of the parameters to scan</span>
 <span class="n">energy</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">7201</span><span class="p">,</span><span class="mi">250</span><span class="p">)</span>
 <span class="n">SlitSize</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">])</span>
@@ -127,7 +127,7 @@ certain aperture of the exit slits:</p>
 <span class="n">sim</span><span class="o">.</span><span class="n">params</span><span class="o">=</span><span class="n">params</span>
 </pre></div>
 </div>
-<p>It is also possible to define coupled parameters. If for instance one wants
+<p>It is also possible to define coupled parameters. If for instance, one wants
 to increase the number of rays with the photon energy</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># define the values of the parameters to scan</span>
 <span class="n">energy</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">7201</span><span class="p">,</span><span class="mi">250</span><span class="p">)</span>
@@ -145,8 +145,8 @@ to increase the number of rays with the photon energy</p>
 </pre></div>
 </div>
 <p>The simulations files and the results will be saved in a folder called <cite>RAYPy_simulation_</cite>
-plusa name at your choce, that can be set. This folder will be saved, by default,
-in the folder where the program is executed, but it can be eventually be modified</p>
+plus a name of your choice, that can be set. This folder will be saved, by default,
+in the folder where the program is executed, but it can eventually be modified</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">.</span><span class="n">simulation_folder</span> <span class="o">=</span> <span class="s1">&#39;/home/raypy/Documents/simulations&#39;</span>
 <span class="n">sim</span><span class="o">.</span><span class="n">simulation_name</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span>
 </pre></div>
@@ -156,17 +156,17 @@ in the folder where the program is executed, but it can be eventually be modifie
 </pre></div>
 </div>
 <p>Sometimes, instead of using millions of rays, it is more convenient to repeat the simulations and average the results
-The we can set which parameters of which optical elements can be exported. The number of rounds of simulations can be set like this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># repeat the simulations as many time as needed</span>
+We can set which parameters of which optical elements can be exported. The number of rounds of simulations can be set like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># repeat the simulations as many times as needed</span>
 <span class="n">sim</span><span class="o">.</span><span class="n">repeat</span> <span class="o">=</span> <span class="mi">1</span>
 </pre></div>
 </div>
-<p>One can decide weather want RAY-UI or raypyng to do a prelimanary analysis of the results.
+<p>One can decide whether want RAY-UI or raypyng to do a preliminary analysis of the results.
 To let RAY-UI analyze the results, one has to set:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">.</span><span class="n">analyze</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># let RAY-UI analyze the results</span>
 </pre></div>
 </div>
-<p>In this case the following exports are available:</p>
+<p>In this case, the following files are available to export:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">possible_exports</span><span class="p">)</span>
 <span class="o">&gt;</span> <span class="p">[</span><span class="s1">&#39;AnglePhiDistribution&#39;</span><span class="p">,</span>
 <span class="o">&gt;</span> <span class="s1">&#39;AnglePsiDistribution&#39;</span><span class="p">,</span>
@@ -193,7 +193,7 @@ To let RAY-UI analyze the results, one has to set:</p>
 <span class="n">sim</span><span class="o">.</span><span class="n">raypyng_analysis</span><span class="o">=</span><span class="kc">True</span> <span class="c1"># let raypyng analyze the results</span>
 </pre></div>
 </div>
-<p>In this case only these exports are possible</p>
+<p>In this case, only these exports are possible</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">possible_exports_without_analysis</span><span class="p">)</span>
 <span class="o">&gt;</span> <span class="p">[</span><span class="s1">&#39;RawRaysIncoming&#39;</span><span class="p">,</span> <span class="s1">&#39;RawRaysOutgoing&#39;</span><span class="p">]</span>
 </pre></div>
@@ -205,49 +205,49 @@ To let RAY-UI analyze the results, one has to set:</p>
                 <span class="p">]</span>
 </pre></div>
 </div>
-<p>Finally the simulations can be run using</p>
+<p>Finally, the simulations can be run using</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">multiprocessing</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>where the <cite>multiprocessing</cite> parameter can be set either to False or to an int, corresponding to the number of parallel instances of RAY-UI to be used. Generally speaking the number of instances of RAY-UI must be lower than the number of cores available. If simulation using many rays, monitor the RAM usage of your computer. If the computation uses all the possible RAM of the computer the program may get blocked or not execute correctly.</p>
+<p>where the <cite>multiprocessing</cite> parameter can be set either to False or to an int, corresponding to the number of parallel instances of RAY-UI to be used. Generally speaking, the number of instances of RAY-UI must be lower than the number of cores available. If the simulation uses many rays, monitor the RAM usage of your computer. If the computation uses all the possible RAM of the computer the program may get blocked or not execute correctly.</p>
 </section>
 <section id="exports">
 <h2>Exports<a class="headerlink" href="#exports" title="Permalink to this heading"></a></h2>
-<section id="analysis-perfomed-by-ray-ui">
-<h3>Analysis perfomed by RAY-UI<a class="headerlink" href="#analysis-perfomed-by-ray-ui" title="Permalink to this heading"></a></h3>
-<p>If you decided to let RAY-UI doing the analysis, you should expect the following files to be
+<section id="analysis-performed-by-ray-ui">
+<h3>Analysis performed by RAY-UI<a class="headerlink" href="#analysis-performed-by-ray-ui" title="Permalink to this heading"></a></h3>
+<p>If you decided to let RAY-UI do the analysis, you should expect the following files to be
 saved in your simulation folder:</p>
 <ul class="simple">
 <li><p>one file for each parameter you set with the values that you passed to the program.
-If for instance you input the Dipole numberRays, you will find a file called
+If for instance, you input the Dipole numberRays, you will find a file called
 <cite>input_param_Dipole_numberRays.dat</cite></p></li>
 <li><p>one folder called <cite>round_n</cite> for each repetition of the simulations.
-For instance if you set <code class="code docutils literal notranslate"><span class="pre">sim.repeat=2</span></code> you will have two folders <cite>round_0</cite> and <cite>round_1</cite></p></li>
+For instance, if you set <code class="code docutils literal notranslate"><span class="pre">sim.repeat=2</span></code> you will have two folders <cite>round_0</cite> and <cite>round_1</cite></p></li>
 <li><p>inside each <cite>round_n</cite> folder you will find the beamline files modified
 with the parameters you set in <cite>sim.params</cite>, these are the <cite>.rml</cite> files,
 that can be opened by RAY-UI.</p></li>
 <li><p>inside each <cite>round_n</cite> folder you will find your exported files, one for
-each simulation. If for instance you exported the <cite>ScalarElementProperties</cite> of the Dipole,
+each simulation. If for instance, you exported the <cite>ScalarElementProperties</cite> of the Dipole,
 you will have a list of files <cite>0_Dipole-ScalarElementProperties.csv</cite></p></li>
 </ul>
 </section>
-<section id="analysis-perfomed-by-raypyng">
-<h3>Analysis perfomed by raypyng<a class="headerlink" href="#analysis-perfomed-by-raypyng" title="Permalink to this heading"></a></h3>
-<p>If you decided to let raypyng doing the analysis, you should expect the following files to
+<section id="analysis-performed-by-raypyng">
+<h3>Analysis performed by raypyng<a class="headerlink" href="#analysis-performed-by-raypyng" title="Permalink to this heading"></a></h3>
+<p>If you decided to let raypyng do the analysis, you should expect the following files to
 be saved in your simulation folder:</p>
 <ul class="simple">
 <li><p>one file for each parameter you set with the values that you passed to the program.
-If for instance you input the Dipole numberRays, you will find a file called
+If for instance, you input the Dipole numberRays, you will find a file called
 <cite>input_param_Dipole_numberRays.dat</cite></p></li>
 <li><p>one folder called <cite>round_n</cite> for each repetition of the simulations.
-For instance if you set <code class="code docutils literal notranslate"><span class="pre">sim.repeat=2</span></code> you will have two folders <cite>round_0</cite> and <cite>round_1</cite></p></li>
+For instance, if you set <code class="code docutils literal notranslate"><span class="pre">sim.repeat=2</span></code> you will have two folders <cite>round_0</cite> and <cite>round_1</cite></p></li>
 <li><p>inside each <cite>round_n</cite> folder you will find the beamline files modified with the parameters
 you set in <cite>sim.params</cite>, these are the <cite>.rml</cite> files, that can be opened by RAY-UI.</p></li>
 <li><p>inside each <cite>round_n</cite> folder you will find your exported files, one for each simulation.
-If for instance you exported the <cite>RawRaysOutgoing</cite> of the Dipole, you will
+If for instance, you exported the <cite>RawRaysOutgoing</cite> of the Dipole, you will
 have a list of files <cite>0_Dipole-RawRaysOutgoing.csv</cite></p></li>
 <li><p>for each <cite>RawRaysOutgoing</cite> file, raypyng calculates some properties,
-and saves a corresponding file, for instance <cite>0_Dipole_analyzed_rays.dat</cite>. Each of these files contains the followin informations:</p>
+and saves a corresponding file, for instance <cite>0_Dipole_analyzed_rays.dat</cite>. Each of these files contains the following information:</p>
 <ul>
 <li><p>SourcePhotonFlux</p></li>
 <li><p>NumberRaysSurvived</p></li>
@@ -259,38 +259,39 @@ and saves a corresponding file, for instance <cite>0_Dipole_analyzed_rays.dat</c
 </ul>
 </li>
 <li><p>In the simulation folder, all the for each exported element
-is united (and in case of more rounds of simulations averaged) in one single file. For the dipole the fill is called <cite>Dipole.dat</cite></p></li>
+is united (and in case of more rounds of simulations averaged)
+in one single file. For the dipole, the file is called <cite>Dipole.dat</cite></p></li>
 </ul>
 </section>
-<section id="recipees">
-<h3>Recipees<a class="headerlink" href="#recipees" title="Permalink to this heading"></a></h3>
-<p>Documentation still not available, see the examples.</p>
 </section>
-<section id="list-of-examples-avalable-and-short-explanation">
-<h3>List of examples avalable and short explanation<a class="headerlink" href="#list-of-examples-avalable-and-short-explanation" title="Permalink to this heading"></a></h3>
+<section id="recipes">
+<h2>Recipes<a class="headerlink" href="#recipes" title="Permalink to this heading"></a></h2>
+<p>Documentation is still not available, see the examples.</p>
+</section>
+<section id="list-of-examples-available-and-short-explanation">
+<h2>List of examples available and short explanation<a class="headerlink" href="#list-of-examples-available-and-short-explanation" title="Permalink to this heading"></a></h2>
 <p>In the example folder, the following examples are available:</p>
 <ul class="simple">
 <li><p><cite>example_simulation_analyze.py</cite> simulate a beamline,
 let Ray-UI do the analysis</p></li>
 <li><p><cite>example_simulation_noanalyze.py</cite> simulate a beamline,
-let Ray-UI do the analysis</p></li>
-<li><p><cite>example_eval_noanalyze_and_analyze.py</cite> plot the results
+let raypyng do the analysis</p></li>
+<li><p><cite>example_eval_noanalyze_and_analyze.py</cite> plots the results
 of the two previous simulations</p></li>
-<li><p><cite>example_simulation_Flux.py</cite> simulations using the flux recipee,
-useful if you intent is to simulate the flux of your beamline</p></li>
+<li><p><cite>example_simulation_Flux.py</cite> simulations using the flux recipe,
+useful if you intend to simulate the flux of your beamline</p></li>
 <li><p><cite>example_simulation_RP.py</cite> simulations using the resolving power
-(RP) recipee, useful if you intent is to simulate the RP of your beamline.
+(RP) recipe, useful if you intend to simulate the RP of your beamline.
 The reflectivity of every optical element is switched to 100% and not
-calculated using the substrate and coiating(s) material(s). The
-information about the Flux of the beamline are therefore not reliable.</p></li>
-<li><p><cite>example_beamwaist.py</cite>: raypyng is able to plot the beamwaist of
-the x-rays across your beamline. It performs simulations using the beamwaist recipee,
-and it exports the raw raysoutgoing from each optical element. It then uses a
+calculated using the substrate and coating(s) material(s). The
+information about the Flux of the beamline is therefore not reliable.</p></li>
+<li><p><cite>example_beamwaist.py</cite>: raypyng can plot the beam waist of
+the x-rays across your beamline. It performs simulations using the beam waist recipe,
+and it exports the RawRaysOutgoing file from each optical element. It then uses a
 simple geometrical x-ray tracer to propagate each ray until the next optical
-element, and plots the results (both top view and side view). This is still
+element and plots the results (both top view and side view). This is still
 experimental and it may fail.</p></li>
 </ul>
-</section>
 </section>
 </section>
 

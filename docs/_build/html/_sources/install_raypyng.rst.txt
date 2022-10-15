@@ -1,6 +1,6 @@
 Install
 *******
-raypyng will work only if using a linux or a MacOS distribustion.
+raypyng will work only if using a Linux or a macOS distribution.
 
 Install RAY-UI
 --------------
@@ -22,7 +22,7 @@ Install xvfb:
 
 .. note::
 
-    xvfb-run script is a part of the xvfb distribuion and 
+    xvfb-run script is a part of the xvfb distribution and 
     runs an app on a new virtual X11 server.
 
 
@@ -37,7 +37,7 @@ Install raypyng
 
   If that version is less than 3.8, you must update it.
 
-  We recommend install bluesky into a "virtual environment" so this
+  We recommend installing raypyng into a "virtual environment" so that this
   installation will not interfere with any existing Python software:
 
   .. code-block:: bash
@@ -54,7 +54,7 @@ Install raypyng
     conda create -n raypyng-tutorial "python>=3.8"
     conda activate raypyng-tutorial
 
-* Install the latest versions of raypyng and ophyd. Also install IPython 
+* Install the latest versions of raypyng and ophyd. Also, install IPython 
   (a Python interpreter designed by scientists for scientists).
 
   .. code-block:: bash
