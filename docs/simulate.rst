@@ -3,8 +3,6 @@ Simulation
 .. autoclass:: raypyng.simulate.Simulate
    :members:
 
-.. SimulationParams
-.. ==================
 .. autoclass:: raypyng.simulate.SimulationParams
    :members:
 
