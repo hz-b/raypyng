@@ -231,11 +231,12 @@ class SimulationParams():
 class Simulate():
     """A class that takes care of performing the simulations with RAY-UI 
     """
-    def __init__(self, rml=None, hide=False,**kwargs) -> None:
+    def __init__(self, rml=None, hide=False,ray_path=None,**kwargs) -> None:
         """Initialize the class with a rml file
         Args:
             rml (RMLFile/string, optional): string pointing to an rml file with the beamline template, or an RMLFile class object. Defaults to None.
             hide (bool, optional): force hiding of GUI leftovers, xvfb needs to be installed. Defaults to False.
+            ray_path (str, optional): the path to the RAY-UI installation folder. If None, the program will look for RAY-UI in the standard installation paths. 
 
         Raises:
             Exception: If the rml file is not defined an exception is raised
@@ -253,6 +254,7 @@ class Simulate():
         self.analyze = True
         self._repeat = 1
         self.raypyng_analysis = True
+        self.ray_path = ray_path
 
 
     @property
@@ -564,7 +566,7 @@ class Simulate():
         missing_simulations= self.check_simulations(force=force).items()
         for ind,rml in missing_simulations:
             filename = os.path.basename(rml.filename)
-            filenames_hide_analyze.append([rml.filename, self._hide, self._analyze, self.raypyng_analysis])
+            filenames_hide_analyze.append([rml.filename, self._hide, self._analyze, self.raypyng_analysis, self.ray_path])
             sim_index = int(filename[:filename.index("_")])
             exports.append(self.generate_export_params(sim_index,self.sim_list_path[ind]))
             rml.write()
@@ -581,11 +583,12 @@ class Simulate():
          
 def run_rml_func(_tuple):
     filenames_hide_analyze,exports = _tuple
-    rml_filename = filenames_hide_analyze[0]
-    hide         = filenames_hide_analyze[1]
-    analyze      = filenames_hide_analyze[2]
+    rml_filename     = filenames_hide_analyze[0]
+    hide             = filenames_hide_analyze[1]
+    analyze          = filenames_hide_analyze[2]
     raypyng_analysis = filenames_hide_analyze[3]
-    runner = RayUIRunner(hide=hide)
+    ray_path         = filenames_hide_analyze[4]
+    runner = RayUIRunner(ray_path=ray_path,hide=hide)
     api    = RayUIAPI(runner)
     pp     = PostProcess()
     runner.run()
