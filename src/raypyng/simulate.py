@@ -1,6 +1,6 @@
 import raypyng
 from .rml import RMLFile
-from .rml import ObjectElement,ParamElement
+from .rml import ObjectElement,ParamElement, BeamlineElement
 import itertools
 import os 
 import numpy as np
@@ -87,7 +87,7 @@ class SimulationParams():
                     except TypeError:
                         raise Exception('The only permitted type are: int, float, str, list, range, np.array, check',d[k]) 
         self.param = value
-  
+        
     def _check_param(self):
         """Check that self.param is a list of dictionaries, and convert the 
         items of the dictionaries to lists, otherwise raise an exception.
@@ -606,6 +606,23 @@ class Simulate():
     def generate_export_params(self,simulation_index,rml):
         folder = os.path.dirname(rml)
         return [ (d[0], d[1], folder, str(simulation_index)+'_') for d in self.exports_list]
+    
+    def reflectivity(self, reflectivity=True):
+        """Switch the reflectivity of all the optical elements in the beamline on or off.
+
+        Args:
+            reflectivity (bool, optional): If :code:`True` the reflectivity is switched on,
+                                           if :code:`False` the reflectivity is switched off.
+                                           Defaults to True.
+        """        
+        if reflectivity: 
+            on_off = '1'
+        else:
+            on_off = '0'
+
+        for oe in self.rml.beamline.children():
+                if hasattr(oe,"reflectivityType"):
+                    oe.reflectivityType.cdata = on_off
          
 def run_rml_func(_tuple):
     filenames_hide_analyze,exports = _tuple
