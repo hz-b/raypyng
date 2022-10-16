@@ -25,3 +25,4 @@ src/raypyng.egg-info/PKG-INFO
 src/raypyng.egg-info/requires.txt
 src/raypyng.egg-info/SOURCES.txt
 src/raypyng.egg-info/top_level.txt
+examples/rml/new_elisa.rml
