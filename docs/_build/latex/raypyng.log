@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.7.22)  16 OCT 2022 09:53
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.7.22)  16 OCT 2022 11:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -821,7 +821,7 @@ qtm/m/n/10 , and
 ]
 Chapter 4.
 [15] [16] [17] [18]
-Underfull \hbox (badness 10000) in paragraph at lines 1302--1304
+Underfull \hbox (badness 10000) in paragraph at lines 1322--1324
 []\T1/txtt/bx/n/10 exported_object \T1/qtm/m/n/10 (\T1/txtt/m/sl/10 str, option
 al\T1/qtm/m/n/10 ) ^^U the ex-ported ob-ject, tested only with
  []
@@ -914,53 +914,53 @@ Underfull \hbox (badness 5417) in paragraph at lines 80--81
 late.Simulate prop-
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 84--85
-[]\T1/txtt/m/n/10 resolvable_name() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.rml
-.BeamlineElement
- []
-
 [25
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 85--86
 []\T1/txtt/m/n/10 resolvable_name() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.rml
-.ObjectElement
+.BeamlineElement
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 86--87
 []\T1/txtt/m/n/10 resolvable_name() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.rml
+.ObjectElement
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--88
+[]\T1/txtt/m/n/10 resolvable_name() \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.rml
 .ParamElement
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 88--90
+Underfull \hbox (badness 10000) in paragraph at lines 89--91
 []\T1/txtt/m/n/10 retrieve_bw_and_focusSize()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 88--90
+Underfull \hbox (badness 10000) in paragraph at lines 89--91
 \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.postprocessing.PostProcessAnalyzed
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 90--92
+Underfull \hbox (badness 10000) in paragraph at lines 91--93
 []\T1/txtt/m/n/10 retrieve_flux_beamline()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 90--92
+Underfull \hbox (badness 10000) in paragraph at lines 91--93
 \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.postprocessing.PostProcessAnalyzed
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 101--103
+Underfull \hbox (badness 10000) in paragraph at lines 102--104
 []\T1/txtt/m/n/10 save_parameters_to_file()
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 104--105
+Underfull \hbox (badness 10000) in paragraph at lines 105--106
 []\T1/txtt/m/n/10 simulation_name \T1/qtm/m/n/10 (\T1/qtm/m/it/10 raypyng.simul
 ate.Simulate prop-
  []
@@ -969,16 +969,16 @@ ate.Simulate prop-
 
 ]) (./raypyng.aux)
 Package rerunfilecheck Info: File `raypyng.out' has not changed.
-(rerunfilecheck)             Checksum: 1CEED683A40BB13E36A75C5E50C68F7E;4292.
+(rerunfilecheck)             Checksum: B90F96D078B3D076035FF5CAA3E1AAB8;4292.
  ) 
 Here is how much of TeX's memory you used:
- 14822 strings out of 478287
- 237988 string characters out of 5849289
- 641489 words of memory out of 5000000
- 32527 multiletter control sequences out of 15000+600000
+ 14824 strings out of 478287
+ 238058 string characters out of 5849289
+ 641527 words of memory out of 5000000
+ 32528 multiletter control sequences out of 15000+600000
  527087 words of font info for 76 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
- 70i,11n,76p,1046b,641s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 70i,12n,76p,1046b,698s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/tex-gyre/q-ec.enc}{/usr/share/texmf/fonts/e
 nc/dvips/tex-gyre/q-ts1.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base
 /8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb
@@ -991,10 +991,10 @@ lic/txfonts/t1xbtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfont
 s/t1xtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb
 ></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/tcxtt.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on raypyng.pdf (30 pages, 229285 bytes).
+Output written on raypyng.pdf (30 pages, 229824 bytes).
 PDF statistics:
- 508 PDF objects out of 1000 (max. 8388607)
- 450 compressed objects within 5 object streams
- 120 named destinations out of 1000 (max. 500000)
+ 511 PDF objects out of 1000 (max. 8388607)
+ 453 compressed objects within 5 object streams
+ 121 named destinations out of 1000 (max. 500000)
  285 words of extra memory for PDF output out of 10000 (max. 10000000)
 

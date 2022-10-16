@@ -72,7 +72,7 @@
 		\hyperpage{16}
   \item \spxentry{PostProcess}\spxextra{class in raypyng.postprocessing}, \hyperpage{18}
   \item \spxentry{postprocess\_RawRays()}\spxextra{raypyng.postprocessing.PostProcess method}, 
-		\hyperpage{18}
+		\hyperpage{19}
   \item \spxentry{PostProcessAnalyzed}\spxextra{class in raypyng.postprocessing}, \hyperpage{19}
 
   \indexspace
@@ -80,6 +80,7 @@
   \item \spxentry{raypyng\_analysis}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{16}
   \item \spxentry{RayUIRunner}\spxextra{class in raypyng.runner}, \hyperpage{20}
   \item \spxentry{read()}\spxextra{raypyng.rml.RMLFile method}, \hyperpage{21}
+  \item \spxentry{reflectivity()}\spxextra{raypyng.simulate.Simulate method}, \hyperpage{16}
   \item \spxentry{repeat}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{16}
   \item \spxentry{resolvable\_name()}\spxextra{raypyng.rml.BeamlineElement method}, \hyperpage{22}
   \item \spxentry{resolvable\_name()}\spxextra{raypyng.rml.ObjectElement method}, \hyperpage{22}
@@ -99,7 +100,7 @@
   \indexspace
   \bigletter S
   \item \spxentry{save\_parameters\_to\_file()}\spxextra{raypyng.simulate.Simulate method}, 
-		\hyperpage{16}
+		\hyperpage{17}
   \item \spxentry{Simulate}\spxextra{class in raypyng.simulate}, \hyperpage{15}
   \item \spxentry{simulation\_name}\spxextra{raypyng.simulate.Simulate property}, \hyperpage{17}
   \item \spxentry{SimulationParams}\spxextra{class in raypyng.simulate}, \hyperpage{17}

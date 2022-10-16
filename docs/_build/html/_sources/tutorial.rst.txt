@@ -242,12 +242,6 @@ one to make `Flux
 <https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_Flux.py>`_
 simulations. 
 
-Resolving Power 
-----------------
-
-Flux
------
-
 
 List of available examples 
 ===========================
