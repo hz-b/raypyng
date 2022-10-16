@@ -9,9 +9,11 @@ from .rml import RMLFile
 
 class PostProcess():
     """class to post-process the data. 
-    At the moment works only if the exported data are RawRaysOutgoing
+
+    It works only if the exported data are RawRaysOutgoing
     """
     def __init__(self) -> None:
+    
         self.format_saved_files = '.dat'
         self.source = None
         pass
@@ -65,7 +67,7 @@ class PostProcess():
         return(rays.shape[0])
     
     def _save_file(self, filename:str, array:np.array, header:str=None):
-        """This function is used to save files, 
+        """This function is used to save files.
 
         Args:
             filename (str): file name(path)
@@ -78,7 +80,7 @@ class PostProcess():
             np.savetxt(filename+self.format_saved_files,array)
 
     def _load_file(self,filepath):
-        """Load a :code:`.npy` file and returns the array
+        """Load file and returns the array
 
         Args:
             filepath (str): the path to the file to load
@@ -106,7 +108,9 @@ class PostProcess():
         return self.source.photonFlux.cdata, self.source.numberRays.cdata
     
     def postprocess_RawRays(self,exported_element:str=None, exported_object:str=None, dir_path:str=None, sim_number:str=None, rml_filename:str=None):
-        """The method looks in the folder dir_path for a file with the filename:
+        """ PostProcess rountine of the RawRaysOutgoing extracted files.
+
+        The method looks in the folder dir_path for a file with the filename:
         :code:`filename = os.path.join(dir_path,sim_number+exported_element + '-' + exported_object+'.csv')`
         for each file it calculates the number of rays, the bandwidth, and the horizontal and vertical focus size,
         it saves it in an array that is composed by :code:`[n_rays,bandwidth,hor_focus,vert_focus]`, that is then saved to
@@ -167,7 +171,10 @@ class PostProcess():
         return 
 
     def cleanup(self,dir_path:str=None, repeat:int=1, exp_elements:list=None):
-        """This functions reads all the temporary files created by :code:`self.postptocess_RawRays()`
+        """Reads all the results of the postprocessing process and summarize 
+        them in a single file for each exported object.
+        
+        This functions reads all the temporary files created by :code:`self.postptocess_RawRays()`
         saves one file for each exported element in dir_path, and deletes the temporary files.
         If more than one round of simulations was done, the values are averaged.
 
@@ -206,7 +213,9 @@ class PostProcessAnalyzed():
         pass
 
     def retrieve_flux_beamline(self, folder_name,source,oe,nsimulations,rounds=1,current=0.3):
-        """This function takes as arguments the name of the 
+        """Extract the flux from object ScalarBeamProperties and from source ScalarElementProperties.
+
+        This function takes as arguments the name of the 
         simulation folder, the exported objet in RAY-UI and there
         number of simulations and returns the flux at the optical element in 
         percentage and in number of photons, and the flux produced
@@ -257,8 +266,7 @@ class PostProcessAnalyzed():
         return flux_percent*scale_factor
 
     def retrieve_bw_and_focusSize(self,folder_name:str,oe:str,nsimulations:int,rounds:int):
-        """Extract the bandwidth and focus size if RAY-UI was run in analyze mode.
-        It requires ScalarBeamProperties to be exported for the desired optical element
+        """Extract the bandwidth and focus size from ScalarBeamProperties of an object.
 
         Args:
             folder_name (str): the path to the folder where the simulations are 

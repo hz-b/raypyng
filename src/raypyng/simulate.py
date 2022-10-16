@@ -1,6 +1,6 @@
 import raypyng
 from .rml import RMLFile
-from .rml import ObjectElement,ParamElement, BeamlineElement
+from .rml import ObjectElement,ParamElement
 import itertools
 import os 
 import numpy as np
@@ -12,12 +12,23 @@ from .postprocessing import PostProcess
 
 ################################################################
 class SimulationParams():
-    """A class that takes care of the simulations parameters, makes sure that they are written correctly,
+    """The entry point of the simulation parameters.
+    
+    A class that takes care of the simulations parameters, 
+    makes sure that they are written correctly,
     and returns the the list of simulations that is requested by the user.
+
+    Args:
+        rml (RMLFile/string, optional): string pointing to an rml 
+                                        file with the beamline template, 
+                                        or an RMLFile class object. 
+                                        Defaults to None.
+        param_list (list, optional): list of dictionaries containing the 
+                                     parameters and values to simulate. 
+                                     Defaults to None.            
     """    
     def __init__(self, rml=None, param_list=None,**kwargs) -> None:
-        """_summary_
-
+        """ 
         Args:
             rml (RMLFile/string, optional): string pointing to an rml file with the beamline template, or an RMLFile class object. Defaults to None.
             param_list (list, optional): list of dictionaries containing the parameters and values to simulate. Defaults to None.
@@ -230,13 +241,28 @@ class SimulationParams():
 ################################################################
 class Simulate():
     """A class that takes care of performing the simulations with RAY-UI 
+
+    Args:
+        rml (RMLFile/string, optional): string pointing to an rml file with 
+                                        the beamline template, or an RMLFile 
+                                        class object. Defaults to None.
+        hide (bool, optional): force hiding of GUI leftovers, xvfb needs 
+                               to be installed. Defaults to False.
+        ray_path (str, optional): the path to the RAY-UI installation folder. 
+                                  If None, the program will look for RAY-UI in 
+                                  the standard installation paths. 
     """
     def __init__(self, rml=None, hide=False,ray_path=None,**kwargs) -> None:
         """Initialize the class with a rml file
         Args:
-            rml (RMLFile/string, optional): string pointing to an rml file with the beamline template, or an RMLFile class object. Defaults to None.
-            hide (bool, optional): force hiding of GUI leftovers, xvfb needs to be installed. Defaults to False.
-            ray_path (str, optional): the path to the RAY-UI installation folder. If None, the program will look for RAY-UI in the standard installation paths. 
+            rml (RMLFile/string, optional): string pointing to an rml file with 
+                                            the beamline template, or an RMLFile 
+                                            class object. Defaults to None.
+            hide (bool, optional): force hiding of GUI leftovers, xvfb needs 
+                                   to be installed. Defaults to False.
+            ray_path (str, optional): the path to the RAY-UI installation folder. 
+                                      If None, the program will look for RAY-UI in 
+                                      the standard installation paths. 
 
         Raises:
             Exception: If the rml file is not defined an exception is raised

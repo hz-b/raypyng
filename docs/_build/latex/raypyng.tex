@@ -520,12 +520,6 @@ one to make \sphinxhref{https://github.com/hz-b/raypyng/blob/main/examples/examp
 simulations.
 
 
-\subsection{Resolving Power}
-\label{\detokenize{tutorial:id1}}
-
-\subsection{Flux}
-\label{\detokenize{tutorial:id2}}
-
 \section{List of available examples}
 \label{\detokenize{tutorial:list-of-available-examples}}
 \sphinxAtStartPar
@@ -586,7 +580,10 @@ there is the possibility to write recipe for raypyng, to
 perform simulations, and automatize some tasks.
 
 
-\section{Recipe Template}
+\section{Recipe}
+\label{\detokenize{how_to_guides:recipe}}
+
+\subsection{Recipe Template}
 \label{\detokenize{how_to_guides:recipe-template}}
 \sphinxAtStartPar
 This the template to use to write a recipe.
@@ -661,7 +658,7 @@ in \sphinxcode{\sphinxupquote{simulation\_name()}}
 \end{sphinxVerbatim}
 
 
-\section{How To Write a Recipe}
+\subsection{How To Write a Recipe}
 \label{\detokenize{how_to_guides:how-to-write-a-recipe}}
 \sphinxAtStartPar
 An example of how to write a recipe that exports
@@ -767,6 +764,28 @@ file for each element present in the beamline automatically.
 \pysigstopsignatures
 \sphinxAtStartPar
 A class that takes care of performing the simulations with RAY\sphinxhyphen{}UI
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{rml}} (\sphinxstyleliteralemphasis{\sphinxupquote{RMLFile/string}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} string pointing to an rml file with
+the beamline template, or an RMLFile
+class object. Defaults to None.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{hide}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} force hiding of GUI leftovers, xvfb needs
+to be installed. Defaults to False.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{ray\_path}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} the path to the RAY\sphinxhyphen{}UI installation folder.
+If None, the program will look for RAY\sphinxhyphen{}UI in
+the standard installation paths.
+
+\end{itemize}
+
+\end{description}\end{quote}
 \index{analyze (raypyng.simulate.Simulate property)@\spxentry{analyze}\spxextra{raypyng.simulate.Simulate property}}
 
 \begin{fulllineitems}
@@ -1036,8 +1055,30 @@ A string to append to the folder where the simulations will be executed.
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.simulate.}}\sphinxbfcode{\sphinxupquote{SimulationParams}}}{\emph{\DUrole{n}{rml}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{param\_list}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-A class that takes care of the simulations parameters, makes sure that they are written correctly,
+The entry point of the simulation parameters.
+
+\sphinxAtStartPar
+A class that takes care of the simulations parameters,
+makes sure that they are written correctly,
 and returns the the list of simulations that is requested by the user.
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{rml}} (\sphinxstyleliteralemphasis{\sphinxupquote{RMLFile/string}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} string pointing to an rml
+file with the beamline template,
+or an RMLFile class object.
+Defaults to None.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{param\_list}} (\sphinxstyleliteralemphasis{\sphinxupquote{list}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} list of dictionaries containing the
+parameters and values to simulate.
+Defaults to None.
+
+\end{itemize}
+
+\end{description}\end{quote}
 \index{params (raypyng.simulate.SimulationParams property)@\spxentry{params}\spxextra{raypyng.simulate.SimulationParams property}}
 
 \begin{fulllineitems}
@@ -1081,7 +1122,35 @@ RMLFile object instantiated in init
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.recipes.}}\sphinxbfcode{\sphinxupquote{ResolvingPower}}}{\emph{\DUrole{n}{energy\_range}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{range}}, \emph{\DUrole{n}{exported\_object}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{{\hyperref[\detokenize{code_documentation:raypyng.rml.ObjectElement}]{\sphinxcrossref{ObjectElement}}}}}, \emph{\DUrole{o}{/}}, \emph{\DUrole{o}{*}\DUrole{n}{args}}, \emph{\DUrole{n}{source}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}{\hyperref[\detokenize{code_documentation:raypyng.rml.ObjectElement}]{\sphinxcrossref{ObjectElement}}}\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{sim\_folder}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Resolving Power Simulations, reflectivity is automatically switched off for all elements
+Recipe for resolving power simulations.
+
+\sphinxAtStartPar
+The eflectivity is automatically switched off for all elements,
+the source if automatically recognized.
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{energy\_range}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.array}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{list}}) \textendash{} the energies to simulate in eV
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{exported\_object}} ({\hyperref[\detokenize{code_documentation:raypyng.rml.ObjectElement}]{\sphinxcrossref{\sphinxstyleliteralemphasis{\sphinxupquote{ObjectElement}}}}}) \textendash{} the object to export
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{source}} ({\hyperref[\detokenize{code_documentation:raypyng.rml.ObjectElement}]{\sphinxcrossref{\sphinxstyleliteralemphasis{\sphinxupquote{ObjectElement}}}}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} the source object.
+If None is provided, an automatic recogniton
+of the source will be tried. Defaults to None.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{sim\_folder}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} the name of the simulation folder. If None, the rml
+filename will be used. Defaults to None.
+
+\end{itemize}
+
+\end{description}\end{quote}
 
 \end{fulllineitems}
 
@@ -1096,7 +1165,35 @@ Resolving Power Simulations, reflectivity is automatically switched off for all 
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.recipes.}}\sphinxbfcode{\sphinxupquote{Flux}}}{\emph{\DUrole{n}{energy\_range}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{range}}, \emph{\DUrole{n}{exported\_object}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{{\hyperref[\detokenize{code_documentation:raypyng.rml.ObjectElement}]{\sphinxcrossref{ObjectElement}}}}}, \emph{\DUrole{o}{/}}, \emph{\DUrole{o}{*}\DUrole{n}{args}}, \emph{\DUrole{n}{source}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}{\hyperref[\detokenize{code_documentation:raypyng.rml.ObjectElement}]{\sphinxcrossref{ObjectElement}}}\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{sim\_folder}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Flux simulations, reflectivity is automatically switched on for all elements
+Recipe for flux simulations.
+
+\sphinxAtStartPar
+The reflectivity is automatically switched on for all elements,
+and the source is automatically identified.
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{energy\_range}} (\sphinxstyleliteralemphasis{\sphinxupquote{np.array}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{list}}) \textendash{} the energies to simulate in eV
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{exported\_object}} ({\hyperref[\detokenize{code_documentation:raypyng.rml.ObjectElement}]{\sphinxcrossref{\sphinxstyleliteralemphasis{\sphinxupquote{ObjectElement}}}}}) \textendash{} the object to export
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{source}} ({\hyperref[\detokenize{code_documentation:raypyng.rml.ObjectElement}]{\sphinxcrossref{\sphinxstyleliteralemphasis{\sphinxupquote{ObjectElement}}}}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} the source object.
+If None is provided, an automatic recogniton
+of the source will be tried. Defaults to None.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{sim\_folder}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} the name of the simulation folder. If None, the rml
+filename will be used. Defaults to None.
+
+\end{itemize}
+
+\end{description}\end{quote}
 
 \end{fulllineitems}
 
@@ -1115,7 +1212,9 @@ Flux simulations, reflectivity is automatically switched on for all elements
 \pysigstopsignatures
 \sphinxAtStartPar
 class to post\sphinxhyphen{}process the data.
-At the moment works only if the exported data are RawRaysOutgoing
+
+\sphinxAtStartPar
+It works only if the exported data are RawRaysOutgoing
 \index{cleanup() (raypyng.postprocessing.PostProcess method)@\spxentry{cleanup()}\spxextra{raypyng.postprocessing.PostProcess method}}
 
 \begin{fulllineitems}
@@ -1123,6 +1222,10 @@ At the moment works only if the exported data are RawRaysOutgoing
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{cleanup}}}{\emph{\DUrole{n}{dir\_path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{repeat}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{int}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{1}}, \emph{\DUrole{n}{exp\_elements}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}list\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
 \pysigstopsignatures
+\sphinxAtStartPar
+Reads all the results of the postprocessing process and summarize
+them in a single file for each exported object.
+
 \sphinxAtStartPar
 This functions reads all the temporary files created by \sphinxcode{\sphinxupquote{self.postptocess\_RawRays()}}
 saves one file for each exported element in dir\_path, and deletes the temporary files.
@@ -1180,6 +1283,9 @@ str
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{postprocess\_RawRays}}}{\emph{\DUrole{n}{exported\_element}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{exported\_object}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{dir\_path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{sim\_number}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{rml\_filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
 \pysigstopsignatures
+\sphinxAtStartPar
+PostProcess rountine of the RawRaysOutgoing extracted files.
+
 \sphinxAtStartPar
 The method looks in the folder dir\_path for a file with the filename:
 \sphinxcode{\sphinxupquote{filename = os.path.join(dir\_path,sim\_number+exported\_element + \textquotesingle{}\sphinxhyphen{}\textquotesingle{} + exported\_object+\textquotesingle{}.csv\textquotesingle{})}}
@@ -1266,8 +1372,7 @@ np.array
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{retrieve\_bw\_and\_focusSize}}}{\emph{\DUrole{n}{folder\_name}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{oe}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{nsimulations}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{int}}, \emph{\DUrole{n}{rounds}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{int}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Extract the bandwidth and focus size if RAY\sphinxhyphen{}UI was run in analyze mode.
-It requires ScalarBeamProperties to be exported for the desired optical element
+Extract the bandwidth and focus size from ScalarBeamProperties of an object.
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
@@ -1309,6 +1414,9 @@ bw np.array
 \pysigstartsignatures
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{retrieve\_flux\_beamline}}}{\emph{\DUrole{n}{folder\_name}}, \emph{\DUrole{n}{source}}, \emph{\DUrole{n}{oe}}, \emph{\DUrole{n}{nsimulations}}, \emph{\DUrole{n}{rounds}\DUrole{o}{=}\DUrole{default_value}{1}}, \emph{\DUrole{n}{current}\DUrole{o}{=}\DUrole{default_value}{0.3}}}{}
 \pysigstopsignatures
+\sphinxAtStartPar
+Extract the flux from object ScalarBeamProperties and from source ScalarElementProperties.
+
 \sphinxAtStartPar
 This function takes as arguments the name of the
 simulation folder, the exported objet in RAY\sphinxhyphen{}UI and there
@@ -1385,7 +1493,33 @@ if the source is a Dipole
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.runner.}}\sphinxbfcode{\sphinxupquote{RayUIRunner}}}{\emph{\DUrole{n}{ray\_path}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{ray\_binary}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}rayui.sh\textquotesingle{}}}, \emph{\DUrole{n}{background}\DUrole{o}{=}\DUrole{default_value}{True}}, \emph{\DUrole{n}{hide}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-RayUIRunner class implements all logic to start a RayUI process
+RayUIRunner class implements all logic to start a RayUI process, load and rml file, trace and export.
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{ray\_path}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} the path to the RAY\sphinxhyphen{}UI installation folder.
+Defaults to config.ray\_path, that will look for the
+ray\_path in the standard installation folders.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{ray\_binary}} (\sphinxstyleliteralemphasis{\sphinxupquote{\_type\_}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} the binary file of RAY\sphinxhyphen{}UI.
+Defaults to “rayui.sh”.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{background}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} activate background mode. Defaults to True.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{hide}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} Hide the RAY\sphinxhyphen{}UI graphical instances.
+Available only if xvfb is installed.
+Defaults to False.
+
+\end{itemize}
+
+\end{description}\end{quote}
 \index{isrunning (raypyng.runner.RayUIRunner property)@\spxentry{isrunning}\spxextra{raypyng.runner.RayUIRunner property}}
 
 \begin{fulllineitems}
@@ -1436,7 +1570,7 @@ PID of the process if it running, None otherwise
 
 \sphinxlineitem{Return type}
 \sphinxAtStartPar
-\_type\_
+int
 
 \end{description}\end{quote}
 
@@ -1478,6 +1612,20 @@ Open one instance of RAY\sphinxhyphen{}UI using subprocess
 \pysigstopsignatures
 \sphinxAtStartPar
 Read/Write wrapper for the Ray RML files
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{filename}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} path to rml file. Defaults to None.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{template}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} path to rml file to use as template.
+Defaults to None.
+
+\end{itemize}
+
+\end{description}\end{quote}
 \index{read() (raypyng.rml.RMLFile method)@\spxentry{read()}\spxextra{raypyng.rml.RMLFile method}}
 
 \begin{fulllineitems}
@@ -1486,7 +1634,7 @@ Read/Write wrapper for the Ray RML files
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{read}}}{\emph{\DUrole{n}{file}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-read rml file
+Read rml file
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}
 \sphinxAtStartPar

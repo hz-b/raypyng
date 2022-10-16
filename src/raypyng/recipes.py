@@ -13,16 +13,30 @@ class SimulationRecipe:
 
 ################################################################
 class ResolvingPower(SimulationRecipe):
-    """Resolving Power Simulations, reflectivity is automatically switched off for all elements
+    """Recipe for resolving power simulations.
+    
+    The eflectivity is automatically switched off for all elements, 
+    the source if automatically recognized.
+
+    Args:
+            energy_range (np.array, list): the energies to simulate in eV
+            exported_object (ObjectElement): the object to export
+            source (ObjectElement, optional): the source object. 
+                                              If None is provided, an automatic recogniton 
+                                              of the source will be tried. Defaults to None.
+            sim_folder (str, optional): the name of the simulation folder. If None, the rml 
+                                        filename will be used. Defaults to None.
     """
     def __init__(self, energy_range:range, exported_object:ObjectElement,/, *args,source:ObjectElement=None,sim_folder:str=None):
-        """init
-
+        """
         Args:
             energy_range (np.array, list): the energies to simulate in eV
             exported_object (ObjectElement): the object to export
-            source (ObjectElement, optional): the source object. If None is provided, an automatic recogniton of the source will be tried. Defaults to None.
-            sim_folder (str, optional): the name of the simulation folder. If None, the rml filename will be used. Defaults to None.
+            source (ObjectElement, optional): the source object. 
+                                              If None is provided, an automatic recogniton 
+                                              of the source will be tried. Defaults to None.
+            sim_folder (str, optional): the name of the simulation folder. If None, the rml 
+                                        filename will be used. Defaults to None.
         """        
     
         if not isinstance(source, ObjectElement) and source != None:
@@ -93,16 +107,30 @@ class ResolvingPower(SimulationRecipe):
             
 ################################################################
 class Flux(SimulationRecipe):
-    """Flux simulations, reflectivity is automatically switched on for all elements
+    """Recipe for flux simulations.
+    
+    The reflectivity is automatically switched on for all elements, 
+    and the source is automatically identified.
+
+    Args:
+            energy_range (np.array, list): the energies to simulate in eV
+            exported_object (ObjectElement): the object to export
+            source (ObjectElement, optional): the source object. 
+                                              If None is provided, an automatic recogniton 
+                                              of the source will be tried. Defaults to None.
+            sim_folder (str, optional): the name of the simulation folder. If None, the rml 
+                                        filename will be used. Defaults to None.
     """
     def __init__(self, energy_range:range, exported_object:ObjectElement,/, *args,source:ObjectElement=None,sim_folder:str=None):
-        """init
-
+        """
         Args:
             energy_range (np.array, list): the energies to simulate in eV
             exported_object (ObjectElement): the object to export
-            source (ObjectElement, optional): the source object. If None is provided, an automatic recogniton of the source will be tried. Defaults to None.
-            sim_folder (str, optional): the name of the simulation folder. If None, the rml filename will be used. Defaults to None.
+            source (ObjectElement, optional): the source object. 
+                                              If None is provided, an automatic recogniton 
+                                              of the source will be tried. Defaults to None.
+            sim_folder (str, optional): the name of the simulation folder. If None, the rml 
+                                        filename will be used. Defaults to None.
         """        
     
         if not isinstance(source, ObjectElement) and source != None:
@@ -174,17 +202,33 @@ class Flux(SimulationRecipe):
 ################################################################
 
 class BeamWaist(SimulationRecipe):
-    """Beamwaist Simulation: at one defined energy export RawRaysOutgoing for all 
-    optical elements, including image planes
+    """Recipe for beamwaist simulations.
+    
+    At one defined energy export RawRaysOutgoing for all 
+    optical elements, including image planes.
+
+    Args:
+            energy_range (np.array, list): the energies to simulate in eV
+            source (ObjectElement, optional): the source object. If None is provided, 
+                                              an automatic recogniton of the source 
+                                              will be tried. Defaults to None.
+            nrays (int): number of rays for the source
+            sim_folder (str, optional): the name of the simulation folder. 
+                                        If None, the rml filename will be used. 
+                                        Defaults to None.
+        
     """
     def __init__(self, energy:float,/,source:ObjectElement=None,nrays:int=None,sim_folder:str=None):
-        """_summary_
-
+        """
         Args:
             energy_range (np.array, list): the energies to simulate in eV
-            source (ObjectElement, optional): the source object. If None is provided, an automatic recogniton of the source will be tried. Defaults to None.
+            source (ObjectElement, optional): the source object. If None is provided, 
+                                              an automatic recogniton of the source 
+                                              will be tried. Defaults to None.
             nrays (int): number of rays for the source
-            sim_folder (str, optional): the name of the simulation folder. If None, the rml filename will be used. Defaults to None.
+            sim_folder (str, optional): the name of the simulation folder. 
+                                        If None, the rml filename will be used. 
+                                        Defaults to None.
         
         """        
     
