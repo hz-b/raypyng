@@ -1,5 +1,5 @@
-Install
-*******
+Installation
+*************
 raypyng will work only if using a Linux or a macOS distribution.
 
 Install RAY-UI

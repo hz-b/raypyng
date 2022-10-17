@@ -19,8 +19,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="How To Guides" href="how_to_guides.html" />
-    <link rel="prev" title="Install" href="install_raypyng.html" /> 
+    <link rel="next" title="How To Guides" href="how_to.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -40,20 +40,23 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="install_raypyng.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#minimal-example">Minimal example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#simulation-output">Simulation Output</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#analysis-performed-by-ray-ui">Analysis performed by RAY-UI</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#analysis-performed-by-raypyng">Analysis performed by raypyng</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#simulations">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#perform-simulations">Perform Simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#simulation-output">Simulation Output</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#analysis-performed-by-ray-ui">Analysis performed by RAY-UI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analysis-performed-by-raypyng">Analysis performed by raypyng</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#recipes">Recipes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#list-of-available-examples">List of available examples</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="how_to_guides.html">How To Guides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code_documentation.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_to.html">How To Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API.html">API</a></li>
 </ul>
 
         </div>
@@ -82,8 +85,10 @@
              
   <section id="tutorial">
 <h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this heading"></a></h1>
-<section id="minimal-example">
-<h2>Minimal example<a class="headerlink" href="#minimal-example" title="Permalink to this heading"></a></h2>
+<section id="simulations">
+<h2>Simulations<a class="headerlink" href="#simulations" title="Permalink to this heading"></a></h2>
+<section id="perform-simulations">
+<h3>Perform Simulations<a class="headerlink" href="#perform-simulations" title="Permalink to this heading"></a></h3>
 <p>raypyng is not able to create a beamline from scratch. To do so, use RAY-UI,
 create a beamline, and save it. What you save is <code class="code docutils literal notranslate"><span class="pre">.rml</span></code> file, which you have to
 pass as an argument to the <code class="code docutils literal notranslate"><span class="pre">Simulate</span></code> class. In the following example, we
@@ -211,7 +216,7 @@ To let RAY-UI analyze the results, one has to set:</p>
 <p>where the <cite>multiprocessing</cite> parameter can be set either to False or to an int, corresponding to the number of parallel instances of RAY-UI to be used. Generally speaking, the number of instances of RAY-UI must be lower than the number of cores available. If the simulation uses many rays, monitor the RAM usage of your computer. If the computation uses all the possible RAM of the computer the program may get blocked or not execute correctly.</p>
 </section>
 <section id="simulation-output">
-<h2>Simulation Output<a class="headerlink" href="#simulation-output" title="Permalink to this heading"></a></h2>
+<h3>Simulation Output<a class="headerlink" href="#simulation-output" title="Permalink to this heading"></a></h3>
 <p>Expect this folders and subfolders to be created:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>RAYPy_simulation_mySimulation
 ├── round_0
@@ -234,7 +239,7 @@ To let RAY-UI analyze the results, one has to set:</p>
 </pre></div>
 </div>
 <section id="analysis-performed-by-ray-ui">
-<h3>Analysis performed by RAY-UI<a class="headerlink" href="#analysis-performed-by-ray-ui" title="Permalink to this heading"></a></h3>
+<h4>Analysis performed by RAY-UI<a class="headerlink" href="#analysis-performed-by-ray-ui" title="Permalink to this heading"></a></h4>
 <p>If you decided to let RAY-UI do the analysis, you should expect the following files to be
 saved in your simulation folder:</p>
 <ul class="simple">
@@ -253,7 +258,7 @@ you will have a list of files <cite>0_Dipole-ScalarElementProperties.csv</cite><
 </ul>
 </section>
 <section id="analysis-performed-by-raypyng">
-<h3>Analysis performed by raypyng<a class="headerlink" href="#analysis-performed-by-raypyng" title="Permalink to this heading"></a></h3>
+<h4>Analysis performed by raypyng<a class="headerlink" href="#analysis-performed-by-raypyng" title="Permalink to this heading"></a></h4>
 <p>If you decided to let raypyng do the analysis, you should expect the following files to
 be saved in your simulation folder:</p>
 <ul class="simple">
@@ -286,6 +291,7 @@ in one single file. For the dipole, the file is called <cite>Dipole.dat</cite></
 </ul>
 </section>
 </section>
+</section>
 <section id="recipes">
 <h2>Recipes<a class="headerlink" href="#recipes" title="Permalink to this heading"></a></h2>
 <p>raypyng provides some recipes to make simulations,
@@ -298,6 +304,11 @@ simulations.</p>
 <h2>List of available examples<a class="headerlink" href="#list-of-available-examples" title="Permalink to this heading"></a></h2>
 <p>In the example folder, the following examples are available:</p>
 <ul class="simple">
+<li><p><a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_rml.py">example_rml.py</a>
+in this example is shown how to read, manipulate and save an rml file.</p></li>
+<li><p><a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_runner.py">example_runner.py</a>
+in this example is shown how to use the RAY-UI API to start RAY-UI, load a file,
+trace it and export the desired results.</p></li>
 <li><p><a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_analyze.py">example_simulation_analyze.py</a> simulate a beamline,
 let Ray-UI do the analysis</p></li>
 <li><p><a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_noanalyze.py">example_simulation_noanalyze.py</a>
@@ -330,8 +341,8 @@ experimental and it may fail.</p></li>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="install_raypyng.html" class="btn btn-neutral float-left" title="Install" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="how_to_guides.html" class="btn btn-neutral float-right" title="How To Guides" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="how_to.html" class="btn btn-neutral float-right" title="How To Guides" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

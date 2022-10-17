@@ -1,8 +1,11 @@
 Tutorial
 ********
 
-Minimal example
+Simulations 
 ===============
+
+Perform Simulations
+--------------------
 raypyng is not able to create a beamline from scratch. To do so, use RAY-UI, 
 create a beamline, and save it. What you save is :code:`.rml` file, which you have to 
 pass as an argument to the :code:`Simulate` class. In the following example, we 
@@ -157,7 +160,7 @@ Finally, the simulations can be run using
 where the `multiprocessing` parameter can be set either to False or to an int, corresponding to the number of parallel instances of RAY-UI to be used. Generally speaking, the number of instances of RAY-UI must be lower than the number of cores available. If the simulation uses many rays, monitor the RAM usage of your computer. If the computation uses all the possible RAM of the computer the program may get blocked or not execute correctly.
 
 Simulation Output
-=================
+------------------
 Expect this folders and subfolders to be created:
 
 ::
@@ -184,7 +187,7 @@ Expect this folders and subfolders to be created:
 
 
 Analysis performed by RAY-UI 
------------------------------- 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 If you decided to let RAY-UI do the analysis, you should expect the following files to be 
 saved in your simulation folder:
 
@@ -202,7 +205,7 @@ saved in your simulation folder:
 - `looper.csv` each simulation and its parameters.
 
 Analysis performed by raypyng
--------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 If you decided to let raypyng do the analysis, you should expect the following files to 
 be saved in your simulation folder:
 
@@ -247,6 +250,13 @@ List of available examples
 ===========================
 In the example folder, the following examples are available:
 
+- `example_rml.py
+  <https://github.com/hz-b/raypyng/blob/main/examples/example_rml.py>`_
+  in this example is shown how to read, manipulate and save an rml file.   
+- `example_runner.py
+  <https://github.com/hz-b/raypyng/blob/main/examples/example_runner.py>`_
+  in this example is shown how to use the RAY-UI API to start RAY-UI, load a file,
+  trace it and export the desired results.  
 - `example_simulation_analyze.py
   <https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_analyze.py>`_ simulate a beamline, 
   let Ray-UI do the analysis
@@ -276,6 +286,8 @@ In the example folder, the following examples are available:
   and it exports the RawRaysOutgoing file from each optical element. It then uses a 
   simple geometrical x-ray tracer to propagate each ray until the next optical 
   element and plots the results (both top view and side view). This is still 
-  experimental and it may fail.   
+  experimental and it may fail. 
+ 
 
+  
   

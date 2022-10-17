@@ -6,7 +6,7 @@
 Welcome to raypyng's documentation!
 ===================================
 raypyng provides a simple API to work with 
-`RAY_UI
+`RAY-UI 
 <https://www.helmholtz-berlin.de/forschung/oe/wi/optik-strahlrohre/arbeitsgebiete/ray_en.html>`_, 
 a software for optical simulation of synchrotron 
 beamlines and x-ray systems developed by 
@@ -17,10 +17,10 @@ Helmholtz-Zentrum Berlin.
    :maxdepth: 2
    :caption: Contents:
 
-   install_raypyng
+   installation
    tutorial
-   how_to_guides
-   code_documentation
+   how_to
+   API
    
 
 
