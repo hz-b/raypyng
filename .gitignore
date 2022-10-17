@@ -7,24 +7,24 @@ __pycache__/
 # local-only files, including data which should NOT end in the repo
 local/
 
-# ignore test output folder
-#tests/
-
 # Ignoring simlation tests
 RAYPy_Simulation_*
-test/
 
 # Ignore distribution on pip
 dist
 src/raypyng_test.egg-info
-.vscode/configurationCache.log
-.vscode/dryrun.log
-.vscode/targets.log
 src/raypyng.egg-info/dependency_links.txt
 src/raypyng.egg-info/PKG-INFO
 src/raypyng.egg-info/requires.txt
 src/raypyng.egg-info/SOURCES.txt
 src/raypyng.egg-info/top_level.txt
+
+#ignore vscode stuff
+.vscode/configurationCache.log
+.vscode/dryrun.log
+.vscode/targets.log
+
+# ignore output of examples/tests
 examples/rml/new_elisa.rml
 examples/test_exportDetectorAtFocus-RawRaysOutgoing.csv
 examples/test_exportDipole-RawRaysOutgoing.csv
