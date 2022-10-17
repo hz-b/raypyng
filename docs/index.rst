@@ -5,7 +5,7 @@
 
 Welcome to raypyng's documentation!
 ===================================
-raypyng provides a simple API to work with 
+raypyng provides a simple python API to work with 
 `RAY-UI 
 <https://www.helmholtz-berlin.de/forschung/oe/wi/optik-strahlrohre/arbeitsgebiete/ray_en.html>`_, 
 a software for optical simulation of synchrotron 
