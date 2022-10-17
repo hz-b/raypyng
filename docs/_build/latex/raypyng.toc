@@ -12,7 +12,7 @@
 \contentsline {section}{\numberline {2.2}Recipes}{9}{section.2.2}%
 \contentsline {section}{\numberline {2.3}List of available examples}{9}{section.2.3}%
 \contentsline {chapter}{\numberline {3}How To Guides}{11}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Recipe}{11}{section.3.1}%
+\contentsline {section}{\numberline {3.1}Write your own Recipe}{11}{section.3.1}%
 \contentsline {subsection}{\numberline {3.1.1}Recipe Template}{11}{subsection.3.1.1}%
 \contentsline {subsection}{\numberline {3.1.2}How To Write a Recipe}{12}{subsection.3.1.2}%
 \contentsline {chapter}{\numberline {4}API}{15}{chapter.4}%

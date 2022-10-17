@@ -5,8 +5,8 @@ To simplify the scripting, especially when repetitive,
 there is the possibility to write recipe for raypyng, to 
 perform simulations, and automatize some tasks.
 
-Recipe
-========
+Write your own Recipe
+======================
 
 Recipe Template
 ------------------
