@@ -1,6 +1,5 @@
 import os
 import time
-import os
 
 from raypyng.runner import RayUIRunner, RayUIAPI
 
@@ -30,6 +29,7 @@ a.export("Dipole,DetectorAtFocus", "RawRaysOutgoing", this_file_dir, 'test_expor
 
 print("Killing the RAY-UI process")
 r.kill()
+# sometime it takes a while to kill the process
 time.sleep(2)
 print('Confirm that RAY-UI is running:', r.isrunning)
 

@@ -14,6 +14,8 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('../src'))
 
+import sphinx_rtd_theme
+
 
 # -- Project information -----------------------------------------------------
 
@@ -27,7 +29,8 @@ author = 'Simone Vadilonga, Ruslan Ovsyannikov'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
+extensions = ['sphinx_rtd_theme',
+                'sphinx.ext.autodoc',
                 'sphinx.ext.napoleon'
 ]
 napoleon_google_docstring = True
