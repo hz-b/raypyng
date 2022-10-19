@@ -100,6 +100,68 @@ Once you are done with the modifications, you can save the rml file using the :c
   rml.write('rml/new_elisa.rml')
 
 
+RAY-UI API 
+===============
+Using the :code:`RayUIRunner` and the :code:`RayUIAPI` classes it is possible 
+to interact with RAY-UI directly from python.
+
+.. code:: python
+
+  In [1]: import os
+   ...: import time
+   ...: from raypyng.runner import RayUIRunner, RayUIAPI
+   ...: 
+   ...: r = RayUIRunner(ray_path=None, hide=True)
+   ...: a = RayUIAPI(r)
+
+  In [2]: r.run()
+  Out[2]: <raypyng.runner.RayUIRunner at 0x7effd8f53b50>
+
+Once an instance of RAY-UI is running, we can confirm that it is running
+and we can ask the :code:`pid`
+
+.. code:: python
+
+  In [3]: r.isrunning
+  Out[3]: True
+
+  In [4]: r.pid
+  Out[4]: 20742
+
+It is possible to load an rml file and trace it
+
+.. code:: python
+
+  In [5]: a.load('rml/elisa.rml')
+   ...: 
+  Out[5]: True
+
+  In [6]: a.trace(analyze=True)
+    ...: 
+  Out[6]: True
+ 
+Export the files for the elements of interest:
+
+.. code:: python
+
+  In [7]: a.export("Dipole,DetectorAtFocus", "RawRaysOutgoing", '/home/simone/Documents/RAYPYNG/raypyng/examples', 'test_export')
+   ...: 
+  Out[7]: True
+
+Save the rml file used for the simulation (this is useful because RAY-UI 
+when it traces the beamline it updates the RML files with the latest parameters: for
+instance if you change the photon energy, it will update the source flux)
+
+.. code:: python 
+
+  In [8]: a.save('rml/new_elisa')
+  Out[8]: True
+
+And finally we can quit the RAY-UI instance that we opened:
+
+.. code:: python
+
+  In [9]: a.quit()
 
 Simulations 
 ===============

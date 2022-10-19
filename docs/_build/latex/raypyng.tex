@@ -308,6 +308,76 @@ Once you are done with the modifications, you can save the rml file using the \s
 \end{sphinxVerbatim}
 
 
+\section{RAY\sphinxhyphen{}UI API}
+\label{\detokenize{tutorial:ray-ui-api}}
+\sphinxAtStartPar
+Using the \sphinxcode{\sphinxupquote{RayUIRunner}} and the \sphinxcode{\sphinxupquote{RayUIAPI}} classes it is possible
+to interact with RAY\sphinxhyphen{}UI directly from python.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{p}{:} \PYG{k+kn}{import} \PYG{n+nn}{os}
+ \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}\PYG{p}{:} \PYG{k+kn}{import} \PYG{n+nn}{time}
+ \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}\PYG{p}{:} \PYG{k+kn}{from} \PYG{n+nn}{raypyng}\PYG{n+nn}{.}\PYG{n+nn}{runner} \PYG{k+kn}{import} \PYG{n}{RayUIRunner}\PYG{p}{,} \PYG{n}{RayUIAPI}
+ \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}\PYG{p}{:}
+ \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}\PYG{p}{:} \PYG{n}{r} \PYG{o}{=} \PYG{n}{RayUIRunner}\PYG{p}{(}\PYG{n}{ray\PYGZus{}path}\PYG{o}{=}\PYG{k+kc}{None}\PYG{p}{,} \PYG{n}{hide}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+ \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}\PYG{p}{:} \PYG{n}{a} \PYG{o}{=} \PYG{n}{RayUIAPI}\PYG{p}{(}\PYG{n}{r}\PYG{p}{)}
+
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}\PYG{p}{:} \PYG{n}{r}\PYG{o}{.}\PYG{n}{run}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{Out}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}\PYG{p}{:} \PYG{o}{\PYGZlt{}}\PYG{n}{raypyng}\PYG{o}{.}\PYG{n}{runner}\PYG{o}{.}\PYG{n}{RayUIRunner} \PYG{n}{at} \PYG{l+m+mh}{0x7effd8f53b50}\PYG{o}{\PYGZgt{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Once an instance of RAY\sphinxhyphen{}UI is running, we can confirm that it is running
+and we can ask the \sphinxcode{\sphinxupquote{pid}}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{]}\PYG{p}{:} \PYG{n}{r}\PYG{o}{.}\PYG{n}{isrunning}
+\PYG{n}{Out}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{]}\PYG{p}{:} \PYG{k+kc}{True}
+
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{4}\PYG{p}{]}\PYG{p}{:} \PYG{n}{r}\PYG{o}{.}\PYG{n}{pid}
+\PYG{n}{Out}\PYG{p}{[}\PYG{l+m+mi}{4}\PYG{p}{]}\PYG{p}{:} \PYG{l+m+mi}{20742}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+It is possible to load an rml file and trace it
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{5}\PYG{p}{]}\PYG{p}{:} \PYG{n}{a}\PYG{o}{.}\PYG{n}{load}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{rml/elisa.rml}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+ \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}\PYG{p}{:}
+\PYG{n}{Out}\PYG{p}{[}\PYG{l+m+mi}{5}\PYG{p}{]}\PYG{p}{:} \PYG{k+kc}{True}
+
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{6}\PYG{p}{]}\PYG{p}{:} \PYG{n}{a}\PYG{o}{.}\PYG{n}{trace}\PYG{p}{(}\PYG{n}{analyze}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+  \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}\PYG{p}{:}
+\PYG{n}{Out}\PYG{p}{[}\PYG{l+m+mi}{6}\PYG{p}{]}\PYG{p}{:} \PYG{k+kc}{True}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Export the files for the elements of interest:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{7}\PYG{p}{]}\PYG{p}{:} \PYG{n}{a}\PYG{o}{.}\PYG{n}{export}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Dipole,DetectorAtFocus}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{RawRaysOutgoing}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{/home/simone/Documents/RAYPYNG/raypyng/examples}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{test\PYGZus{}export}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+ \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}\PYG{p}{:}
+\PYG{n}{Out}\PYG{p}{[}\PYG{l+m+mi}{7}\PYG{p}{]}\PYG{p}{:} \PYG{k+kc}{True}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Save the rml file used for the simulation (this is useful because RAY\sphinxhyphen{}UI
+when it traces the beamline it updates the RML files with the latest parameters: for
+instance if you change the photon energy, it will update the source flux)
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{8}\PYG{p}{]}\PYG{p}{:} \PYG{n}{a}\PYG{o}{.}\PYG{n}{save}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{rml/new\PYGZus{}elisa}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{Out}\PYG{p}{[}\PYG{l+m+mi}{8}\PYG{p}{]}\PYG{p}{:} \PYG{k+kc}{True}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+And finally we can quit the RAY\sphinxhyphen{}UI instance that we opened:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{9}\PYG{p}{]}\PYG{p}{:} \PYG{n}{a}\PYG{o}{.}\PYG{n}{quit}\PYG{p}{(}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+
 \section{Simulations}
 \label{\detokenize{tutorial:simulations}}
 
@@ -1738,6 +1808,121 @@ Open one instance of RAY\sphinxhyphen{}UI using subprocess
 \sphinxlineitem{Raises}
 \sphinxAtStartPar
 \sphinxstyleliteralstrong{\sphinxupquote{RayPyRunnerError}} \textendash{} if the RAY\sphinxhyphen{}UI executable is not found raise an error
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+
+
+\subsection{RayUIAPI}
+\label{\detokenize{API:rayuiapi}}\index{RayUIAPI (class in raypyng.runner)@\spxentry{RayUIAPI}\spxextra{class in raypyng.runner}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{API:raypyng.runner.RayUIAPI}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.runner.}}\sphinxbfcode{\sphinxupquote{RayUIAPI}}}{\emph{\DUrole{n}{runner}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}{\hyperref[\detokenize{API:raypyng.runner.RayUIRunner}]{\sphinxcrossref{RayUIRunner}}}\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+RayUIAPI class implements (hopefully all) command interface of the RAY\sphinxhyphen{}UI
+\index{export() (raypyng.runner.RayUIAPI method)@\spxentry{export()}\spxextra{raypyng.runner.RayUIAPI method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{API:raypyng.runner.RayUIAPI.export}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{export}}}{\emph{\DUrole{n}{objects}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{parameters}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{export\_path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{data\_prefix}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Export simulation results from RAY\sphinxhyphen{}UI.
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{objects}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} string with objects list, e.g. “Dipole,DetectorAtFocus”
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{parameters}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} stromg with parameters to export, e.g. “ScalarBeamProperties,ScalarElementProperties”
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{export\_path}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} path where to save the data
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{data\_prefix}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} prefix for the putput files
+
+\end{itemize}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{load() (raypyng.runner.RayUIAPI method)@\spxentry{load()}\spxextra{raypyng.runner.RayUIAPI method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{API:raypyng.runner.RayUIAPI.load}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{load}}}{\emph{\DUrole{n}{rml\_path}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Load an rml file
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{rml\_path}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} path to the rml file
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{quit() (raypyng.runner.RayUIAPI method)@\spxentry{quit()}\spxextra{raypyng.runner.RayUIAPI method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{API:raypyng.runner.RayUIAPI.quit}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{quit}}}{}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+quit RAY\sphinxhyphen{}UI if it is running
+
+\end{fulllineitems}
+
+\index{save() (raypyng.runner.RayUIAPI method)@\spxentry{save()}\spxextra{raypyng.runner.RayUIAPI method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{API:raypyng.runner.RayUIAPI.save}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{save}}}{\emph{\DUrole{n}{rml\_path}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Save an rml file
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{rml\_path}} (\sphinxstyleliteralemphasis{\sphinxupquote{path}}) \textendash{} path to save the rml file
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{trace() (raypyng.runner.RayUIAPI method)@\spxentry{trace()}\spxextra{raypyng.runner.RayUIAPI method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{API:raypyng.runner.RayUIAPI.trace}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{trace}}}{\emph{\DUrole{n}{analyze}\DUrole{o}{=}\DUrole{default_value}{True}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Trace an rml file (must have been loaded before).
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{analyze}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} If True RAY\sphinxhyphen{}UI will perform analysis of the rays.
+Defaults to True.
 
 \end{description}\end{quote}
 

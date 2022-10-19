@@ -48,6 +48,11 @@ RayUIRunner
 .. autoclass:: raypyng.runner.RayUIRunner
    :members:
 
+RayUIAPI
+----------------
+.. autoclass:: raypyng.runner.RayUIAPI
+   :members:
+
 RML
 ==================
 

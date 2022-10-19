@@ -60,6 +60,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#ray-ui-api">RAY-UI API</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#rayuirunner">RayUIRunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rayuiapi">RayUIAPI</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#rml">RML</a><ul>
@@ -139,18 +140,19 @@ The analysis of the results takes time, so turn it on only if needed</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.exports">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exports</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.exports" title="Permalink to this definition"></a></dt>
-<dd><p>The files to export once the simulation is complete.
-for a list of possible files check self.possible_exports
-and self.possible_exports_without_analysis.</p>
-<p>It is expeceted a list of dictionaries, and for each dictionary the key is the element
-to be exported and the valuee are the files to be exported</p>
+<dd><p>The files to export once the simulation is complete.</p>
+<p>For a list of possible files check self.possible_exports
+and self.possible_exports_without_analysis.
+It is expected a list of dictionaries, and for each dictionary
+the key is the element to be exported and the values are
+the files to be exported</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.params">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">params</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.params" title="Permalink to this definition"></a></dt>
-<dd><p>The parameters to scan, as a list of dictionaries.
-For each dictionary the keys are the parameters elements of the beamline, and the values are the
+<dd><p>The parameters to scan, as a list of dictionaries.</p>
+<p>For each dictionary the keys are the parameters elements of the beamline, and the values are the
 values to be assigned.</p>
 </dd></dl>
 
@@ -228,8 +230,8 @@ Defaults to True.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.repeat">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">repeat</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.repeat" title="Permalink to this definition"></a></dt>
-<dd><p>The simulations can be repeated an arbitrary number of times
-If the statitcs are not good enough using 2 millions of rays is suggested
+<dd><p>The simulations can be repeated an arbitrary number of times</p>
+<p>If the statitcs are not good enough using 2 millions of rays is suggested
 to repeat them instead of increasing the number of rays</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -250,8 +252,8 @@ to repeat them instead of increasing the number of rays</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.rml_list">
 <span class="sig-name descname"><span class="pre">rml_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.simulate.Simulate.rml_list" title="Permalink to this definition"></a></dt>
-<dd><p>This function creates the folder structure and the rml files to simulate.
-It requires the param to be set. Useful if one wants to create the simulation files
+<dd><p>This function creates the folder structure and the rml files to simulate.</p>
+<p>It requires the param to be set. Useful if one wants to create the simulation files
 for a manual check before starting the simulations.</p>
 </dd></dl>
 
@@ -273,8 +275,8 @@ for a manual check before starting the simulations.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.save_parameters_to_file">
 <span class="sig-name descname"><span class="pre">save_parameters_to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.simulate.Simulate.save_parameters_to_file" title="Permalink to this definition"></a></dt>
-<dd><p>save all the user input parameters to file. It takes the values
-from the SimulationParams class</p>
+<dd><p>Save user input parameters to file.</p>
+<p>It takes the values from the SimulationParams class</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>dir</strong> (<em>str</em>) – the folder where to save the parameters</p>
@@ -607,6 +609,71 @@ Defaults to False.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><p><strong>RayPyRunnerError</strong> – if the RAY-UI executable is not found raise an error</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="rayuiapi">
+<h3>RayUIAPI<a class="headerlink" href="#rayuiapi" title="Permalink to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="raypyng.runner.RayUIAPI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.runner.</span></span><span class="sig-name descname"><span class="pre">RayUIAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#raypyng.runner.RayUIRunner" title="raypyng.runner.RayUIRunner"><span class="pre">RayUIRunner</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.runner.RayUIAPI" title="Permalink to this definition"></a></dt>
+<dd><p>RayUIAPI class implements (hopefully all) command interface of the RAY-UI</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="raypyng.runner.RayUIAPI.export">
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objects</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.runner.RayUIAPI.export" title="Permalink to this definition"></a></dt>
+<dd><p>Export simulation results from RAY-UI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>objects</strong> (<em>str</em>) – string with objects list, e.g. “Dipole,DetectorAtFocus”</p></li>
+<li><p><strong>parameters</strong> (<em>str</em>) – stromg with parameters to export, e.g. “ScalarBeamProperties,ScalarElementProperties”</p></li>
+<li><p><strong>export_path</strong> (<em>str</em>) – path where to save the data</p></li>
+<li><p><strong>data_prefix</strong> (<em>str</em>) – prefix for the putput files</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="raypyng.runner.RayUIAPI.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml_path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.runner.RayUIAPI.load" title="Permalink to this definition"></a></dt>
+<dd><p>Load an rml file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rml_path</strong> (<em>str</em>) – path to the rml file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="raypyng.runner.RayUIAPI.quit">
+<span class="sig-name descname"><span class="pre">quit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.runner.RayUIAPI.quit" title="Permalink to this definition"></a></dt>
+<dd><p>quit RAY-UI if it is running</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="raypyng.runner.RayUIAPI.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml_path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.runner.RayUIAPI.save" title="Permalink to this definition"></a></dt>
+<dd><p>Save an rml file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rml_path</strong> (<em>path</em>) – path to save the rml file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="raypyng.runner.RayUIAPI.trace">
+<span class="sig-name descname"><span class="pre">trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyze</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.runner.RayUIAPI.trace" title="Permalink to this definition"></a></dt>
+<dd><p>Trace an rml file (must have been loaded before).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>analyze</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True RAY-UI will perform analysis of the rays.
+Defaults to True.</p>
 </dd>
 </dl>
 </dd></dl>

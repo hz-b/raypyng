@@ -43,6 +43,7 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#manipulate-an-rml-file">Manipulate an RML file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ray-ui-api">RAY-UI API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#simulations">Simulations</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#perform-simulations">Perform Simulations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#simulation-output">Simulation Output</a><ul>
@@ -168,6 +169,58 @@ For instance, to print all the parameters of the Dipole:</p>
 </div>
 <p>Once you are done with the modifications, you can save the rml file using the <code class="code docutils literal notranslate"><span class="pre">write()</span></code> method</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rml</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;rml/new_elisa.rml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="ray-ui-api">
+<h2>RAY-UI API<a class="headerlink" href="#ray-ui-api" title="Permalink to this heading"></a></h2>
+<p>Using the <code class="code docutils literal notranslate"><span class="pre">RayUIRunner</span></code> and the <code class="code docutils literal notranslate"><span class="pre">RayUIAPI</span></code> classes it is possible
+to interact with RAY-UI directly from python.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">os</span>
+ <span class="o">...</span><span class="p">:</span> <span class="kn">import</span> <span class="nn">time</span>
+ <span class="o">...</span><span class="p">:</span> <span class="kn">from</span> <span class="nn">raypyng.runner</span> <span class="kn">import</span> <span class="n">RayUIRunner</span><span class="p">,</span> <span class="n">RayUIAPI</span>
+ <span class="o">...</span><span class="p">:</span>
+ <span class="o">...</span><span class="p">:</span> <span class="n">r</span> <span class="o">=</span> <span class="n">RayUIRunner</span><span class="p">(</span><span class="n">ray_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hide</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+ <span class="o">...</span><span class="p">:</span> <span class="n">a</span> <span class="o">=</span> <span class="n">RayUIAPI</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">r</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">raypyng</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">RayUIRunner</span> <span class="n">at</span> <span class="mh">0x7effd8f53b50</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Once an instance of RAY-UI is running, we can confirm that it is running
+and we can ask the <code class="code docutils literal notranslate"><span class="pre">pid</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">r</span><span class="o">.</span><span class="n">isrunning</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="kc">True</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">r</span><span class="o">.</span><span class="n">pid</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="mi">20742</span>
+</pre></div>
+</div>
+<p>It is possible to load an rml file and trace it</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">a</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;rml/elisa.rml&#39;</span><span class="p">)</span>
+ <span class="o">...</span><span class="p">:</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="kc">True</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">a</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">analyze</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="o">...</span><span class="p">:</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>Export the files for the elements of interest:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="n">a</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s2">&quot;Dipole,DetectorAtFocus&quot;</span><span class="p">,</span> <span class="s2">&quot;RawRaysOutgoing&quot;</span><span class="p">,</span> <span class="s1">&#39;/home/simone/Documents/RAYPYNG/raypyng/examples&#39;</span><span class="p">,</span> <span class="s1">&#39;test_export&#39;</span><span class="p">)</span>
+ <span class="o">...</span><span class="p">:</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>Save the rml file used for the simulation (this is useful because RAY-UI
+when it traces the beamline it updates the RML files with the latest parameters: for
+instance if you change the photon energy, it will update the source flux)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="n">a</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;rml/new_elisa&#39;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>And finally we can quit the RAY-UI instance that we opened:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="n">a</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
