@@ -42,6 +42,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#manipulate-an-rml-file">Manipulate an RML file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#simulations">Simulations</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#perform-simulations">Perform Simulations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#simulation-output">Simulation Output</a><ul>
@@ -85,6 +86,91 @@
              
   <section id="tutorial">
 <h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this heading"></a></h1>
+<section id="manipulate-an-rml-file">
+<h2>Manipulate an RML file<a class="headerlink" href="#manipulate-an-rml-file" title="Permalink to this heading"></a></h2>
+<p>Using the <code class="code docutils literal notranslate"><span class="pre">RMLFile</span></code> class it is possible to manupulate an beamline file produced by RAY-UI.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">raypyng.rml</span> <span class="kn">import</span> <span class="n">RMLFile</span>
+ <span class="o">...</span><span class="p">:</span> <span class="n">rml</span> <span class="o">=</span> <span class="n">RMLFile</span><span class="p">(</span><span class="s1">&#39;rml/elisa.rml&#39;</span><span class="p">)</span>
+ <span class="o">...</span><span class="p">:</span> <span class="n">rml</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="n">RMLFile</span><span class="p">(</span><span class="s1">&#39;rml/elisa.rml&#39;</span><span class="p">,</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;rml/elisa.rml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The filename can be accesed with the filename <code class="code docutils literal notranslate"><span class="pre">attribute</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="n">rml</span><span class="o">.</span><span class="n">filename</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="s1">&#39;rml/elisa.rml&#39;</span>
+</pre></div>
+</div>
+<p>and the beamline is available under:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="n">elisa</span> <span class="o">=</span> <span class="n">rml</span><span class="o">.</span><span class="n">beamline</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">elisa</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">XmlElement</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="n">beamline</span><span class="p">,</span> <span class="n">attributes</span> <span class="o">=</span> <span class="p">{},</span> <span class="n">cdata</span> <span class="o">=</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>It is possible to list all the element present in the beamlne using
+the <code class="code docutils literal notranslate"><span class="pre">children()</span></code> method</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">oe</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">elisa</span><span class="o">.</span><span class="n">children</span><span class="p">()):</span>
+  <span class="o">...</span><span class="p">:</span>     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;OE &#39;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">oe</span><span class="o">.</span><span class="n">resolvable_name</span><span class="p">())</span>
+  <span class="o">...</span><span class="p">:</span>
+<span class="n">OE</span>  <span class="mi">0</span> <span class="p">:</span> <span class="n">Dipole</span>
+<span class="n">OE</span>  <span class="mi">1</span> <span class="p">:</span> <span class="n">M1</span>
+<span class="n">OE</span>  <span class="mi">2</span> <span class="p">:</span> <span class="n">PremirrorM2</span>
+<span class="n">OE</span>  <span class="mi">3</span> <span class="p">:</span> <span class="n">PG</span>
+<span class="n">OE</span>  <span class="mi">4</span> <span class="p">:</span> <span class="n">M3</span>
+<span class="n">OE</span>  <span class="mi">5</span> <span class="p">:</span> <span class="n">ExitSlit</span>
+<span class="n">OE</span>  <span class="mi">6</span> <span class="p">:</span> <span class="n">KB1</span>
+<span class="n">OE</span>  <span class="mi">7</span> <span class="p">:</span> <span class="n">KB2</span>
+<span class="n">OE</span>  <span class="mi">8</span> <span class="p">:</span> <span class="n">DetectorAtFocus</span>
+</pre></div>
+</div>
+<p>In a similar way one can print all the available paramters of a certain element.
+For instance, to print all the parameters of the Dipole:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="c1"># print all the parameters of the Dipole</span>
+  <span class="o">...</span><span class="p">:</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">elisa</span><span class="o">.</span><span class="n">Dipole</span><span class="o">.</span><span class="n">children</span><span class="p">():</span>
+  <span class="o">...</span><span class="p">:</span>     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Dipole param: &#39;</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+  <span class="o">...</span><span class="p">:</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">numberRays</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">sourceWidth</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">sourceHeight</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">verEbeamDiv</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">horDiv</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">electronEnergy</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">electronEnergyOrientation</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">bendingRadius</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">alignmentError</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">translationXerror</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">translationYerror</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">rotationXerror</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">rotationYerror</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">energyDistributionType</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">photonEnergyDistributionFile</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">photonEnergy</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">energySpreadType</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">energySpreadUnit</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">energySpread</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">sourcePulseType</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">sourcePulseLength</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">photonFlux</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">worldPosition</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">worldXdirection</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">worldYdirection</span>
+<span class="n">Dipole</span> <span class="n">param</span><span class="p">:</span>  <span class="n">worldZdirection</span>
+</pre></div>
+</div>
+<p>Any parameter can be modified in this way:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">17</span><span class="p">]:</span> <span class="n">elisa</span><span class="o">.</span><span class="n">Dipole</span><span class="o">.</span><span class="n">photonEnergy</span><span class="o">.</span><span class="n">cdata</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">17</span><span class="p">]:</span> <span class="s1">&#39;1000&#39;</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">18</span><span class="p">]:</span> <span class="n">elisa</span><span class="o">.</span><span class="n">Dipole</span><span class="o">.</span><span class="n">photonEnergy</span><span class="o">.</span><span class="n">cdata</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="n">elisa</span><span class="o">.</span><span class="n">Dipole</span><span class="o">.</span><span class="n">photonEnergy</span><span class="o">.</span><span class="n">cdata</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="mi">2000</span>
+</pre></div>
+</div>
+<p>Once you are done with the modifications, you can save the rml file using the <code class="code docutils literal notranslate"><span class="pre">write()</span></code> method</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rml</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;rml/new_elisa.rml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 <section id="simulations">
 <h2>Simulations<a class="headerlink" href="#simulations" title="Permalink to this heading"></a></h2>
 <section id="perform-simulations">

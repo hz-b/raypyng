@@ -1,6 +1,106 @@
 Tutorial
 ********
 
+Manipulate an RML file 
+========================
+Using the :code:`RMLFile` class it is possible to manupulate an beamline file produced by RAY-UI.
+
+.. code:: python
+
+  In [8]: from raypyng.rml import RMLFile
+   ...: rml = RMLFile('rml/elisa.rml')
+   ...: rml
+  Out[8]: RMLFile('rml/elisa.rml',template='rml/elisa.rml')
+
+The filename can be accesed with the filename :code:`attribute`
+
+.. code:: python
+
+  In [9]: rml.filename
+  Out[9]: 'rml/elisa.rml'
+
+and the beamline is available under:
+
+.. code:: python
+  
+  In [10]: elisa = rml.beamline
+  In [11]: elisa
+  Out[11]: XmlElement(name = beamline, attributes = {}, cdata = )
+
+It is possible to list all the element present in the beamlne using 
+the :code:`children()` method
+
+.. code:: python
+
+  In [14]: for i, oe in enumerate(elisa.children()):
+    ...:     print('OE ',i, ':', oe.resolvable_name())
+    ...: 
+  OE  0 : Dipole
+  OE  1 : M1
+  OE  2 : PremirrorM2
+  OE  3 : PG
+  OE  4 : M3
+  OE  5 : ExitSlit
+  OE  6 : KB1
+  OE  7 : KB2
+  OE  8 : DetectorAtFocus
+
+In a similar way one can print all the available paramters of a certain element.
+For instance, to print all the parameters of the Dipole:
+
+.. code:: python
+
+  In [15]: # print all the parameters of the Dipole
+    ...: for param in elisa.Dipole.children():
+    ...:     print('Dipole param: ', param.id)
+    ...: 
+  Dipole param:  numberRays
+  Dipole param:  sourceWidth
+  Dipole param:  sourceHeight
+  Dipole param:  verEbeamDiv
+  Dipole param:  horDiv
+  Dipole param:  electronEnergy
+  Dipole param:  electronEnergyOrientation
+  Dipole param:  bendingRadius
+  Dipole param:  alignmentError
+  Dipole param:  translationXerror
+  Dipole param:  translationYerror
+  Dipole param:  rotationXerror
+  Dipole param:  rotationYerror
+  Dipole param:  energyDistributionType
+  Dipole param:  photonEnergyDistributionFile
+  Dipole param:  photonEnergy
+  Dipole param:  energySpreadType
+  Dipole param:  energySpreadUnit
+  Dipole param:  energySpread
+  Dipole param:  sourcePulseType
+  Dipole param:  sourcePulseLength
+  Dipole param:  photonFlux
+  Dipole param:  worldPosition
+  Dipole param:  worldXdirection
+  Dipole param:  worldYdirection
+  Dipole param:  worldZdirection
+
+Any parameter can be modified in this way:
+
+.. code:: python
+
+  In [17]: elisa.Dipole.photonEnergy.cdata
+  Out[17]: '1000'
+
+  In [18]: elisa.Dipole.photonEnergy.cdata = str(2000)
+
+  In [19]: elisa.Dipole.photonEnergy.cdata
+  Out[19]: 2000
+
+Once you are done with the modifications, you can save the rml file using the :code:`write()` method
+
+.. code:: python
+
+  rml.write('rml/new_elisa.rml')
+
+
+
 Simulations 
 ===============
 

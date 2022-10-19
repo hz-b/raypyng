@@ -88,11 +88,6 @@ class SimulationParams():
                         raise Exception('The only permitted type are: int, float, str, list, range, np.array, check',d[k]) 
         self.param = value
         
-    def _check_param(self):
-        """Check that self.param is a list of dictionaries, and convert the 
-        items of the dictionaries to lists, otherwise raise an exception.
-        """        
-        
     def _extract_param(self, verbose:bool=False):
         """Parse self.param and extract dependent and independent parameters
 
@@ -168,7 +163,7 @@ class SimulationParams():
         return result
 
     def _calc_loop(self, verbose:bool=True):
-        """Calculate the simulations loop
+        """Calculate the simulations loop.
 
         Returns:
             self.param_to_simulate (list): idependent and dependent parameters
@@ -212,7 +207,7 @@ class SimulationParams():
         return param.enabled=='T'
     
     def _enable_param(self, param):
-        """Set enabled to True in a beamline object, and auto to False
+        """Set :code:`enabled='T'` and :code:`auto='F'` in a beamline object
 
         Args:
             param (RML object): beamline object
@@ -226,7 +221,9 @@ class SimulationParams():
 
 
     def _write_value_to_param(self, param, value):
-        """Write a value to a parameter, making sure enable is T 
+        """Write a value to a parameter. 
+        
+        Additionally it makes sure that enable is T 
         and auto is F
 
         Args:
@@ -254,6 +251,7 @@ class Simulate():
     """
     def __init__(self, rml=None, hide=False,ray_path=None,**kwargs) -> None:
         """Initialize the class with a rml file
+
         Args:
             rml (RMLFile/string, optional): string pointing to an rml file with 
                                             the beamline template, or an RMLFile 
@@ -374,6 +372,7 @@ class Simulate():
     @property 
     def repeat(self):
         """The simulations can be repeated an arbitrary number of times
+        
         If the statitcs are not good enough using 2 millions of rays is suggested
         to repeat them instead of increasing the number of rays
 
@@ -421,11 +420,12 @@ class Simulate():
     @property 
     def exports(self):
         """The files to export once the simulation is complete.
-        for a list of possible files check self.possible_exports
-        and self.possible_exports_without_analysis.
 
-        It is expeceted a list of dictionaries, and for each dictionary the key is the element 
-        to be exported and the valuee are the files to be exported
+        For a list of possible files check self.possible_exports
+        and self.possible_exports_without_analysis.
+        It is expected a list of dictionaries, and for each dictionary 
+        the key is the element to be exported and the values are 
+        the files to be exported
         """        
         return self._exports
 
@@ -459,6 +459,7 @@ class Simulate():
     @property
     def params(self):
         """The parameters to scan, as a list of dictionaries.
+
         For each dictionary the keys are the parameters elements of the beamline, and the values are the 
         values to be assigned.
         """               
@@ -477,8 +478,9 @@ class Simulate():
         _ =self.sp._calc_loop()
 
     def save_parameters_to_file(self, dir):
-        """save all the user input parameters to file. It takes the values
-        from the SimulationParams class
+        """Save user input parameters to file. 
+        
+        It takes the values from the SimulationParams class
 
         Args:
             dir (str): the folder where to save the parameters
@@ -497,6 +499,7 @@ class Simulate():
     
     def rml_list(self):
         """This function creates the folder structure and the rml files to simulate.
+        
         It requires the param to be set. Useful if one wants to create the simulation files 
         for a manual check before starting the simulations.
         """            

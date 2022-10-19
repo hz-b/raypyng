@@ -61,7 +61,7 @@
 
 
 \title{RayPyNG}
-\date{Oct 17, 2022}
+\date{Oct 19, 2022}
 \release{}
 \author{Simone Vadilonga, Ruslan Ovsyannikov}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -201,6 +201,112 @@ install it in this environment alongside raypyng and run it from there:
 
 \chapter{Tutorial}
 \label{\detokenize{tutorial:tutorial}}\label{\detokenize{tutorial::doc}}
+
+\section{Manipulate an RML file}
+\label{\detokenize{tutorial:manipulate-an-rml-file}}
+\sphinxAtStartPar
+Using the \sphinxcode{\sphinxupquote{RMLFile}} class it is possible to manupulate an beamline file produced by RAY\sphinxhyphen{}UI.
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{8}\PYG{p}{]}\PYG{p}{:} \PYG{k+kn}{from} \PYG{n+nn}{raypyng}\PYG{n+nn}{.}\PYG{n+nn}{rml} \PYG{k+kn}{import} \PYG{n}{RMLFile}
+ \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}\PYG{p}{:} \PYG{n}{rml} \PYG{o}{=} \PYG{n}{RMLFile}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{rml/elisa.rml}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+ \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}\PYG{p}{:} \PYG{n}{rml}
+\PYG{n}{Out}\PYG{p}{[}\PYG{l+m+mi}{8}\PYG{p}{]}\PYG{p}{:} \PYG{n}{RMLFile}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{rml/elisa.rml}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}\PYG{n}{template}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{rml/elisa.rml}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+The filename can be accesed with the filename \sphinxcode{\sphinxupquote{attribute}}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{9}\PYG{p}{]}\PYG{p}{:} \PYG{n}{rml}\PYG{o}{.}\PYG{n}{filename}
+\PYG{n}{Out}\PYG{p}{[}\PYG{l+m+mi}{9}\PYG{p}{]}\PYG{p}{:} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{rml/elisa.rml}\PYG{l+s+s1}{\PYGZsq{}}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+and the beamline is available under:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{10}\PYG{p}{]}\PYG{p}{:} \PYG{n}{elisa} \PYG{o}{=} \PYG{n}{rml}\PYG{o}{.}\PYG{n}{beamline}
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{11}\PYG{p}{]}\PYG{p}{:} \PYG{n}{elisa}
+\PYG{n}{Out}\PYG{p}{[}\PYG{l+m+mi}{11}\PYG{p}{]}\PYG{p}{:} \PYG{n}{XmlElement}\PYG{p}{(}\PYG{n}{name} \PYG{o}{=} \PYG{n}{beamline}\PYG{p}{,} \PYG{n}{attributes} \PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{p}{\PYGZcb{}}\PYG{p}{,} \PYG{n}{cdata} \PYG{o}{=} \PYG{p}{)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+It is possible to list all the element present in the beamlne using
+the \sphinxcode{\sphinxupquote{children()}} method
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{14}\PYG{p}{]}\PYG{p}{:} \PYG{k}{for} \PYG{n}{i}\PYG{p}{,} \PYG{n}{oe} \PYG{o+ow}{in} \PYG{n+nb}{enumerate}\PYG{p}{(}\PYG{n}{elisa}\PYG{o}{.}\PYG{n}{children}\PYG{p}{(}\PYG{p}{)}\PYG{p}{)}\PYG{p}{:}
+  \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}\PYG{p}{:}     \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{OE }\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{:}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{n}{oe}\PYG{o}{.}\PYG{n}{resolvable\PYGZus{}name}\PYG{p}{(}\PYG{p}{)}\PYG{p}{)}
+  \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}\PYG{p}{:}
+\PYG{n}{OE}  \PYG{l+m+mi}{0} \PYG{p}{:} \PYG{n}{Dipole}
+\PYG{n}{OE}  \PYG{l+m+mi}{1} \PYG{p}{:} \PYG{n}{M1}
+\PYG{n}{OE}  \PYG{l+m+mi}{2} \PYG{p}{:} \PYG{n}{PremirrorM2}
+\PYG{n}{OE}  \PYG{l+m+mi}{3} \PYG{p}{:} \PYG{n}{PG}
+\PYG{n}{OE}  \PYG{l+m+mi}{4} \PYG{p}{:} \PYG{n}{M3}
+\PYG{n}{OE}  \PYG{l+m+mi}{5} \PYG{p}{:} \PYG{n}{ExitSlit}
+\PYG{n}{OE}  \PYG{l+m+mi}{6} \PYG{p}{:} \PYG{n}{KB1}
+\PYG{n}{OE}  \PYG{l+m+mi}{7} \PYG{p}{:} \PYG{n}{KB2}
+\PYG{n}{OE}  \PYG{l+m+mi}{8} \PYG{p}{:} \PYG{n}{DetectorAtFocus}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+In a similar way one can print all the available paramters of a certain element.
+For instance, to print all the parameters of the Dipole:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{15}\PYG{p}{]}\PYG{p}{:} \PYG{c+c1}{\PYGZsh{} print all the parameters of the Dipole}
+  \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}\PYG{p}{:} \PYG{k}{for} \PYG{n}{param} \PYG{o+ow}{in} \PYG{n}{elisa}\PYG{o}{.}\PYG{n}{Dipole}\PYG{o}{.}\PYG{n}{children}\PYG{p}{(}\PYG{p}{)}\PYG{p}{:}
+  \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}\PYG{p}{:}     \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{Dipole param: }\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{n}{param}\PYG{o}{.}\PYG{n}{id}\PYG{p}{)}
+  \PYG{o}{.}\PYG{o}{.}\PYG{o}{.}\PYG{p}{:}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{numberRays}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{sourceWidth}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{sourceHeight}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{verEbeamDiv}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{horDiv}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{electronEnergy}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{electronEnergyOrientation}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{bendingRadius}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{alignmentError}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{translationXerror}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{translationYerror}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{rotationXerror}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{rotationYerror}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{energyDistributionType}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{photonEnergyDistributionFile}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{photonEnergy}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{energySpreadType}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{energySpreadUnit}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{energySpread}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{sourcePulseType}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{sourcePulseLength}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{photonFlux}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{worldPosition}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{worldXdirection}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{worldYdirection}
+\PYG{n}{Dipole} \PYG{n}{param}\PYG{p}{:}  \PYG{n}{worldZdirection}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Any parameter can be modified in this way:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{17}\PYG{p}{]}\PYG{p}{:} \PYG{n}{elisa}\PYG{o}{.}\PYG{n}{Dipole}\PYG{o}{.}\PYG{n}{photonEnergy}\PYG{o}{.}\PYG{n}{cdata}
+\PYG{n}{Out}\PYG{p}{[}\PYG{l+m+mi}{17}\PYG{p}{]}\PYG{p}{:} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{1000}\PYG{l+s+s1}{\PYGZsq{}}
+
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{18}\PYG{p}{]}\PYG{p}{:} \PYG{n}{elisa}\PYG{o}{.}\PYG{n}{Dipole}\PYG{o}{.}\PYG{n}{photonEnergy}\PYG{o}{.}\PYG{n}{cdata} \PYG{o}{=} \PYG{n+nb}{str}\PYG{p}{(}\PYG{l+m+mi}{2000}\PYG{p}{)}
+
+\PYG{n}{In} \PYG{p}{[}\PYG{l+m+mi}{19}\PYG{p}{]}\PYG{p}{:} \PYG{n}{elisa}\PYG{o}{.}\PYG{n}{Dipole}\PYG{o}{.}\PYG{n}{photonEnergy}\PYG{o}{.}\PYG{n}{cdata}
+\PYG{n}{Out}\PYG{p}{[}\PYG{l+m+mi}{19}\PYG{p}{]}\PYG{p}{:} \PYG{l+m+mi}{2000}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+Once you are done with the modifications, you can save the rml file using the \sphinxcode{\sphinxupquote{write()}} method
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{rml}\PYG{o}{.}\PYG{n}{write}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{rml/new\PYGZus{}elisa.rml}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+\end{sphinxVerbatim}
+
 
 \section{Simulations}
 \label{\detokenize{tutorial:simulations}}
@@ -832,12 +938,13 @@ bool
 \pysigstopsignatures
 \sphinxAtStartPar
 The files to export once the simulation is complete.
-for a list of possible files check self.possible\_exports
-and self.possible\_exports\_without\_analysis.
 
 \sphinxAtStartPar
-It is expeceted a list of dictionaries, and for each dictionary the key is the element
-to be exported and the valuee are the files to be exported
+For a list of possible files check self.possible\_exports
+and self.possible\_exports\_without\_analysis.
+It is expected a list of dictionaries, and for each dictionary
+the key is the element to be exported and the values are
+the files to be exported
 
 \end{fulllineitems}
 
@@ -850,6 +957,8 @@ to be exported and the valuee are the files to be exported
 \pysigstopsignatures
 \sphinxAtStartPar
 The parameters to scan, as a list of dictionaries.
+
+\sphinxAtStartPar
 For each dictionary the keys are the parameters elements of the beamline, and the values are the
 values to be assigned.
 
@@ -974,6 +1083,8 @@ Defaults to True.
 \pysigstopsignatures
 \sphinxAtStartPar
 The simulations can be repeated an arbitrary number of times
+
+\sphinxAtStartPar
 If the statitcs are not good enough using 2 millions of rays is suggested
 to repeat them instead of increasing the number of rays
 \begin{quote}\begin{description}
@@ -1010,6 +1121,8 @@ RMLFile object instantiated in init
 \pysigstopsignatures
 \sphinxAtStartPar
 This function creates the folder structure and the rml files to simulate.
+
+\sphinxAtStartPar
 It requires the param to be set. Useful if one wants to create the simulation files
 for a manual check before starting the simulations.
 
@@ -1052,8 +1165,10 @@ This method starts the simulations. params and exports need to be defined.
 \pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{save\_parameters\_to\_file}}}{\emph{\DUrole{n}{dir}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-save all the user input parameters to file. It takes the values
-from the SimulationParams class
+Save user input parameters to file.
+
+\sphinxAtStartPar
+It takes the values from the SimulationParams class
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}
 \sphinxAtStartPar

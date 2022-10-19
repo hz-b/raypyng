@@ -31,7 +31,9 @@ author = 'Simone Vadilonga, Ruslan Ovsyannikov'
 # ones.
 extensions = ['sphinx_rtd_theme',
                 'sphinx.ext.autodoc',
-                'sphinx.ext.napoleon'
+                'sphinx.ext.napoleon',
+                'IPython.sphinxext.ipython_console_highlighting',
+              'IPython.sphinxext.ipython_directive'
 ]
 napoleon_google_docstring = True
 

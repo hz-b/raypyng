@@ -1080,9 +1080,6 @@ INPUT /usr/share/texmf/tex/latex/tex-gyre/ts1qtm.fd
 INPUT /usr/share/texmf/tex/latex/tex-gyre/ts1qtm.fd
 INPUT /usr/share/texmf/tex/latex/tex-gyre/ts1qtm.fd
 INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ts1-qtmr.tfm
-INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ec-qtmr.tfm
-INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ec-qhvr.tfm
-INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ec-qtmri.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/txfonts/t1xbtt.tfm
 INPUT /usr/share/texlive/texmf-dist/tex/latex/txfonts/ts1txtt.fd
 INPUT /usr/share/texlive/texmf-dist/tex/latex/txfonts/ts1txtt.fd
@@ -1091,6 +1088,9 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/txfonts/ts1txtt.fd
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/txfonts/tcxtt.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/txfonts/t1xttsl.tfm
 INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ec-qtmr.tfm
+INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ec-qtmr.tfm
+INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ec-qhvr.tfm
+INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ec-qtmri.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/txfonts/tcxsl.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/vf/public/txfonts/tcxsl.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/txfonts/rtxptmro.tfm
