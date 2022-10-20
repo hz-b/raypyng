@@ -262,7 +262,7 @@ class PostProcessAnalyzed():
         if source == 'Dipole':
             flux = np.array(flux)
             flux_dipole = np.array(flux_dipole)
-            return flux*scale_factor, flux_percent*scale_factor, flux_dipole*scale_factor
+            return flux*scale_factor, flux_percent, flux_dipole*scale_factor
         return flux_percent*scale_factor
 
     def retrieve_bw_and_focusSize(self,folder_name:str,oe:str,nsimulations:int,rounds:int):
