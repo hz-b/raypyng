@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.interpolate import UnivariateSpline
 import time
 
 
@@ -16,19 +15,13 @@ def find_FWHM(y):
 
     xs = [x for x in range(y.shape[0]) if y[x] > max_y/2.0]
 
-    #print (np.amin(xs), np.amax(xs)) # Print the points at half-maximum
-
-    # here shift everything to zero
-
-    x_curve = UnivariateSpline(np.arange(y.shape[0]), y)
-
-    r = x_curve.roots()
-
     return np.amax(xs)-np.amin(xs)
 
 
+#simulate the number of rays
 
-stepsize = 0.000001
+n_rays = 2000000
+stepsize = 3/n_rays
 
 # box
 a = np.arange(0,1,stepsize)
@@ -66,7 +59,7 @@ ax = axs[0,0]
 ax.scatter(1.5-fwhm/2, 0.5, color='r', label='FWHM')
 ax.scatter(1.5+fwhm/2, 0.5, color='r')
 ax.plot(x,y)
-ax.set_title('np.std() - box')
+ax.set_title('np.std() - box, et: ' + str(np.round(elapsed_time,3))+' s')
 ax.legend()
 
 
@@ -85,7 +78,7 @@ ax = axs[0,1]
 ax.plot(x,g)
 ax.scatter(1.5-fwhm/2, 0.5, color='r', label='FWHM')
 ax.scatter(1.5+fwhm/2, 0.5, color='r')
-ax.set_title('np.std() - gaussian')
+ax.set_title('np.std() - gaussian, et: ' + str(np.round(elapsed_time,3))+' s')
 ax.legend()
 
 
@@ -105,7 +98,7 @@ ax = axs[1,0]
 ax.scatter(1.5-fwhm/2, 0.5, color='r', label='FWHM')
 ax.scatter(1.5+fwhm/2, 0.5, color='r')
 ax.plot(x,y)
-ax.set_title('SplineRoots - box')
+ax.set_title('SplineRoots - box, et: ' + str(np.round(elapsed_time,3))+' s')
 ax.legend()
 
 
@@ -123,11 +116,12 @@ ax = axs[1,1]
 ax.plot(x,g)
 ax.scatter(1.5-fwhm/2, 0.5, color='r', label='FWHM')
 ax.scatter(1.5+fwhm/2, 0.5, color='r')
-ax.set_title('SplineRoots - gaussian')
+ax.set_title('SplineRoots - gaussian, et: ' + str(np.round(elapsed_time,3))+' s')
 ax.legend()
 
 
 
-
-
+fig.suptitle('FWHM, time and accuracy for {} nrays'.format(n_rays))
+plt.tight_layout()
+plt.savefig('fwhm.png')
 plt.show()
