@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.7.22)  19 OCT 2022 11:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.7.22)  20 OCT 2022 20:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -973,7 +973,7 @@ Package rerunfilecheck Info: File `raypyng.out' has not changed.
 Here is how much of TeX's memory you used:
  14852 strings out of 478287
  237449 string characters out of 5849289
- 641977 words of memory out of 5000000
+ 640977 words of memory out of 5000000
  32544 multiletter control sequences out of 15000+600000
  527087 words of font info for 76 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
@@ -990,10 +990,10 @@ lic/txfonts/t1xbtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfont
 s/t1xtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb
 ></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/tcxtt.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on raypyng.pdf (32 pages, 237582 bytes).
+Output written on raypyng.pdf (32 pages, 238402 bytes).
 PDF statistics:
- 554 PDF objects out of 1000 (max. 8388607)
- 494 compressed objects within 5 object streams
+ 571 PDF objects out of 1000 (max. 8388607)
+ 510 compressed objects within 6 object streams
  133 named destinations out of 1000 (max. 500000)
  317 words of extra memory for PDF output out of 10000 (max. 10000000)
 
