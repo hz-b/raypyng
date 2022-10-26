@@ -129,27 +129,13 @@ class PostProcess():
         filename = os.path.join(dir_path,sim_number+exported_element + '-' + exported_object+'.csv')
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            rays = np.loadtxt(filename, skiprows=2)
+            #rays = np.loadtxt(filename, skiprows=2)
+            rays = np.genfromtxt(filename, dtype=float, delimiter='\t', names=True,skip_header=1)
         ray_properties = np.zeros((7,1))
         if rays.shape[0]==0: # if no rays survived
             # source photon flux
             ray_properties[0] = source_photon_flux
             pass
-        elif rays.shape[0]==15: # if only one ray survived
-            # source photon flux
-            ray_properties[0] = source_photon_flux
-            # number of rays reaching the oe
-            ray_properties[1] = 1
-            # percentage of survived photons
-            ray_properties[2] = ray_properties[1]/source_n_rays*100
-            # photon flux reaching the oe
-            ray_properties[3] = source_photon_flux/100*ray_properties[2]
-            # bandwidth of the rays reaching the OE
-            ray_properties[4] = self._extract_bandwidth_fwhm(rays[9])
-            # horizontal focus
-            ray_properties[5] = self._extract_focus_fwhm(rays[3])
-            # vertical focus
-            ray_properties[6] = self._extract_focus_fwhm(rays[4])
         else:
             # source photon flux
             ray_properties[0] = source_photon_flux
@@ -160,11 +146,11 @@ class PostProcess():
             # photon flux reaching the oe
             ray_properties[3] = source_photon_flux/100*ray_properties[2]
             # bandwidth of the rays reaching the oe
-            ray_properties[4] = self._extract_bandwidth_fwhm(rays[:,9])
+            ray_properties[4] = self._extract_bandwidth_fwhm(rays[f'{exported_element}_EN'])
             # horizontal focus
-            ray_properties[5] = self._extract_focus_fwhm(rays[:,3])
+            ray_properties[5] = self._extract_focus_fwhm(rays[f'{exported_element}_OX'])
             # vertical focus
-            ray_properties[6] = self._extract_focus_fwhm(rays[:,4])
+            ray_properties[6] = self._extract_focus_fwhm(rays[f'{exported_element}_OY'])
         
         new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays')
         self._save_file(new_filename, ray_properties)
