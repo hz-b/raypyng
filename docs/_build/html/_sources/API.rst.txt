@@ -40,6 +40,11 @@ PostProcess rays analyzed by RAY-UI
 ------------------------------------
 .. autoclass:: raypyng.postprocessing.PostProcessAnalyzed
    :members:
+
+RayProperties
+------------------------------------
+.. autoclass:: raypyng.postprocessing.RayProperties
+   :members:
    
 RAY-UI API
 ============

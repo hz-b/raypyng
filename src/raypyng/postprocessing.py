@@ -6,6 +6,55 @@ from natsort import natsorted, ns
 
 from .rml import RMLFile
 
+class RayProperties(np.ndarray):
+    """RayProperties class privides simplified interface to access results of the 
+    postprocessing of calculated rays and provides functions to read and write those results
+    into a txt file, including the header
+
+    Args:
+        input (nd.array): create RayProperties from an array. Intentende for internal use only!
+        filename (str): file name to load the data from (including the header information/row)
+    """
+    def __new__(cls,input:np.ndarray=None,/,filename=None) -> None:
+        dt_names = ['SourcePhotonFlux', 'NumberRaysSurvived', 'PercentageRaysSurvived', 'PhotonFlux', 'Bandwidth', 'HorizontalFocusFWHM', 'VerticalFocusFWHM']
+        dt_formats = [float for n in dt_names]
+        dt = np.dtype({'names':dt_names, 'formats':dt_formats})
+
+        if input is None:
+            if filename is None:
+                input_array = np.zeros(1, dtype=dt)
+            else:
+                input_array = np.genfromtxt(filename, dtype=float, delimiter='\t', names=True)
+        else:
+            input_array = input.copy()
+            input_array.dtype = dt
+
+        obj = np.asarray(input_array).view(cls)
+        return obj
+
+    def save(self,filename):
+        """Save current object into tab-separated file with header row
+
+        Args:
+            filename (_type_): _description_
+        """
+        tmp = self.copy()
+        if tmp.shape[0]>1:
+            tmp.dtype = float
+        np.savetxt(filename,tmp,delimiter='\t',header="\t".join(self.dtype.names))
+        
+
+    def concat(self,other):
+        """concatenate another instalnce of RayProperties and return a new object 
+
+        Args:
+            other (RayProperties): instance of RayProperties to be contated to this instance
+
+        Returns:
+            RayProperties: resulting RayProperties object
+        """
+        return RayProperties(np.vstack((self,other)))
+
 
 class PostProcess():
     """class to post-process the data. 
@@ -66,31 +115,6 @@ class PostProcess():
         """        
         return(rays.shape[0])
     
-    def _save_file(self, filename:str, array:np.array, header:str=None):
-        """This function is used to save files.
-
-        Args:
-            filename (str): file name(path)
-            array (np.array): array to save 
-            header (str): header for the file
-        """        
-        if header != None:
-            np.savetxt(filename+self.format_saved_files,array, header=header)
-        else:
-            np.savetxt(filename+self.format_saved_files,array)
-
-    def _load_file(self,filepath):
-        """Load file and returns the array
-
-        Args:
-            filepath (str): the path to the file to load
-
-        Returns:
-            arr (np.array): The loaded numpy array
-        """        
-        arr = np.loadtxt(filepath)
-        return arr
-    
     def extract_nrays_from_source(self, rml_filename):
         """Extract photon flux from rml file, find source automatically
 
@@ -131,29 +155,30 @@ class PostProcess():
             warnings.simplefilter("ignore")
             #rays = np.loadtxt(filename, skiprows=2)
             rays = np.genfromtxt(filename, dtype=float, delimiter='\t', names=True,skip_header=1)
-        ray_properties = np.zeros((7,1))
+        ray_properties = RayProperties()
         if rays.shape[0]==0: # if no rays survived
             # source photon flux
-            ray_properties[0] = source_photon_flux
+            ray_properties['SourcePhotonFlux'] = source_photon_flux
             pass
         else:
             # source photon flux
-            ray_properties[0] = source_photon_flux
+            ray_properties['SourcePhotonFlux'] = source_photon_flux
             # number of rays reaching the oe
-            ray_properties[1] = self._extract_intensity(rays)
+            ray_properties['NumberRaysSurvived'] = self._extract_intensity(rays)
             # percentage of survived photons
-            ray_properties[2] = ray_properties[1]/source_n_rays*100
+            ray_properties['PercentageRaysSurvived'] = ray_properties['NumberRaysSurvived']/source_n_rays*100
             # photon flux reaching the oe
-            ray_properties[3] = source_photon_flux/100*ray_properties[2]
+            ray_properties['PhotonFlux'] = source_photon_flux/100*ray_properties['PercentageRaysSurvived']
             # bandwidth of the rays reaching the oe
-            ray_properties[4] = self._extract_bandwidth_fwhm(rays[f'{exported_element}_EN'])
+            ray_properties['Bandwidth'] = self._extract_bandwidth_fwhm(rays[f'{exported_element}_EN'])
             # horizontal focus
-            ray_properties[5] = self._extract_focus_fwhm(rays[f'{exported_element}_OX'])
+            ray_properties['HorizontalFocusFWHM'] = self._extract_focus_fwhm(rays[f'{exported_element}_OX'])
             # vertical focus
-            ray_properties[6] = self._extract_focus_fwhm(rays[f'{exported_element}_OY'])
+            ray_properties['VerticalFocusFWHM'] = self._extract_focus_fwhm(rays[f'{exported_element}_OY'])
         
-        new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays')
-        self._save_file(new_filename, ray_properties)
+        new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays.dat')
+        #self._save_file(new_filename, ray_properties)
+        ray_properties.save(new_filename)
         return 
 
     def cleanup(self,dir_path:str=None, repeat:int=1, exp_elements:list=None):
@@ -176,21 +201,27 @@ class PostProcess():
                 files = self._list_files(dir_path_round, d[0]+"_analyzed_rays"+self.format_saved_files)
                 for f_ind, f in enumerate(files):
                     if r == 0 and f_ind==0:
-                        analyzed_rays = self._load_file(f)
-                        analyzed_rays = np.reshape(analyzed_rays,(1,analyzed_rays.shape[0]))
+                        #analyzed_rays = self._load_file(f)
+                        #analyzed_rays = np.reshape(analyzed_rays,(1,analyzed_rays.shape[0]))
+                        analyzed_rays = RayProperties(filename=f)
                     elif r==0 and f_ind!=0:
-                        tmp=self._load_file(f)
-                        tmp = np.reshape(tmp,(1,tmp.shape[0]))
-                        analyzed_rays = np.concatenate((analyzed_rays, tmp), axis=0)
+                        #tmp=self._load_file(f)
+                        #tmp = np.reshape(tmp,(1,tmp.shape[0]))
+                        tmp = RayProperties(filename=f)
+                        analyzed_rays = analyzed_rays.concat(tmp)
                     elif r>=1:
-                        tmp=self._load_file(f)
-                        tmp=tmp.reshape((tmp.shape[0]))
-                        analyzed_rays[f_ind,:] += tmp
+                        #tmp=self._load_file(f)
+                        #tmp=tmp.reshape((tmp.shape[0]))
+                        tmp = RayProperties(filename=f)
+                        print(f"DEBIG:: r>=1 :: analyzed_rays={analyzed_rays}, tmp={tmp}")
+                        #analyzed_rays[f_ind] += tmp
+                        for n in analyzed_rays.dtype.names: analyzed_rays[n] += tmp[n]
                     else:
                         pass
             fn = os.path.join(dir_path, d[0])
-            analyzed_rays = analyzed_rays/repeat
-            self._save_file(fn,analyzed_rays,header=header)
+            for n in analyzed_rays.dtype.names: analyzed_rays[n] /= repeat
+            #self._save_file(fn,analyzed_rays,header=header)
+            analyzed_rays.save(f"{fn}.dat")
 
 class PostProcessAnalyzed():
     """class to analyze the data exported by RAY-UI

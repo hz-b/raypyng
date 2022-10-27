@@ -16,6 +16,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -44,30 +45,70 @@
 <li class="toctree-l1"><a class="reference internal" href="how_to.html">How To Guides</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#simulation">Simulation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#simulate">Simulate</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#simulationparams">SimulationParams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#simulate">Simulate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#raypyng.simulate.Simulate"><code class="docutils literal notranslate"><span class="pre">Simulate</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#simulationparams">SimulationParams</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#raypyng.simulate.SimulationParams"><code class="docutils literal notranslate"><span class="pre">SimulationParams</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#recipes">Recipes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#resolving-power">Resolving Power</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#flux">Flux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#resolving-power">Resolving Power</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#raypyng.recipes.ResolvingPower"><code class="docutils literal notranslate"><span class="pre">ResolvingPower</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#flux">Flux</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#raypyng.recipes.Flux"><code class="docutils literal notranslate"><span class="pre">Flux</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#process-simulation-files">Process simulation files</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#postprocess-rays-analyzed-by-raypyng">PostProcess rays analyzed by raypyng</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#postprocess-rays-analyzed-by-ray-ui">PostProcess rays analyzed by RAY-UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#postprocess-rays-analyzed-by-raypyng">PostProcess rays analyzed by raypyng</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#raypyng.postprocessing.PostProcess"><code class="docutils literal notranslate"><span class="pre">PostProcess</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#postprocess-rays-analyzed-by-ray-ui">PostProcess rays analyzed by RAY-UI</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#raypyng.postprocessing.PostProcessAnalyzed"><code class="docutils literal notranslate"><span class="pre">PostProcessAnalyzed</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rayproperties">RayProperties</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#raypyng.postprocessing.RayProperties"><code class="docutils literal notranslate"><span class="pre">RayProperties</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#ray-ui-api">RAY-UI API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#rayuirunner">RayUIRunner</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#rayuiapi">RayUIAPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rayuirunner">RayUIRunner</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#raypyng.runner.RayUIRunner"><code class="docutils literal notranslate"><span class="pre">RayUIRunner</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rayuiapi">RayUIAPI</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#raypyng.runner.RayUIAPI"><code class="docutils literal notranslate"><span class="pre">RayUIAPI</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#rml">RML</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#rmlfile">RMLFile</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#beamlineelement">BeamlineElement</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#objectelement">ObjectElement</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#paramelement">ParamElement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rmlfile">RMLFile</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#raypyng.rml.RMLFile"><code class="docutils literal notranslate"><span class="pre">RMLFile</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#beamlineelement">BeamlineElement</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#raypyng.rml.BeamlineElement"><code class="docutils literal notranslate"><span class="pre">BeamlineElement</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#objectelement">ObjectElement</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#raypyng.rml.ObjectElement"><code class="docutils literal notranslate"><span class="pre">ObjectElement</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#paramelement">ParamElement</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#raypyng.rml.ParamElement"><code class="docutils literal notranslate"><span class="pre">ParamElement</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -537,6 +578,53 @@ source_Photon_flux (np.array) : the photon flux of the source</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>if the source is a Dipole</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="rayproperties">
+<h3>RayProperties<a class="headerlink" href="#rayproperties" title="Permalink to this heading"></a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="raypyng.postprocessing.RayProperties">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.postprocessing.</span></span><span class="sig-name descname"><span class="pre">RayProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.postprocessing.RayProperties" title="Permalink to this definition"></a></dt>
+<dd><p>RayProperties class privides simplified interface to access results of the
+postprocessing of calculated rays and provides functions to read and write those results
+into a txt file, including the header</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<em>nd.array</em>) – create RayProperties from an array. Intentende for internal use only!</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – file name to load the data from (including the header information/row)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="raypyng.postprocessing.RayProperties.concat">
+<span class="sig-name descname"><span class="pre">concat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.postprocessing.RayProperties.concat" title="Permalink to this definition"></a></dt>
+<dd><p>concatenate another instalnce of RayProperties and return a new object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#raypyng.postprocessing.RayProperties" title="raypyng.postprocessing.RayProperties"><em>RayProperties</em></a>) – instance of RayProperties to be contated to this instance</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>resulting RayProperties object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#raypyng.postprocessing.RayProperties" title="raypyng.postprocessing.RayProperties">RayProperties</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="raypyng.postprocessing.RayProperties.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.postprocessing.RayProperties.save" title="Permalink to this definition"></a></dt>
+<dd><p>Save current object into tab-separated file with header row</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>_type_</em>) – _description_</p>
 </dd>
 </dl>
 </dd></dl>
