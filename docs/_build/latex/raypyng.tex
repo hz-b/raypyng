@@ -10,6 +10,7 @@
 %% let collapsible pdf bookmarks panel have high depth per default
 \PassOptionsToPackage{bookmarksdepth=5}{hyperref}
 
+
 \PassOptionsToPackage{warn}{textcomp}
 \usepackage[utf8]{inputenc}
 \ifdefined\DeclareUnicodeCharacter
@@ -61,7 +62,7 @@
 
 
 \title{RayPyNG}
-\date{Oct 20, 2022}
+\date{Oct 27, 2022}
 \release{}
 \author{Simone Vadilonga, Ruslan Ovsyannikov}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -1690,6 +1691,80 @@ flux\_percent (np.array) : the photon flux in percentage relative to the source
 \sphinxlineitem{Return type}
 \sphinxAtStartPar
 if the source is a Dipole
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+
+
+\subsection{RayProperties}
+\label{\detokenize{API:rayproperties}}\index{RayProperties (class in raypyng.postprocessing)@\spxentry{RayProperties}\spxextra{class in raypyng.postprocessing}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{API:raypyng.postprocessing.RayProperties}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.postprocessing.}}\sphinxbfcode{\sphinxupquote{RayProperties}}}{\emph{\DUrole{n}{input}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}ndarray\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{o}{/}}, \emph{\DUrole{n}{filename}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+RayProperties class privides simplified interface to access results of the
+postprocessing of calculated rays and provides functions to read and write those results
+into a txt file, including the header
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{input}} (\sphinxstyleliteralemphasis{\sphinxupquote{nd.array}}) \textendash{} create RayProperties from an array. Intentende for internal use only!
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{filename}} (\sphinxstyleliteralemphasis{\sphinxupquote{str}}) \textendash{} file name to load the data from (including the header information/row)
+
+\end{itemize}
+
+\end{description}\end{quote}
+\index{concat() (raypyng.postprocessing.RayProperties method)@\spxentry{concat()}\spxextra{raypyng.postprocessing.RayProperties method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{API:raypyng.postprocessing.RayProperties.concat}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{concat}}}{\emph{\DUrole{n}{other}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+concatenate another instalnce of RayProperties and return a new object
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{other}} ({\hyperref[\detokenize{API:raypyng.postprocessing.RayProperties}]{\sphinxcrossref{\sphinxstyleliteralemphasis{\sphinxupquote{RayProperties}}}}}) \textendash{} instance of RayProperties to be contated to this instance
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+resulting RayProperties object
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+{\hyperref[\detokenize{API:raypyng.postprocessing.RayProperties}]{\sphinxcrossref{RayProperties}}}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{save() (raypyng.postprocessing.RayProperties method)@\spxentry{save()}\spxextra{raypyng.postprocessing.RayProperties method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{API:raypyng.postprocessing.RayProperties.save}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{save}}}{\emph{\DUrole{n}{filename}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Save current object into tab\sphinxhyphen{}separated file with header row
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{filename}} (\sphinxstyleliteralemphasis{\sphinxupquote{\_type\_}}) \textendash{} \_description\_
 
 \end{description}\end{quote}
 
