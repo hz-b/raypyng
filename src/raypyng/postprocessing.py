@@ -6,25 +6,55 @@ from natsort import natsorted, ns
 
 from .rml import RMLFile
 
+
+def prepend_line(file_name, line):
+    """ Insert given string as a new line at the beginning of a file """
+    # define name of temporary dummy file
+    dummy_file = file_name + '.bak'
+    # open original file in read mode and dummy file in write mode
+    with open(file_name, 'r') as read_obj, open(dummy_file, 'w') as write_obj:
+        # Write given line to the dummy file
+        write_obj.write(line + '\n')
+        # Read lines from original file one by one and append them to the dummy file
+        for line in read_obj:
+            write_obj.write(line[:-2])
+    # remove original file
+    os.remove(file_name)
+    # Rename dummy file as the original file
+    os.rename(dummy_file, file_name)
+
+
+
 class RayProperties(np.ndarray):
-    def __new__(cls,/,filename=None) -> None:
+    def __new__(cls,input=None,/,filename=None) -> None:
         dt_names = ['SourcePhotonFlux', 'NumberRaysSurvived', 'PercentageRaysSurvived', 'PhotonFlux', 'Bandwidth', 'HorizontalFocusFWHM', 'VerticalFocusFWHM']
         dt_formats = [float for n in dt_names]
-        dt = {'names':dt_names, 'formats':dt_formats}
-        if filename is None:
-            input_array = np.zeros(1, dtype=dt)
+        dt = np.dtype({'names':dt_names, 'formats':dt_formats})
+
+        if input is None:
+            if filename is None:
+                input_array = np.zeros(1, dtype=dt)
+            else:
+                print("DEBUG:: opening filename", filename)
+                input_array = np.genfromtxt(filename, dtype=float, delimiter='\t', names=True)
+                print("DEBUG:: inoput_array", input_array)
         else:
-            input_array = np.genfromtxt(filename, dtype=float, delimiter='\t', names=True)
+            input_array = input.copy()
+            input_array.dtype = dt
+
         obj = np.asarray(input_array).view(cls)
         return obj
 
     def save(self,filename):
-        np.savetxt(filename,self,delimiter='\t',header="\t".join(self.dtype.names))
+        tmp = self.copy()
+        if tmp.shape[0]>1:
+            tmp.dtype = float
+        print(f"DEBUG:: saving {filename}:\n{tmp}\n============")
+        np.savetxt(filename,tmp,delimiter='\t',header="\t".join(self.dtype.names))
+        
 
-    def append(self,other):
-        pass
-
-
+    def concat(self,other):
+        return RayProperties(np.vstack((self,other)))
 
 
 class PostProcess():
@@ -204,18 +234,20 @@ class PostProcess():
                         #tmp=self._load_file(f)
                         #tmp = np.reshape(tmp,(1,tmp.shape[0]))
                         tmp = RayProperties(filename=f)
-                        analyzed_rays = np.vstack((analyzed_rays, tmp))
+                        analyzed_rays = analyzed_rays.concat(tmp)
                     elif r>=1:
                         #tmp=self._load_file(f)
                         #tmp=tmp.reshape((tmp.shape[0]))
                         tmp = RayProperties(filename=f)
                         print(f"DEBIG:: r>=1 :: analyzed_rays={analyzed_rays}, tmp={tmp}")
-                        analyzed_rays[f_ind] += tmp
+                        #analyzed_rays[f_ind] += tmp
+                        for n in analyzed_rays.dtype.names: analyzed_rays[n] += tmp[n]
                     else:
                         pass
             fn = os.path.join(dir_path, d[0])
-            analyzed_rays = analyzed_rays/repeat
-            self._save_file(fn,analyzed_rays,header=header)
+            for n in analyzed_rays.dtype.names: analyzed_rays[n] /= repeat
+            #self._save_file(fn,analyzed_rays,header=header)
+            analyzed_rays.save(f"{fn}.dat")
 
 class PostProcessAnalyzed():
     """class to analyze the data exported by RAY-UI
