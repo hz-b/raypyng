@@ -6,6 +6,26 @@ from natsort import natsorted, ns
 
 from .rml import RMLFile
 
+class RayProperties(np.ndarray):
+    def __new__(cls,/,filename=None) -> None:
+        dt_names = ['SourcePhotonFlux', 'NumberRaysSurvived', 'PercentageRaysSurvived', 'PhotonFlux', 'Bandwidth', 'HorizontalFocusFWHM', 'VerticalFocusFWHM']
+        dt_formats = [float for n in dt_names]
+        dt = {'names':dt_names, 'formats':dt_formats}
+        if filename is None:
+            input_array = np.zeros(1, dtype=dt)
+        else:
+            input_array = np.genfromtxt(filename, dtype=float, delimiter='\t', names=True)
+        obj = np.asarray(input_array).view(cls)
+        return obj
+
+    def save(self,filename):
+        np.savetxt(filename,self,delimiter='\t',header="\t".join(self.dtype.names))
+
+    def append(self,other):
+        pass
+
+
+
 
 class PostProcess():
     """class to post-process the data. 
@@ -131,29 +151,30 @@ class PostProcess():
             warnings.simplefilter("ignore")
             #rays = np.loadtxt(filename, skiprows=2)
             rays = np.genfromtxt(filename, dtype=float, delimiter='\t', names=True,skip_header=1)
-        ray_properties = np.zeros((7,1))
+        ray_properties = RayProperties()
         if rays.shape[0]==0: # if no rays survived
             # source photon flux
-            ray_properties[0] = source_photon_flux
+            ray_properties['SourcePhotonFlux'] = source_photon_flux
             pass
         else:
             # source photon flux
-            ray_properties[0] = source_photon_flux
+            ray_properties['SourcePhotonFlux'] = source_photon_flux
             # number of rays reaching the oe
-            ray_properties[1] = self._extract_intensity(rays)
+            ray_properties['NumberRaysSurvived'] = self._extract_intensity(rays)
             # percentage of survived photons
-            ray_properties[2] = ray_properties[1]/source_n_rays*100
+            ray_properties['PercentageRaysSurvived'] = ray_properties['NumberRaysSurvived']/source_n_rays*100
             # photon flux reaching the oe
-            ray_properties[3] = source_photon_flux/100*ray_properties[2]
+            ray_properties['PhotonFlux'] = source_photon_flux/100*ray_properties['PercentageRaysSurvived']
             # bandwidth of the rays reaching the oe
-            ray_properties[4] = self._extract_bandwidth_fwhm(rays[f'{exported_element}_EN'])
+            ray_properties['Bandwidth'] = self._extract_bandwidth_fwhm(rays[f'{exported_element}_EN'])
             # horizontal focus
-            ray_properties[5] = self._extract_focus_fwhm(rays[f'{exported_element}_OX'])
+            ray_properties['HorizontalFocusFWHM'] = self._extract_focus_fwhm(rays[f'{exported_element}_OX'])
             # vertical focus
-            ray_properties[6] = self._extract_focus_fwhm(rays[f'{exported_element}_OY'])
+            ray_properties['VerticalFocusFWHM'] = self._extract_focus_fwhm(rays[f'{exported_element}_OY'])
         
-        new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays')
-        self._save_file(new_filename, ray_properties)
+        new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays.dat')
+        #self._save_file(new_filename, ray_properties)
+        ray_properties.save(new_filename)
         return 
 
     def cleanup(self,dir_path:str=None, repeat:int=1, exp_elements:list=None):
@@ -176,16 +197,20 @@ class PostProcess():
                 files = self._list_files(dir_path_round, d[0]+"_analyzed_rays"+self.format_saved_files)
                 for f_ind, f in enumerate(files):
                     if r == 0 and f_ind==0:
-                        analyzed_rays = self._load_file(f)
-                        analyzed_rays = np.reshape(analyzed_rays,(1,analyzed_rays.shape[0]))
+                        #analyzed_rays = self._load_file(f)
+                        #analyzed_rays = np.reshape(analyzed_rays,(1,analyzed_rays.shape[0]))
+                        analyzed_rays = RayProperties(filename=f)
                     elif r==0 and f_ind!=0:
-                        tmp=self._load_file(f)
-                        tmp = np.reshape(tmp,(1,tmp.shape[0]))
-                        analyzed_rays = np.concatenate((analyzed_rays, tmp), axis=0)
+                        #tmp=self._load_file(f)
+                        #tmp = np.reshape(tmp,(1,tmp.shape[0]))
+                        tmp = RayProperties(filename=f)
+                        analyzed_rays = np.vstack((analyzed_rays, tmp))
                     elif r>=1:
-                        tmp=self._load_file(f)
-                        tmp=tmp.reshape((tmp.shape[0]))
-                        analyzed_rays[f_ind,:] += tmp
+                        #tmp=self._load_file(f)
+                        #tmp=tmp.reshape((tmp.shape[0]))
+                        tmp = RayProperties(filename=f)
+                        print(f"DEBIG:: r>=1 :: analyzed_rays={analyzed_rays}, tmp={tmp}")
+                        analyzed_rays[f_ind] += tmp
                     else:
                         pass
             fn = os.path.join(dir_path, d[0])
