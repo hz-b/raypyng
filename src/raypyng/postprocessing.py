@@ -6,27 +6,16 @@ from natsort import natsorted, ns
 
 from .rml import RMLFile
 
-
-def prepend_line(file_name, line):
-    """ Insert given string as a new line at the beginning of a file """
-    # define name of temporary dummy file
-    dummy_file = file_name + '.bak'
-    # open original file in read mode and dummy file in write mode
-    with open(file_name, 'r') as read_obj, open(dummy_file, 'w') as write_obj:
-        # Write given line to the dummy file
-        write_obj.write(line + '\n')
-        # Read lines from original file one by one and append them to the dummy file
-        for line in read_obj:
-            write_obj.write(line[:-2])
-    # remove original file
-    os.remove(file_name)
-    # Rename dummy file as the original file
-    os.rename(dummy_file, file_name)
-
-
-
 class RayProperties(np.ndarray):
-    def __new__(cls,input=None,/,filename=None) -> None:
+    """RayProperties class privides simplified interface to access results of the 
+    postprocessing of calculated rays and provides functions to read and write those results
+    into a txt file, including the header
+
+    Args:
+        input (nd.array): create RayProperties from an array. Intentende for internal use only!
+        filename (str): file name to load the data from (including the header information/row)
+    """
+    def __new__(cls,input:np.ndarray=None,/,filename=None) -> None:
         dt_names = ['SourcePhotonFlux', 'NumberRaysSurvived', 'PercentageRaysSurvived', 'PhotonFlux', 'Bandwidth', 'HorizontalFocusFWHM', 'VerticalFocusFWHM']
         dt_formats = [float for n in dt_names]
         dt = np.dtype({'names':dt_names, 'formats':dt_formats})
@@ -35,9 +24,7 @@ class RayProperties(np.ndarray):
             if filename is None:
                 input_array = np.zeros(1, dtype=dt)
             else:
-                print("DEBUG:: opening filename", filename)
                 input_array = np.genfromtxt(filename, dtype=float, delimiter='\t', names=True)
-                print("DEBUG:: inoput_array", input_array)
         else:
             input_array = input.copy()
             input_array.dtype = dt
@@ -46,14 +33,26 @@ class RayProperties(np.ndarray):
         return obj
 
     def save(self,filename):
+        """Save current object into tab-separated file with header row
+
+        Args:
+            filename (_type_): _description_
+        """
         tmp = self.copy()
         if tmp.shape[0]>1:
             tmp.dtype = float
-        print(f"DEBUG:: saving {filename}:\n{tmp}\n============")
         np.savetxt(filename,tmp,delimiter='\t',header="\t".join(self.dtype.names))
         
 
     def concat(self,other):
+        """concatenate another instalnce of RayProperties and return a new object 
+
+        Args:
+            other (RayProperties): instance of RayProperties to be contated to this instance
+
+        Returns:
+            RayProperties: resulting RayProperties object
+        """
         return RayProperties(np.vstack((self,other)))
 
 
@@ -115,31 +114,6 @@ class PostProcess():
             rays (np.array): contains rays information
         """        
         return(rays.shape[0])
-    
-    def _save_file(self, filename:str, array:np.array, header:str=None):
-        """This function is used to save files.
-
-        Args:
-            filename (str): file name(path)
-            array (np.array): array to save 
-            header (str): header for the file
-        """        
-        if header != None:
-            np.savetxt(filename+self.format_saved_files,array, header=header)
-        else:
-            np.savetxt(filename+self.format_saved_files,array)
-
-    def _load_file(self,filepath):
-        """Load file and returns the array
-
-        Args:
-            filepath (str): the path to the file to load
-
-        Returns:
-            arr (np.array): The loaded numpy array
-        """        
-        arr = np.loadtxt(filepath)
-        return arr
     
     def extract_nrays_from_source(self, rml_filename):
         """Extract photon flux from rml file, find source automatically
