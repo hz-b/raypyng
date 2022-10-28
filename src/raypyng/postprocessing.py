@@ -117,12 +117,10 @@ class PostProcess():
         # check where y becomes higher that max_y/2
         xs = [x for x in range(y.shape[0]) if y[x] > max_y/2.0]
         fwhm = x[np.amax(xs)-1]-x[np.amin(xs)-1]
+        fwhm_std = 2*np.sqrt(2*np.log(2))*np.std(rays)
+        #print(f'DEBUG:: fwhm: {fwhm} vs np.std() {fwhm_std}')
         return fwhm
         
-
-        
-        
-
     def _extract_intensity(self,rays:np.array):
         """calculate how many rays there are
 
@@ -177,19 +175,12 @@ class PostProcess():
             ray_properties['SourcePhotonFlux'] = source_photon_flux
             pass
         else:
-            # source photon flux
             ray_properties['SourcePhotonFlux'] = source_photon_flux
-            # number of rays reaching the oe
             ray_properties['NumberRaysSurvived'] = self._extract_intensity(rays)
-            # percentage of survived photons
             ray_properties['PercentageRaysSurvived'] = ray_properties['NumberRaysSurvived']/source_n_rays*100
-            # photon flux reaching the oe
             ray_properties['PhotonFlux'] = source_photon_flux/100*ray_properties['PercentageRaysSurvived']
-            # bandwidth of the rays reaching the oe
             ray_properties['Bandwidth'] = self._extract_fwhm(rays[f'{exported_element}_EN'])
-            # horizontal focus
             ray_properties['HorizontalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OX'])
-            # vertical focus
             ray_properties['VerticalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OY'])
         
         new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays.dat')
@@ -223,11 +214,13 @@ class PostProcess():
                         analyzed_rays = analyzed_rays.concat(tmp)
                     elif r>=1:
                         tmp = RayProperties(filename=f)
-                        for n in analyzed_rays.dtype.names: analyzed_rays[n] += tmp[n]
+                        for n in analyzed_rays.dtype.names: 
+                            analyzed_rays[n][f_ind] += tmp[n]
                     else:
                         pass
             fn = os.path.join(dir_path, d[0])
-            for n in analyzed_rays.dtype.names: analyzed_rays[n] /= repeat
+            for n in analyzed_rays.dtype.names:
+                analyzed_rays[n] /= repeat
             analyzed_rays.save(f"{fn}.dat")
 
 class PostProcessAnalyzed():
