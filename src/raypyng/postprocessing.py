@@ -217,26 +217,17 @@ class PostProcess():
                 files = self._list_files(dir_path_round, d[0]+"_analyzed_rays"+self.format_saved_files)
                 for f_ind, f in enumerate(files):
                     if r == 0 and f_ind==0:
-                        #analyzed_rays = self._load_file(f)
-                        #analyzed_rays = np.reshape(analyzed_rays,(1,analyzed_rays.shape[0]))
                         analyzed_rays = RayProperties(filename=f)
                     elif r==0 and f_ind!=0:
-                        #tmp=self._load_file(f)
-                        #tmp = np.reshape(tmp,(1,tmp.shape[0]))
                         tmp = RayProperties(filename=f)
                         analyzed_rays = analyzed_rays.concat(tmp)
                     elif r>=1:
-                        #tmp=self._load_file(f)
-                        #tmp=tmp.reshape((tmp.shape[0]))
                         tmp = RayProperties(filename=f)
-                        print(f"DEBIG:: r>=1 :: analyzed_rays={analyzed_rays}, tmp={tmp}")
-                        #analyzed_rays[f_ind] += tmp
                         for n in analyzed_rays.dtype.names: analyzed_rays[n] += tmp[n]
                     else:
                         pass
             fn = os.path.join(dir_path, d[0])
             for n in analyzed_rays.dtype.names: analyzed_rays[n] /= repeat
-            #self._save_file(fn,analyzed_rays,header=header)
             analyzed_rays.save(f"{fn}.dat")
 
 class PostProcessAnalyzed():
