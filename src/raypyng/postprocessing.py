@@ -85,27 +85,43 @@ class PostProcess():
                 res.append(os.path.join(dir_path,file))
         return natsorted(res, alg=ns.IGNORECASE)
 
-    def _extract_bandwidth_fwhm(self,rays_bw:np.array):
-        """calculate the fwhm of the rays_bw.
+    def _extract_fwhm(self,rays:np.array):
+        """Calculate the fwhm of the rays.
+
+        If less than 100 rays are passed check what is the standard deviation of the array.
+        Else, make an histogram with 30 bins and check when the array falls at less than half the max
 
         Args:
-            rays_bw (np:array): the energy of the x-rays
+            rays (np:array): the energy of the x-rays
 
         Returns:
             float: fwhm
         """        
-        return 2.3555*np.std(rays_bw)
+        # if I have less than 100 rays calculate the standard deviation
+        if rays.shape[0]<100:
+            return 2*np.sqrt(2*np.log(2))*np.std(rays)
+        
+        # else actually look for the fwhm
 
-    def _extract_focus_fwhm(self,rays_pos:np.array):
-        """calculate the fwhm of rays_pos
+        # make an histogram, get back a tuple of values and bins
+        gh = np.histogram(rays, bins=30)
+        y = gh[0]
+        x_bins = gh[1]
 
-        Args:
-            rays_pos (np.array): contains positions of the x-rays
+        # take the average of each pari of bins to get the middle
+        x = (x_bins[1:] + x_bins[:-1]) / 2
 
-        Returns:
-            float: fwhm
-        """        
-        return 2.3555*np.std(rays_pos)
+        # Find the maximum y value
+        max_y = np.amax(y)  
+
+        # check where y becomes higher that max_y/2
+        xs = [x for x in range(y.shape[0]) if y[x] > max_y/2.0]
+        fwhm = x[np.amax(xs)-1]-x[np.amin(xs)-1]
+        return fwhm
+        
+
+        
+        
 
     def _extract_intensity(self,rays:np.array):
         """calculate how many rays there are
@@ -170,11 +186,11 @@ class PostProcess():
             # photon flux reaching the oe
             ray_properties['PhotonFlux'] = source_photon_flux/100*ray_properties['PercentageRaysSurvived']
             # bandwidth of the rays reaching the oe
-            ray_properties['Bandwidth'] = self._extract_bandwidth_fwhm(rays[f'{exported_element}_EN'])
+            ray_properties['Bandwidth'] = self._extract_fwhm(rays[f'{exported_element}_EN'])
             # horizontal focus
-            ray_properties['HorizontalFocusFWHM'] = self._extract_focus_fwhm(rays[f'{exported_element}_OX'])
+            ray_properties['HorizontalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OX'])
             # vertical focus
-            ray_properties['VerticalFocusFWHM'] = self._extract_focus_fwhm(rays[f'{exported_element}_OY'])
+            ray_properties['VerticalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OY'])
         
         new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays.dat')
         #self._save_file(new_filename, ray_properties)
