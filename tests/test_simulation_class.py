@@ -11,9 +11,11 @@ sys.path.insert(1, '../src')
 from raypyng.simulate import Simulate
 
 
-class TestAnalyze(unittest.TestCase):
-    
+class TestSimulationClass(unittest.TestCase):
+    '''\nTest Simulation class\n
+    '''
     def test_1_turn_reflectivity_on(self):
+        '''\nTest Simulation class\n'''
 
         this_file_dir=os.path.dirname(os.path.realpath(__file__))
         rml_file = os.path.join(this_file_dir,'rml/elisa.rml')
