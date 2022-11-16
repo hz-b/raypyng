@@ -30,7 +30,7 @@ class PlotBeamwaist():
     
     def simulate_beamline(self, energy:float,/,source:ObjectElement=None,nrays:int=None, force:bool=False):
         #sim.params,sim.exports, sim.simulation_name = ResolvingPower(energy_range, elisa.DetectorAtFocus,ES,cff)
-        rp = BeamWaist(energy,source=source,nrays=nrays,sim_folder=self._original_directory, force=force)
+        rp = BeamWaist(energy,source=source,nrays=nrays,sim_folder=self._original_directory)
 
         # test resolving power simulations
         self._sim.run(rp, multiprocessing=5, force=force)
