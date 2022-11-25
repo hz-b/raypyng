@@ -191,6 +191,7 @@ class RayUIAPI:
         self._runner = runner
         self._read_wait_delay = 0.01    # if rayui does not send anything to stdio this delay will be used before next attempt to read
         self._quit_timeout = 300         # default timeout for commands like quit
+        self._simulation_done = False
 
     def quit(self):
         """quit RAY-UI if it is running
@@ -208,6 +209,7 @@ class RayUIAPI:
         Args:
             rml_path (str): path to the rml file
         """        
+        self._simulation_done = False
         return self._cmd_io("load",rml_path,**kwargs)
 
     def save(self,rml_path,**kwargs):
@@ -260,10 +262,14 @@ class RayUIAPI:
         """
         if payload is None:
             payload = ""
+        if cmd == 'load':
+            self._simulation_done = False
         cmdstr = cmd+" "+payload
         self._runner._write(cmdstr)
-        status = self._wait_for_cmd_io(cmd,cbdataread=cbNewLine)
-        if status=="success":# or 'trace success':
+        status = self._wait_for_cmd_io(cmd,cbdataread=cbNewLine)        
+        if status=="success":
+            if cmd == 'trace':
+                self._simulation_done = True
             return True
         elif status=="failed":
             return False
