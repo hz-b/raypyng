@@ -177,7 +177,7 @@ class PostProcess():
             ray_properties['NumberRaysSurvived'] = self._extract_intensity(rays)
             ray_properties['PercentageRaysSurvived'] = ray_properties['NumberRaysSurvived']/source_n_rays*100
             ray_properties['PhotonFlux'] = source_photon_flux/100*ray_properties['PercentageRaysSurvived']
-            ray_properties['Bandwidth'] = self._extract_fwhm(rays[f'{exported_element}_EN'], pr=False)
+            ray_properties['Bandwidth'] = self._extract_fwhm(rays[f'{exported_element}_EN'], pr=True)
             ray_properties['HorizontalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OX'])
             ray_properties['VerticalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OY'])
         
