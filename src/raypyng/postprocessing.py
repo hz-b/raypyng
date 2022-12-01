@@ -85,7 +85,7 @@ class PostProcess():
                 res.append(os.path.join(dir_path,file))
         return natsorted(res, alg=ns.IGNORECASE)
 
-    def _extract_fwhm(self,rays:np.array):
+    def _extract_fwhm(self,rays:np.array, pr=False):
         """Calculate the fwhm of the rays.
 
         If less than 100 rays are passed check what is the standard deviation of the array.
@@ -98,9 +98,8 @@ class PostProcess():
             float: fwhm
         """        
         # if I have less than 100 rays calculate the standard deviation
-        if rays.shape[0]<100:
+        if rays.shape[0]<100 or pr==True:
             return 2*np.sqrt(2*np.log(2))*np.std(rays)
-        
         # else actually look for the fwhm
 
         # make an histogram, get back a tuple of values and bins
@@ -117,7 +116,6 @@ class PostProcess():
         # check where y becomes higher that max_y/2
         xs = [x for x in range(y.shape[0]) if y[x] > max_y/2.0]
         fwhm = x[np.amax(xs)-1]-x[np.amin(xs)-1]
-        fwhm_std = 2*np.sqrt(2*np.log(2))*np.std(rays)
         #print(f'DEBUG:: fwhm: {fwhm} vs np.std() {fwhm_std}')
         return fwhm
         
@@ -179,7 +177,7 @@ class PostProcess():
             ray_properties['NumberRaysSurvived'] = self._extract_intensity(rays)
             ray_properties['PercentageRaysSurvived'] = ray_properties['NumberRaysSurvived']/source_n_rays*100
             ray_properties['PhotonFlux'] = source_photon_flux/100*ray_properties['PercentageRaysSurvived']
-            ray_properties['Bandwidth'] = self._extract_fwhm(rays[f'{exported_element}_EN'])
+            ray_properties['Bandwidth'] = self._extract_fwhm(rays[f'{exported_element}_EN'], pr=True)
             ray_properties['HorizontalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OX'])
             ray_properties['VerticalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OY'])
         
