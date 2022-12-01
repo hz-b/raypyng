@@ -85,7 +85,7 @@ class PostProcess():
                 res.append(os.path.join(dir_path,file))
         return natsorted(res, alg=ns.IGNORECASE)
 
-    def _extract_fwhm(self,rays:np.array, pr=False):
+    def _extract_fwhm(self,rays:np.array):
         """Calculate the fwhm of the rays.
 
         If less than 100 rays are passed check what is the standard deviation of the array.
@@ -98,25 +98,31 @@ class PostProcess():
             float: fwhm
         """        
         # if I have less than 100 rays calculate the standard deviation
-        if rays.shape[0]<100 or pr==True:
+        if rays.shape[0]<100:
             return 2*np.sqrt(2*np.log(2))*np.std(rays)
         # else actually look for the fwhm
+        # iterate over the number of bins to amke sure we get
+        # a result that makes sense, check if fwhm is negative
+        for bins in [30,300,3000,30000,300000]:
+            # make an histogram, get back a tuple of values and bins
+            gh = np.histogram(rays, bins=bins)
+            y = gh[0]
+            x_bins = gh[1]
 
-        # make an histogram, get back a tuple of values and bins
-        gh = np.histogram(rays, bins=30)
-        y = gh[0]
-        x_bins = gh[1]
+            # take the average of each pari of bins to get the middle
+            x = (x_bins[1:] + x_bins[:-1]) / 2
 
-        # take the average of each pari of bins to get the middle
-        x = (x_bins[1:] + x_bins[:-1]) / 2
+            # Find the maximum y value
+            max_y = np.amax(y)  
 
-        # Find the maximum y value
-        max_y = np.amax(y)  
-
-        # check where y becomes higher that max_y/2
-        xs = [x for x in range(y.shape[0]) if y[x] > max_y/2.0]
-        fwhm = x[np.amax(xs)-1]-x[np.amin(xs)-1]
-        #print(f'DEBUG:: fwhm: {fwhm} vs np.std() {fwhm_std}')
+            # check where y becomes higher that max_y/2
+            xs = [x for x in range(y.shape[0]) if y[x] > max_y/2.0]
+            fwhm = x[np.amax(xs)-1]-x[np.amin(xs)-1]
+            if fwhm > 0:
+                break
+        # if fwhm still negative fall back to use np.std
+        if fwhm <= 0:
+            fwhm = 2*np.sqrt(2*np.log(2))*np.std(rays)
         return fwhm
         
     def _extract_intensity(self,rays:np.array):
@@ -177,7 +183,7 @@ class PostProcess():
             ray_properties['NumberRaysSurvived'] = self._extract_intensity(rays)
             ray_properties['PercentageRaysSurvived'] = ray_properties['NumberRaysSurvived']/source_n_rays*100
             ray_properties['PhotonFlux'] = source_photon_flux/100*ray_properties['PercentageRaysSurvived']
-            ray_properties['Bandwidth'] = self._extract_fwhm(rays[f'{exported_element}_EN'], pr=True)
+            ray_properties['Bandwidth'] = self._extract_fwhm(rays[f'{exported_element}_EN'])
             ray_properties['HorizontalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OX'])
             ray_properties['VerticalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OY'])
         
