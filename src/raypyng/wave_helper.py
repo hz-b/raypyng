@@ -24,7 +24,7 @@ class WaveHelper():
             self.folders_dict[1+(ind*2)] = f
 
     def _find_energy_files(self):
-        pass
+        
 
 
     def _explore_wave_folder(self):
