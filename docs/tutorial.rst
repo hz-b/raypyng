@@ -449,6 +449,10 @@ In the example folder, the following examples are available:
   simple geometrical x-ray tracer to propagate each ray until the next optical 
   element and plots the results (both top view and side view). This is still 
   experimental and it may fail. 
+- `example_waveHelper.py <https://github.com/hz-b/raypyng/blob/main/examples/example_rml.py>`_ 
+  The WaveHelper class can help to inspect a folder produced by `WAVE <https://www.helmholtz-berlin.de/forschung/oe/wi/undulators/arbeitsgebiete/wave_en.html>`_ 
+  and provides a simple API to get the path of the simulation files depending on the harmonic and 
+  on the energy.
  
 
   

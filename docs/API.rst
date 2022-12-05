@@ -14,6 +14,15 @@ SimulationParams
 .. autoclass:: raypyng.simulate.SimulationParams
    :members:
 
+WaveHelper
+------------
+Some source in RAY-UI can take as an input a file obtained by simulating the 
+insertion device with WAVE. This class inspects the folder where the WAVES results are
+stored and provides a simple way to get a list of absolute paths to the simulation files.
+
+.. autoclass:: raypyng.wave_helper.WaveHelper
+   :members:
+
 Recipes
 ==================
 
@@ -84,4 +93,7 @@ ParamElement
 .. autoclass:: raypyng.rml.ParamElement
    :members:
    :inherited-members:
+
+
+
 
