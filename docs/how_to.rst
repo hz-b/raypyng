@@ -162,10 +162,10 @@ file for each element present in the beamline automatically.
         # test resolving power simulations
         sim.run(myRecipe, multiprocessing=5, force=True)
 
-The WaveHelper class
-======================
+How to work with Undulator File
+================================
 
-The WaveHelper class helps to inspect a WAVE simulation folder and 
+The `WaveHelper` class helps to inspect a WAVE simulation folder and 
 provides a simple way to extract the absolute path of the simulation files
 to feed to the `Undulator File`. In this example we use the `WAVE` folder provided in the example
 folder at this `link <https://github.com/hz-b/raypyng/tree/main/examples>`_. Inside the folder there are 
