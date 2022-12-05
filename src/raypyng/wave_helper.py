@@ -11,8 +11,11 @@ class WaveHelper():
     For instance for an undulator called 'U49' and harmonic=3, this filestructure is expected:
     
     Wave
-    ├── U49H1allrayfiles          
+
+    ├── U49H1allrayfiles    
+
     ├── U49H3allrayfiles          
+    
     ├── U49H5allrayfiles          
 
 
