@@ -162,4 +162,52 @@ file for each element present in the beamline automatically.
         # test resolving power simulations
         sim.run(myRecipe, multiprocessing=5, force=True)
 
+The WaveHelper class
+======================
 
+The WaveHelper class helps to inspect a WAVE simulation folder and 
+provides a simple way to extract the absolute path of the simulation files
+to feed to the `Undulator File`. In this example we use the `WAVE` folder provided in the example
+folder at this `link <https://github.com/hz-b/raypyng/tree/main/examples>`_. Inside the folder there are 
+WAVE simulation files for the first, third and fifth harmonic, and the Undulator is called `U49`
+
+.. code:: python
+
+    import numpy as np
+
+    from raypyng.wave_helper import WaveHelper
+
+    WH = WaveHelper(wave_folder_path='WAVE', harmonic=3, undulator='U49')
+
+    WH.report_available_energies(verbose=True)
+
+This produces the following output:
+
+.. code:: python
+
+    I found the following harmonics: dict_keys([1, 3, 5])
+    the energy points for each harmonic are equally spaced
+    Harmonic number 1, available energies:
+    start 80
+    stop 570
+    step 10
+    Harmonic number 3, available energies:
+    start 240
+    stop 1710
+    step 30
+    Harmonic number 5, available energies:
+    start 400
+    stop 2850
+    step 50 
+
+
+We can now extract the file location for all the energies or a subset of the 
+energies available for the first harmonic of the undulator:
+
+.. code:: python
+
+    energies = np.arange(80,570,10)
+    energy_files = WH.convert_energies_to_file_list(1,energies)
+
+`energy_files` contains the absolute path to the WAVE simulation file for each energy. 
+This can be used to change the energy of an Undulator by calling the parameter `undulatorFile`.
