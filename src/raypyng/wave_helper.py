@@ -133,7 +133,7 @@ class WaveHelper():
         en_to_file_dict = self.energies_to_file_dict[harmonic]
         for en in energies:
             if en in en_to_file_dict.keys():
-                en_list.append(en_to_file_dict[en])
+                en_list.append(os.path.abspath(en_to_file_dict[en]))
             else:
                 raise ValueError(f"There is no file for harmonic {harmonic} energy {en}")
         return en_list
