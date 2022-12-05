@@ -16,48 +16,54 @@
 \indexentry{SimulationParams (class in raypyng.simulate)@\spxentry{SimulationParams}\spxextra{class in raypyng.simulate}|hyperpage}{19}
 \indexentry{params (raypyng.simulate.SimulationParams property)@\spxentry{params}\spxextra{raypyng.simulate.SimulationParams property}|hyperpage}{19}
 \indexentry{rml (raypyng.simulate.SimulationParams property)@\spxentry{rml}\spxextra{raypyng.simulate.SimulationParams property}|hyperpage}{19}
+\indexentry{WaveHelper (class in raypyng.wave\_helper)@\spxentry{WaveHelper}\spxextra{class in raypyng.wave\_helper}|hyperpage}{20}
+\indexentry{convert\_energies\_to\_file\_list() (raypyng.wave\_helper.WaveHelper method)@\spxentry{convert\_energies\_to\_file\_list()}\spxextra{raypyng.wave\_helper.WaveHelper method}|hyperpage}{20}
+\indexentry{report\_available\_energies() (raypyng.wave\_helper.WaveHelper method)@\spxentry{report\_available\_energies()}\spxextra{raypyng.wave\_helper.WaveHelper method}|hyperpage}{20}
 \indexentry{ResolvingPower (class in raypyng.recipes)@\spxentry{ResolvingPower}\spxextra{class in raypyng.recipes}|hyperpage}{20}
-\indexentry{Flux (class in raypyng.recipes)@\spxentry{Flux}\spxextra{class in raypyng.recipes}|hyperpage}{20}
-\indexentry{PostProcess (class in raypyng.postprocessing)@\spxentry{PostProcess}\spxextra{class in raypyng.postprocessing}|hyperpage}{20}
-\indexentry{cleanup() (raypyng.postprocessing.PostProcess method)@\spxentry{cleanup()}\spxextra{raypyng.postprocessing.PostProcess method}|hyperpage}{20}
-\indexentry{extract\_nrays\_from\_source() (raypyng.postprocessing.PostProcess method)@\spxentry{extract\_nrays\_from\_source()}\spxextra{raypyng.postprocessing.PostProcess method}|hyperpage}{21}
-\indexentry{postprocess\_RawRays() (raypyng.postprocessing.PostProcess method)@\spxentry{postprocess\_RawRays()}\spxextra{raypyng.postprocessing.PostProcess method}|hyperpage}{21}
+\indexentry{Flux (class in raypyng.recipes)@\spxentry{Flux}\spxextra{class in raypyng.recipes}|hyperpage}{21}
+\indexentry{PostProcess (class in raypyng.postprocessing)@\spxentry{PostProcess}\spxextra{class in raypyng.postprocessing}|hyperpage}{21}
+\indexentry{cleanup() (raypyng.postprocessing.PostProcess method)@\spxentry{cleanup()}\spxextra{raypyng.postprocessing.PostProcess method}|hyperpage}{21}
+\indexentry{extract\_nrays\_from\_source() (raypyng.postprocessing.PostProcess method)@\spxentry{extract\_nrays\_from\_source()}\spxextra{raypyng.postprocessing.PostProcess method}|hyperpage}{22}
+\indexentry{postprocess\_RawRays() (raypyng.postprocessing.PostProcess method)@\spxentry{postprocess\_RawRays()}\spxextra{raypyng.postprocessing.PostProcess method}|hyperpage}{22}
 \indexentry{PostProcessAnalyzed (class in raypyng.postprocessing)@\spxentry{PostProcessAnalyzed}\spxextra{class in raypyng.postprocessing}|hyperpage}{22}
 \indexentry{moving\_average() (raypyng.postprocessing.PostProcessAnalyzed method)@\spxentry{moving\_average()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}|hyperpage}{22}
 \indexentry{retrieve\_bw\_and\_focusSize() (raypyng.postprocessing.PostProcessAnalyzed method)@\spxentry{retrieve\_bw\_and\_focusSize()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}|hyperpage}{22}
-\indexentry{retrieve\_flux\_beamline() (raypyng.postprocessing.PostProcessAnalyzed method)@\spxentry{retrieve\_flux\_beamline()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}|hyperpage}{22}
-\indexentry{RayUIRunner (class in raypyng.runner)@\spxentry{RayUIRunner}\spxextra{class in raypyng.runner}|hyperpage}{23}
-\indexentry{isrunning (raypyng.runner.RayUIRunner property)@\spxentry{isrunning}\spxextra{raypyng.runner.RayUIRunner property}|hyperpage}{23}
-\indexentry{kill() (raypyng.runner.RayUIRunner method)@\spxentry{kill()}\spxextra{raypyng.runner.RayUIRunner method}|hyperpage}{23}
-\indexentry{pid (raypyng.runner.RayUIRunner property)@\spxentry{pid}\spxextra{raypyng.runner.RayUIRunner property}|hyperpage}{23}
-\indexentry{run() (raypyng.runner.RayUIRunner method)@\spxentry{run()}\spxextra{raypyng.runner.RayUIRunner method}|hyperpage}{23}
-\indexentry{RayUIAPI (class in raypyng.runner)@\spxentry{RayUIAPI}\spxextra{class in raypyng.runner}|hyperpage}{24}
-\indexentry{export() (raypyng.runner.RayUIAPI method)@\spxentry{export()}\spxextra{raypyng.runner.RayUIAPI method}|hyperpage}{24}
-\indexentry{load() (raypyng.runner.RayUIAPI method)@\spxentry{load()}\spxextra{raypyng.runner.RayUIAPI method}|hyperpage}{24}
-\indexentry{quit() (raypyng.runner.RayUIAPI method)@\spxentry{quit()}\spxextra{raypyng.runner.RayUIAPI method}|hyperpage}{24}
-\indexentry{save() (raypyng.runner.RayUIAPI method)@\spxentry{save()}\spxextra{raypyng.runner.RayUIAPI method}|hyperpage}{24}
-\indexentry{trace() (raypyng.runner.RayUIAPI method)@\spxentry{trace()}\spxextra{raypyng.runner.RayUIAPI method}|hyperpage}{24}
-\indexentry{RMLFile (class in raypyng.rml)@\spxentry{RMLFile}\spxextra{class in raypyng.rml}|hyperpage}{24}
-\indexentry{read() (raypyng.rml.RMLFile method)@\spxentry{read()}\spxextra{raypyng.rml.RMLFile method}|hyperpage}{24}
-\indexentry{write() (raypyng.rml.RMLFile method)@\spxentry{write()}\spxextra{raypyng.rml.RMLFile method}|hyperpage}{25}
-\indexentry{BeamlineElement (class in raypyng.rml)@\spxentry{BeamlineElement}\spxextra{class in raypyng.rml}|hyperpage}{25}
-\indexentry{add\_cdata() (raypyng.rml.BeamlineElement method)@\spxentry{add\_cdata()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{25}
-\indexentry{add\_child() (raypyng.rml.BeamlineElement method)@\spxentry{add\_child()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{25}
-\indexentry{get\_attribute() (raypyng.rml.BeamlineElement method)@\spxentry{get\_attribute()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{25}
-\indexentry{get\_elements() (raypyng.rml.BeamlineElement method)@\spxentry{get\_elements()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{25}
-\indexentry{get\_full\_path() (raypyng.rml.BeamlineElement method)@\spxentry{get\_full\_path()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{25}
-\indexentry{resolvable\_name() (raypyng.rml.BeamlineElement method)@\spxentry{resolvable\_name()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{25}
-\indexentry{ObjectElement (class in raypyng.rml)@\spxentry{ObjectElement}\spxextra{class in raypyng.rml}|hyperpage}{25}
-\indexentry{add\_cdata() (raypyng.rml.ObjectElement method)@\spxentry{add\_cdata()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{25}
-\indexentry{add\_child() (raypyng.rml.ObjectElement method)@\spxentry{add\_child()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{25}
-\indexentry{get\_attribute() (raypyng.rml.ObjectElement method)@\spxentry{get\_attribute()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{25}
-\indexentry{get\_elements() (raypyng.rml.ObjectElement method)@\spxentry{get\_elements()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{25}
-\indexentry{get\_full\_path() (raypyng.rml.ObjectElement method)@\spxentry{get\_full\_path()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{26}
-\indexentry{resolvable\_name() (raypyng.rml.ObjectElement method)@\spxentry{resolvable\_name()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{26}
-\indexentry{ParamElement (class in raypyng.rml)@\spxentry{ParamElement}\spxextra{class in raypyng.rml}|hyperpage}{26}
-\indexentry{add\_cdata() (raypyng.rml.ParamElement method)@\spxentry{add\_cdata()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{26}
-\indexentry{add\_child() (raypyng.rml.ParamElement method)@\spxentry{add\_child()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{26}
-\indexentry{get\_attribute() (raypyng.rml.ParamElement method)@\spxentry{get\_attribute()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{26}
-\indexentry{get\_elements() (raypyng.rml.ParamElement method)@\spxentry{get\_elements()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{26}
-\indexentry{get\_full\_path() (raypyng.rml.ParamElement method)@\spxentry{get\_full\_path()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{26}
-\indexentry{resolvable\_name() (raypyng.rml.ParamElement method)@\spxentry{resolvable\_name()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{26}
+\indexentry{retrieve\_flux\_beamline() (raypyng.postprocessing.PostProcessAnalyzed method)@\spxentry{retrieve\_flux\_beamline()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}|hyperpage}{23}
+\indexentry{RayProperties (class in raypyng.postprocessing)@\spxentry{RayProperties}\spxextra{class in raypyng.postprocessing}|hyperpage}{24}
+\indexentry{concat() (raypyng.postprocessing.RayProperties method)@\spxentry{concat()}\spxextra{raypyng.postprocessing.RayProperties method}|hyperpage}{24}
+\indexentry{save() (raypyng.postprocessing.RayProperties method)@\spxentry{save()}\spxextra{raypyng.postprocessing.RayProperties method}|hyperpage}{24}
+\indexentry{RayUIRunner (class in raypyng.runner)@\spxentry{RayUIRunner}\spxextra{class in raypyng.runner}|hyperpage}{24}
+\indexentry{isrunning (raypyng.runner.RayUIRunner property)@\spxentry{isrunning}\spxextra{raypyng.runner.RayUIRunner property}|hyperpage}{24}
+\indexentry{kill() (raypyng.runner.RayUIRunner method)@\spxentry{kill()}\spxextra{raypyng.runner.RayUIRunner method}|hyperpage}{24}
+\indexentry{pid (raypyng.runner.RayUIRunner property)@\spxentry{pid}\spxextra{raypyng.runner.RayUIRunner property}|hyperpage}{25}
+\indexentry{run() (raypyng.runner.RayUIRunner method)@\spxentry{run()}\spxextra{raypyng.runner.RayUIRunner method}|hyperpage}{25}
+\indexentry{RayUIAPI (class in raypyng.runner)@\spxentry{RayUIAPI}\spxextra{class in raypyng.runner}|hyperpage}{25}
+\indexentry{export() (raypyng.runner.RayUIAPI method)@\spxentry{export()}\spxextra{raypyng.runner.RayUIAPI method}|hyperpage}{25}
+\indexentry{load() (raypyng.runner.RayUIAPI method)@\spxentry{load()}\spxextra{raypyng.runner.RayUIAPI method}|hyperpage}{25}
+\indexentry{quit() (raypyng.runner.RayUIAPI method)@\spxentry{quit()}\spxextra{raypyng.runner.RayUIAPI method}|hyperpage}{25}
+\indexentry{save() (raypyng.runner.RayUIAPI method)@\spxentry{save()}\spxextra{raypyng.runner.RayUIAPI method}|hyperpage}{25}
+\indexentry{trace() (raypyng.runner.RayUIAPI method)@\spxentry{trace()}\spxextra{raypyng.runner.RayUIAPI method}|hyperpage}{25}
+\indexentry{RMLFile (class in raypyng.rml)@\spxentry{RMLFile}\spxextra{class in raypyng.rml}|hyperpage}{26}
+\indexentry{read() (raypyng.rml.RMLFile method)@\spxentry{read()}\spxextra{raypyng.rml.RMLFile method}|hyperpage}{26}
+\indexentry{write() (raypyng.rml.RMLFile method)@\spxentry{write()}\spxextra{raypyng.rml.RMLFile method}|hyperpage}{26}
+\indexentry{BeamlineElement (class in raypyng.rml)@\spxentry{BeamlineElement}\spxextra{class in raypyng.rml}|hyperpage}{26}
+\indexentry{add\_cdata() (raypyng.rml.BeamlineElement method)@\spxentry{add\_cdata()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{26}
+\indexentry{add\_child() (raypyng.rml.BeamlineElement method)@\spxentry{add\_child()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{26}
+\indexentry{get\_attribute() (raypyng.rml.BeamlineElement method)@\spxentry{get\_attribute()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{26}
+\indexentry{get\_elements() (raypyng.rml.BeamlineElement method)@\spxentry{get\_elements()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{26}
+\indexentry{get\_full\_path() (raypyng.rml.BeamlineElement method)@\spxentry{get\_full\_path()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{26}
+\indexentry{resolvable\_name() (raypyng.rml.BeamlineElement method)@\spxentry{resolvable\_name()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{26}
+\indexentry{ObjectElement (class in raypyng.rml)@\spxentry{ObjectElement}\spxextra{class in raypyng.rml}|hyperpage}{27}
+\indexentry{add\_cdata() (raypyng.rml.ObjectElement method)@\spxentry{add\_cdata()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{27}
+\indexentry{add\_child() (raypyng.rml.ObjectElement method)@\spxentry{add\_child()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{27}
+\indexentry{get\_attribute() (raypyng.rml.ObjectElement method)@\spxentry{get\_attribute()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{27}
+\indexentry{get\_elements() (raypyng.rml.ObjectElement method)@\spxentry{get\_elements()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{27}
+\indexentry{get\_full\_path() (raypyng.rml.ObjectElement method)@\spxentry{get\_full\_path()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{27}
+\indexentry{resolvable\_name() (raypyng.rml.ObjectElement method)@\spxentry{resolvable\_name()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{27}
+\indexentry{ParamElement (class in raypyng.rml)@\spxentry{ParamElement}\spxextra{class in raypyng.rml}|hyperpage}{27}
+\indexentry{add\_cdata() (raypyng.rml.ParamElement method)@\spxentry{add\_cdata()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{27}
+\indexentry{add\_child() (raypyng.rml.ParamElement method)@\spxentry{add\_child()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{27}
+\indexentry{get\_attribute() (raypyng.rml.ParamElement method)@\spxentry{get\_attribute()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{27}
+\indexentry{get\_elements() (raypyng.rml.ParamElement method)@\spxentry{get\_elements()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{27}
+\indexentry{get\_full\_path() (raypyng.rml.ParamElement method)@\spxentry{get\_full\_path()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{27}
+\indexentry{resolvable\_name() (raypyng.rml.ParamElement method)@\spxentry{resolvable\_name()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{27}

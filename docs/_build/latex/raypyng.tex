@@ -10,7 +10,6 @@
 %% let collapsible pdf bookmarks panel have high depth per default
 \PassOptionsToPackage{bookmarksdepth=5}{hyperref}
 
-
 \PassOptionsToPackage{warn}{textcomp}
 \usepackage[utf8]{inputenc}
 \ifdefined\DeclareUnicodeCharacter
@@ -62,7 +61,7 @@
 
 
 \title{RayPyNG}
-\date{Oct 27, 2022}
+\date{Dec 05, 2022}
 \release{}
 \author{Simone Vadilonga, Ruslan Ovsyannikov}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -758,6 +757,13 @@ simple geometrical x\sphinxhyphen{}ray tracer to propagate each ray until the ne
 element and plots the results (both top view and side view). This is still
 experimental and it may fail.
 
+\item {} 
+\sphinxAtStartPar
+\sphinxhref{https://github.com/hz-b/raypyng/blob/main/examples/example\_rml.py}{example\_waveHelper.py}
+The WaveHelper class can help to inspect a folder produced by \sphinxhref{https://www.helmholtz-berlin.de/forschung/oe/wi/undulators/arbeitsgebiete/wave\_en.html}{WAVE}
+and provides a simple API to get the path of the simulation files depending on the harmonic and
+on the energy.
+
 \end{itemize}
 
 \sphinxstepscope
@@ -935,6 +941,59 @@ file for each element present in the beamline automatically.
     \PYG{n}{sim}\PYG{o}{.}\PYG{n}{run}\PYG{p}{(}\PYG{n}{myRecipe}\PYG{p}{,} \PYG{n}{multiprocessing}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{force}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
 \end{sphinxVerbatim}
 \end{quote}
+
+
+\section{How to work with Undulator File}
+\label{\detokenize{how_to:how-to-work-with-undulator-file}}
+\sphinxAtStartPar
+The \sphinxtitleref{WaveHelper} class helps to inspect a WAVE simulation folder and
+provides a simple way to extract the absolute path of the simulation files
+to feed to the \sphinxtitleref{Undulator File}. In this example we use the \sphinxtitleref{WAVE} folder provided in the example
+folder at this \sphinxhref{https://github.com/hz-b/raypyng/tree/main/examples}{link}. Inside the folder there are
+WAVE simulation files for the first, third and fifth harmonic, and the Undulator is called \sphinxtitleref{U49}
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+
+\PYG{k+kn}{from} \PYG{n+nn}{raypyng}\PYG{n+nn}{.}\PYG{n+nn}{wave\PYGZus{}helper} \PYG{k+kn}{import} \PYG{n}{WaveHelper}
+
+\PYG{n}{WH} \PYG{o}{=} \PYG{n}{WaveHelper}\PYG{p}{(}\PYG{n}{wave\PYGZus{}folder\PYGZus{}path}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{WAVE}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,} \PYG{n}{harmonic}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{undulator}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+s1}{U49}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{WH}\PYG{o}{.}\PYG{n}{report\PYGZus{}available\PYGZus{}energies}\PYG{p}{(}\PYG{n}{verbose}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+This produces the following output:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{I} \PYG{n}{found} \PYG{n}{the} \PYG{n}{following} \PYG{n}{harmonics}\PYG{p}{:} \PYG{n}{dict\PYGZus{}keys}\PYG{p}{(}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{]}\PYG{p}{)}
+\PYG{n}{the} \PYG{n}{energy} \PYG{n}{points} \PYG{k}{for} \PYG{n}{each} \PYG{n}{harmonic} \PYG{n}{are} \PYG{n}{equally} \PYG{n}{spaced}
+\PYG{n}{Harmonic} \PYG{n}{number} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{available} \PYG{n}{energies}\PYG{p}{:}
+\PYG{n}{start} \PYG{l+m+mi}{80}
+\PYG{n}{stop} \PYG{l+m+mi}{570}
+\PYG{n}{step} \PYG{l+m+mi}{10}
+\PYG{n}{Harmonic} \PYG{n}{number} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{available} \PYG{n}{energies}\PYG{p}{:}
+\PYG{n}{start} \PYG{l+m+mi}{240}
+\PYG{n}{stop} \PYG{l+m+mi}{1710}
+\PYG{n}{step} \PYG{l+m+mi}{30}
+\PYG{n}{Harmonic} \PYG{n}{number} \PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{available} \PYG{n}{energies}\PYG{p}{:}
+\PYG{n}{start} \PYG{l+m+mi}{400}
+\PYG{n}{stop} \PYG{l+m+mi}{2850}
+\PYG{n}{step} \PYG{l+m+mi}{50}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+We can now extract the file location for all the energies or a subset of the
+energies available for the first harmonic of the undulator:
+
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{n}{energies} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{80}\PYG{p}{,}\PYG{l+m+mi}{570}\PYG{p}{,}\PYG{l+m+mi}{10}\PYG{p}{)}
+\PYG{n}{energy\PYGZus{}files} \PYG{o}{=} \PYG{n}{WH}\PYG{o}{.}\PYG{n}{convert\PYGZus{}energies\PYGZus{}to\PYGZus{}file\PYGZus{}list}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{energies}\PYG{p}{)}
+\end{sphinxVerbatim}
+
+\sphinxAtStartPar
+\sphinxtitleref{energy\_files} contains the absolute path to the WAVE simulation file for each energy.
+This can be used to change the energy of an Undulator by calling the parameter \sphinxtitleref{undulatorFile}.
 
 \sphinxstepscope
 
@@ -1322,6 +1381,113 @@ values to be assigned.
 \pysigstopsignatures
 \sphinxAtStartPar
 RMLFile object instantiated in init
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+
+
+\subsection{WaveHelper}
+\label{\detokenize{API:wavehelper}}
+\sphinxAtStartPar
+Some source in RAY\sphinxhyphen{}UI can take as an input a file obtained by simulating the
+insertion device with WAVE. This class inspects the folder where the WAVES results are
+stored and provides a simple way to get a list of absolute paths to the simulation files.
+\index{WaveHelper (class in raypyng.wave\_helper)@\spxentry{WaveHelper}\spxextra{class in raypyng.wave\_helper}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{API:raypyng.wave_helper.WaveHelper}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{raypyng.wave\_helper.}}\sphinxbfcode{\sphinxupquote{WaveHelper}}}{\emph{\DUrole{n}{wave\_folder\_path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{harmonics}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{int}}, \emph{\DUrole{n}{undulator}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Explore WAVE simulation folder and gives an easy way to convert energies into filenames
+
+\sphinxAtStartPar
+The class expects the WAVE simulations to be stored in a folder called WAVE.
+For instance for an undulator called ‘U49’ and harmonic=3, this filestructure is expected:
+\begin{itemize}
+\item {} \begin{description}
+\sphinxlineitem{Wave}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+U49H1allrayfiles
+
+\item {} 
+\sphinxAtStartPar
+U49H3allrayfiles
+
+\item {} 
+\sphinxAtStartPar
+U49H5allrayfiles
+
+\end{itemize}
+\begin{description}
+\sphinxlineitem{Args:}
+\sphinxAtStartPar
+wave\_folder\_path (str): the path to the WAVW folder where the WAVE simulations are stored
+harmonics (int): the number of harmonics present.(If harmonics=2, simulations for 1st and 3rd should exist)
+undulator (str): the undulator name as indicated in the simulation folders
+
+\end{description}
+
+\end{description}
+
+\end{itemize}
+\index{convert\_energies\_to\_file\_list() (raypyng.wave\_helper.WaveHelper method)@\spxentry{convert\_energies\_to\_file\_list()}\spxextra{raypyng.wave\_helper.WaveHelper method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{API:raypyng.wave_helper.WaveHelper.convert_energies_to_file_list}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{convert\_energies\_to\_file\_list}}}{\emph{\DUrole{n}{harmonic}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{int}}, \emph{\DUrole{n}{energies}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{list}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Takes the harmonic and a list of energies and returns the files location
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{harmonic}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} the harmonic that you want to have
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{energies}} (\sphinxstyleliteralemphasis{\sphinxupquote{list}}) \textendash{} list of int, the x\sphinxhyphen{}ray energies
+
+\end{itemize}
+
+\sphinxlineitem{Raises}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{ValueError}} \textendash{} If an energy is not present in the WAVE simulation folder.
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+list of absolute paths for each energy given as an input
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+list
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{report\_available\_energies() (raypyng.wave\_helper.WaveHelper method)@\spxentry{report\_available\_energies()}\spxextra{raypyng.wave\_helper.WaveHelper method}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{API:raypyng.wave_helper.WaveHelper.report_available_energies}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{report\_available\_energies}}}{\emph{\DUrole{n}{verbose}\DUrole{o}{=}\DUrole{default_value}{True}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Report about the availbale energies and explore the WAVE folder
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{verbose}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{optional}}) \textendash{} If Ture a report about the neergie is printed. Defaults to True.
+
+\end{description}\end{quote}
 
 \end{fulllineitems}
 

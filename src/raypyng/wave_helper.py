@@ -9,10 +9,12 @@ class WaveHelper():
 
     The class expects the WAVE simulations to be stored in a folder called WAVE. 
     For instance for an undulator called 'U49' and harmonic=3, this filestructure is expected:
-    * Wave
-        *U49H1allrayfiles
-        *U49H3allrayfiles
-        *U49H5allrayfiles
+    
+    Wave
+    ├── U49H1allrayfiles          
+    ├── U49H3allrayfiles          
+    ├── U49H5allrayfiles          
+
 
         Args:
             wave_folder_path (str): the path to the WAVW folder where the WAVE simulations are stored
