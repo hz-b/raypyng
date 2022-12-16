@@ -160,9 +160,8 @@ class XmlElement:
     def __eq__(self, val):
         return self.cdata == val
 
-
     def __hash__(self) -> int:
-        return hash((tuple(self._children),tuple(self._attributes),tuple(self._name)))
+        return hash((frozenset(self._children),frozenset(self._attributes.items()),self._name))
 
     def __dir__(self):
         children_names = [x._name for x in self._children]
