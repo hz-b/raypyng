@@ -272,13 +272,15 @@ class Simulate():
                 self._rml = RMLFile(None,template=rml)
         else:
             raise Exception("rml file must be defined")
-        self.path   = None
-        self.prefix = 'RAYPy_Simulation'
-        self._hide = hide
-        self.analyze = True
-        self._repeat = 1
+        
+        self.path             = None
+        self.prefix           = 'RAYPy_Simulation'
+        self._hide            = hide
+        self.analyze          = True
+        self._repeat          = 1
         self.raypyng_analysis = True
-        self.ray_path = ray_path
+        self.ray_path         = ray_path
+        self.overwrite_rml    = True
 
 
     @property
@@ -518,7 +520,8 @@ class Simulate():
                 rml_path = os.path.join(sim_folder,str(sim_n)+'_'+self.simulation_name+'.rml')
                 for param,value in param_set.items():
                     self.sp._write_value_to_param(param,value)
-                self.rml.write(rml_path)
+                if self.overwrite_rml or os.path.exists(rml_path)==False:
+                    self.rml.write(rml_path)
                 self.sim_list_path.append(rml_path)
                 # is this gonna create problems if I have millions of simulations?
                 result.append(RMLFile(rml_path))
@@ -573,15 +576,17 @@ class Simulate():
             #print('missing_simulations',missing_simulations)
         return missing_simulations
 
-    def run(self,recipe=None,/,multiprocessing=True, force=False):
+    def run(self,recipe=None,/,multiprocessing=True, force=False, overwrite_rml=True):
         """This method starts the simulations. params and exports need to be defined.
 
         Args:
             recipe (SimulationRecipe, optional): If using a recipee pass it as a parameter. Defaults to None.
             multiprocessing (boolint, optional): If True all the cpus are used. If an integer n is provided, n cpus are used. Defaults to True.
             force (bool, optional): If True all the simlations are performed, even if the export files already exist. If False only the simlations for which are missing some exports are performed. Defaults to False.
+            overwrite_rml (bool): if exists, overwrite the rml files, otherwise don't.   Defaults to True
 
-        """             
+        """  
+        self.overwrite_rml = overwrite_rml           
         if recipe is not None:
             if isinstance(recipe,SimulationRecipe):
                 self.params = recipe.params(self)
