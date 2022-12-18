@@ -9,16 +9,16 @@ sim      = Simulate(rml_file, hide=True)
 
 sim.analyze = False
 
-nsim = 1e1
+nsim = 1e3
 
 # correct output using a dirty trick:
-myRecipe = ML(nsim,['DetectorAtFocus'],sim_folder='ELISA_correct', dirty_hack=True)
+#myRecipe = ML(nsim,['DetectorAtFocus'],sim_folder='ELISA_correct', dirty_hack=True)
 
 # buggy output using a dirty trick:
 myRecipe = ML(nsim,['DetectorAtFocus'],sim_folder='ELISA_bug', dirty_hack=False)
 
 # test resolving power simulations
-sim.run(myRecipe, multiprocessing=4, force=False)
+#sim.run(myRecipe, multiprocessing=4, force=False)
 
 
 ############################################
@@ -30,4 +30,4 @@ sim.run(myRecipe, multiprocessing=4, force=False)
 # myRecipe = ML(1e6,['DetectorAtFocus'],sim_folder='ELISA_bug', dirty_hack=True)
 
 # # test resolving power simulations
-# sim.run(myRecipe, multiprocessing=True, force=False)
+sim.run(myRecipe, multiprocessing=8, force=True)

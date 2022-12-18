@@ -22,7 +22,7 @@ class ML(SimulationRecipe):
         self.exports_list = exports
         self.sim_folder = sim_folder
         
-        self.nrays = np.random.uniform(1e3, 1e6+1,self.nsim)
+        self.nrays = np.full(self.nsim,8e6+1)#np.random.uniform(1e3, 1e6+1,self.nsim)
         
         self.cff = np.random.uniform(1.01,5,self.nsim)
 
@@ -50,12 +50,13 @@ class ML(SimulationRecipe):
                 params_dict[self.source.photonEnergy]=self.energy
                 params_dict[self.source.numberRays]=self.nrays
             if hasattr(oe,'translationXerror') and i>0:
-                params_dict[oe.translationXerror] = np.random.uniform(-1,1,self.nsim)
-                params_dict[oe.translationYerror] = np.random.uniform(-1,1,self.nsim)
-                params_dict[oe.translationZerror] = np.random.uniform(-1,1,self.nsim)
-                params_dict[oe.rotationXerror] =  np.random.uniform(-1,1,self.nsim)
-                params_dict[oe.rotationYerror] =  np.random.uniform(-1,1,self.nsim)
-                params_dict[oe.rotationZerror] =  np.random.uniform(-1,1,self.nsim)
+                # fill with a special array value for better debugging
+                params_dict[oe.translationXerror]   = np.full(self.nsim,i/100+0.1)
+                params_dict[oe.translationYerror]   = np.full(self.nsim,i/100+0.2)
+                params_dict[oe.translationZerror]   = np.full(self.nsim,i/100+0.3)
+                params_dict[oe.rotationXerror]      = np.full(self.nsim,i/100+0.4)
+                params_dict[oe.rotationYerror]      = np.full(self.nsim,i/100+0.5)
+                params_dict[oe.rotationZerror]      = np.full(self.nsim,i/100+0.6)
             if hasattr(oe,'cFactor') and i>0:
                 params_dict[oe.cFactor]=self.cff
             if i==6:
