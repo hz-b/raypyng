@@ -157,8 +157,8 @@ class XmlElement:
     def __nonzero__(self):
         return self.is_root or self._name is not None
 
-    def __eq__(self, val):
-        return self.cdata == val
+    # def __eq__(self, val):
+    #     return self.cdata == val
 
     def __hash__(self) -> int:
         return hash((frozenset(self._children),frozenset(self._attributes.items()),self._name))
