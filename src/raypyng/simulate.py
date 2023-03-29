@@ -504,7 +504,10 @@ class Simulate():
         
         It requires the param to be set. Useful if one wants to create the simulation files 
         for a manual check before starting the simulations.
-        """            
+        """
+        print('DEBUG:: start rml_list')
+        import time
+        start_time = time.time()            
         result = []
         self.sim_list_path = []
         self.sim_path = os.path.join(self.path, self.prefix+'_'+self.simulation_name)
@@ -540,6 +543,8 @@ class Simulate():
                     for value in par:
                         line += str(value)+'\t'
                     f.write(line+'\n')  
+        print('DEBUG:: end rml_list')
+        print("--- %s seconds ---" % round((time.time() - start_time),2))
         return result
 
     def compose_exports_list(self, exports_dict_list,/,verbose:bool=True):
