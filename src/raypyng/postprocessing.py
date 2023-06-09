@@ -24,7 +24,7 @@ class RayProperties(np.ndarray):
             if filename is None:
                 input_array = np.zeros(1, dtype=dt)
             else:
-                input_array = np.genfromtxt(filename, dtype=float, delimiter='\t', names=True)
+                input_array = np.genfromtxt(filename, dtype=float, delimiter='\t', names=True,ndmin=1)
         else:
             input_array = input.copy()
             input_array.dtype = dt
