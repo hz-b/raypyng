@@ -33,120 +33,115 @@ class SimulationParams():
             rml (RMLFile/string, optional): string pointing to an rml file with the beamline template, or an RMLFile class object. Defaults to None.
             param_list (list, optional): list of dictionaries containing the parameters and values to simulate. Defaults to None.
         """        
-        if rml is not None:
-            if isinstance(rml,RMLFile):
-                self._rml = rml
-            else: # assume that parameter is the file name as required for RMLFile
-                self._rml = RMLFile(rml,**kwargs)
-        else:
-            raise Exception("rml file must be defined")
-        
-        self.param = param_list
+        self._rml = self._initialize_rml(rml, **kwargs)
+        self.params = param_list or []
+        self.param_to_simulate = []  # Initialize the attribute here
+        self.simulations_param_list = []  # Initialize the attribute here
 
-        
-    @property 
+    def _initialize_rml(self, rml, **kwargs):
+        if rml is None:
+            raise ValueError("An RML file or RMLFile object must be provided.")
+        elif isinstance(rml, RMLFile):
+            return rml
+        elif isinstance(rml, str):
+            return RMLFile(rml, **kwargs)
+        else:
+            raise ValueError(f"The rml should be either a string point to n rml file or an instance of the RMLFile class. You passed a {type(rml)}")
+
+    @property
     def rml(self):
-        """RMLFile object instantiated in init
-        """        
         return self._rml
 
     @property
-    def params(self):   
-        """The parameters to scan, as a list of dictionaries.
-        For each dictionary the keys are the parameters elements of the beamline, and the values are the 
-        values to be assigned.
-        """            
-        return self.param
+    def params(self):
+        return self._params
 
     @params.setter
-    def params(self,value):
-        # self.param must be a list
-        if not isinstance(value, list) == True:
-            raise AssertionError('params must be a list')
-        # every element in the list must be a dictionary
-        for d in value:
-            if not isinstance(d, dict):
-                raise AssertionError('The elements of params must be dictionaries')
-        # the items permitted types are:
-        # int,float,str,np.array
-        # a list of the types above
-        # the output of range, that I still did not understand what it is
-        # in any case at the end we want to have either
-        # a list or a numpy array
-        for d in value:
-            for k in d.keys():
-                if not isinstance(k,ParamElement):
-                    raise AssertionError('The keys of the dictionaries must be instance of ParamElement, while ', k, 'is a ', str(type(k)))
-                if isinstance(d[k], (list)):
-                    pass
-                elif isinstance(d[k], (float, int, str)):
-                    d[k] = [d[k]]
-                else: # this works with range output, but I would like to capture the type..
-                    try:
-                        d[k] = list(d[k])
-                    except TypeError:
-                        raise Exception('The only permitted type are: int, float, str, list, range, np.array, check',d[k]) 
-        self.param = value
+    def params(self, value):
+        self._validate_params(value)
+        self._params = value
+
+    def _validate_params(self, value):
+        if not isinstance(value, list):
+            raise TypeError('params must be a list')
+        for item in value:
+            if not isinstance(item, dict):
+                raise TypeError('Each element in params must be a dictionary')
+            self._validate_param_keys_values(item)
+
+    def _validate_param_keys_values(self, param):
+        for key, value in param.items():
+            if not isinstance(key, ParamElement):
+                raise TypeError(f'Keys must be ParamElement instances, found {type(key)}')
+            self._validate_value_type(param, value, key)
+
+    def _validate_value_type(self, param, value, key):
+        if not isinstance(value, (list, float, int, str)) and not hasattr(value, '__iter__'):
+            raise TypeError(f'Invalid type for parameter {key}: {type(value)}')
+        if not isinstance(value, list):
+            param[key] = [value] if isinstance(value, (float, int, str)) else list(value)
         
     def _extract_param(self, verbose:bool=False):
-        """Parse self.param and extract dependent and independent parameters
-
-        Args:
-            verbose (bool, optional): If True print the returned objects. Defaults to False.
-
-        Returns:
-            self.ind_param_values (list): indieendent parameter values
-            self.ind_par (list): independent parameters
-            self.dep_param_dependency (dict): dictionary of dependencies
-            self.dep_value_dependency (list): dictionaries of dependent values
-            self.dep_par (list): dependent parameters
-
-        """                 
-        self.ind_param_values = []
-        self.ind_par = []
-        self.dep_param_dependency = {}
-        self.dep_value_dependency = []
-        self.dep_par = []
-        # loop over the list of dictionaries
-        for par in self.param:
-            keys_par = list(par.keys())
-            # if there is more than one key, we have an indipendent parameter
-            # and one or more dependent parameters
-            # the dependent param are keys, value and dependency are stored
-            if len(keys_par) > 1:
-                index_param  = 0
-                for dep_param in keys_par:
-                    if dep_param != keys_par[0]:
-                        if len(par[dep_param]) != len(par[keys_par[0]]):
-                            dep_param_string = dep_param.get_full_path().lstrip("lab.beamline.")
-                            indep_param_string = keys_par[0].get_full_path().lstrip("lab.beamline.")
-                            raise AssertionError ('The parameter {} has {} values, but since it depends on {} it \
-                                should have the same number of values, {}'.format(dep_param_string,
-                                                                                len(par[dep_param]),
-                                                                                indep_param_string,
-                                                                                len(par[keys_par[0]])))
-                        index_values = 0
-                        self.dep_param_dependency[dep_param] = keys_par[0]
-                        for dep_value in par[dep_param]:
-                            if index_values == 0:
-                                self.dep_value_dependency.append({par[keys_par[0]][index_values]:dep_value})
-                            else:
-                                self.dep_value_dependency[index_param][par[keys_par[0]][index_values]]=dep_value
-                            index_values += 1
-                        index_param += 1
-            # here we deal with the indipendent parameters
-            self.ind_param_values.append(par[keys_par[0]])
-            self.ind_par.append(keys_par[0])
-            self.dep_par = list(self.dep_param_dependency.keys())
+        """Refactored method to parse and extract parameters."""
+        self._reset_extraction_variables()
+        for parameters_dict in self.params:
+            self._process_parameter_dict(parameters_dict)
         if verbose:
-            print('###########################################')
-            print('self.ind_param_values', self.ind_param_values)
-            print('self.ind_par', self.ind_par)
-            print('###########################################')
-            print('self.dep_param_dependency', self.dep_param_dependency)
-            print('self.dep_value_dependency',self.dep_value_dependency)
-        return (self.ind_param_values,self.ind_par,self.dep_param_dependency,self.dep_value_dependency,self.dep_par)
+            self._print_extraction_results()
+        return self._compilation_results()
 
+    def _reset_extraction_variables(self):
+        """Reset or initialize variables for a new extraction."""
+        self.ind_param_values, self.ind_par = [], []
+        self.dep_param_dependency, self.dep_value_dependency, self.dep_par = {}, [], []
+
+    def _process_parameter_dict(self, parameters_dict):
+        """Process each dictionary of parameters."""
+        keys = list(parameters_dict.keys())
+        if len(keys) > 1:
+            self._handle_dependent_parameters(parameters_dict, keys)
+        else:
+            self._handle_independent_parameter(parameters_dict, keys[0])
+
+    def _handle_dependent_parameters(self, parameters_dict, keys):
+        """Handle parameters with dependencies."""
+        for index, dependent_key in enumerate(keys[1:], start=1):  # Skip the first key, which is independent
+            self._validate_dependency_length(parameters_dict, keys[0], dependent_key)
+            self._store_dependency_info(parameters_dict, keys[0], dependent_key, index)
+
+    def _validate_dependency_length(self, parameters_dict, independent_key, dependent_key):
+        """Ensure dependent parameters match the length of their independent counterparts."""
+        if len(parameters_dict[dependent_key]) != len(parameters_dict[independent_key]):
+            raise ValueError(f"Dependent parameter lengths do not match for {dependent_key}.")
+
+    def _store_dependency_info(self, parameters_dict, independent_key, dependent_key, index):
+        """Store information about dependencies."""
+        for idx, value in enumerate(parameters_dict[dependent_key]):
+            if idx == 0:
+                self.dep_value_dependency.append({parameters_dict[independent_key][idx]: value})
+            else:
+                self.dep_value_dependency[index-1][parameters_dict[independent_key][idx]] = value
+        self.dep_param_dependency[dependent_key] = independent_key
+
+    def _handle_independent_parameter(self, parameters_dict, key):
+        """Handle independent parameters."""
+        self.ind_param_values.append(parameters_dict[key])
+        self.ind_par.append(key)
+
+    def _print_extraction_results(self):
+        """Print the results of the parameter extraction."""
+        print('###########################################')
+        print('Independent parameter values:', self.ind_param_values)
+        print('Independent parameters:', self.ind_par)
+        print('###########################################')
+        print('Dependency dictionary:', self.dep_param_dependency)
+        print('Dependent value dependency:', self.dep_value_dependency)
+
+    def _compilation_results(self):
+        """Compile and return the results of the extraction."""
+        self.dep_par = list(self.dep_param_dependency.keys())
+        return self.ind_param_values, self.ind_par, self.dep_param_dependency, self.dep_value_dependency, self.dep_par
+    
     def _make_dictionary(self, keys, items):
         d = {}
         for v,k in enumerate(keys):
@@ -163,38 +158,49 @@ class SimulationParams():
         return result
 
     def _calc_loop(self, verbose:bool=True):
-        """Calculate the simulations loop.
+        """Refactor to calculate the simulations loop with better structure."""
+        self._prepare_simulation_parameters()
+        self._generate_simulation_combinations()
+        self._append_dependent_parameters_to_combinations()
 
-        Returns:
-            self.param_to_simulate (list): idependent and dependent parameters
-            self.simulations_param_list (list): parameters values for each simulation loop
-        """                
-        self.param_to_simulate = self.ind_par + self.dep_par
-        self.simulations_param_list = []
-        # here we arrange the indipendent parameters in a grid
-        self.loop = list(itertools.product(*self.ind_param_values))
-        
-        # work out where are the parameters on which the dependent parameters depends
-        # make a copy of the dependency dictionary and replace the items with the index in the second step
-        self.dep_param_dependency_index = []
-        for ind,par in enumerate(self.dep_param_dependency.values()):
-            index_par = self.ind_par.index(par)
-            self.dep_param_dependency_index.append(index_par)
-
-        # here we add the dependent parameters
-        for count, loop in enumerate(self.loop):
-            for ind,par in enumerate(self.dep_param_dependency.keys()):
-                to_add = (self.dep_value_dependency[ind][loop[self.dep_param_dependency_index[ind]]],)
-                loop = loop + to_add
-            self.simulations_param_list.append(loop)
-        self.par = self.ind_par + self.dep_par
         if verbose:
-            print('You have defined:')
-            print(len(self.ind_par), ' independent parameters')
-            print(len(self.dep_par), ' dependent parameters or set parameters')
-            print(len(self.simulations_param_list), ' simulations')
-        return (self.param_to_simulate, self.simulations_param_list)
-    
+            self._print_simulation_details()
+
+    def _prepare_simulation_parameters(self):
+        """Prepare the list of parameters to simulate."""
+        self.param_to_simulate = self.ind_par + self.dep_par
+
+    def _generate_simulation_combinations(self):
+        """Generate all possible combinations of independent parameters."""
+        self.loop = list(itertools.product(*self.ind_param_values))
+
+    def _append_dependent_parameters_to_combinations(self):
+        """Append dependent parameters to each combination based on dependencies."""
+        self.simulations_param_list = []
+        dependency_indices = self._get_dependency_indices()
+
+        for combination in self.loop:
+            extended_combination = list(combination)  # Copy to modify
+            for dep_index, dep_par in enumerate(self.dep_param_dependency.keys()):
+                dependent_value = self.dep_value_dependency[dep_index][combination[dependency_indices[dep_index]]]
+                extended_combination.append(dependent_value)
+            self.simulations_param_list.append(tuple(extended_combination))
+
+    def _get_dependency_indices(self):
+        """Get indices of independent parameters that dependent parameters rely on."""
+        return [self.ind_par.index(dep) for dep in self.dep_param_dependency.values()]
+
+    def _print_simulation_details(self):
+        """Print details about the simulations setup."""
+        print('You have defined:')
+        print(f"{len(self.ind_par)} independent parameters")
+        print(f"{len(self.dep_par)} dependent parameters or set parameters")
+        print(f"{len(self.simulations_param_list)} simulations")
+
+    def _compilation_results(self):
+        """Compile and return the results of the calculation."""
+        self.par = self.ind_par + self.dep_par  # Might be redundant if not used elsewhere
+        return self.param_to_simulate, self.simulations_param_list    
     def _check_if_enabled(self, param):
         """Check if a parameter is enabled
 
@@ -505,9 +511,6 @@ class Simulate():
         It requires the param to be set. Useful if one wants to create the simulation files 
         for a manual check before starting the simulations.
         """
-        print('DEBUG:: start rml_list')
-        import time
-        start_time = time.time()            
         result = []
         self.sim_list_path = []
         self.sim_path = os.path.join(self.path, self.prefix+'_'+self.simulation_name)
@@ -543,8 +546,6 @@ class Simulate():
                     for value in par:
                         line += str(value)+'\t'
                     f.write(line+'\n')  
-        print('DEBUG:: end rml_list')
-        print("--- %s seconds ---" % round((time.time() - start_time),2))
         return result
 
     def compose_exports_list(self, exports_dict_list,/,verbose:bool=True):
