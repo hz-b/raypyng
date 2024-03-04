@@ -309,6 +309,7 @@ class Simulate():
         self.ray_path = ray_path  # RAY-UI installation path
         self.overwrite_rml = True  # Overwrite RML files
         self._sim_folder = None  # Simulation folder name
+        self.batch_size = 1000
         
         self._simulation_name = None  # Custom simulation name
         self._exports = []  # Files to export after simulation
@@ -317,7 +318,6 @@ class Simulate():
         self.sim_list_path = []  # Paths to RML files
         self.sim_path = None  # Simulation directory path
         self.durations = []  # Durations of simulations
-        # New variables, initialized to None where not previously specified.
         self.total_duration = None  # Total duration of all simulations
         self.completed_simulations = None  # Count of completed simulations
         self._possible_exports = ['AnglePhiDistribution', # possible exports when RAY-UI analysis is active
@@ -521,10 +521,10 @@ class Simulate():
         """
         if not isinstance(object_element, ObjectElement):
             raise TypeError('Keys of the export dictionary must be instances of ObjectElement.')
-        if isinstance(export_files, str):
-            export_files = [export_files]  # Normalize single string to list
+        if not isinstance(export_files, list):
+            raise ValueError('The exported files should be written as a list')
         if not all(isinstance(file, str) for file in export_files):
-            raise TypeError('Export files must be specified as a string or list of strings.')
+            raise TypeError('Export files must be specified as a list of strings.')
         self._validate_export_files_existence(export_files)
 
     def _validate_export_files_existence(self, export_files):
@@ -718,30 +718,6 @@ class Simulate():
             # Write the formatted row to the TXT file
             txtfile.write(formatted_row + '\n')
 
-    def _append_exports(self, obj_element, file_names):
-        """
-        Appends export configurations to the exports list.
-
-        Args:
-            obj_element (ObjectElement): The simulation object element associated with the export.
-            file_names (str or list): A single file name or a list of file names to export.
-        """
-        if isinstance(file_names, str):
-            file_names = [file_names]  # Normalize to list for uniform processing
-        elif not isinstance(file_names, list):
-            raise ValueError('The exported param can be only str or list of str.')
-
-        for file_name in file_names:
-            self.exports_list.append((obj_element.attributes().original()['name'], file_name))
-
-    def _print_exports(self):
-        """
-        Prints the compiled list of exports.
-        """
-        print('The following will be exported:')
-        for export_name, file_name in self.exports_list:
-            print(export_name, file_name)
-
 
     def _is_simulation_missing(self, sim_index, repeat):
         """
@@ -755,7 +731,7 @@ class Simulate():
         """
         round_folder = 'round_'+str(repeat)
         folder = os.path.join(self._sim_folder, round_folder)
-        for export_config in self._exports_list:  # Corrected from exports_list to _exports_list
+        for export_config in self._exports_list:  
             export_file = os.path.join(folder, f"{sim_index}_{export_config[0]}-{export_config[1]}.csv")
             if not os.path.exists(export_file):
                 return True  # Missing at least one export file
@@ -766,12 +742,13 @@ class Simulate():
         path = os.path.join(self.sim_path, 'round_'+str(round_n))
         for d in self.exports:
             for exp_oe in d.keys():
-                temp_exp_list = []
-                temp_exp_list.append(exp_oe["name"])
-                temp_exp_list.append(d[exp_oe][0])
-                temp_exp_list.append(path)
-                temp_exp_list.append(str(sim_number)+'_')
-            exports_list.append(temp_exp_list)
+                for exp in d[exp_oe]:
+                    temp_exp_list = []
+                    temp_exp_list.append(exp_oe["name"])
+                    temp_exp_list.append(exp)
+                    temp_exp_list.append(path)
+                    temp_exp_list.append(str(sim_number)+'_')
+                    exports_list.append(temp_exp_list)
         return exports_list
 
     
@@ -796,9 +773,10 @@ class Simulate():
         
         # Prepare data for printing
         data = [
-            ["Simulation Info", ""],
-            ["Independent parameters", len(self.sp.ind_par)],
-            ["Dependent parameters", len(self.sp.dep_par)],
+            ["RML File ", os.path.basename(self._rml._template)],
+            ["Simulation Name",self._sim_folder],
+            ["Independent Parameters", len(self.sp.ind_par)],
+            ["Dependent Parameters", len(self.sp.dep_par)],
             ["Rounds of Simulations", self._repeat],
             ["Total Number of Simulations", total_simulations]
         ]
@@ -806,13 +784,12 @@ class Simulate():
         # Determine column widths by the longest item in each column
         col_widths = [max(len(str(item)) for item in col) for col in zip(*data)]
         
-        # Print the header
-        header = data[0]
-        print(f"{header[0]:<{col_widths[0]}} | {header[1]:>{col_widths[1]}}")
-        print("-" * (sum(col_widths) + 3))  # for the separator and spaces
-        
+        print()
+        print('Simulation Info')
+
         # Print the data rows
-        for row in data[1:]:
+        print("-" * (sum(col_widths) + 3))  # for the separator and spaces
+        for row in data[0:]:
             print(f"{row[0]:<{col_widths[0]}} | {row[1]:>{col_widths[1]}}")
 
         print("-" * (sum(col_widths) + 3))  # for the separator and spaces
@@ -882,7 +859,6 @@ class Simulate():
             total_simulations (int): Total number of simulations to be executed.
             pbar (tqdm): Progress bar object for tracking simulation progress.
         """
-        batch_size = 100  # Adjust batch size as needed
         simulations_durations = []  # Track durations of all simulations for average calculation
 
         with ProcessPoolExecutor(max_workers=multiprocessing) as executor:
@@ -893,7 +869,7 @@ class Simulate():
                         self._prepare_and_submit_simulation(params, sim_number, round_number, simulation_params_batch, executor, force)
                     else:
                         pbar.update(1)  # If not missing or forced, update progress bar directly
-                    if len(simulation_params_batch) == batch_size or sim_number == total_simulations - 1:
+                    if len(simulation_params_batch) == self.batch_size or sim_number == total_simulations - 1:
                         self._wait_for_simulation_batch(simulations_durations, simulation_params_batch, executor, pbar)
 
     def _prepare_and_submit_simulation(self, params, sim_number, round_number, simulation_params_batch, executor, force):
@@ -1006,7 +982,7 @@ def run_rml_func(parameters):
         for export_params in exports:
             api.export(*export_params)
             if not analyze and raypyng_analysis:
-                pp.postprocess_RawRays(*export_params, rml_filename)
+                pp.postprocess_RawRays(*export_params, rml_filename, suffix=export_params[1])
     except Exception as e:
         print(f"WARNING! Got exception while processing {rml_filename}, the error was: {e}")
     finally:
