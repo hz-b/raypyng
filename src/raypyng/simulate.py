@@ -10,7 +10,6 @@ from .rml import RMLFile
 from .rml import ObjectElement,ParamElement, BeamlineElement
 from .runner import RayUIAPI,RayUIRunner
 from .recipes import SimulationRecipe
-from .multiprocessing import RunPool
 from .postprocessing import PostProcess
 
 ################################################################
@@ -719,30 +718,6 @@ class Simulate():
             # Write the formatted row to the TXT file
             txtfile.write(formatted_row + '\n')
 
-
-    def compose_exports_list(self, exports_dict_list, verbose:bool=True):
-        """
-        Generates a list of exports based on configurations and prints them if verbose.
-
-        This function iterates over the export configurations provided to the class and
-        compiles a list of tuples specifying the object elements and the associated files
-        to export. It supports exporting single files or lists of files for each object element.
-
-        Args:
-            exports_dict_list (list): A list of dictionaries specifying the exports configuration.
-            verbose (bool, optional): If True, prints the list of exports. Defaults to True.
-        
-        Raises:
-            ValueError: If an export configuration is neither a string nor a list of strings.
-        """
-        self.exports_list = []
-        for export_config in self.exports:
-            for obj_element, file_names in export_config.items():
-                self._append_exports(obj_element, file_names)
-
-        if verbose:
-            self._print_exports()
-
     def _append_exports(self, obj_element, file_names):
         """
         Appends export configurations to the exports list.
@@ -816,7 +791,7 @@ class Simulate():
         progress_bar = tqdm(total=total_simulations, bar_format=bar_format, desc="Simulations Completed")
         return progress_bar
     
-    def print_simulations_info(self):
+    def _print_simulations_info(self):
         total_simulations = self.sp._calc_number_sim() * self.repeat
         
         # Prepare data for printing
@@ -845,63 +820,134 @@ class Simulate():
 
 
     def run(self, recipe=None, multiprocessing=1, force=False, overwrite_rml=True):
+        """
+        Execute simulations with optional recipe, multiprocessing, and file management options.
+
+        This method orchestrates the setup and execution of simulations, managing multiprocessing,
+        file generation, and progress tracking.
+
+        Args:
+            recipe (SimulationRecipe, optional): Recipe for simulation setup. Defaults to None.
+            multiprocessing (int, optional): Number of processes for parallel execution. Defaults to 1.
+            force (bool, optional): Force re-execution of simulations. Defaults to False.
+            overwrite_rml (bool, optional): Overwrite existing RML files. Defaults to True.
+        """
         if not isinstance(multiprocessing, int) or multiprocessing < 1:
             raise ValueError("The 'multiprocessing' argument must be an integer greater than 0.")
-        self.print_simulations_info()
+        
+        self._prepare_simulation_environment(recipe, overwrite_rml)
+        total_simulations = self.sp._calc_number_sim() * self.repeat
+        self._handle_simulation_recap_files(force, total_simulations)
+
+        pbar = self._initialize_progress_bar(total_simulations)
+        self._execute_simulations(multiprocessing, force, total_simulations, pbar)
+        pbar.close()
+
+    def _prepare_simulation_environment(self, recipe, overwrite_rml):
+        """
+        Prepares the simulation environment based on a given recipe and file management options.
+
+        Args:
+            recipe (SimulationRecipe, optional): Recipe for simulation setup. Defaults to None.
+            overwrite_rml (bool, optional): Overwrite existing RML files. Defaults to True.
+        """
+        self._print_simulations_info()
         self.overwrite_rml = overwrite_rml
         self._setup_simulation_environment(recipe)
         self._initialize_simulation_directory()
         self._save_parameters_to_file(self.sim_path)
-        total_simulations = self.sp._calc_number_sim() * self.repeat
-        
 
-        batch_size = 10000  # Define the size of each batch
+    def _handle_simulation_recap_files(self, force, total_simulations):
+        """
+        Manages recap files based on simulation settings.
+
+        Args:
+            force (bool): Force re-execution of simulations and potential recap file updates.
+            total_simulations (int): Total number of simulations to be executed.
+        """
+        n_sim_max_for_looper = 1e7
+        if total_simulations <= n_sim_max_for_looper:
+            for params in self.sp.simulation_parameters_generator():
+                # Corrected the call to match the expected method signature
+                self._update_simulation_recap_files(params, 0)
+
+
+    def _execute_simulations(self, multiprocessing, force, total_simulations, pbar):
+        """
+        Executes the simulations in batches with multiprocessing support.
+
+        Args:
+            multiprocessing (int): Number of processes for parallel execution.
+            force (bool): Force re-execution of simulations.
+            total_simulations (int): Total number of simulations to be executed.
+            pbar (tqdm): Progress bar object for tracking simulation progress.
+        """
+        batch_size = 100  # Adjust batch size as needed
         simulations_durations = []  # Track durations of all simulations for average calculation
-        
-        if force or overwrite_rml:
-            recap_csv_path = os.path.join(self.sim_path, 'looper.csv')
-            os.remove(recap_csv_path)
-            recap_txt_path = os.path.join(self.sim_path, 'looper.txt')
-            os.remove(recap_txt_path)
-        
-        pbar = self._initialize_progress_bar(total_simulations)
 
         with ProcessPoolExecutor(max_workers=multiprocessing) as executor:
             simulation_params_batch = []
             for round_number in range(self.repeat):
-                sim_number = 0
-                for params in self.sp.simulation_parameters_generator():
+                for sim_number, params in enumerate(self.sp.simulation_parameters_generator()):
                     if self._is_simulation_missing(sim_number, round_number) or force:
-                        rml_file_path = self._generate_rml_file(sim_number, round_number, params)
-                        exp_list = self._make_exports_list(sim_number, round_number)
-                        simulation_params = ((rml_file_path, self._hide, self.analyze, self.raypyng_analysis, self.ray_path), exp_list)
-                        simulation_params_batch.append(simulation_params)
-                        self._update_simulation_recap_files(params, sim_number)
-
-                        # Submit batch when it reaches the batch size or at the end of the list
-                        if len(simulation_params_batch) == batch_size or sim_number == total_simulations - 1:
-                            futures = {executor.submit(run_rml_func, sim_params): sim_params for sim_params in simulation_params_batch}
-                            for future in as_completed(futures):
-                                try:
-                                    sim_duration = future.result()
-                                    simulations_durations.append(sim_duration)
-                                    # Update progress bar after each simulation
-                                    avg_duration = sum(simulations_durations) / len(simulations_durations)
-                                    last_duration = simulations_durations[-1]
-                                    remaining_simulations = total_simulations - pbar.n
-                                    eta_seconds = avg_duration * remaining_simulations /multiprocessing
-                                    eta_str = self._format_eta(eta_seconds)
-                                    pbar.set_postfix_str(f"ETA: {eta_str}, Last: {last_duration:.2f}s, Avg: {avg_duration:.2f}s/it", refresh=True)
-                                    pbar.update(1)
-                                except Exception as e:
-                                    print(f"Exception during simulation: {e}")
-                            simulation_params_batch = []  # Reset batch for next set of simulations
+                        self._prepare_and_submit_simulation(params, sim_number, round_number, simulation_params_batch, executor, force)
                     else:
                         pbar.update(1)  # If not missing or forced, update progress bar directly
-                    sim_number += 1
+                    if len(simulation_params_batch) == batch_size or sim_number == total_simulations - 1:
+                        self._wait_for_simulation_batch(simulations_durations, simulation_params_batch, executor, pbar)
 
-        pbar.close()
-        return True
+    def _prepare_and_submit_simulation(self, params, sim_number, round_number, simulation_params_batch, executor, force):
+        """
+        Prepares and submits a single simulation for execution.
+
+        Args:
+            params (dict): Parameters for the current simulation.
+            sim_number (int): Simulation number within the current batch.
+            round_number (int): Current round of simulations.
+            simulation_params_batch (list): Batch of simulation parameters for submission.
+            executor (ProcessPoolExecutor): Executor for multiprocessing.
+            force (bool): Force re-execution of simulations.
+        """
+        rml_file_path = self._generate_rml_file(sim_number, round_number, params)
+        exp_list = self._make_exports_list(sim_number, round_number)
+        simulation_params = ((rml_file_path, self._hide, self.analyze, self.raypyng_analysis, self.ray_path), exp_list)
+        simulation_params_batch.append(simulation_params)
+
+    def _wait_for_simulation_batch(self, simulations_durations, simulation_params_batch, executor, pbar):
+        """
+        Waits for a batch of simulations to complete and updates the progress bar.
+
+        Args:
+            simulations_durations (list): List to track durations of completed simulations.
+            simulation_params_batch (list): Batch of simulation parameters that were submitted.
+            executor (ProcessPoolExecutor): Executor for multiprocessing.
+            pbar (tqdm): Progress bar object for tracking simulation progress.
+        """
+        futures = {executor.submit(run_rml_func, sim_params): sim_params for sim_params in simulation_params_batch}
+        for future in as_completed(futures):
+            try:
+                sim_duration = future.result()
+                simulations_durations.append(sim_duration)
+                self._update_progress_bar(simulations_durations, pbar)
+            except Exception as e:
+                print(f"Exception during simulation: {e}")
+        simulation_params_batch.clear()  # Reset batch for next set of simulations
+
+    def _update_progress_bar(self, simulations_durations, pbar):
+        """
+        Updates the progress bar based on completed simulations.
+
+        Args:
+            simulations_durations (list): List of durations for completed simulations.
+            pbar (tqdm): Progress bar object for tracking simulation progress.
+        """
+        avg_duration = sum(simulations_durations) / len(simulations_durations)
+        last_duration = simulations_durations[-1]
+        remaining_simulations = pbar.total - pbar.n
+        eta_seconds = avg_duration * remaining_simulations
+        eta_str = self._format_eta(eta_seconds)
+        pbar.set_postfix_str(f"ETA: {eta_str}, Last: {last_duration:.2f}s, Avg: {avg_duration:.2f}s/it", refresh=True)
+        pbar.update(1)
 
     def _setup_simulation_environment(self, recipe):
         """
