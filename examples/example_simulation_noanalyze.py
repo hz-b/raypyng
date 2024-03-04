@@ -42,7 +42,7 @@ sim.analyze = False # don't let RAY-UI analyze the results
 sim.raypyng_analysis=True # let raypyng analyze the results
 
 ## This must be a list of dictionaries
-sim.exports  =  [{elisa.Dipole:'RawRaysOutgoing'},
+sim.exports  =  [{elisa.Dipole:['RawRaysOutgoing']},
                 {elisa.DetectorAtFocus:['RawRaysOutgoing']}
                 ]
 
