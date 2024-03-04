@@ -14,28 +14,26 @@ from .postprocessing import PostProcess
 
 ################################################################
 class SimulationParams():
-    """The entry point of the simulation parameters.
-    
-    A class that takes care of the simulations parameters, 
-    makes sure that they are written correctly,
-    and returns the the list of simulations that is requested by the user.
+    """Handles the setup and management of simulation parameters for RAY-UI simulations.
 
-    Args:
-        rml (RMLFile/string, optional): string pointing to an rml 
-                                        file with the beamline template, 
-                                        or an RMLFile class object. 
-                                        Defaults to None.
-        param_list (list, optional): list of dictionaries containing the 
-                                     parameters and values to simulate. 
-                                     Defaults to None.            
-    """    
+    This class is responsible for organizing simulation parameters, both independent and dependent,
+    and generating the necessary parameter sets for conducting simulations.
+
+    Attributes:
+        rml (RMLFile or str): The RML file or the path to the RML file used as the template for simulations.
+        params (list of dict): A list of dictionaries where each dictionary represents a set of parameters
+                               to simulate. Each key in the dictionary is a ParamElement, and its value
+                               is the parameter value(s) to simulate.
+    """
+    
     def __init__(self, rml=None, param_list=None,**kwargs) -> None:
-        """ 
+        """Initializes the SimulationParams class with a RML file and a list of parameter dictionaries.
+
         Args:
-            rml (RMLFile/string, optional): string pointing to an rml file with the beamline template, or an RMLFile class object. Defaults to None.
-            param_list (list, optional): list of dictionaries containing the parameters and values to simulate. Defaults to None.
+            rml (RMLFile or str, optional): The RML file or the path to the RML file used as the template for simulations.
+            param_list (list of dict, optional): A list of dictionaries where each dictionary represents a set of parameters
+                                                  to simulate. Defaults to None.
         """        
-       
         self._rml = self._initialize_rml(rml, **kwargs)  # Initializes the RML file or RMLFile object
         self.params = param_list or []  # List of dictionaries for parameters to simulate
         self.param_to_simulate = []  # List of parameters to be simulated
@@ -49,6 +47,14 @@ class SimulationParams():
         self.par = None  # Compiled result of parameters for simulation
 
     def _initialize_rml(self, rml, **kwargs):
+        """Initializes the RML file or RMLFile object based on the provided RML path or object.
+
+        Args:
+            rml (RMLFile or str): The RML file or the path to the RML file used as the template for simulations.
+
+        Returns:
+            RMLFile: An initialized RMLFile object.
+        """
         if rml is None:
             raise ValueError("An RML file or RMLFile object must be provided.")
         elif isinstance(rml, RMLFile):
@@ -72,6 +78,14 @@ class SimulationParams():
         self._params = value
 
     def _validate_params(self, value):
+        """Validates the input parameter list to ensure it is in the correct format.
+
+        Args:
+            value (list): The parameter list to be validated.
+
+        Raises:
+            TypeError: If the input value is not a list or if the elements of the list are not dictionaries.
+        """
         if not isinstance(value, list):
             raise TypeError('params must be a list')
         for item in value:
@@ -80,6 +94,14 @@ class SimulationParams():
             self._validate_param_keys_values(item)
 
     def _validate_param_keys_values(self, param):
+        """Validates the keys and values of a parameter dictionary.
+
+        Args:
+            param (dict): The parameter dictionary to be validated.
+
+        Raises:
+            TypeError: If the keys are not instances of ParamElement or if the values are not valid types.
+        """
         for key, value in param.items():
             if not isinstance(key, ParamElement):
                 raise TypeError(f'Keys must be ParamElement instances, found {type(key)}')
@@ -92,7 +114,14 @@ class SimulationParams():
             param[key] = [value] if isinstance(value, (float, int, str)) else list(value)
         
     def _extract_param(self, verbose:bool=False):
-        """Refactored method to parse and extract parameters."""
+        """Extracts and organizes parameters from the input parameter list.
+
+        Args:
+            verbose (bool, optional): If set to True, prints the results of the parameter extraction. Defaults to False.
+
+        Returns:
+            tuple: A tuple containing the organized parameters and their values.
+        """
         self._reset_extraction_variables()
         for parameters_dict in self.params:
             self._process_parameter_dict(parameters_dict)
@@ -157,12 +186,6 @@ class SimulationParams():
             d.update({k:items[v]})
         return d
 
-    def params_list(self, obj=None):
-        result = []
-        for i in self.simulations_param_list:
-            result.append(self._make_dictionary(self.param_to_simulate, i))
-        return result
-
     def _calc_loop(self, verbose:bool=True):
         """Refactor to calculate the simulations loop with better structure."""
         self._prepare_simulation_parameters()
@@ -197,6 +220,7 @@ class SimulationParams():
         """Compile and return the results of the calculation."""
         self.par = self.ind_par + self.dep_par  # Might be redundant if not used elsewhere
         return self.param_to_simulate, self.simulations_param_list    
+    
     def _check_if_enabled(self, param):
         """Check if a parameter is enabled
 
@@ -221,7 +245,6 @@ class SimulationParams():
         except AttributeError:
             pass
 
-
     def _write_value_to_param(self, param, value):
         """Write a value to a parameter. 
         
@@ -238,14 +261,22 @@ class SimulationParams():
         param.cdata = value
     
     def _calc_number_sim(self):
+        """Calculates the total number of simulations based on the provided parameters.
+
+        Returns:
+            int: The total number of simulations.
+        """
         from functools import reduce
         from operator import mul
         sim_per_round = reduce(mul, (len(values) for values in self.ind_param_values), 1)    
         return sim_per_round
   
     def simulation_parameters_generator(self):
-        """Yield parameters for each simulation as a dictionary."""
-        # Generate all possible combinations of independent parameters
+        """Generates a dictionary of parameters for each simulation based on the input parameter list.
+
+        Yields:
+            dict: A dictionary of parameters for a single simulation.
+        """        # Generate all possible combinations of independent parameters
         for combination in itertools.product(*self.ind_param_values):
             simulation_params = {}
             # Combine independent parameters with their values
@@ -640,21 +671,6 @@ class Simulate():
             if not os.path.exists(round_folder_path):
                 os.makedirs(round_folder_path)
 
-    def _create_simulation_round_folder(self, round_number):
-        """
-        Creates a folder for each round of simulations.
-
-        Args:
-            round_number (int): The current round number of the simulation.
-
-        Returns:
-            str: The path to the created simulation round folder.
-        """
-        sim_folder = os.path.join(self.sim_path, f"round_{round_number}")
-        if not os.path.exists(sim_folder):
-            os.makedirs(sim_folder)
-        return sim_folder
-
     def _generate_rml_file(self, sim_number,round_n, param_set):
         """
         Generates an RML file for a given simulation setup.
@@ -828,11 +844,11 @@ class Simulate():
             recipe (SimulationRecipe, optional): Recipe for simulation setup. Defaults to None.
             overwrite_rml (bool, optional): Overwrite existing RML files. Defaults to True.
         """
-        self._print_simulations_info()
         self.overwrite_rml = overwrite_rml
         self._setup_simulation_environment(recipe)
         self._initialize_simulation_directory()
         self._save_parameters_to_file(self.sim_path)
+        self._print_simulations_info()
 
     def _handle_simulation_recap_files(self, force, total_simulations):
         """
@@ -938,6 +954,7 @@ class Simulate():
         if recipe:
             if not isinstance(recipe, SimulationRecipe):
                 raise TypeError("Unsupported type of the recipe!")
+            print('recipe')
             self.params = recipe.params(self)
             self.exports = recipe.exports(self)
             self.simulation_name = recipe.simulation_name(self)
