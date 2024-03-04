@@ -149,7 +149,7 @@ class PostProcess():
                     break
         return self.source.photonFlux.cdata, self.source.numberRays.cdata
     
-    def postprocess_RawRays(self,exported_element:str=None, exported_object:str=None, dir_path:str=None, sim_number:str=None, rml_filename:str=None):
+    def postprocess_RawRays(self,exported_element:str=None, exported_object:str=None, dir_path:str=None, sim_number:str=None, rml_filename:str=None, suffix:str=None):
         """ PostProcess rountine of the RawRaysOutgoing extracted files.
 
         The method looks in the folder dir_path for a file with the filename:
@@ -164,6 +164,11 @@ class PostProcess():
             dir_path (str, optional): the folder where the file to process is located. Defaults to None.
             sim_number (str, optional): the prefix of the file, that is the simulation number with a _prepended, ie `0_`. Defaults to None.
         """        
+        if suffix == None:
+            suffix = ''
+        else:
+            if suffix[0] != '_':
+                suffix = '_'+suffix
         source_photon_flux, source_n_rays  = self.extract_nrays_from_source(rml_filename)
         
         source_photon_flux = float(source_photon_flux)
@@ -187,7 +192,7 @@ class PostProcess():
             ray_properties['HorizontalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OX'])
             ray_properties['VerticalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OY'])
         
-        new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays.dat')
+        new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays'+suffix+'.dat')
         #self._save_file(new_filename, ray_properties)
         ray_properties.save(new_filename)
         return 
