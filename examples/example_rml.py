@@ -1,5 +1,4 @@
 from raypyng.rml import RMLFile
-import numpy as np
 import os
 
 
