@@ -1,4 +1,4 @@
-from raypyng import Simulate, multiprocessing
+from raypyng import Simulate
 import numpy as np
 import os
 
