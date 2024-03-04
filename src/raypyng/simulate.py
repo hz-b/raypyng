@@ -1,10 +1,13 @@
-import raypyng
-from .rml import RMLFile
-from .rml import ObjectElement,ParamElement, BeamlineElement
 import itertools
 import os 
 import numpy as np
+from tqdm import tqdm
+import time
+import csv
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
+from .rml import RMLFile
+from .rml import ObjectElement,ParamElement, BeamlineElement
 from .runner import RayUIAPI,RayUIRunner
 from .recipes import SimulationRecipe
 from .multiprocessing import RunPool
@@ -33,10 +36,18 @@ class SimulationParams():
             rml (RMLFile/string, optional): string pointing to an rml file with the beamline template, or an RMLFile class object. Defaults to None.
             param_list (list, optional): list of dictionaries containing the parameters and values to simulate. Defaults to None.
         """        
-        self._rml = self._initialize_rml(rml, **kwargs)
-        self.params = param_list or []
-        self.param_to_simulate = []  # Initialize the attribute here
-        self.simulations_param_list = []  # Initialize the attribute here
+       
+        self._rml = self._initialize_rml(rml, **kwargs)  # Initializes the RML file or RMLFile object
+        self.params = param_list or []  # List of dictionaries for parameters to simulate
+        self.param_to_simulate = []  # List of parameters to be simulated
+        self.simulations_param_list = []  # List of simulations based on the parameters
+        self.ind_param_values = []  # Independent parameter values for simulations
+        self.ind_par = []  # Independent parameters
+        self.dep_param_dependency = {}  # Dependencies between parameters
+        self.dep_value_dependency = []  # Values dependent on other parameters
+        self.dep_par = []  # Dependent parameters
+        self.loop = []  # Product of independent parameter values for generating simulations
+        self.par = None  # Compiled result of parameters for simulation
 
     def _initialize_rml(self, rml, **kwargs):
         if rml is None:
@@ -130,12 +141,8 @@ class SimulationParams():
 
     def _print_extraction_results(self):
         """Print the results of the parameter extraction."""
-        print('###########################################')
-        print('Independent parameter values:', self.ind_param_values)
-        print('Independent parameters:', self.ind_par)
-        print('###########################################')
-        print('Dependency dictionary:', self.dep_param_dependency)
-        print('Dependent value dependency:', self.dep_value_dependency)
+        print('Independent parameters:', len(self.ind_par))
+        print('Dependent parameters:', len(self.dep_par))
 
     def _compilation_results(self):
         """Compile and return the results of the extraction."""
@@ -163,9 +170,6 @@ class SimulationParams():
         self._generate_simulation_combinations()
         self._append_dependent_parameters_to_combinations()
 
-        if verbose:
-            self._print_simulation_details()
-
     def _prepare_simulation_parameters(self):
         """Prepare the list of parameters to simulate."""
         self.param_to_simulate = self.ind_par + self.dep_par
@@ -189,13 +193,6 @@ class SimulationParams():
     def _get_dependency_indices(self):
         """Get indices of independent parameters that dependent parameters rely on."""
         return [self.ind_par.index(dep) for dep in self.dep_param_dependency.values()]
-
-    def _print_simulation_details(self):
-        """Print details about the simulations setup."""
-        print('You have defined:')
-        print(f"{len(self.ind_par)} independent parameters")
-        print(f"{len(self.dep_par)} dependent parameters or set parameters")
-        print(f"{len(self.simulations_param_list)} simulations")
 
     def _compilation_results(self):
         """Compile and return the results of the calculation."""
@@ -240,6 +237,29 @@ class SimulationParams():
         if not isinstance(value,str):
             value = str(value)
         param.cdata = value
+    
+    def _calc_number_sim(self):
+        from functools import reduce
+        from operator import mul
+        sim_per_round = reduce(mul, (len(values) for values in self.ind_param_values), 1)    
+        return sim_per_round
+  
+    def simulation_parameters_generator(self):
+        """Yield parameters for each simulation as a dictionary."""
+        # Generate all possible combinations of independent parameters
+        for combination in itertools.product(*self.ind_param_values):
+            simulation_params = {}
+            # Combine independent parameters with their values
+            for param, value in zip(self.ind_par, combination):
+                simulation_params[param] = value
+            # Append dependent parameters based on the current combination
+            for dep_param in self.dep_par:
+                ind_param = self.dep_param_dependency[dep_param]
+                ind_param_index = self.ind_par.index(ind_param)
+                ind_param_value = combination[ind_param_index]
+                dependent_value = self.dep_value_dependency[self.dep_par.index(dep_param)][ind_param_value]
+                simulation_params[dep_param] = dependent_value
+            yield simulation_params
 
 ################################################################
 class Simulate():
@@ -279,24 +299,29 @@ class Simulate():
         else:
             raise Exception("rml file must be defined")
         
-        self.path             = None
-        self.prefix           = 'RAYPy_Simulation'
-        self._hide            = hide
-        self.analyze          = True
-        self._repeat          = 1
-        self.raypyng_analysis = True
-        self.ray_path         = ray_path
-        self.overwrite_rml    = True
 
-
-    @property
-    def possible_exports(self):
-        """A list of the files that can be exported by RAY-UI
-
-        Returns:
-            list: list of the names of the possible exports for RAY-UI
-        """        
-        self._possible_exports = ['AnglePhiDistribution',
+        self._rml = rml if isinstance(rml, RMLFile) else RMLFile(None, template=rml) if rml else None
+        self.path = None  # Path for simulation execution
+        self.prefix = 'RAYPy_Simulation'  # Simulation prefix
+        self._hide = hide  # Hide GUI leftovers
+        self.analyze = True  # Enable RAY-UI analysis
+        self._repeat = 1  # Number of simulation repeats
+        self.raypyng_analysis = True  # Enable RAYPyNG analysis
+        self.ray_path = ray_path  # RAY-UI installation path
+        self.overwrite_rml = True  # Overwrite RML files
+        self._sim_folder = None  # Simulation folder name
+        
+        self._simulation_name = None  # Custom simulation name
+        self._exports = []  # Files to export after simulation
+        self._exports_list = []  # Processed list of exports
+        self.sp = None  # SimulationParams instance
+        self.sim_list_path = []  # Paths to RML files
+        self.sim_path = None  # Simulation directory path
+        self.durations = []  # Durations of simulations
+        # New variables, initialized to None where not previously specified.
+        self.total_duration = None  # Total duration of all simulations
+        self.completed_simulations = None  # Count of completed simulations
+        self._possible_exports = ['AnglePhiDistribution', # possible exports when RAY-UI analysis is active
                                 'AnglePsiDistribution',
                                 'BeamPropertiesPlotSnapshot',
                                 'EnergyDistribution',
@@ -315,6 +340,17 @@ class Simulate():
                                 'ScalarBeamProperties',
                                 'ScalarElementProperties'
                              ]
+        self._possible_exports_without_analysis = ['RawRaysIncoming', # possible exports when RAY-UI analysis is not active
+                                'RawRaysOutgoing'
+                             ]
+
+    @property
+    def possible_exports(self):
+        """A list of the files that can be exported by RAY-UI
+
+        Returns:
+            list: list of the names of the possible exports for RAY-UI
+        """        
         return self._possible_exports
     
     @property
@@ -325,9 +361,6 @@ class Simulate():
         Returns:
             list: list of the names of the possible exports for RAY-UI when analysis is off
         """        
-        self._possible_exports_without_analysis = ['RawRaysIncoming',
-                                'RawRaysOutgoing'
-                             ]
         return self._possible_exports_without_analysis
 
     @property 
@@ -345,6 +378,7 @@ class Simulate():
     @simulation_name.setter
     def simulation_name(self,value):
         self._simulation_name = value
+        self._sim_folder = self.prefix+'_'+self._simulation_name
 
     @property 
     def analyze(self):
@@ -541,16 +575,13 @@ class Simulate():
     @params.setter
     def params(self,value):
         if not isinstance(value, SimulationParams):
-            #raise AssertionError('Params must be an instance of SimulationParams, while it is', type(params))
-            sp = SimulationParams(self.rml)
-            sp.params = value
-            self.sp = sp
+            self.sp = SimulationParams(self.rml)
+            self.sp.params = value
         else:
             self.sp = value
         _ = self.sp._extract_param(verbose=False)
-        _ =self.sp._calc_loop()
 
-    def save_parameters_to_file(self, dir):
+    def _save_parameters_to_file(self, dir):
         """Save user input parameters to file. 
         
         It takes the values from the SimulationParams class
@@ -558,7 +589,6 @@ class Simulate():
         Args:
             dir (str): the folder where to save the parameters
         """        
-        # do it first for indipendent parameters
         for i,p in enumerate(self.sp.ind_par):
             filename = str(p.get_full_path().lstrip("lab.beamline."))
             filename = "input_param_"+filename.replace(".", "_")
@@ -570,22 +600,35 @@ class Simulate():
             filename += ".dat"
             np.savetxt(os.path.join(dir,filename),list(self.sp.dep_value_dependency[i].values()))
     
-    def rml_list(self):
+    def rml_list(self, recipe=None, overwrite_rml=True):
         """
-        Creates the folder structure and RML files needed for simulation.
+        Creates the folder structure and RML files needed for simulation. This method organizes simulation parameters into RML files and prepares the directory structure for simulations, which is useful for pre-simulation checks and manual adjustments.
 
-        This function organizes simulation parameters into RML files and
-        prepares the directory structure for simulations. It's useful for
-        pre-simulation checks and manual adjustments.
+        Args:
+            recipe (SimulationRecipe, optional): Recipe to use for setting up the simulation. Defaults to None.
+            overwrite_rml (bool, optional): If True, existing RML files will be overwritten. Defaults to True.
 
-        Returns:
-            list: A list of RMLFile objects representing the simulations to run.
         """
+        self.overwrite_rml = overwrite_rml
+        self._setup_simulation_environment(recipe)
         self._initialize_simulation_directory()
-        self.save_parameters_to_file(self.sim_path)
-        result = self._generate_rml_files_for_each_round()
-        self._create_simulation_recap_files()
-        return result
+
+        if overwrite_rml:
+            recap_csv_path = os.path.join(self.sim_path, 'looper.csv')
+            if os.path.exists(recap_csv_path):
+                os.remove(recap_csv_path)
+            recap_txt_path = os.path.join(self.sim_path, 'looper.txt')
+            if os.path.exists(recap_txt_path):
+                os.remove(recap_txt_path)
+        
+        for round_number in range(self.repeat):
+            sim_number = 0
+            for params in self.sp.simulation_parameters_generator():
+                _ = self._generate_rml_file(sim_number, round_number, params)
+                if round_number==0:
+                    self._update_simulation_recap_files(params, sim_number)
+                sim_number += 1
+        self._save_parameters_to_file(self.sim_path)
 
     def _initialize_simulation_directory(self):
         """Initializes the directory structure for simulations."""
@@ -593,16 +636,10 @@ class Simulate():
         self.sim_path = os.path.join(self.path, f"{self.prefix}_{self.simulation_name}")
         if not os.path.exists(self.sim_path):
             os.makedirs(self.sim_path)
-
-    def _generate_rml_files_for_each_round(self):
-        """Generates RML files for each simulation round."""
-        result = []
-        for round_number in range(self.repeat):
-            sim_folder = self._create_simulation_round_folder(round_number)
-            for sim_number, param_set in enumerate(self.sp.params_list()):
-                rml_path = self._generate_rml_file(sim_folder, sim_number, param_set)
-                result.append(RMLFile(rml_path))
-        return result
+        for round_n in range(self.repeat):
+            round_folder_path = os.path.join(self.sim_path, 'round_'+str(round_n))
+            if not os.path.exists(round_folder_path):
+                os.makedirs(round_folder_path)
 
     def _create_simulation_round_folder(self, round_number):
         """
@@ -619,7 +656,7 @@ class Simulate():
             os.makedirs(sim_folder)
         return sim_folder
 
-    def _generate_rml_file(self, sim_folder, sim_number, param_set):
+    def _generate_rml_file(self, sim_number,round_n, param_set):
         """
         Generates an RML file for a given simulation setup.
 
@@ -631,7 +668,9 @@ class Simulate():
         Returns:
             str: The path to the generated RML file.
         """
-        rml_path = os.path.join(sim_folder, f"{sim_number}_{self.simulation_name}.rml")
+        round_folder = 'round_'+str(round_n)
+        rml_path = os.path.join(self._sim_folder, round_folder,f"{sim_number}_{self.simulation_name}.rml")
+        
         for param, value in param_set.items():
             self.sp._write_value_to_param(param, value)
         if self.overwrite_rml or not os.path.exists(rml_path):
@@ -639,15 +678,46 @@ class Simulate():
         self.sim_list_path.append(rml_path)
         return rml_path
 
-    def _create_simulation_recap_files(self):
-        """Creates recap CSV files summarizing the simulations for each round."""
-        for sim_folder in set(os.path.dirname(path) for path in self.sim_list_path):
-            with open(os.path.join(sim_folder, 'looper.csv'), 'w') as f:
-                header = 'n\t' + '\t'.join(par.get_full_path().lstrip("lab.beamline.") for par in self.sp.param_to_simulate) + '\n'
-                f.write(header)
-                for ind, par in enumerate(self.sp.simulations_param_list):
-                    line = f'{ind}\t' + '\t'.join(str(value) for value in par) + '\n'
-                    f.write(line)
+    def _update_simulation_recap_files(self, params, simulation_number):
+        """Updates or creates recap CSV and TXT files summarizing the simulations.
+        
+        Args:
+            params (list): The parameters for the current simulation batch.
+            simulation_number (int): The number of the simulation being processed.
+        """
+        # Paths for the recap files in the main simulation directory
+        recap_csv_path = os.path.join(self.sim_path, 'looper.csv')
+        recap_txt_path = os.path.join(self.sim_path, 'looper.txt')
+
+        # Check if the files exist to determine if headers need to be written
+        csv_file_exists = os.path.exists(recap_csv_path)
+        txt_file_exists = os.path.exists(recap_txt_path)
+        
+        # Prepare data for CSV and TXT files
+        header = ['Simulation Number'] + [f"{param._parent['name']}.{param['id']}" for param in params]
+        row = [str(simulation_number)] + [param.cdata for param in params]
+        
+        # Update CSV file
+        with open(recap_csv_path, 'a', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            if not csv_file_exists:
+                writer.writerow(header)
+            writer.writerow(row)
+        
+        # Prepare and update TXT file with nice formatting
+        with open(recap_txt_path, 'a') as txtfile:
+            if not txt_file_exists:
+                # Write header with nice formatting
+                txtfile.write(' '.join(header) + '\n')
+            
+            # Determine the maximum width for each column
+            column_widths = [max(len(str(simulation_number)), max(len(h), max(len(str(r)) for r in row))) for h, r in zip(header, row)]
+            
+            # Format row with aligned columns
+            formatted_row = ' '.join(str(r).ljust(w) for r, w in zip(row, column_widths))
+            
+            # Write the formatted row to the TXT file
+            txtfile.write(formatted_row + '\n')
 
 
     def compose_exports_list(self, exports_dict_list, verbose:bool=True):
@@ -698,46 +768,7 @@ class Simulate():
             print(export_name, file_name)
 
 
-    def check_simulations(self, verbose:bool=True, force:bool=False):
-        """
-        Checks for simulations that have not been completed or are missing exports.
-
-        This function iterates through the list of simulations, checking if the expected
-        export files exist. If files are missing for a simulation, it's considered missing.
-
-        Args:
-            verbose (bool, optional): If True, prints the number of simulations still to do.
-            force (bool, optional): If True, considers all simulations as missing regardless of existing files.
-
-        Returns:
-            dict: A dictionary mapping from simulation index to the simulation object for all missing simulations.
-        """
-        if force:
-            return {k: v for k, v in enumerate(self.rml_list())}
-
-        missing_simulations = self._identify_missing_simulations()
-
-        if verbose:
-            self._print_missing_simulations_count(missing_simulations)
-
-        return missing_simulations
-
-    def _identify_missing_simulations(self):
-        """
-        Identifies simulations that are missing based on their export files.
-
-        Iterates through each simulation, checking if all specified export files exist.
-
-        Returns:
-            dict: A dictionary of missing simulations indexed by their enumeration index.
-        """
-        missing_simulations = {}
-        for ind, simulation in enumerate(self.rml_list()):
-            if self._is_simulation_missing(ind):
-                missing_simulations[ind] = simulation
-        return missing_simulations
-
-    def _is_simulation_missing(self, simulation_index):
+    def _is_simulation_missing(self, sim_index, repeat):
         """
         Checks if a simulation is missing based on the existence of its export files.
 
@@ -747,48 +778,129 @@ class Simulate():
         Returns:
             bool: True if the simulation is missing any export files, False otherwise.
         """
-        folder = os.path.dirname(self.sim_list_path[simulation_index])
-        sim_number = os.path.basename(self.sim_list_path[simulation_index]).split("_")[0]
-
+        round_folder = 'round_'+str(repeat)
+        folder = os.path.join(self._sim_folder, round_folder)
         for export_config in self._exports_list:  # Corrected from exports_list to _exports_list
-            if not os.path.exists(os.path.join(folder, f"{sim_number}_{export_config[0]}-{export_config[1]}.csv")):
+            export_file = os.path.join(folder, f"{sim_index}_{export_config[0]}-{export_config[1]}.csv")
+            if not os.path.exists(export_file):
                 return True  # Missing at least one export file
         return False
 
-    def _print_missing_simulations_count(self, missing_simulations):
-        """
-        Prints the count of missing simulations.
+    def _make_exports_list(self, sim_number, round_n):
+        exports_list = []
+        path = os.path.join(self.sim_path, 'round_'+str(round_n))
+        for d in self.exports:
+            for exp_oe in d.keys():
+                temp_exp_list = []
+                temp_exp_list.append(exp_oe["name"])
+                temp_exp_list.append(d[exp_oe][0])
+                temp_exp_list.append(path)
+                temp_exp_list.append(str(sim_number)+'_')
+            exports_list.append(temp_exp_list)
+        return exports_list
 
-        Args:
-            missing_simulations (dict): Dictionary of missing simulations.
-        """
-        print(f"I still have {len(missing_simulations)} simulations to do!")
+    
+    def _format_eta(self, seconds):
+        """Format seconds into days, hours, and minutes."""
+        days, seconds = divmod(int(seconds), 86400)
+        hours, seconds = divmod(int(seconds), 3600)
+        minutes, seconds = divmod(int(seconds), 60)
+        if days > 0:
+            return f"{days} day(s), {int(hours):02d}h:{int(minutes):02d}min"
+        else:
+            return f"{int(hours):02d}h:{int(minutes):02d}min"
 
-    def run(self, recipe=None, multiprocessing=True, force=False, overwrite_rml=True):
-        """
-        Initiates the simulation process based on defined parameters and exports.
+    
+    def _initialize_progress_bar(self, total_simulations):
+        bar_format = '{desc}: {percentage:3.0f}%|{bar}| {n_fmt}/{total_fmt} {postfix}]'
+        progress_bar = tqdm(total=total_simulations, bar_format=bar_format, desc="Simulations Completed")
+        return progress_bar
+    
+    def print_simulations_info(self):
+        total_simulations = self.sp._calc_number_sim() * self.repeat
+        
+        # Prepare data for printing
+        data = [
+            ["Simulation Info", ""],
+            ["Independent parameters", len(self.sp.ind_par)],
+            ["Dependent parameters", len(self.sp.dep_par)],
+            ["Rounds of Simulations", self._repeat],
+            ["Total Number of Simulations", total_simulations]
+        ]
+        
+        # Determine column widths by the longest item in each column
+        col_widths = [max(len(str(item)) for item in col) for col in zip(*data)]
+        
+        # Print the header
+        header = data[0]
+        print(f"{header[0]:<{col_widths[0]}} | {header[1]:>{col_widths[1]}}")
+        print("-" * (sum(col_widths) + 3))  # for the separator and spaces
+        
+        # Print the data rows
+        for row in data[1:]:
+            print(f"{row[0]:<{col_widths[0]}} | {row[1]:>{col_widths[1]}}")
 
-        Args:
-            recipe (SimulationRecipe, optional): Recipe to use for setting up the simulation.
-            multiprocessing (bool or int, optional): Specifies if simulations should run in parallel
-                                                    and the number of processes to use.
-            force (bool, optional): Forces re-execution of simulations even if they already have been completed.
-            overwrite_rml (bool, optional): Overwrites existing RML files if set to True.
+        print("-" * (sum(col_widths) + 3))  # for the separator and spaces
+        print()
 
-        Returns:
-            bool: True if simulations are successfully started, False otherwise.
 
-        Raises:
-            TypeError: If an unsupported recipe type is provided.
-        """
+    def run(self, recipe=None, multiprocessing=1, force=False, overwrite_rml=True):
+        if not isinstance(multiprocessing, int) or multiprocessing < 1:
+            raise ValueError("The 'multiprocessing' argument must be an integer greater than 0.")
+        self.print_simulations_info()
         self.overwrite_rml = overwrite_rml
         self._setup_simulation_environment(recipe)
-        missing_simulations = self.check_simulations(force=force)
+        self._initialize_simulation_directory()
+        self._save_parameters_to_file(self.sim_path)
+        total_simulations = self.sp._calc_number_sim() * self.repeat
         
-        self._execute_missing_simulations(missing_simulations, multiprocessing)
-        
-        self._postprocess_simulations(missing_simulations)
 
+        batch_size = 10000  # Define the size of each batch
+        simulations_durations = []  # Track durations of all simulations for average calculation
+        
+        if force or overwrite_rml:
+            recap_csv_path = os.path.join(self.sim_path, 'looper.csv')
+            os.remove(recap_csv_path)
+            recap_txt_path = os.path.join(self.sim_path, 'looper.txt')
+            os.remove(recap_txt_path)
+        
+        pbar = self._initialize_progress_bar(total_simulations)
+
+        with ProcessPoolExecutor(max_workers=multiprocessing) as executor:
+            simulation_params_batch = []
+            for round_number in range(self.repeat):
+                sim_number = 0
+                for params in self.sp.simulation_parameters_generator():
+                    if self._is_simulation_missing(sim_number, round_number) or force:
+                        rml_file_path = self._generate_rml_file(sim_number, round_number, params)
+                        exp_list = self._make_exports_list(sim_number, round_number)
+                        simulation_params = ((rml_file_path, self._hide, self.analyze, self.raypyng_analysis, self.ray_path), exp_list)
+                        simulation_params_batch.append(simulation_params)
+                        self._update_simulation_recap_files(params, sim_number)
+
+                        # Submit batch when it reaches the batch size or at the end of the list
+                        if len(simulation_params_batch) == batch_size or sim_number == total_simulations - 1:
+                            futures = {executor.submit(run_rml_func, sim_params): sim_params for sim_params in simulation_params_batch}
+                            for future in as_completed(futures):
+                                try:
+                                    sim_duration = future.result()
+                                    simulations_durations.append(sim_duration)
+                                    # Update progress bar after each simulation
+                                    avg_duration = sum(simulations_durations) / len(simulations_durations)
+                                    last_duration = simulations_durations[-1]
+                                    remaining_simulations = total_simulations - pbar.n
+                                    eta_seconds = avg_duration * remaining_simulations /multiprocessing
+                                    eta_str = self._format_eta(eta_seconds)
+                                    pbar.set_postfix_str(f"ETA: {eta_str}, Last: {last_duration:.2f}s, Avg: {avg_duration:.2f}s/it", refresh=True)
+                                    pbar.update(1)
+                                except Exception as e:
+                                    print(f"Exception during simulation: {e}")
+                            simulation_params_batch = []  # Reset batch for next set of simulations
+                    else:
+                        pbar.update(1)  # If not missing or forced, update progress bar directly
+                    sim_number += 1
+
+        pbar.close()
         return True
 
     def _setup_simulation_environment(self, recipe):
@@ -807,73 +919,6 @@ class Simulate():
             self.params = recipe.params(self)
             self.exports = recipe.exports(self)
             self.simulation_name = recipe.simulation_name(self)
-
-    def _execute_missing_simulations(self, missing_simulations, multiprocessing):
-        """
-        Executes simulations that are identified as missing or incomplete.
-
-        Args:
-            missing_simulations (dict): A dictionary of missing simulations.
-            multiprocessing (bool or int): Specifies if and how multiprocessing should be used.
-        """
-        if not missing_simulations:
-            return
-
-        filenames_hide_analyze, exports = self._prepare_simulation_execution(missing_simulations)
-
-        with RunPool(multiprocessing) as pool:
-            pool.map(run_rml_func, zip(filenames_hide_analyze, exports))
-
-    def _prepare_simulation_execution(self, missing_simulations):
-        """
-        Prepares necessary data for executing missing simulations.
-
-        Args:
-            missing_simulations (dict): A dictionary of missing simulations.
-
-        Returns:
-            tuple: Two lists containing data for running simulations and their respective exports.
-        """
-        filenames_hide_analyze = []
-        exports = []
-
-        for ind, rml in missing_simulations.items():
-            simulation_data = self._gather_simulation_data(ind, rml)
-            filenames_hide_analyze.append(simulation_data)
-            exports.append(self.generate_export_params(ind, self.sim_list_path[ind]))
-
-        return filenames_hide_analyze, exports
-
-    def _gather_simulation_data(self, ind, rml):
-        """
-        Gathers necessary data for a single simulation execution.
-
-        Args:
-            ind (int): Index of the simulation.
-            rml (RMLFile): RML file associated with the simulation.
-
-        Returns:
-            list: Data needed for executing the simulation.
-        """
-        filename = os.path.basename(rml.filename)
-        sim_index = int(filename.split("_")[0])
-        return [rml.filename, self._hide, self._analyze, self.raypyng_analysis, self.ray_path]
-
-    def _postprocess_simulations(self, missing_simulations):
-        """
-        Performs cleanup and postprocessing after simulations are executed.
-
-        Args:
-            missing_simulations (dict): A dictionary of missing simulations that were executed.
-        """
-        if missing_simulations and not self.analyze and self.raypyng_analysis:
-            pp = PostProcess()
-            pp.cleanup(self.sim_path, self.repeat, self.exports_list)
-
-
-    def generate_export_params(self,simulation_index,rml):
-        folder = os.path.dirname(rml)
-        return [ (d[0], d[1], folder, str(simulation_index)+'_') for d in self._exports_list]
     
     def reflectivity(self, reflectivity=True):
         """Switch the reflectivity of all the optical elements in the beamline on or off.
@@ -901,18 +946,17 @@ def run_rml_func(parameters):
                             which includes the RML filename, hide flag, analyze flag, raypyng analysis flag,
                             and the path to the RAY-UI installation.
     """
+    st = time.time()
     (rml_filename, hide, analyze, raypyng_analysis, ray_path), exports = parameters
 
     runner = RayUIRunner(ray_path=ray_path, hide=hide)
     api = RayUIAPI(runner)
     pp = PostProcess()
-
     try:
         runner.run()
         api.load(rml_filename)
         api.trace(analyze=analyze)
         api.save(rml_filename)
-
         for export_params in exports:
             api.export(*export_params)
             if not analyze and raypyng_analysis:
@@ -926,5 +970,7 @@ def run_rml_func(parameters):
         except Exception as e:
             print(f"WARNING! Got exception while quitting API for {rml_filename}, the error was: {e}")
         runner.kill()
-
+    et = time.time()
+    simulation_duration = et-st
+    return simulation_duration
 
