@@ -124,7 +124,7 @@
                 <z>0.999848</z>
             </param>
         </object>
-        <object name="Premirror M2" type="Plane Mirror">
+        <object name="PremirrorM2" type="Plane Mirror">
             <param id="geometricalShape" comment="rectangle" enabled="T">0</param>
             <param id="totalWidth" enabled="T">25</param>
             <param id="totalLength" enabled="T">500</param>

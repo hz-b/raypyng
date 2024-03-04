@@ -92,9 +92,9 @@ class ResolvingPower(SimulationRecipe):
     def exports(self,sim:Simulate):
         params = []
         if sim.analyze:
-            export = "ScalarBeamProperties"
+            export = ["ScalarBeamProperties"]
         else: 
-            export = "RawRaysOutgoing"
+            export = ["RawRaysOutgoing"]
         for exp_obj in self.exported_object:
             params.append({exp_obj:export})
         return params
@@ -186,9 +186,9 @@ class Flux(SimulationRecipe):
     def exports(self,sim:Simulate):
         params = []
         if sim.analyze:
-            export = "ScalarBeamProperties"
+            export = ["ScalarBeamProperties"]
         else: 
-            export = "RawRaysOutgoing"
+            export = ["RawRaysOutgoing"]
         for exp_obj in self.exported_object:
             params.append({exp_obj:export})
         return params
@@ -271,7 +271,7 @@ class BeamWaist(SimulationRecipe):
             oe_list.append(oe)
         exports = []
         for oe in oe_list:
-            exports.append({oe:'RawRaysOutgoing'})
+            exports.append({oe:['RawRaysOutgoing']})
             # print('DEBUG:: exported oe', oe.name)
         return exports
 
