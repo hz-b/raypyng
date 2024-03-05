@@ -64,26 +64,35 @@ class PostProcess():
     def __init__(self) -> None:
     
         self.format_saved_files = '.dat'
-        self.source = None
         pass
 
-    def _list_files(self,dir_path:str, end_filename:str):
-        """List all the files in dir_path ending with end_filename
+    def _list_files(self, dir_path: str, contain_str: str = None, end_filename: str = None):
+        """
+        List all the files in dir_path that contain a certain string and/or end with a specified string. 
+        At least one of contain_str or end_filename must be provided.
 
         Args:
-            dir_path (str): path to a folder
-            end_filename (str): the listed files end with end_filename
+            dir_path (str): Path to a folder.
+            contain_str (str, optional): String that must be contained in the filenames. Defaults to None.
+            end_filename (str, optional): String that the filenames must end with. Defaults to None.
 
         Returns:
-            res (list): list of files in dir_path ending eith end_filename
-        """        
-        # list to store files
-        res = []
+            list: List of files in dir_path that meet the criteria.
+        """
+        if contain_str is None and end_filename is None:
+            raise ValueError("At least one of 'contain_str' or 'end_filename' must be provided.")
+
+        res = []  # List to store files
         for file in os.listdir(dir_path):
-            # check only text files
-            if file.endswith(end_filename):
-                res.append(os.path.join(dir_path,file))
+            if contain_str is not None and contain_str in file:
+                if end_filename is None or file.endswith(end_filename):
+                    res.append(os.path.join(dir_path, file))
+            elif end_filename is not None and file.endswith(end_filename):
+                res.append(os.path.join(dir_path, file))
+
+        # Assuming natsorted and ns are properly imported and available in the context
         return natsorted(res, alg=ns.IGNORECASE)
+
 
     def _extract_fwhm(self,rays:np.array):
         """Calculate the fwhm of the rays.
@@ -144,12 +153,18 @@ class PostProcess():
         """        
         s = RMLFile(rml_filename)
         for oe in s.beamline.children():
-                if hasattr(oe,"photonFlux"):
-                    self.source = oe
+                if hasattr(oe,"numberRays"):
+                    source = oe
                     break
-        return self.source.photonFlux.cdata, self.source.numberRays.cdata
+        nrays = source.numberRays.cdata
+        try:
+            flux = float(source.photonFlux.cdata)
+        except:
+            flux = np.nan
+        
+        return flux, nrays
     
-    def postprocess_RawRays(self,exported_element:str=None, exported_object:str=None, dir_path:str=None, sim_number:str=None, rml_filename:str=None):
+    def postprocess_RawRays(self,exported_element:str=None, exported_object:str=None, dir_path:str=None, sim_number:str=None, rml_filename:str=None, suffix:str=None):
         """ PostProcess rountine of the RawRaysOutgoing extracted files.
 
         The method looks in the folder dir_path for a file with the filename:
@@ -164,9 +179,17 @@ class PostProcess():
             dir_path (str, optional): the folder where the file to process is located. Defaults to None.
             sim_number (str, optional): the prefix of the file, that is the simulation number with a _prepended, ie `0_`. Defaults to None.
         """        
+        if suffix == None:
+            suffix = ''
+        else:
+            if suffix[0] != '_':
+                suffix = '_'+suffix
         source_photon_flux, source_n_rays  = self.extract_nrays_from_source(rml_filename)
-        
-        source_photon_flux = float(source_photon_flux)
+        # deal with the case that the source has no photon flux
+        try:
+            source_photon_flux = float(source_photon_flux)
+        except:
+            source_photon_flux = np.nan
         source_n_rays      = float(source_n_rays)
         filename = os.path.join(dir_path,sim_number+exported_element + '-' + exported_object+'.csv')
         with warnings.catch_warnings():
@@ -187,7 +210,7 @@ class PostProcess():
             ray_properties['HorizontalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OX'])
             ray_properties['VerticalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OY'])
         
-        new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays.dat')
+        new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays'+suffix+'.dat')
         #self._save_file(new_filename, ray_properties)
         ray_properties.save(new_filename)
         return 
@@ -196,7 +219,7 @@ class PostProcess():
         """Reads all the results of the postprocessing process and summarize 
         them in a single file for each exported object.
         
-        This functions reads all the temporary files created by :code:`self.postptocess_RawRays()`
+        This functions reads all the temporary files created by :code:`self.postprocess_RawRays()`
         saves one file for each exported element in dir_path, and deletes the temporary files.
         If more than one round of simulations was done, the values are averaged.
 
@@ -207,25 +230,26 @@ class PostProcess():
         """        
         header = "SourcePhotonFlux\t\t NumberRaysSurvived\t\t  PercentageRaysSurvived   PhotonFlux\t\t\t\tBandwidth\t\t\t\t HorizontalFocusFWHM\t  VerticalFocusFWHM"
         for d in exp_elements:
-            for r in range(repeat):
-                dir_path_round=os.path.join(dir_path,"round_"+str(r))
-                files = self._list_files(dir_path_round, d[0]+"_analyzed_rays"+self.format_saved_files)
-                for f_ind, f in enumerate(files):
-                    if r == 0 and f_ind==0:
-                        analyzed_rays = RayProperties(filename=f)
-                    elif r==0 and f_ind!=0:
-                        tmp = RayProperties(filename=f)
-                        analyzed_rays = analyzed_rays.concat(tmp)
-                    elif r>=1:
-                        tmp = RayProperties(filename=f)
-                        for n in analyzed_rays.dtype.names: 
-                            analyzed_rays[n][f_ind] += tmp[n]
-                    else:
-                        pass
-            fn = os.path.join(dir_path, d[0])
-            for n in analyzed_rays.dtype.names:
-                analyzed_rays[n] /= repeat
-            analyzed_rays.save(f"{fn}.dat")
+            for exp in ['RawRaysOutgoing', 'RawRaysIncoming']:
+                for round in range(repeat):
+                    dir_path_round=os.path.join(dir_path,"round_"+str(round))
+                    files = self._list_files(dir_path_round, d+"_analyzed_rays_"+exp+self.format_saved_files)
+                    for f_ind, f in enumerate(files):
+                        if round == 0 and f_ind==0: # first round, first file, create
+                            analyzed_rays = RayProperties(filename=f)
+                        elif round==0 and f_ind!=0: # first round, following files, concatenate
+                            tmp = RayProperties(filename=f)
+                            analyzed_rays = analyzed_rays.concat(tmp)
+                        elif round>=1: # other rounds: sum the values
+                            tmp = RayProperties(filename=f)
+                            for n in analyzed_rays.dtype.names: 
+                                analyzed_rays[n][f_ind] += tmp[n]
+                # take the average
+                for n in analyzed_rays.dtype.names:
+                    analyzed_rays[n] /= repeat
+                # save the file
+                fn = os.path.join(dir_path, d+'_'+exp+'.dat')
+                analyzed_rays.save(f"{fn}")
 
 class PostProcessAnalyzed():
     """class to analyze the data exported by RAY-UI
