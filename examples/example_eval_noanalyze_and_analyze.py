@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from raypyng.postprocessing import PostProcessAnalyzed
 
 # extract noanalyze data
-noanalyze_det = np.loadtxt('RAYPy_Simulation_test_noAnalyze/DetectorAtFocus.dat')
+noanalyze_det = np.loadtxt('RAYPy_Simulation_test_noAnalyze/DetectorAtFocus_RawRaysOutgoing.dat')
 energy    = np.loadtxt("RAYPy_Simulation_test_noAnalyze/input_param_Dipole_photonEnergy.dat")
 
 # extract analyze data
