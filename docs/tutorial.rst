@@ -319,7 +319,22 @@ Finally, the simulations can be run using
 
     sim.run(multiprocessing=5, force=True)
 
-where the `multiprocessing` parameter can be set either to False or to an int, corresponding to the number of parallel instances of RAY-UI to be used. Generally speaking, the number of instances of RAY-UI must be lower than the number of cores available. If the simulation uses many rays, monitor the RAM usage of your computer. If the computation uses all the possible RAM of the computer the program may get blocked or not execute correctly.
+where the `multiprocessing` parameter can be an integer greater or equal to 1, corresponding to the number of parallel instances of RAY-UI to be used. Generally speaking, the number of instances of RAY-UI must be lower or equal than the number of available cores. If the simulation uses many rays, monitor the RAM usage of your computer. If the computation uses all the possible RAM of the computer the program may get blocked or not execute correctly.
+
+Note on multiprocessing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The speed increase due to opening many RAY-UI instances is effective only when RAY-UI is not performing the analysis of the results.
+
+.. code-block:: python
+
+    sim.analyze = False # don't let RAY-UI analyze the results
+
+
+There is little/no difference having RayPyNG analyzing the results
+.. code-block:: python
+
+    sim.raypyng_analysis=True # let raypyng analyze the results
+
 
 Simulation Output
 ------------------
