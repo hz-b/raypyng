@@ -336,7 +336,7 @@ class Simulate():
         self._hide = hide  # Hide GUI leftovers
         self.analyze = True  # Enable RAY-UI analysis
         self._repeat = 1  # Number of simulation repeats
-        self.raypyng_analysis = True  # Enable RAYPyNG analysis
+        self.raypyng_analysis = False  # Enable RAYPyNG analysis
         self.ray_path = ray_path  # RAY-UI installation path
         self.overwrite_rml = True  # Overwrite RML files
         self._sim_folder = None  # Simulation folder name
@@ -345,6 +345,7 @@ class Simulate():
         self._simulation_name = None  # Custom simulation name
         self._exports = []  # Files to export after simulation
         self._exports_list = []  # Processed list of exports
+        self._exported_obj_names_list = [] # List containing the names of the objects to export
         self.sp = None  # SimulationParams instance
         self.sim_list_path = []  # Paths to RML files
         self.sim_path = None  # Simulation directory path
@@ -508,6 +509,7 @@ class Simulate():
         self._validate_export_list(value)
         self._exports = value
         self._exports_list = self._generate_exports_list(value)
+        self._exported_obj_names_list = self._generate_exported_obj_names_list(value)
 
     def _validate_export_list(self, export_list):
         """
@@ -592,7 +594,25 @@ class Simulate():
                     exports_list.append((object_element.attributes().original()['name'], file))
         return exports_list
 
-        
+    def _generate_exported_obj_names_list(self, export_list):
+        """
+        Generates a list with the names of the objects that will be exported.
+
+        Args:
+            export_list (list): The validated list of export configurations.
+
+        Returns:
+            list: A list of str representing the names of the objects to export.
+        """
+        self._exported_obj_names_list = []
+        for export_dict in export_list:
+            for object_element, export_files in export_dict.items():
+                if isinstance(export_files, str):
+                    export_files = [export_files]  # Ensure it's a list
+                for file in export_files:
+                    self._exported_obj_names_list.append(object_element.attributes().original()['name'])
+        return self._exported_obj_names_list
+
     @property
     def params(self):
         """The parameters to scan, as a list of dictionaries.
@@ -827,13 +847,15 @@ class Simulate():
         """
         if not isinstance(multiprocessing, int) or multiprocessing < 1:
             raise ValueError("The 'multiprocessing' argument must be an integer greater than 0.")
-        
         self._prepare_simulation_environment(recipe, overwrite_rml)
         total_simulations = self.sp._calc_number_sim() * self.repeat
         self._handle_simulation_recap_files(force, total_simulations)
 
         pbar = self._initialize_progress_bar(total_simulations)
         self._execute_simulations(multiprocessing, force, total_simulations, pbar)
+        if self.raypyng_analysis:
+            pp = PostProcess()
+            pp.cleanup(self.sim_path, self.repeat, self._exported_obj_names_list)
         pbar.close()
 
     def _prepare_simulation_environment(self, recipe, overwrite_rml):
@@ -998,7 +1020,7 @@ def run_rml_func(parameters):
         api.save(rml_filename)
         for export_params in exports:
             api.export(*export_params)
-            if not analyze and raypyng_analysis:
+            if raypyng_analysis:
                 pp.postprocess_RawRays(*export_params, rml_filename, suffix=export_params[1])
     except Exception as e:
         print(f"WARNING! Got exception while processing {rml_filename}, the error was: {e}")
