@@ -23,7 +23,7 @@ bw,foc_x,foc_y = p.retrieve_bw_and_focusSize(folder_name="RAYPy_Simulation_test_
 
 #plotting
 
-fig, (axs) = plt.subplots(4, 2,figsize=(10,10))
+fig, (axs) = plt.subplots(4, 2,figsize=(8,8))
 
 ax = axs[0,0]
 ax.plot(energy, noanalyze_det[:,0], 'b', linestyle='solid', label='noAnalyze')
