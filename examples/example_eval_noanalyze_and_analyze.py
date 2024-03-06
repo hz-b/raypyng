@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from raypyng.postprocessing import PostProcessAnalyzed
 
 # extract noanalyze data
-noanalyze_det = np.loadtxt('RAYPy_Simulation_test_noAnalyze/DetectorAtFocus.dat')
+noanalyze_det = np.loadtxt('RAYPy_Simulation_test_noAnalyze/DetectorAtFocus_RawRaysOutgoing.dat')
 energy    = np.loadtxt("RAYPy_Simulation_test_noAnalyze/input_param_Dipole_photonEnergy.dat")
 
 # extract analyze data
@@ -23,7 +23,7 @@ bw,foc_x,foc_y = p.retrieve_bw_and_focusSize(folder_name="RAYPy_Simulation_test_
 
 #plotting
 
-fig, (axs) = plt.subplots(4, 2,figsize=(10,10))
+fig, (axs) = plt.subplots(4, 2,figsize=(8,8))
 
 ax = axs[0,0]
 ax.plot(energy, noanalyze_det[:,0], 'b', linestyle='solid', label='noAnalyze')
