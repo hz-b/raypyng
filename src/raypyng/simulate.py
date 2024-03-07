@@ -282,7 +282,7 @@ class SimulationParams():
             # Combine independent parameters with their values
             for param, value in zip(self.ind_par, combination):
                 simulation_params[param] = value
-            # Append dependent parameters based on the current combination
+            # Append dependent parameters based on the current com_bination
             for dep_param in self.dep_par:
                 ind_param = self.dep_param_dependency[dep_param]
                 ind_param_index = self.ind_par.index(ind_param)
@@ -849,7 +849,6 @@ class Simulate():
             raise ValueError("The 'multiprocessing' argument must be an integer greater than 0.")
         self._prepare_simulation_environment(recipe, overwrite_rml)
         total_simulations = self.sp._calc_number_sim() * self.repeat
-        self._handle_simulation_recap_files(force, total_simulations)
 
         pbar = self._initialize_progress_bar(total_simulations)
         self._execute_simulations(multiprocessing, force, total_simulations, pbar)
@@ -857,6 +856,9 @@ class Simulate():
             pp = PostProcess()
             pp.cleanup(self.sim_path, self.repeat, self._exported_obj_names_list)
         pbar.close()
+
+    def _remove_recap_files(self,):
+        print(self.sim_path)
 
     def _prepare_simulation_environment(self, recipe, overwrite_rml):
         """
@@ -870,22 +872,8 @@ class Simulate():
         self._setup_simulation_environment(recipe)
         self._initialize_simulation_directory()
         self._save_parameters_to_file(self.sim_path)
+        self._remove_recap_files()
         self._print_simulations_info()
-
-    def _handle_simulation_recap_files(self, force, total_simulations):
-        """
-        Manages recap files based on simulation settings.
-
-        Args:
-            force (bool): Force re-execution of simulations and potential recap file updates.
-            total_simulations (int): Total number of simulations to be executed.
-        """
-        n_sim_max_for_looper = 1e7
-        if total_simulations <= n_sim_max_for_looper:
-            for params in self.sp.simulation_parameters_generator():
-                # Corrected the call to match the expected method signature
-                self._update_simulation_recap_files(params, 0)
-
 
     def _execute_simulations(self, multiprocessing, force, total_simulations, pbar):
         """
@@ -903,12 +891,16 @@ class Simulate():
             simulation_params_batch = []
             for round_number in range(self.repeat):
                 for sim_number, params in enumerate(self.sp.simulation_parameters_generator()):
+                    self._update_simulation_recap_files(params, sim_number)
                     if self._is_simulation_missing(sim_number, round_number) or force:
                         self._prepare_and_submit_simulation(params, sim_number, round_number, simulation_params_batch, executor, force)
+                        
                     else:
                         pbar.update(1)  # If not missing or forced, update progress bar directly
-                    if len(simulation_params_batch) == self.batch_size or sim_number == total_simulations - 1:
+                    all_simulations= sim_number*(round_number+1)+1== total_simulations-1
+                    if len(simulation_params_batch) == self.batch_size or all_simulations:
                         self._wait_for_simulation_batch(simulations_durations, simulation_params_batch, executor, pbar)
+
 
     def _prepare_and_submit_simulation(self, params, sim_number, round_number, simulation_params_batch, executor, force):
         """
