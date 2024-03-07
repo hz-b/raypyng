@@ -197,21 +197,29 @@ class PostProcess():
             #rays = np.loadtxt(filename, skiprows=2)
             rays = np.genfromtxt(filename, dtype=float, delimiter='\t', names=True,skip_header=1)
         ray_properties = RayProperties()
-        if rays.shape[0]==0: # if no rays survived
-            # source photon flux
-            ray_properties['SourcePhotonFlux'] = source_photon_flux
-            pass
-        else:
-            ray_properties['SourcePhotonFlux'] = source_photon_flux
-            ray_properties['NumberRaysSurvived'] = self._extract_intensity(rays)
-            ray_properties['PercentageRaysSurvived'] = ray_properties['NumberRaysSurvived']/source_n_rays*100
-            ray_properties['PhotonFlux'] = source_photon_flux/100*ray_properties['PercentageRaysSurvived']
-            ray_properties['Bandwidth'] = self._extract_fwhm(rays[f'{exported_element}_EN'])
-            ray_properties['HorizontalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OX'])
-            ray_properties['VerticalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OY'])
-        
+        # account for the case that no rays survived
+        try:
+            if rays.shape[0]==0: # if no rays survived
+                # source photon flux
+                ray_properties['SourcePhotonFlux'] = source_photon_flux
+                pass
+            else:
+                ray_properties['SourcePhotonFlux'] = source_photon_flux
+                ray_properties['NumberRaysSurvived'] = self._extract_intensity(rays)
+                ray_properties['PercentageRaysSurvived'] = ray_properties['NumberRaysSurvived']/source_n_rays*100
+                ray_properties['PhotonFlux'] = source_photon_flux/100*ray_properties['PercentageRaysSurvived']
+                ray_properties['Bandwidth'] = self._extract_fwhm(rays[f'{exported_element}_EN'])
+                ray_properties['HorizontalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OX'])
+                ray_properties['VerticalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OY'])
+        except Exception as e:
+                ray_properties['SourcePhotonFlux'] = np.nan
+                ray_properties['NumberRaysSurvived'] = np.nan
+                ray_properties['PercentageRaysSurvived'] = np.nan
+                ray_properties['PhotonFlux'] = np.nan
+                ray_properties['Bandwidth'] = np.nan
+                ray_properties['HorizontalFocusFWHM'] = np.nan
+                ray_properties['VerticalFocusFWHM'] = np.nan
         new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays'+suffix+'.dat')
-        #self._save_file(new_filename, ray_properties)
         ray_properties.save(new_filename)
         return 
 

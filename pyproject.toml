@@ -1,13 +1,13 @@
 [project]
 name = "raypyng"
-version = "0.0.20"
+version = "1.2.1"
 authors = [
   { name="Simone Vadilonga, Ruslan Ovsyannikov", email="simone.vadilonga@helmholtz-berlin.de" },
 ]
 description = "Python interface for RAY-UI x-ray tracing program"
 readme = "README.md"
 license = { file="LICENSE" }
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License"
