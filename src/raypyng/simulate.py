@@ -76,6 +76,7 @@ class SimulationParams():
     def params(self, value):
         self._validate_params(value)
         self._params = value
+        self._extract_param()
 
     def _validate_params(self, value):
         """Validates the input parameter list to ensure it is in the correct format.
@@ -127,100 +128,46 @@ class SimulationParams():
             self._process_parameter_dict(parameters_dict)
         if verbose:
             self._print_extraction_results()
-        return self._compilation_results()
+        #return self._compilation_results()
 
     def _reset_extraction_variables(self):
         """Reset or initialize variables for a new extraction."""
         self.ind_param_values, self.ind_par = [], []
-        self.dep_param_dependency, self.dep_value_dependency, self.dep_par = {}, [], []
+        self.dep_param_dependency, self.dep_value_dependency, self.dep_par = {}, {}, []
 
     def _process_parameter_dict(self, parameters_dict):
         """Process each dictionary of parameters."""
         keys = list(parameters_dict.keys())
+        items = list(parameters_dict.items())
+        # add independent params
+        self.ind_par.append(keys[0])
+        self.ind_param_values.append(items[0])
+        
         if len(keys) > 1:
-            self._handle_dependent_parameters(parameters_dict, keys)
-        else:
-            self._handle_independent_parameter(parameters_dict, keys[0])
-
-    def _handle_dependent_parameters(self, parameters_dict, keys):
-        """Handle parameters with dependencies."""
-        for index, dependent_key in enumerate(keys[1:], start=1):  # Skip the first key, which is independent
-            self._validate_dependency_length(parameters_dict, keys[0], dependent_key)
-            self._store_dependency_info(parameters_dict, keys[0], dependent_key, index)
+            for k in keys[1:]:
+                self.dep_param_dependency[k] = keys[0]
+                self.dep_par.append(k)
+                for ind, ind_par_value in enumerate(items[0][1]):
+                    if ind_par_value in list(self.dep_value_dependency.keys()):
+                        self.dep_value_dependency[ind_par_value].append(parameters_dict[k][ind])
+                    else:
+                        self.dep_value_dependency[ind_par_value] = [parameters_dict[k][ind]]
+               
 
     def _validate_dependency_length(self, parameters_dict, independent_key, dependent_key):
         """Ensure dependent parameters match the length of their independent counterparts."""
         if len(parameters_dict[dependent_key]) != len(parameters_dict[independent_key]):
             raise ValueError(f"Dependent parameter lengths do not match for {dependent_key}.")
 
-    def _store_dependency_info(self, parameters_dict, independent_key, dependent_key, index):
-        """Store information about dependencies."""
-        for idx, value in enumerate(parameters_dict[dependent_key]):
-            if idx == 0:
-                self.dep_value_dependency.append({parameters_dict[independent_key][idx]: value})
-            else:
-                self.dep_value_dependency[index-1][parameters_dict[independent_key][idx]] = value
-        self.dep_param_dependency[dependent_key] = independent_key
-
-    def _handle_independent_parameter(self, parameters_dict, key):
-        """Handle independent parameters."""
-        self.ind_param_values.append(parameters_dict[key])
-        self.ind_par.append(key)
-
     def _print_extraction_results(self):
         """Print the results of the parameter extraction."""
         print('Independent parameters:', len(self.ind_par))
         print('Dependent parameters:', len(self.dep_par))
 
-    def _compilation_results(self):
-        """Compile and return the results of the extraction."""
-        self.dep_par = list(self.dep_param_dependency.keys())
-        return self.ind_param_values, self.ind_par, self.dep_param_dependency, self.dep_value_dependency, self.dep_par
-    
-    def _make_dictionary(self, keys, items):
-        d = {}
-        for v,k in enumerate(keys):
-            # it follows a dirty little trick to ensure that all the dictionry keys
-            # are different
-            k.cdata=v+3987.3423421534563632
-            d.update({k:items[v]})
-        return d
-
-    def _calc_loop(self, verbose:bool=True):
-        """Refactor to calculate the simulations loop with better structure."""
-        self._prepare_simulation_parameters()
-        self._generate_simulation_combinations()
-        self._append_dependent_parameters_to_combinations()
-
-    def _prepare_simulation_parameters(self):
-        """Prepare the list of parameters to simulate."""
-        self.param_to_simulate = self.ind_par + self.dep_par
-
-    def _generate_simulation_combinations(self):
-        """Generate all possible combinations of independent parameters."""
-        self.loop = list(itertools.product(*self.ind_param_values))
-
-    def _append_dependent_parameters_to_combinations(self):
-        """Append dependent parameters to each combination based on dependencies."""
-        self.simulations_param_list = []
-        dependency_indices = self._get_dependency_indices()
-
-        for combination in self.loop:
-            extended_combination = list(combination)  # Copy to modify
-            for dep_index, dep_par in enumerate(self.dep_param_dependency.keys()):
-                dependent_value = self.dep_value_dependency[dep_index][combination[dependency_indices[dep_index]]]
-                extended_combination.append(dependent_value)
-            self.simulations_param_list.append(tuple(extended_combination))
-
     def _get_dependency_indices(self):
         """Get indices of independent parameters that dependent parameters rely on."""
         return [self.ind_par.index(dep) for dep in self.dep_param_dependency.values()]
 
-    def _compilation_results(self):
-        """Compile and return the results of the calculation."""
-        self.par = self.ind_par + self.dep_par  # Might be redundant if not used elsewhere
-        return self.param_to_simulate, self.simulations_param_list    
-    
     def _check_if_enabled(self, param):
         """Check if a parameter is enabled
 
@@ -268,28 +215,39 @@ class SimulationParams():
         """
         from functools import reduce
         from operator import mul
-        sim_per_round = reduce(mul, (len(values) for values in self.ind_param_values), 1)    
+        sim_per_round = reduce(mul, (len(value_list) for _, value_list in self.ind_param_values), 1)
         return sim_per_round
-  
+
     def simulation_parameters_generator(self):
         """Generates a dictionary of parameters for each simulation based on the input parameter list.
 
         Yields:
             dict: A dictionary of parameters for a single simulation.
-        """        # Generate all possible combinations of independent parameters
-        for combination in itertools.product(*self.ind_param_values):
-            simulation_params = {}
-            # Combine independent parameters with their values
-            for param, value in zip(self.ind_par, combination):
-                simulation_params[param] = value
-            # Append dependent parameters based on the current com_bination
-            for dep_param in self.dep_par:
-                ind_param = self.dep_param_dependency[dep_param]
-                ind_param_index = self.ind_par.index(ind_param)
-                ind_param_value = combination[ind_param_index]
-                dependent_value = self.dep_value_dependency[self.dep_par.index(dep_param)][ind_param_value]
-                simulation_params[dep_param] = dependent_value
+        """
+        # Extract the keys (first elements of tuples) and the lists of possible values (second elements)
+        keys, value_lists = zip(*self.ind_param_values)
+        # Generate all combinations of values using itertools.product
+        for values_combination in itertools.product(*value_lists):
+            # Create a dictionary for the current combination, pairing keys with their respective values
+            simulation_params = dict(zip(keys, values_combination))
+            # add dependen parameters
+            if len(self.dep_param_dependency.keys()) > 0:
+                for ind, dep_par in enumerate(self.dep_param_dependency.keys()):
+                    depending_param = self.dep_param_dependency[dep_par]
+                    value_depending_param = simulation_params[depending_param]
+                    dep_par_value = self.dep_value_dependency[value_depending_param][ind]
+                    simulation_params[dep_par] = dep_par_value
             yield simulation_params
+
+
+
+
+
+
+
+
+
+
 
 ################################################################
 class Simulate():
@@ -629,7 +587,7 @@ class Simulate():
             self.sp.params = value
         else:
             self.sp = value
-        _ = self.sp._extract_param(verbose=False)
+        
 
     def _save_parameters_to_file(self, dir):
         """Save user input parameters to file. 
@@ -639,17 +597,26 @@ class Simulate():
         Args:
             dir (str): the folder where to save the parameters
         """        
-        for i,p in enumerate(self.sp.ind_par):
+        for i, p in enumerate(self.sp.ind_par):
             filename = str(p.get_full_path().lstrip("lab.beamline."))
             filename = "input_param_"+filename.replace(".", "_")
             filename += ".dat"
-            np.savetxt(os.path.join(dir,filename),self.sp.ind_param_values[i])
-        for i,p in enumerate(self.sp.dep_par):
+            filepath = os.path.join(dir, filename)
+            with open(filepath, 'w') as f:
+                values = self.sp.ind_param_values[i]
+                for item in values[1]:
+                        f.write(f"{item}\n")
+
+        for i, p in enumerate(self.sp.dep_par):
             filename = str(p.get_full_path().lstrip("lab.beamline."))
             filename = "input_param_"+filename.replace(".", "_")
             filename += ".dat"
-            np.savetxt(os.path.join(dir,filename),list(self.sp.dep_value_dependency[i].values()))
-    
+            filepath = os.path.join(dir, filename)
+            with open(filepath, 'w') as f:
+                values = list(self.sp.dep_value_dependency.items())
+                for item in values:
+                        f.write(f"{item[1][i]}\n")
+
     def rml_list(self, recipe=None, overwrite_rml=True):
         """
         Creates the folder structure and RML files needed for simulation. This method organizes simulation parameters into RML files and prepares the directory structure for simulations, which is useful for pre-simulation checks and manual adjustments.
@@ -858,7 +825,15 @@ class Simulate():
         pbar.close()
 
     def _remove_recap_files(self,):
-        print(self.sim_path)
+
+        # Filter files ending with ".csv" or ".data"
+        files_to_remove = ['looper.csv', 'looper.txt']
+
+        # Remove filtered files
+        for file in files_to_remove:
+            to_be_removed = os.path.join(self.sim_path, file)
+            print(to_be_removed)
+            os.remove(to_be_removed)
 
     def _prepare_simulation_environment(self, recipe, overwrite_rml):
         """
@@ -889,18 +864,21 @@ class Simulate():
 
         with ProcessPoolExecutor(max_workers=multiprocessing) as executor:
             simulation_params_batch = []
+            batch_length = 0
+            remaining_simulations = total_simulations
             for round_number in range(self.repeat):
                 for sim_number, params in enumerate(self.sp.simulation_parameters_generator()):
-                    self._update_simulation_recap_files(params, sim_number)
+                    if round_number==0:
+                        self._update_simulation_recap_files(params, sim_number)
                     if self._is_simulation_missing(sim_number, round_number) or force:
-                        self._prepare_and_submit_simulation(params, sim_number, round_number, simulation_params_batch, executor, force)
-                        
+                        self._prepare_and_submit_simulation(params, sim_number, round_number, simulation_params_batch, executor, force)       
                     else:
                         pbar.update(1)  # If not missing or forced, update progress bar directly
-                    all_simulations= sim_number*(round_number+1)+1== total_simulations-1
-                    if len(simulation_params_batch) == self.batch_size or all_simulations:
+                    batch_length += 1
+                    remaining_simulations -= 1
+                    if batch_length == self.batch_size or remaining_simulations == 0:
                         self._wait_for_simulation_batch(simulations_durations, simulation_params_batch, executor, pbar)
-
+                        batch_length = 0
 
     def _prepare_and_submit_simulation(self, params, sim_number, round_number, simulation_params_batch, executor, force):
         """
