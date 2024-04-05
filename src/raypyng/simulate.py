@@ -1,10 +1,13 @@
 import itertools
 import os 
+import sys
+import re
 import numpy as np
 from tqdm import tqdm
 import time
 import csv
 from concurrent.futures import ProcessPoolExecutor, as_completed
+import logging
 
 from .rml import RMLFile
 from .rml import ObjectElement,ParamElement, BeamlineElement
@@ -288,6 +291,7 @@ class Simulate():
             raise Exception("rml file must be defined")
         
 
+        
         self._rml = rml if isinstance(rml, RMLFile) else RMLFile(None, template=rml) if rml else None
         self.path = None  # Path for simulation execution
         self.prefix = 'RAYPy_Simulation'  # Simulation prefix
@@ -298,7 +302,9 @@ class Simulate():
         self.ray_path = ray_path  # RAY-UI installation path
         self.overwrite_rml = True  # Overwrite RML files
         self._sim_folder = None  # Simulation folder name
-        self.batch_size = 1000
+        self.batch_size = 50#1e6
+        self._simulation_timeout = 60
+        self._batch_number = None
         
         self._simulation_name = None  # Custom simulation name
         self._exports = []  # Files to export after simulation
@@ -766,9 +772,9 @@ class Simulate():
             return f"{int(hours):02d}h:{int(minutes):02d}min"
 
     
-    def _initialize_progress_bar(self, total_simulations):
+    def _initialize_progress_bar(self, total_simulations, description="Simulations Completed"):
         bar_format = '{desc}: {percentage:3.0f}%|{bar}| {n_fmt}/{total_fmt} {postfix}]'
-        progress_bar = tqdm(total=total_simulations, bar_format=bar_format, desc="Simulations Completed")
+        progress_bar = tqdm(total=total_simulations, bar_format=bar_format, desc=description)
         return progress_bar
     
     def _print_simulations_info(self):
@@ -798,7 +804,14 @@ class Simulate():
         print("-" * (sum(col_widths) + 3))  # for the separator and spaces
         print()
 
-
+    def _init_logging(self):
+        """Initializes logging for the simulation."""
+        log_filename = os.path.join(self.sim_path,'simulation.log')
+        logging.basicConfig(filename=log_filename, filemode='a', level=logging.DEBUG,
+                            format='%(asctime)s - %(levelname)s - %(message)s')
+        self.logger = logging.getLogger(__name__)
+        self.logger.info(f'Simulation started, using {self._workers} workers')
+        
     def run(self, recipe=None, multiprocessing=1, force=False, overwrite_rml=True):
         """
         Execute simulations with optional recipe, multiprocessing, and file management options.
@@ -814,15 +827,29 @@ class Simulate():
         """
         if not isinstance(multiprocessing, int) or multiprocessing < 1:
             raise ValueError("The 'multiprocessing' argument must be an integer greater than 0.")
+        self._batch_number = 0
+        self._workers = multiprocessing
+        self.batch_size = int(self._workers)*5  
         self._prepare_simulation_environment(recipe, overwrite_rml)
+        self._init_logging()
         total_simulations = self.sp._calc_number_sim() * self.repeat
+        self.simulations_checked = False
 
-        pbar = self._initialize_progress_bar(total_simulations)
-        self._execute_simulations(multiprocessing, force, total_simulations, pbar)
+        pbar = self._initialize_progress_bar(total_simulations, description='Simulations Completed')
+        try:
+            self._execute_simulations(multiprocessing, force, total_simulations, pbar)
+            pbar.close()
+            self.logger.info('Simulation completed successfully.')
+        except Exception as e:
+            self.logger.error('Simulation failed.', exc_info=True) 
         if self.raypyng_analysis:
+            self.logger.info('Starting cleanup')
             pp = PostProcess()
             pp.cleanup(self.sim_path, self.repeat, self._exported_obj_names_list)
-        pbar.close()
+            self.logger.info('Done with the cleanup')
+        self.logger.info('Brute force exit')
+        os._exit(0) # exit brute force
+        
 
     def _remove_recap_files(self,):
 
@@ -832,8 +859,8 @@ class Simulate():
         # Remove filtered files
         for file in files_to_remove:
             to_be_removed = os.path.join(self.sim_path, file)
-            print(to_be_removed)
-            os.remove(to_be_removed)
+            if os.path.exists(to_be_removed):
+                os.remove(to_be_removed)
 
     def _prepare_simulation_environment(self, recipe, overwrite_rml):
         """
@@ -862,23 +889,58 @@ class Simulate():
         """
         simulations_durations = []  # Track durations of all simulations for average calculation
 
-        with ProcessPoolExecutor(max_workers=multiprocessing) as executor:
-            simulation_params_batch = []
-            batch_length = 0
-            remaining_simulations = total_simulations
-            for round_number in range(self.repeat):
-                for sim_number, params in enumerate(self.sp.simulation_parameters_generator()):
-                    if round_number==0:
-                        self._update_simulation_recap_files(params, sim_number)
-                    if self._is_simulation_missing(sim_number, round_number) or force:
-                        self._prepare_and_submit_simulation(params, sim_number, round_number, simulation_params_batch, executor, force)       
-                    else:
-                        pbar.update(1)  # If not missing or forced, update progress bar directly
-                    batch_length += 1
-                    remaining_simulations -= 1
-                    if batch_length == self.batch_size or remaining_simulations == 0:
-                        self._wait_for_simulation_batch(simulations_durations, simulation_params_batch, executor, pbar)
-                        batch_length = 0
+        try:
+            with ProcessPoolExecutor(max_workers=multiprocessing) as executor:
+                simulation_params_batch = []
+                batch_length = 0
+                remaining_simulations = total_simulations
+                for round_number in range(self.repeat):
+                    self.logger.info(f'Start round {round_number}')
+                    for sim_number, params in enumerate(self.sp.simulation_parameters_generator()):
+                        if round_number==0:
+                            self._update_simulation_recap_files(params, sim_number)
+                        if self._is_simulation_missing(sim_number, round_number) or force:
+                            self._prepare_and_submit_simulation(params, sim_number, round_number, simulation_params_batch, executor, force)       
+                        else:
+                            pbar.update(1)  # If not missing or forced, update progress bar directly
+                        batch_length += 1
+                        remaining_simulations -= 1
+                        if batch_length == self.batch_size or remaining_simulations == 0:
+                            self._wait_for_simulation_batch(simulations_durations, simulation_params_batch, executor, pbar)
+                            self.logger.info(f'Waiting For batch, {self.batch_size} simulations to go')
+                            batch_length = 0
+                        if remaining_simulations == 0:
+                            self.logger.info(f'Remaning Simulations {remaining_simulations}, stop the simulations loop')
+                            self._final_check_on_simulations_and_shutdown(executor, pbar)
+                            break 
+        except Exception as e:
+            self.logger.info(f'Error in _execute simulations: {e}')
+            executor.shutdown(wait=False)
+            self.logger.info('Executor shutdown completed.')
+        
+        
+
+    def _final_check_on_simulations_and_shutdown(self, executor, old_pbar):
+
+        #check that all simulatins are completed:
+        self.logger.info(f'Checking that all simulations are completed before stopping the ProcessPoolExecutor')
+        missing_sim = []
+        for round_number in range(self.repeat):
+            for sim_number, params in enumerate(self.sp.simulation_parameters_generator()):
+                if self._is_simulation_missing(sim_number, round_number):
+                    self.logger.info(f'This simulation is missing: round {round_number}, number {sim_number}')
+                    missing_sim.append({'round': round_number, 'sim_number':sim_number})
+
+        executor.shutdown(wait=False)
+        self.logger.info('Executor shutdown completed.')
+
+        if len(missing_sim) >=1 and self.simulations_checked==False:
+            self.logger.info('Finish missing simulations')
+            total_simulations = self.sp._calc_number_sim() * self.repeat
+            old_pbar.close()
+            pbar = self._initialize_progress_bar(total_simulations,description='Checking Simulations')
+            self.simulations_checked = True
+            self._execute_simulations(self._workers, False, total_simulations, pbar)
 
     def _prepare_and_submit_simulation(self, params, sim_number, round_number, simulation_params_batch, executor, force):
         """
@@ -896,6 +958,8 @@ class Simulate():
         exp_list = self._make_exports_list(sim_number, round_number)
         simulation_params = ((rml_file_path, self._hide, self.analyze, self.raypyng_analysis, self.ray_path), exp_list)
         simulation_params_batch.append(simulation_params)
+        self.logger.info(f'Prepared sim number: {sim_number}: {rml_file_path}')
+
 
     def _wait_for_simulation_batch(self, simulations_durations, simulation_params_batch, executor, pbar):
         """
@@ -908,14 +972,50 @@ class Simulate():
             pbar (tqdm): Progress bar object for tracking simulation progress.
         """
         futures = {executor.submit(run_rml_func, sim_params): sim_params for sim_params in simulation_params_batch}
-        for future in as_completed(futures):
-            try:
-                sim_duration = future.result()
+        completed_sim = 0
+        remaining_simulations = self.batch_size
+        self.logger.info(f'Waiting for batch number: {self._batch_number}, timeout: {self._simulation_timeout}s')
+        self._batch_number += 1
+        try:
+            for future in as_completed(futures, timeout=self._simulation_timeout):
+                sim_duration, rml_filename = future.result()
                 simulations_durations.append(sim_duration)
+                self._simulation_timeout = (np.mean(simulations_durations)*self.batch_size/self._workers*1.2)
                 self._update_progress_bar(simulations_durations, pbar)
+                completed_sim += 1
+                remaining_simulations -= 1
+                self.logger.info(f'Completed: {completed_sim}, remaining: {remaining_simulations}, {rml_filename}')
+                # if remaining_simulations == 1:
+                #     break
+        except Exception as e:
+            self.logger.info(f'Exception during simulation: {e}')
+            try:
+                for sim in simulation_params_batch:
+                    _,exp_list = sim
+                    # self.logger.info(f'Extracting exp_list {type(exp_list)}, {exp_list}')
+                    exp = exp_list[0]
+                    # self.logger.info(f'Extracting exp {type(exp)}, {exp}')
+                    # self.logger.info(f'Extracting exp[-2] {type(exp[-2])}, {exp[-2]}')
+                    # self.logger.info(f'Extracting exp[-1] {type(exp[-1])}, {exp[-1]}')
+                    round_n = int(re.findall(r'\d+', exp[-2])[0])
+                    # self.logger.info('Extracting sim_n')
+                    sim_n = int(re.findall(r'\d+', exp[-1])[0])
+                    # self.logger.info(f'round_n: {round_n}')
+                    # self.logger.info(f'sim_n: {sim_n}')
+                    sim_file = sim[0][0]
+                    # self.logger.info(f'Waiting for {sim_file}')
+                    while self._is_simulation_missing(sim_n, round_n)==False:
+                        time.sleep(5)
+                        self.logger.info(f'Waiting for file {sim_file}')
             except Exception as e:
-                print(f"Exception during simulation: {e}")
+                self.logger.info(f'Exception checking simulations: {e}')
+            self.logger.info(f'Found all simulations of the batch, futures missed {remaining_simulations} simulations')
+            for i in range(remaining_simulations):
+                self._update_progress_bar(simulations_durations, pbar)
+            self.logger.info('Updated progress bar')
+            
         simulation_params_batch.clear()  # Reset batch for next set of simulations
+        self.logger.info(f'Batch Completed')
 
     def _update_progress_bar(self, simulations_durations, pbar):
         """
@@ -928,7 +1028,7 @@ class Simulate():
         avg_duration = sum(simulations_durations) / len(simulations_durations)
         last_duration = simulations_durations[-1]
         remaining_simulations = pbar.total - pbar.n
-        eta_seconds = avg_duration * remaining_simulations
+        eta_seconds = avg_duration * remaining_simulations / self._workers
         eta_str = self._format_eta(eta_seconds)
         pbar.set_postfix_str(f"ETA: {eta_str}, Last: {last_duration:.2f}s, Avg: {avg_duration:.2f}s/it", refresh=True)
         pbar.update(1)
@@ -1003,5 +1103,5 @@ def run_rml_func(parameters):
         runner.kill()
     et = time.time()
     simulation_duration = et-st
-    return simulation_duration
+    return simulation_duration, rml_filename
 
