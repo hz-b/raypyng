@@ -1,9 +1,9 @@
 [project]
 name = "raypyng"
-version = "1.2.2"
+version = "1.2.5"
 
 authors = [
-  { name="Simone Vadilonga, Ruslan Ovsyannikov", email="simone.vadilonga@helmholtz-berlin.de" },
+  { name="Simone Vadilonga, Ruslan Ovsyannikov, Sebastian Sachse", email="simone.vadilonga@helmholtz-berlin.de" },
 ]
 description = "Python interface for RAY-UI x-ray tracing program"
 readme = "README.md"
@@ -19,7 +19,8 @@ dependencies = [
             'psutil>=5.9.1',
             'joblib>=1.1.0',
             'matplotlib>=3.5.1',
-            'natsort>=8.2.0 '
+            'natsort>=8.2.0 ', 
+            'tqdm'
 ]
 
 [project.urls]
