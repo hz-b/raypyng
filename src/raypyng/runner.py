@@ -167,7 +167,7 @@ class RayUIRunner:
             str: string with the detected RAY-UI installation path
         """
         basepaths = ("~", "~/Applications","/opt","/Applications")
-        installpaths = ("RAY-UI-development","RAY-UI")
+        installpaths = ("RAY-UI-development","RAY-UI", "Ray-UI")
         pathlist = [os.path.expanduser(p) for p in [os.path.join(x,y) for x in basepaths for y in installpaths]]
 
         for ray_path in pathlist:
