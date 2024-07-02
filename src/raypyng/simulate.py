@@ -852,8 +852,7 @@ class Simulate():
             pp = PostProcess()
             pp.cleanup(self.sim_path, self.repeat, self._exported_obj_names_list)
             self.logger.info('Done with the cleanup')
-        self.logger.info('Brute force exit')
-        os._exit(0) # exit brute force
+        self.logger.info('End of the Simulations')
         
 
     def _remove_recap_files(self,):
