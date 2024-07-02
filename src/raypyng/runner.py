@@ -169,11 +169,10 @@ class RayUIRunner:
         basepaths = ("~", "~/Applications","/opt","/Applications")
         installpaths = ("RAY-UI-development","RAY-UI", "Ray-UI")
         pathlist = [os.path.expanduser(p) for p in [os.path.join(x,y) for x in basepaths for y in installpaths]]
-
         for ray_path in pathlist:
             if os.path.isdir(ray_path):
                 return ray_path
-        raise RayPyRunnerError("Can not detect rayui installation path!")
+        raise RayPyRunnerError("Can not detect rayui installation path! Please provide it manually")
  
 ###############################################################################
 class RayUIAPI:
