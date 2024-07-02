@@ -827,6 +827,11 @@ class Simulate():
         """
         if not isinstance(multiprocessing, int) or multiprocessing < 1:
             raise ValueError("The 'multiprocessing' argument must be an integer greater than 0.")
+        
+        # test that we car run RAY-UI
+        runner = RayUIRunner(ray_path=self.ray_path, hide=True)
+        runner.kill()
+
         self._batch_number = 0
         self._workers = multiprocessing
         self.batch_size = int(self._workers)*5  
@@ -847,8 +852,7 @@ class Simulate():
             pp = PostProcess()
             pp.cleanup(self.sim_path, self.repeat, self._exported_obj_names_list)
             self.logger.info('Done with the cleanup')
-        self.logger.info('Brute force exit')
-        os._exit(0) # exit brute force
+        self.logger.info('End of the Simulations')
         
 
     def _remove_recap_files(self,):
@@ -1079,7 +1083,6 @@ def run_rml_func(parameters):
     """
     st = time.time()
     (rml_filename, hide, analyze, raypyng_analysis, ray_path), exports = parameters
-
     runner = RayUIRunner(ray_path=ray_path, hide=hide)
     api = RayUIAPI(runner)
     pp = PostProcess()
