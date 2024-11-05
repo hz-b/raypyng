@@ -3,7 +3,7 @@ name = "raypyng"
 version = "1.2.7"
 
 authors = [
-  { name="Simone Vadilonga, Ruslan Ovsyannikov", email="simone.vadilonga@helmholtz-berlin.de" },
+  { name="Simone Vadilonga, Ruslan Ovsyannikov, Sebastian Sachse", email="simone.vadilonga@helmholtz-berlin.de" },
 ]
 description = "Python interface for RAY-UI x-ray tracing program"
 readme = "README.md"
