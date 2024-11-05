@@ -1008,7 +1008,7 @@ class Simulate():
                     # self.logger.info(f'sim_n: {sim_n}')
                     sim_file = sim[0][0]
                     # self.logger.info(f'Waiting for {sim_file}')
-                    while self._is_simulation_missing(sim_n, round_n)==False:
+                    while self._is_simulation_missing(sim_n, round_n):
                         time.sleep(5)
                         self.logger.info(f'Waiting for file {sim_file}')
             except Exception as e:
