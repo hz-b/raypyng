@@ -14,7 +14,7 @@ elisa = sim.rml.beamline
 
 # define the values of the parameters to scan 
 energy    = np.arange(200, 7201,250)
-SlitSize  = np.array([0.1])
+SlitSize  = np.array([0.1, 0.2])
 cff       = np.array([2.25])
 nrays     = 10000
 
