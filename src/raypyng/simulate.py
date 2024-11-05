@@ -703,8 +703,8 @@ class Simulate():
         
         # Prepare data for CSV and TXT files
         header = ['Simulation Number'] + [f"{param._parent['name']}.{param['id']}" for param in params]
-        row = [str(simulation_number)] + [param.cdata for param in params]
-        
+        row = [str(simulation_number)] + [param for param in params.values()]
+
         # Update CSV file
         with open(recap_csv_path, 'a', newline='') as csvfile:
             writer = csv.writer(csvfile)
