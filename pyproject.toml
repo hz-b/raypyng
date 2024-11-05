@@ -1,6 +1,6 @@
 [project]
 name = "raypyng"
-version = "1.2.6"
+version = "1.2.7"
 
 authors = [
   { name="Simone Vadilonga, Ruslan Ovsyannikov, Sebastian Sachse", email="simone.vadilonga@helmholtz-berlin.de" },
@@ -20,7 +20,8 @@ dependencies = [
             'joblib>=1.1.0',
             'matplotlib>=3.5.1',
             'natsort>=8.2.0 ', 
-            'tqdm'
+            'tqdm>=4.66.1', 
+            'pandas>=2.1.4'
 ]
 
 [project.urls]

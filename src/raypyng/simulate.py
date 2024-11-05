@@ -8,6 +8,7 @@ import time
 import csv
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import logging
+import pandas as pd 
 
 from .rml import RMLFile
 from .rml import ObjectElement,ParamElement, BeamlineElement
@@ -703,8 +704,8 @@ class Simulate():
         
         # Prepare data for CSV and TXT files
         header = ['Simulation Number'] + [f"{param._parent['name']}.{param['id']}" for param in params]
-        row = [str(simulation_number)] + [param.cdata for param in params]
-        
+        row = [str(simulation_number)] + [param for param in params.values()]
+
         # Update CSV file
         with open(recap_csv_path, 'a', newline='') as csvfile:
             writer = csv.writer(csvfile)
@@ -852,8 +853,24 @@ class Simulate():
             pp = PostProcess()
             pp.cleanup(self.sim_path, self.repeat, self._exported_obj_names_list)
             self.logger.info('Done with the cleanup')
+            if self.analyze == False and self.raypyng_analysis == True:
+                self.logger.info('Create Pandas Recap Files')
+                self._create_results_dataframe()
         self.logger.info('End of the Simulations')
         
+        
+    def _create_results_dataframe(self):
+        looper_path = os.path.join(self.sim_path, 'looper.csv')
+        looper = pd.read_csv(looper_path)
+        for export in self._exported_obj_names_list:
+            for in_out in ['RawRaysIncoming', 'RawRaysOutgoing']:
+                oe_path = os.path.join(self.sim_path,f'{export}_{in_out}.dat')
+                # Reading the data into a DataFrame, specify no comment handling and read headers normally
+                res = pd.read_csv(oe_path, sep="\t", comment=None, header=0)
+                # Manually remove the '#' from the first column name
+                res.columns = [col.replace('#', '').strip() for col in res.columns]
+                res_combined = pd.concat([looper, res], axis=1)
+                res_combined.to_csv(os.path.join(self.sim_path,f'{export}_{in_out}.csv'))
 
     def _remove_recap_files(self,):
 
@@ -1008,7 +1025,7 @@ class Simulate():
                     # self.logger.info(f'sim_n: {sim_n}')
                     sim_file = sim[0][0]
                     # self.logger.info(f'Waiting for {sim_file}')
-                    while self._is_simulation_missing(sim_n, round_n)==False:
+                    while self._is_simulation_missing(sim_n, round_n):
                         time.sleep(5)
                         self.logger.info(f'Waiting for file {sim_file}')
             except Exception as e:
