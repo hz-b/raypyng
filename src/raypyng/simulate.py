@@ -1017,9 +1017,11 @@ class Simulate():
                     round_n = int(re.findall(r'(?<=round_)\d+', exp[-2])[0])
                     sim_n = int(re.findall(r'\d+', exp[-1])[0])
                     sim_file = sim[0][0]
-                    while self._is_simulation_missing(sim_n, round_n):
+                    wait_time = 60
+                    while self._is_simulation_missing(sim_n, round_n) and wait_time>0:
                         time.sleep(5)
-                        self.logger.info(f'Waiting for file {sim_file}')
+                        wait_time -= 5
+                        self.logger.info(f'Waiting for file {sim_file}, wait_time {wait_time}')
             except Exception as e:
                 self.logger.info(f'Exception checking simulations: {e}')
             self.logger.info(f'Found all simulations of the batch, futures missed {remaining_simulations} simulations')
