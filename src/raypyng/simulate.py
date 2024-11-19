@@ -1013,18 +1013,10 @@ class Simulate():
             try:
                 for sim in simulation_params_batch:
                     _,exp_list = sim
-                    # self.logger.info(f'Extracting exp_list {type(exp_list)}, {exp_list}')
                     exp = exp_list[0]
-                    # self.logger.info(f'Extracting exp {type(exp)}, {exp}')
-                    # self.logger.info(f'Extracting exp[-2] {type(exp[-2])}, {exp[-2]}')
-                    # self.logger.info(f'Extracting exp[-1] {type(exp[-1])}, {exp[-1]}')
-                    round_n = int(re.findall(r'\d+', exp[-2])[0])
-                    # self.logger.info('Extracting sim_n')
+                    round_n = int(re.findall(r'(?<=round_)\d+', exp[-2])[0])
                     sim_n = int(re.findall(r'\d+', exp[-1])[0])
-                    # self.logger.info(f'round_n: {round_n}')
-                    # self.logger.info(f'sim_n: {sim_n}')
                     sim_file = sim[0][0]
-                    # self.logger.info(f'Waiting for {sim_file}')
                     while self._is_simulation_missing(sim_n, round_n):
                         time.sleep(5)
                         self.logger.info(f'Waiting for file {sim_file}')
