@@ -813,7 +813,7 @@ class Simulate():
         self.logger = logging.getLogger(__name__)
         self.logger.info(f'Simulation started, using {self._workers} workers')
         
-    def run(self, recipe=None, multiprocessing=1, force=False, overwrite_rml=True):
+    def run(self, recipe=None, multiprocessing=1, force=False, overwrite_rml=True, force_exit=True):
         """
         Execute simulations with optional recipe, multiprocessing, and file management options.
 
@@ -825,6 +825,7 @@ class Simulate():
             multiprocessing (int, optional): Number of processes for parallel execution. Defaults to 1.
             force (bool, optional): Force re-execution of simulations. Defaults to False.
             overwrite_rml (bool, optional): Overwrite existing RML files. Defaults to True.
+            force_exit (bool, optional): calls os.exit when the simulations are complete. Nothing else will run after it. Defaults to True.
         """
         if not isinstance(multiprocessing, int) or multiprocessing < 1:
             raise ValueError("The 'multiprocessing' argument must be an integer greater than 0.")
@@ -857,7 +858,8 @@ class Simulate():
                 self.logger.info('Create Pandas Recap Files')
                 self._create_results_dataframe()
         self.logger.info('End of the Simulations')
-        
+        if force_exit:
+            os._exit(0)
         
     def _create_results_dataframe(self):
         looper_path = os.path.join(self.sim_path, 'looper.csv')
@@ -898,7 +900,7 @@ class Simulate():
         self._remove_recap_files()
         self._print_simulations_info()
 
-    def _execute_simulations(self, multiprocessing, force, total_simulations, pbar):
+    def _execute_simulations(self, multiprocessing, force, total_simulations, pbar, update_reacap_files=True):
         """
         Executes the simulations in batches with multiprocessing support.
 
@@ -918,7 +920,7 @@ class Simulate():
                 for round_number in range(self.repeat):
                     self.logger.info(f'Start round {round_number}')
                     for sim_number, params in enumerate(self.sp.simulation_parameters_generator()):
-                        if round_number==0:
+                        if round_number==0 and update_reacap_files==True:
                             self._update_simulation_recap_files(params, sim_number)
                         if self._is_simulation_missing(sim_number, round_number) or force:
                             self._prepare_and_submit_simulation(params, sim_number, round_number, simulation_params_batch, executor, force)       
@@ -933,6 +935,7 @@ class Simulate():
                         if remaining_simulations == 0:
                             self.logger.info(f'Remaning Simulations {remaining_simulations}, stop the simulations loop')
                             self._final_check_on_simulations_and_shutdown(executor, pbar)
+                            executor.shutdown(wait=False, cancel_futures=True)
                             break 
         except Exception as e:
             self.logger.info(f'Error in _execute simulations: {e}')
@@ -961,7 +964,7 @@ class Simulate():
             old_pbar.close()
             pbar = self._initialize_progress_bar(total_simulations,description='Checking Simulations')
             self.simulations_checked = True
-            self._execute_simulations(self._workers, False, total_simulations, pbar)
+            self._execute_simulations(self._workers, False, total_simulations, pbar, update_reacap_files=False)
 
     def _prepare_and_submit_simulation(self, params, sim_number, round_number, simulation_params_batch, executor, force):
         """
@@ -1011,18 +1014,23 @@ class Simulate():
         except Exception as e:
             self.logger.info(f'Exception during simulation: {e}')
             try:
+                wait_time = self._simulation_timeout/4
                 for sim in simulation_params_batch:
                     _,exp_list = sim
                     exp = exp_list[0]
                     round_n = int(re.findall(r'(?<=round_)\d+', exp[-2])[0])
                     sim_n = int(re.findall(r'\d+', exp[-1])[0])
                     sim_file = sim[0][0]
-                    while self._is_simulation_missing(sim_n, round_n):
+                    while self._is_simulation_missing(sim_n, round_n) and wait_time>0:
                         time.sleep(5)
-                        self.logger.info(f'Waiting for file {sim_file}')
+                        wait_time -= 5
+                        self.logger.info(f'Waiting for file {sim_file}, wait_time {wait_time}')
             except Exception as e:
                 self.logger.info(f'Exception checking simulations: {e}')
-            self.logger.info(f'Found all simulations of the batch, futures missed {remaining_simulations} simulations')
+            if wait_time>=0:
+                self.logger.info(f'Found all simulations of the batch, futures missed {remaining_simulations} simulations')
+            else:
+                self.logger.info(f'Found most simulations of the batch, futures missed at least {remaining_simulations} simulations')
             for i in range(remaining_simulations):
                 self._update_progress_bar(simulations_durations, pbar)
             self.logger.info('Updated progress bar')
