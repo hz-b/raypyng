@@ -16,7 +16,9 @@ class RayProperties(np.ndarray):
         filename (str): file name to load the data from (including the header information/row)
     """
     def __new__(cls,input:np.ndarray=None,/,filename=None) -> None:
-        dt_names = ['SourcePhotonFlux', 'NumberRaysSurvived', 'PercentageRaysSurvived', 'PhotonFlux', 'Bandwidth', 'HorizontalFocusFWHM', 'VerticalFocusFWHM']
+        dt_names = ['SourcePhotonFlux', 'NumberRaysSurvived', 'PercentageRaysSurvived', 
+                    'PhotonFlux', 'PhotonEnergy', 'Bandwidth', 'HorizontalFocusFWHM', 'VerticalFocusFWHM', 
+                    'EnergyPerMilPerBw', 'FluxPerMilPerBwPerc', 'FluxPerMilPerBwAbs']
         dt_formats = [float for n in dt_names]
         dt = np.dtype({'names':dt_names, 'formats':dt_formats})
 
@@ -156,7 +158,7 @@ class PostProcess():
                 if hasattr(oe,"numberRays"):
                     source = oe
                     break
-        nrays = source.numberRays.cdata
+        nrays = float(source.numberRays.cdata)
         try:
             flux = float(source.photonFlux.cdata)
         except:
@@ -164,8 +166,26 @@ class PostProcess():
         
         return flux, nrays
     
+    def extract_energy_from_source(self, rml_filename):
+        """Extract photon energy from rml file, find source automatically
+
+        Args:
+            rml_filename (str): the rml file to use to extract the photon flux
+
+        Returns:
+            str: the photon energy
+        """        
+        s = RMLFile(rml_filename)
+        for oe in s.beamline.children():
+                if hasattr(oe,"numberRays"):
+                    source = oe
+                    break
+        energy = source.photonEnergy.cdata
+        
+        return float(energy)
+    
     def postprocess_RawRays(self,exported_element:str=None, exported_object:str=None, dir_path:str=None, sim_number:str=None, rml_filename:str=None, suffix:str=None):
-        """ PostProcess rountine of the RawRaysOutgoing extracted files.
+        """ PostProcess routine of the RawRaysOutgoing extracted files.
 
         The method looks in the folder dir_path for a file with the filename:
         :code:`filename = os.path.join(dir_path,sim_number+exported_element + '-' + exported_object+'.csv')`
@@ -199,19 +219,27 @@ class PostProcess():
         ray_properties = RayProperties()
         # account for the case that no rays survived
         try:
+            en = self.extract_energy_from_source(rml_filename)
+            ray_properties['PhotonEnergy'] = en
             if rays.shape[0]==0: # if no rays survived
                 # source photon flux
                 ray_properties['SourcePhotonFlux'] = source_photon_flux
                 pass
             else:
+
                 ray_properties['SourcePhotonFlux'] = source_photon_flux
                 ray_properties['NumberRaysSurvived'] = self._extract_intensity(rays)
                 ray_properties['PercentageRaysSurvived'] = ray_properties['NumberRaysSurvived']/source_n_rays*100
                 ray_properties['PhotonFlux'] = source_photon_flux/100*ray_properties['PercentageRaysSurvived']
-                ray_properties['Bandwidth'] = self._extract_fwhm(rays[f'{exported_element}_EN'])
+                bw = self._extract_fwhm(rays[f'{exported_element}_EN'])
+                ray_properties['Bandwidth'] = bw
                 ray_properties['HorizontalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OX'])
-                ray_properties['VerticalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OY'])
+                ray_properties['VerticalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OY']) 
+                ray_properties['EnergyPerMilPerBw'] = self._energy_permil_perbw(en, bw) 
+                ray_properties['FluxPerMilPerBwPerc'] = self._flux_permil_perbw(en, bw, ray_properties['PercentageRaysSurvived']) 
+                ray_properties['FluxPerMilPerBwAbs'] = self._flux_permil_perbw(en, bw, ray_properties['PhotonFlux']) 
         except Exception as e:
+                print(e)
                 ray_properties['SourcePhotonFlux'] = np.nan
                 ray_properties['NumberRaysSurvived'] = np.nan
                 ray_properties['PercentageRaysSurvived'] = np.nan
@@ -219,9 +247,24 @@ class PostProcess():
                 ray_properties['Bandwidth'] = np.nan
                 ray_properties['HorizontalFocusFWHM'] = np.nan
                 ray_properties['VerticalFocusFWHM'] = np.nan
+                ray_properties['EnergyPerMilPerBw'] = np.nan
+                ray_properties['FluxPerMilPerBwPerc'] = np.nan
+                ray_properties['FluxPerMilPerBwAbs'] = np.nan
         new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays'+suffix+'.dat')
         ray_properties.save(new_filename)
         return 
+
+    def _flux_permil_perbw(self, energy, bandwidth, photon_flux):
+        if bandwidth != 0:
+            return energy/1000/bandwidth*photon_flux.astype(float)
+        else: 
+            return np.nan
+
+    def _energy_permil_perbw(self, energy, bw):        
+        if bw != 0:
+            return energy/(1000 * bw)
+        else: 
+            return np.nan
 
     def cleanup(self,dir_path:str=None, repeat:int=1, exp_elements:list=None):
         """Reads all the results of the postprocessing process and summarize 
@@ -236,7 +279,6 @@ class PostProcess():
             repeat (int, optional): number of rounds of simulations. Defaults to 1.
             exp_elements (list, optional): the exported elements names as str. Defaults to None.
         """        
-        header = "SourcePhotonFlux\t\t NumberRaysSurvived\t\t  PercentageRaysSurvived   PhotonFlux\t\t\t\tBandwidth\t\t\t\t HorizontalFocusFWHM\t  VerticalFocusFWHM"
         for d in exp_elements:
             for exp in ['RawRaysOutgoing', 'RawRaysIncoming']:
                 for round in range(repeat):
