@@ -166,6 +166,33 @@ class PostProcess():
         
         return flux, nrays
     
+    def extract_bw_from_source(self, rml_filename):
+        """Extract photon energy from rml file, find source automatically
+
+        Args:
+            rml_filename (str): the rml file to use to extract the photon flux
+
+        Returns:
+            str: the photon energy
+        """        
+        s = RMLFile(rml_filename)
+        for oe in s.beamline.children():
+                if hasattr(oe,"numberRays"):
+                    source = oe
+                    break
+        if source.energySpreadType.comment != 'whiteband':
+            return np.nan
+        
+        bandwidth = float(source.energySpread.cdata)
+        print(f'bw pre {bandwidth}')
+        if source.energySpreadUnit.comment == '%':
+            energy = float(source.photonEnergy.cdata)
+            bandwidth = energy * bandwidth / 100
+            print(f'bw after {bandwidth}, energy {energy}')
+        return bandwidth
+
+        
+    
     def extract_energy_from_source(self, rml_filename):
         """Extract photon energy from rml file, find source automatically
 
@@ -221,6 +248,7 @@ class PostProcess():
         try:
             en = self.extract_energy_from_source(rml_filename)
             ray_properties['PhotonEnergy'] = en
+            bw_source = self.extract_bw_from_source(rml_filename)
             if rays.shape[0]==0: # if no rays survived
                 # source photon flux
                 ray_properties['SourcePhotonFlux'] = source_photon_flux
@@ -235,9 +263,9 @@ class PostProcess():
                 ray_properties['Bandwidth'] = bw
                 ray_properties['HorizontalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OX'])
                 ray_properties['VerticalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OY']) 
-                ray_properties['EnergyPerMilPerBw'] = self._energy_permil_perbw(en, bw) 
-                ray_properties['FluxPerMilPerBwPerc'] = self._flux_permil_perbw(en, bw, ray_properties['PercentageRaysSurvived']) 
-                ray_properties['FluxPerMilPerBwAbs'] = self._flux_permil_perbw(en, bw, ray_properties['PhotonFlux']) 
+                ray_properties['EnergyPerMilPerBw'] = self._energy_permil_perbw(bw, bw_source) 
+                ray_properties['FluxPerMilPerBwPerc'] = self._flux_permil_perbw(bw, bw_source, ray_properties['PercentageRaysSurvived']) 
+                ray_properties['FluxPerMilPerBwAbs'] = self._flux_permil_perbw(bw, bw_source, ray_properties['PhotonFlux']) 
         except Exception as e:
                 print(e)
                 ray_properties['SourcePhotonFlux'] = np.nan
@@ -254,15 +282,16 @@ class PostProcess():
         ray_properties.save(new_filename)
         return 
 
-    def _flux_permil_perbw(self, energy, bandwidth, photon_flux):
+    def _flux_permil_perbw(self, bandwidth, source_bandwidth,  photon_flux):
         if bandwidth != 0:
-            return energy/1000/bandwidth*photon_flux.astype(float)
+            return photon_flux.astype(float)/bandwidth*source_bandwidth
+            # return energy/1000/bandwidth*photon_flux.astype(float)
         else: 
             return np.nan
 
-    def _energy_permil_perbw(self, energy, bw):        
+    def _energy_permil_perbw(self, bw, source_bandwidth):        
         if bw != 0:
-            return energy/(1000 * bw)
+            return source_bandwidth / bw
         else: 
             return np.nan
 
