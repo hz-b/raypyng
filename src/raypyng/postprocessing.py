@@ -184,11 +184,9 @@ class PostProcess():
             return np.nan
         
         bandwidth = float(source.energySpread.cdata)
-        print(f'bw pre {bandwidth}')
         if source.energySpreadUnit.comment == '%':
             energy = float(source.photonEnergy.cdata)
             bandwidth = energy * bandwidth / 100
-            print(f'bw after {bandwidth}, energy {energy}')
         return bandwidth
 
         
