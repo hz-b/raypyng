@@ -265,7 +265,6 @@ class PostProcess():
                 ray_properties['FluxPerMilPerBwPerc'] = self._flux_permil_perbw(bw, bw_source, ray_properties['PercentageRaysSurvived']) 
                 ray_properties['FluxPerMilPerBwAbs'] = self._flux_permil_perbw(bw, bw_source, ray_properties['PhotonFlux']) 
         except Exception as e:
-                print(e)
                 ray_properties['SourcePhotonFlux'] = np.nan
                 ray_properties['NumberRaysSurvived'] = np.nan
                 ray_properties['PercentageRaysSurvived'] = np.nan
