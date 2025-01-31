@@ -5,6 +5,7 @@ import warnings
 from natsort import natsorted, ns
 
 from .rml import RMLFile
+from .diodes import AXUVDiode, GaASPDiode
 
 class RayProperties(np.ndarray):
     """RayProperties class privides simplified interface to access results of the 
@@ -18,7 +19,7 @@ class RayProperties(np.ndarray):
     def __new__(cls,input:np.ndarray=None,/,filename=None) -> None:
         dt_names = ['SourcePhotonFlux', 'NumberRaysSurvived', 'PercentageRaysSurvived', 
                     'PhotonFlux', 'PhotonEnergy', 'Bandwidth', 'HorizontalFocusFWHM', 'VerticalFocusFWHM', 
-                    'EnergyPerMilPerBw', 'FluxPerMilPerBwPerc', 'FluxPerMilPerBwAbs']
+                    'EnergyPerMilPerBw', 'FluxPerMilPerBwPerc', 'FluxPerMilPerBwAbs', 'AXUVCurrentAmp', 'GaAsPCurrentAmp']
         dt_formats = [float for n in dt_names]
         dt = np.dtype({'names':dt_names, 'formats':dt_formats})
 
@@ -66,7 +67,8 @@ class PostProcess():
     def __init__(self) -> None:
     
         self.format_saved_files = '.dat'
-        pass
+        self.axuv_diode = AXUVDiode()
+        self.gaasp_diode = GaASPDiode()
 
     def _list_files(self, dir_path: str, contain_str: str = None, end_filename: str = None):
         """
@@ -244,8 +246,8 @@ class PostProcess():
         ray_properties = RayProperties()
         # account for the case that no rays survived
         try:
-            en = self.extract_energy_from_source(rml_filename)
-            ray_properties['PhotonEnergy'] = en
+            energy = self.extract_energy_from_source(rml_filename)
+            ray_properties['PhotonEnergy'] = energy
             bw_source = self.extract_bw_from_source(rml_filename)
             if rays.shape[0]==0: # if no rays survived
                 # source photon flux
@@ -256,7 +258,8 @@ class PostProcess():
                 ray_properties['SourcePhotonFlux'] = source_photon_flux
                 ray_properties['NumberRaysSurvived'] = self._extract_intensity(rays)
                 ray_properties['PercentageRaysSurvived'] = ray_properties['NumberRaysSurvived']/source_n_rays*100
-                ray_properties['PhotonFlux'] = source_photon_flux/100*ray_properties['PercentageRaysSurvived']
+                photon_flux = source_photon_flux/100*ray_properties['PercentageRaysSurvived']
+                ray_properties['PhotonFlux'] = photon_flux
                 bw = self._extract_fwhm(rays[f'{exported_element}_EN'])
                 ray_properties['Bandwidth'] = bw
                 ray_properties['HorizontalFocusFWHM'] = self._extract_fwhm(rays[f'{exported_element}_OX'])
@@ -264,6 +267,8 @@ class PostProcess():
                 ray_properties['EnergyPerMilPerBw'] = self._energy_permil_perbw(bw, bw_source) 
                 ray_properties['FluxPerMilPerBwPerc'] = self._flux_permil_perbw(bw, bw_source, ray_properties['PercentageRaysSurvived']) 
                 ray_properties['FluxPerMilPerBwAbs'] = self._flux_permil_perbw(bw, bw_source, ray_properties['PhotonFlux']) 
+                ray_properties['AXUVCurrentAmp'] = self.axuv_diode.convert_photons_to_amp(energy, photon_flux)
+                ray_properties['GaAsPCurrentAmp'] = self.gaasp_diode.convert_photons_to_amp(energy, photon_flux)
         except Exception as e:
                 ray_properties['SourcePhotonFlux'] = np.nan
                 ray_properties['NumberRaysSurvived'] = np.nan
@@ -275,6 +280,8 @@ class PostProcess():
                 ray_properties['EnergyPerMilPerBw'] = np.nan
                 ray_properties['FluxPerMilPerBwPerc'] = np.nan
                 ray_properties['FluxPerMilPerBwAbs'] = np.nan
+                ray_properties['AXUVCurrentAmp'] =  np.nan
+                ray_properties['GaAsPCurrentAmp'] = np.nan
         new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays'+suffix+'.dat')
         ray_properties.save(new_filename)
         return 
