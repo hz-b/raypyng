@@ -49,10 +49,9 @@ class Diode:
         Raises:
             ValueError: If the energy and photon arrays do not have the same number of elements.
         """
-        # Ensure both arrays are numpy arrays for uniform processing and comparison
-        energy_eV = np.asarray(energy_eV)
-        n_photons = np.asarray(n_photons)
-
+        # Ensure both inputs are converted to numpy arrays
+        energy_eV = np.atleast_1d(np.asarray(energy_eV))
+        n_photons = np.atleast_1d(np.asarray(n_photons))
         # Check if energy_eV and n_photons have the same number of elements
         if energy_eV.shape != n_photons.shape:
             raise ValueError("The 'energy_eV' and 'n_photons' arrays must have the same number of elements.")
