@@ -1,5 +1,7 @@
 from importlib.resources import path
 import numpy as np
+import pandas as pd
+from pathlib import Path
 import os
 import warnings
 from natsort import natsorted, ns
@@ -211,7 +213,9 @@ class PostProcess():
         
         return float(energy)
     
-    def postprocess_RawRays(self,exported_element:str=None, exported_object:str=None, dir_path:str=None, sim_number:str=None, rml_filename:str=None, suffix:str=None):
+    def postprocess_RawRays(self,exported_element:str=None, exported_object:str=None, 
+                            dir_path:str=None, sim_number:str=None, rml_filename:str=None, 
+                            suffix:str=None, remove_rawrays:bool=False):
         """ PostProcess routine of the RawRaysOutgoing extracted files.
 
         The method looks in the folder dir_path for a file with the filename:
@@ -284,6 +288,8 @@ class PostProcess():
                 ray_properties['GaAsPCurrentAmp'] = np.nan
         new_filename = os.path.join(dir_path, sim_number+exported_element+'_analyzed_rays'+suffix+'.dat')
         ray_properties.save(new_filename)
+        if remove_rawrays:
+            remove_file(filename)
         return 
 
     def _flux_permil_perbw(self, bandwidth, source_bandwidth,  photon_flux):
@@ -452,3 +458,9 @@ class PostProcessAnalyzed():
         return np.convolve(x, np.ones(w), 'valid') / w
 
 
+def remove_file(file_path):
+    p = Path(file_path)
+    try:
+        p.unlink()
+    except Exception as e:
+        print(f"Failed to remove {file_path}: {e}")
