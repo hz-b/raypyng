@@ -585,7 +585,11 @@ class Simulate():
         For each dictionary the keys are the parameters elements of the beamline, and the values are the 
         values to be assigned.
         """               
-        return self.param
+        if hasattr(self.sp, "params"):
+            value = self.sp.params
+        else:
+            value = []
+        return value
 
     @params.setter
     def params(self,value):
