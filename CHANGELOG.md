@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
  
-## [1.2.86] - 2025-02-03
+## [1.2.900] - 2025-02-03
 ### Added
  - When raypyng analyzes the results, if the number of photons is available, it calculates the **current generated in a AXUV or a GaAsP diode**. Pull Request [#32](https://github.com/hz-b/raypyng/pull/32)
  - Added **options to save space on disk** via pull request [#34](https://github.com/hz-b/raypyng/pull/34). If raypyng is doing the analysis, it means that RawRays files are exported, which can be pretty large. This pull request introduces the following changes:
