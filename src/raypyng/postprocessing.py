@@ -333,6 +333,7 @@ class PostProcess():
                             tmp = RayProperties(filename=f)
                             for n in analyzed_rays.dtype.names: 
                                 analyzed_rays[n][f_ind] += tmp[n]
+                        os.remove(f)
                 # take the average
                 for n in analyzed_rays.dtype.names:
                     analyzed_rays[n] /= repeat

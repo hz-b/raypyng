@@ -1,6 +1,6 @@
 import itertools
 import os 
-import sys
+import shutil
 import re
 import numpy as np
 from tqdm import tqdm
@@ -824,7 +824,7 @@ class Simulate():
         self.logger.info(f'Simulation started, using {self._workers} workers')
         
     def run(self, recipe=None, multiprocessing=1, force=False, overwrite_rml=True,
-            force_exit=True,remove_rawrays=False):
+            force_exit=True, remove_rawrays=False, remove_round_folders=False):
         """
         Execute simulations with optional recipe, multiprocessing, and file management options.
 
@@ -837,10 +837,14 @@ class Simulate():
             force (bool, optional): Force re-execution of simulations. Defaults to False.
             overwrite_rml (bool, optional): Overwrite existing RML files. Defaults to True.
             force_exit (bool, optional): calls os.exit when the simulations are complete. Nothing else will run after it. Defaults to True.
+            remove_rawrays (bool, optional): removes RawRaysIncoming and RawRaysOutgoing files, if present.
+            remove_round_folders (bool, optional): remove the round folders after the simulations are done.
         """
         if not isinstance(multiprocessing, int) or multiprocessing < 1:
             raise ValueError("The 'multiprocessing' argument must be an integer greater than 0.")
         
+        if remove_rawrays and not self.raypyng_analysis:
+            raise Exception(f'Setting remove_rawrays to True is allowed only raypyng_analysis is set to True')
         if remove_rawrays:
             self.remove_rawrays=remove_rawrays
         # test that we car run RAY-UI
@@ -870,9 +874,17 @@ class Simulate():
             if self.analyze == False and self.raypyng_analysis == True:
                 self.logger.info('Create Pandas Recap Files')
                 self._create_results_dataframe()
+        if remove_round_folders:
+            self._remove_round_folders()
         self.logger.info('End of the Simulations')
         if force_exit:
             os._exit(0)
+    
+    def _remove_round_folders(self):
+        for round_n in range(self._repeat):
+            round_folder_path = os.path.join(self.sim_path, 'round_'+str(round_n))
+            if os.path.exists(round_folder_path):
+                shutil.rmtree(round_folder_path)
         
     def _create_results_dataframe(self):
         looper_path = os.path.join(self.sim_path, 'looper.csv')
@@ -886,6 +898,7 @@ class Simulate():
                 res.columns = [col.replace('#', '').strip() for col in res.columns]
                 res_combined = pd.concat([looper, res], axis=1)
                 res_combined.to_csv(os.path.join(self.sim_path,f'{export}_{in_out}.csv'))
+        
 
     def _remove_recap_files(self,):
 
