@@ -14,8 +14,8 @@ elisa = sim.rml.beamline
 
 # define the values of the parameters to scan 
 energy    = np.arange(200, 7201,250)
-SlitSize  = np.array([0.1])
-cff       = np.array([2.25, 3])
+SlitSize  = np.array([0.1, 0.2])
+cff       = np.array([2.25])
 nrays     = 5e4
 
 # define a list of dictionaries with the parameters to scan
@@ -43,11 +43,11 @@ sim.raypyng_analysis=True # let raypyng analyze the results
 
 ## This must be a list of dictionaries
 sim.exports  =  [{elisa.Dipole:['RawRaysOutgoing']},
-                {elisa.DetectorAtFocus:['RawRaysOutgoing']},
+                {elisa.DetectorAtFocus:['RawRaysOutgoing']}
                 ]
 
 #uncomment to run the simulations
-sim.run(multiprocessing=1, force=True, remove_rawrays=True)
+sim.run(multiprocessing=5, force=True, remove_rawrays=True)
 
 
 
