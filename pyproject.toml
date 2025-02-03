@@ -1,6 +1,6 @@
 [project]
 name = "raypyng"
-version = "1.2.86"
+version = "1.2.900"
 
 authors = [
   { name="Simone Vadilonga, Ruslan Ovsyannikov, Sebastian Sachse", email="simone.vadilonga@helmholtz-berlin.de" },
@@ -24,7 +24,5 @@ dependencies = [
             'pandas>=2.1.4'
 ]
 
-[project.urls]
-"Homepage" = "https://github.com/hz-b/raypyng/"
-"Bug Tracker" = "https://github.com/hz-b/raypyng/issues"
-"Documentation" = "https://raypyng.readthedocs.io"
+[tool.setuptools.package-data]
+mypkg = ["*.csv"]

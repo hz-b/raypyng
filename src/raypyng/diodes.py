@@ -1,9 +1,11 @@
 import os
 import pandas as pd
 import numpy as np
+from .diodes_data.AXUV import AXUV_dict
+from .diodes_data.GaAsP import GaAsP_dict
 
 class Diode:
-    def __init__(self, diode_filepath, conversion_column):
+    def __init__(self, diode_dict, conversion_column):
         """
         Initializes the Diode class with a specific CSV file path and conversion column.
 
@@ -12,12 +14,14 @@ class Diode:
             conversion_column (str): Column name in the CSV file used for conversion calculations.
 
         """
-        # Getting the directory of the current script file
-        current_dir = os.path.dirname(__file__)
-        # Building the relative path to the CSV file
-        self.diode_filepath = os.path.join(current_dir, diode_filepath)
-        # Reading the CSV file
-        self.diode = pd.read_csv(self.diode_filepath)
+        # # Getting the directory of the current script file
+        # current_dir = os.path.dirname(__file__)
+        # # Building the relative path to the CSV file
+        # self.diode_filepath = os.path.join(current_dir, diode_filepath)
+        # # Reading the CSV file
+        # self.diode = pd.read_csv(self.diode_filepath)
+
+        self.diode = diode_dict
         # Store the column name used for conversion factors
         self.conversion_column = conversion_column
 
@@ -97,18 +101,32 @@ class Diode:
                                                   self.diode[self.conversion_column])
         return conversion_factors
 
+def load_data_from_py_AXUV():
+    # Convert the dictionary back to a DataFrame
+    df = pd.DataFrame(list(AXUV_dict.items()),
+    columns=['Energy[keV]', 'Photon_to_nAmp_BestOf'])    
+    return df
+
+def load_data_from_py_GaAsP():
+    # Convert the dictionary back to a DataFrame
+    df = pd.DataFrame(list(GaAsP_dict.items()),
+    columns=['Energy[keV]', 'Photon_to_nAmp'])
+    return df
+
 class AXUVDiode(Diode):
     def __init__(self):
         """
         Initializes the AXUVDiode subclass, specifying the CSV file and conversion column for AXUV diodes.
         """
-        super().__init__('diodes/AXUV.csv', 'Photon_to_nAmp_BestOf')
+        axuv = load_data_from_py_AXUV()
+        super().__init__(axuv, 'Photon_to_nAmp_BestOf')
 
 class GaASPDiode(Diode):
     def __init__(self):
         """
         Initializes the GaASPDiode subclass, specifying the CSV file and conversion column for GaASP diodes.
         """
-        super().__init__('diodes/GaAsP.csv', 'Photon_to_nAmp')
+        gaasp = load_data_from_py_GaAsP()
+        super().__init__(gaasp, 'Photon_to_nAmp')
 
 
