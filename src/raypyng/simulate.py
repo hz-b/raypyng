@@ -1,6 +1,6 @@
 import itertools
 import os 
-import sys
+import shutil
 import re
 import numpy as np
 from tqdm import tqdm
@@ -315,6 +315,7 @@ class Simulate():
         self.sim_list_path = []  # Paths to RML files
         self.sim_path = None  # Simulation directory path
         self.durations = []  # Durations of simulations
+        self.remove_rawrays = False # remove or not the rawrays files
         self.total_duration = None  # Total duration of all simulations
         self.completed_simulations = None  # Count of completed simulations
         self._possible_exports = ['AnglePhiDistribution', # possible exports when RAY-UI analysis is active
@@ -745,10 +746,15 @@ class Simulate():
         """
         round_folder = 'round_'+str(repeat)
         folder = os.path.join(self._sim_folder, round_folder)
-        for export_config in self._exports_list:  
-            export_file = os.path.join(folder, f"{sim_index}_{export_config[0]}-{export_config[1]}.csv")
+        for export_config in self._exports_list:
+            if self.raypyng_analysis:
+                export_file = os.path.join(folder, f"{sim_index}_{export_config[0]}_analyzed_rays_{export_config[1]}.dat")
+            else:
+                export_file = os.path.join(folder, f"{sim_index}_{export_config[0]}-{export_config[1]}.csv")
             if not os.path.exists(export_file):
                 return True  # Missing at least one export file
+
+        
         return False
 
     def _make_exports_list(self, sim_number, round_n):
@@ -817,7 +823,8 @@ class Simulate():
         self.logger = logging.getLogger(__name__)
         self.logger.info(f'Simulation started, using {self._workers} workers')
         
-    def run(self, recipe=None, multiprocessing=1, force=False, overwrite_rml=True, force_exit=True):
+    def run(self, recipe=None, multiprocessing=1, force=False, overwrite_rml=True,
+            force_exit=True, remove_rawrays=False, remove_round_folders=False):
         """
         Execute simulations with optional recipe, multiprocessing, and file management options.
 
@@ -830,10 +837,16 @@ class Simulate():
             force (bool, optional): Force re-execution of simulations. Defaults to False.
             overwrite_rml (bool, optional): Overwrite existing RML files. Defaults to True.
             force_exit (bool, optional): calls os.exit when the simulations are complete. Nothing else will run after it. Defaults to True.
+            remove_rawrays (bool, optional): removes RawRaysIncoming and RawRaysOutgoing files, if present.
+            remove_round_folders (bool, optional): remove the round folders after the simulations are done.
         """
         if not isinstance(multiprocessing, int) or multiprocessing < 1:
             raise ValueError("The 'multiprocessing' argument must be an integer greater than 0.")
         
+        if remove_rawrays and not self.raypyng_analysis:
+            raise Exception(f'Setting remove_rawrays to True is allowed only raypyng_analysis is set to True')
+        if remove_rawrays:
+            self.remove_rawrays=remove_rawrays
         # test that we car run RAY-UI
         runner = RayUIRunner(ray_path=self.ray_path, hide=True)
         runner.kill()
@@ -861,9 +874,17 @@ class Simulate():
             if self.analyze == False and self.raypyng_analysis == True:
                 self.logger.info('Create Pandas Recap Files')
                 self._create_results_dataframe()
+        if remove_round_folders:
+            self._remove_round_folders()
         self.logger.info('End of the Simulations')
         if force_exit:
             os._exit(0)
+    
+    def _remove_round_folders(self):
+        for round_n in range(self._repeat):
+            round_folder_path = os.path.join(self.sim_path, 'round_'+str(round_n))
+            if os.path.exists(round_folder_path):
+                shutil.rmtree(round_folder_path)
         
     def _create_results_dataframe(self):
         looper_path = os.path.join(self.sim_path, 'looper.csv')
@@ -877,6 +898,7 @@ class Simulate():
                 res.columns = [col.replace('#', '').strip() for col in res.columns]
                 res_combined = pd.concat([looper, res], axis=1)
                 res_combined.to_csv(os.path.join(self.sim_path,f'{export}_{in_out}.csv'))
+        
 
     def _remove_recap_files(self,):
 
@@ -984,7 +1006,7 @@ class Simulate():
         """
         rml_file_path = self._generate_rml_file(sim_number, round_number, params)
         exp_list = self._make_exports_list(sim_number, round_number)
-        simulation_params = ((rml_file_path, self._hide, self.analyze, self.raypyng_analysis, self.ray_path), exp_list)
+        simulation_params = ((rml_file_path, self._hide, self.analyze, self.raypyng_analysis, self.ray_path, self.remove_rawrays), exp_list)
         simulation_params_batch.append(simulation_params)
         self.logger.info(f'Prepared sim number: {sim_number}: {rml_file_path}')
 
@@ -1103,7 +1125,7 @@ def run_rml_func(parameters):
                             and the path to the RAY-UI installation.
     """
     st = time.time()
-    (rml_filename, hide, analyze, raypyng_analysis, ray_path), exports = parameters
+    (rml_filename, hide, analyze, raypyng_analysis, ray_path, remove_rawrays), exports = parameters
     runner = RayUIRunner(ray_path=ray_path, hide=hide)
     api = RayUIAPI(runner)
     pp = PostProcess()
@@ -1114,8 +1136,10 @@ def run_rml_func(parameters):
         api.save(rml_filename)
         for export_params in exports:
             api.export(*export_params)
-            if raypyng_analysis:
-                pp.postprocess_RawRays(*export_params, rml_filename, suffix=export_params[1])
+        if raypyng_analysis:
+            for export_params in exports:
+                pp.postprocess_RawRays(*export_params, rml_filename, 
+                                       suffix=export_params[1], remove_rawrays=remove_rawrays)
     except Exception as e:
         print(f"WARNING! Got exception while processing {rml_filename}, the error was: {e}")
     finally:
