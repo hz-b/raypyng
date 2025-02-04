@@ -184,11 +184,19 @@ class PostProcess():
                 if hasattr(oe,"numberRays"):
                     source = oe
                     break
-        if source.energySpreadType.comment != 'whiteband':
+        if source.energySpreadType.comment != 'whiteband' and source.energySpreadType.comment != 'white band':
             return np.nan
         
         bandwidth = float(source.energySpread.cdata)
-        if source.energySpreadUnit.comment == '%':
+        # most of the sources have the energySpreadUnit
+        if hasattr(source, 'energySpreadUnit'):
+            if source.energySpreadUnit.comment == '%':
+                energy = float(source.photonEnergy.cdata)
+                bandwidth = energy * bandwidth / 100
+            else:
+                return np.nan
+        # but not the undulatorFile, so in that case we skip the control
+        else:
             energy = float(source.photonEnergy.cdata)
             bandwidth = energy * bandwidth / 100
         return bandwidth
@@ -258,7 +266,6 @@ class PostProcess():
                 ray_properties['SourcePhotonFlux'] = source_photon_flux
                 pass
             else:
-
                 ray_properties['SourcePhotonFlux'] = source_photon_flux
                 ray_properties['NumberRaysSurvived'] = self._extract_intensity(rays)
                 ray_properties['PercentageRaysSurvived'] = ray_properties['NumberRaysSurvived']/source_n_rays*100
@@ -274,6 +281,7 @@ class PostProcess():
                 ray_properties['AXUVCurrentAmp'] = self.axuv_diode.convert_photons_to_amp(energy, photon_flux)
                 ray_properties['GaAsPCurrentAmp'] = self.gaasp_diode.convert_photons_to_amp(energy, photon_flux)
         except Exception as e:
+                print(f'e: {e}')
                 ray_properties['SourcePhotonFlux'] = np.nan
                 ray_properties['NumberRaysSurvived'] = np.nan
                 ray_properties['PercentageRaysSurvived'] = np.nan
