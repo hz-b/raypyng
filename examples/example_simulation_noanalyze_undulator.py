@@ -6,12 +6,12 @@ import time
 st = time.time()
 
 this_file_dir=os.path.dirname(os.path.realpath(__file__))
-rml_file = os.path.join(this_file_dir,'rml/nap-leem.rml')
+rml_file = os.path.join(this_file_dir,'rml/simple_undulator_beamline.rml')
 
 sim = Simulate(rml_file, hide=True)
 
 rml=sim.rml
-elisa = sim.rml.beamline
+beamline = sim.rml.beamline
 
 
 
@@ -24,12 +24,12 @@ nrays     = 1e5
 # define a list of dictionaries with the parameters to scan
 params = [  
             # set two parameters: "alpha" and "beta" in a dependent way. 
-            {elisa.SU.photonEnergy:energy}, 
+            {beamline.SU.photonEnergy:energy}, 
             # set a range of  values 
-            {elisa.ExitSlit.totalHeight:SlitSize},
+            {beamline.ExitSlit.totalHeight:SlitSize},
             # set values 
-            {elisa.PG.cFactor:cff},
-            {elisa.SU.numberRays:nrays}
+            {beamline.PG.cFactor:cff},
+            {beamline.SU.numberRays:nrays}
         ]
 
 #and then plug them into the Simulation class
@@ -45,8 +45,8 @@ sim.analyze = False # don't let RAY-UI analyze the results
 sim.raypyng_analysis=True # let raypyng analyze the results
 
 ## This must be a list of dictionaries
-sim.exports  =  [{elisa.SU:['RawRaysOutgoing']},
-                {elisa.DetectorAtFocus:['RawRaysOutgoing']}
+sim.exports  =  [{beamline.SU:['RawRaysOutgoing']},
+                {beamline.DetectorAtFocus:['RawRaysOutgoing']}
                 ]
 
 #uncomment to run the simulations
