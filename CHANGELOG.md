@@ -15,4 +15,24 @@ All notable changes to this project will be documented in this file.
  
 ### Fixed
 - issue [#29](https://github.com/hz-b/raypyng/issues/29), Simulate.params used to throw an error when attempting list step-wise operation.
+
+
+## [1.2.910] - 2025-02-05
+### Added
+- it is now possible to load an undulator table in the form of a pandas dataframe. 
+  - The dataframe should have, for each harmonic, one column for the energy and one for the number of photons produced. 
+  - For instance, for the third harmonic the columns should be named `Energy3[eV]` and `Photons3`
+  - If raypyng analysis is active, the resulting number of photons will be calculated for each harmonic
+- add an example to show how to work with the undulator table, see `example_simulation_noanalyze_undulator.py`
+
+### Changed
+- RayProperties now uses pandas instead of numpy arrays. The recap files are exported only as `.csv` files, the `.dat` files are now deleted after they have been merged (and they were incomplete, as they are only an intermediate step).
  
+### Fixed
+- fixed postprocessing for undulator file beamlines, the bug was introduced with 1.2.900
+- issue [#38](https://github.com/hz-b/raypyng/issues/38), [#39](https://github.com/hz-b/raypyng/issues/39)
+
+
+
+
+
