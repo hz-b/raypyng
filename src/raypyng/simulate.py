@@ -311,6 +311,7 @@ class Simulate():
         self._exports = []  # Files to export after simulation
         self._exports_list = []  # Processed list of exports
         self._exported_obj_names_list = [] # List containing the names of the objects to export
+        self._undulator_table = None # holder for undulator table pandas dataframe
         self.sp = None  # SimulationParams instance
         self.sim_list_path = []  # Paths to RML files
         self.sim_path = None  # Simulation directory path
@@ -455,6 +456,49 @@ class Simulate():
         if not isinstance(value, str):
             raise ValueError ('Only str are allowed')
         self._prefix = value
+
+    @property
+    def undulator_table(self):
+        """The parameters to scan, as a list of dictionaries.
+
+        For each dictionary the keys are the parameters elements of the beamline, and the values are the 
+        values to be assigned.
+        """               
+        
+        return self._undulator_table
+
+    @undulator_table.setter
+    def undulator_table(self,value):
+        self._validate_undulator_table(value)
+        self._undulator_table = value
+
+
+    def _validate_undulator_table(self, value):
+        # check that source is not Dipole or Undulator File
+        for oe in self._rml.beamline.children():
+            if hasattr(oe, 'numberRays'):
+                if oe['type'] == 'Dipole' or oe['type'] == 'Undulator File':
+                    raise Exception(f'The undulator table can not be used with source type "Dipole" and "Undulator File", the source type in the rml file is {oe["type"]}')
+                    
+        
+        # Check if the value is an instance of pandas DataFrame
+        if not isinstance(value, pd.DataFrame):
+            raise TypeError("The undulator_table must be a pandas DataFrame.")
+        
+        # Check if the number of columns is even
+        num_columns = value.shape[1]  # shape[1] returns the number of columns
+        if num_columns % 2 != 0:
+            raise ValueError("The DataFrame must have an even number of columns.")
+
+        # Validate column names according to specified patterns
+        for i in range(0, num_columns, 2):  # Iterate over even indices representing odd columns
+            expected_energy_name = f"Energy{2 * (i // 2 + 1) - 1}[eV]"
+            expected_harmonic_name = f"Photons{2 * (i // 2 + 1) - 1}"
+            if value.columns[i+1] != expected_harmonic_name:
+                raise ValueError(f"Expected column {i} to be named '{expected_harmonic_name}', but got '{value.columns[i]}'.")
+
+            if value.columns[i] != expected_energy_name:
+                raise ValueError(f"Expected column {i + 1} to be named '{expected_energy_name}', but got '{value.columns[i + 1]}'.")
 
     @property 
     def exports(self):
@@ -869,7 +913,7 @@ class Simulate():
         if self.raypyng_analysis:
             self.logger.info('Starting cleanup')
             pp = PostProcess()
-            pp.cleanup(self.sim_path, self.repeat, self._exported_obj_names_list)
+            pp.cleanup(self.sim_path, self.repeat, self._exported_obj_names_list, undulator_table=self.undulator_table)
             self.logger.info('Done with the cleanup')
             if self.analyze == False and self.raypyng_analysis == True:
                 self.logger.info('Create Pandas Recap Files')
@@ -891,12 +935,13 @@ class Simulate():
         looper = pd.read_csv(looper_path)
         for export in self._exported_obj_names_list:
             for in_out in ['RawRaysIncoming', 'RawRaysOutgoing']:
-                oe_path = os.path.join(self.sim_path,f'{export}_{in_out}.dat')
+                oe_path = os.path.join(self.sim_path,f'{export}_{in_out}.csv')
                 # Reading the data into a DataFrame, specify no comment handling and read headers normally
-                res = pd.read_csv(oe_path, sep="\t", comment=None, header=0)
+                res = pd.read_csv(oe_path, comment=None, header=0, index_col=False)
                 # Manually remove the '#' from the first column name
                 res.columns = [col.replace('#', '').strip() for col in res.columns]
                 res_combined = pd.concat([looper, res], axis=1)
+                res_combined = res_combined.loc[:, ~res_combined.columns.str.contains('^Unnamed')]
                 res_combined.to_csv(os.path.join(self.sim_path,f'{export}_{in_out}.csv'))
         
 
@@ -1006,7 +1051,7 @@ class Simulate():
         """
         rml_file_path = self._generate_rml_file(sim_number, round_number, params)
         exp_list = self._make_exports_list(sim_number, round_number)
-        simulation_params = ((rml_file_path, self._hide, self.analyze, self.raypyng_analysis, self.ray_path, self.remove_rawrays), exp_list)
+        simulation_params = ((rml_file_path, self._hide, self.analyze, self.raypyng_analysis, self.ray_path, self.remove_rawrays, self.undulator_table), exp_list)
         simulation_params_batch.append(simulation_params)
         self.logger.info(f'Prepared sim number: {sim_number}: {rml_file_path}')
 
@@ -1125,7 +1170,7 @@ def run_rml_func(parameters):
                             and the path to the RAY-UI installation.
     """
     st = time.time()
-    (rml_filename, hide, analyze, raypyng_analysis, ray_path, remove_rawrays), exports = parameters
+    (rml_filename, hide, analyze, raypyng_analysis, ray_path, remove_rawrays, undulator_table), exports = parameters
     runner = RayUIRunner(ray_path=ray_path, hide=hide)
     api = RayUIAPI(runner)
     pp = PostProcess()
@@ -1139,7 +1184,9 @@ def run_rml_func(parameters):
         if raypyng_analysis:
             for export_params in exports:
                 pp.postprocess_RawRays(*export_params, rml_filename, 
-                                       suffix=export_params[1], remove_rawrays=remove_rawrays)
+                                       suffix=export_params[1], 
+                                       remove_rawrays=remove_rawrays, 
+                                       undulator_table=undulator_table)
     except Exception as e:
         print(f"WARNING! Got exception while processing {rml_filename}, the error was: {e}")
     finally:

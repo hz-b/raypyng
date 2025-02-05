@@ -43,7 +43,7 @@ sim.params=params
 sim.simulation_name = 'test_noAnalyze_undulator_wave'
 
 # repeat the simulations as many time as needed
-sim.repeat = 1
+sim.repeat = 2
 
 sim.analyze = False # don't let RAY-UI analyze the results
 sim.raypyng_analysis=True # let raypyng analyze the results
@@ -54,6 +54,6 @@ sim.exports  =  [{beamline.Undulator:['RawRaysOutgoing']},
                 ]
 
 #uncomment to run the simulations
-sim.run(multiprocessing=1, force=True)
+sim.run(multiprocessing=5, force=True)
 
 
