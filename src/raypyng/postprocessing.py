@@ -281,10 +281,10 @@ class PostProcess():
                         ray_properties.df[f'GaAsPCurrentAmp{harmonic}'].iloc[0] = self.gaasp_diode.convert_photons_to_amp(energy, photon_flux)
 
         except Exception as e:
-                print(f'error: {e}')
-                traceback.print_exc()
-                tb_str = traceback.format_exc()
-                print(tb_str)
+                # print(f'error: {e}')
+                # traceback.print_exc()
+                # tb_str = traceback.format_exc()
+                # print(tb_str)
                 ray_properties.df['SourcePhotonFlux'].iloc[0] = np.nan
                 ray_properties.df['NumberRaysSurvived'].iloc[0] = np.nan
                 ray_properties.df['PercentageRaysSurvived'].iloc[0] = np.nan

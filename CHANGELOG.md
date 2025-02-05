@@ -33,6 +33,15 @@ All notable changes to this project will be documented in this file.
 - issue [#38](https://github.com/hz-b/raypyng/issues/38), [#39](https://github.com/hz-b/raypyng/issues/39)
 
 
+### Fixed
+- issue [#29](https://github.com/hz-b/raypyng/issues/29), Simulate.params used to throw an error when attempting list step-wise operation.
 
 
+## [1.2.911] - 2025-02-05
+### Added
 
+### Changed
+
+### Fixed
+- fix pandas version to 2.1.4 to avoid warnings
+- remove debug print statements
