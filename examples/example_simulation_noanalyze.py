@@ -13,7 +13,7 @@ beamline = sim.rml.beamline
 
 
 # define the values of the parameters to scan 
-energy    = np.arange(200, 7201,250)
+energy    = np.arange(200, 7201,500)
 SlitSize  = np.array([0.1, 0.2])
 cff       = np.array([2.25])
 nrays     = 5e4
@@ -36,7 +36,7 @@ sim.params=params
 sim.simulation_name = 'test_noAnalyze'
 
 # repeat the simulations as many time as needed
-sim.repeat = 1
+sim.repeat = 2
 
 sim.analyze = False # don't let RAY-UI analyze the results
 sim.raypyng_analysis=True # let raypyng analyze the results

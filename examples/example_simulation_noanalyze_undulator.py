@@ -55,6 +55,7 @@ undulator_file_path = os.path.join(this_file_dir,
 undulator = pd.read_csv(undulator_file_path)
 
 sim.undulator_table=undulator
+
 #uncomment to run the simulations
 sim.run(multiprocessing=6, force=True)
 

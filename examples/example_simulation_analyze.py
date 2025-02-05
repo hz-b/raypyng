@@ -43,13 +43,8 @@ sim.exports  =  [{beamline.Dipole:['ScalarElementProperties']},
                 ]
 
 
-# create the rml files
-#sim.rml_list()
-
 #uncomment to run the simulations
-#sim.run(multiprocessing=5, force=True)
 sim.run(multiprocessing=5, force=True)
-#sim.run(force=True)
 
 
 
