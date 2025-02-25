@@ -45,3 +45,12 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - fix pandas version to 2.1.4 to avoid warnings
 - remove debug print statements
+
+
+## [1.2.912] - 2025-02-25
+### Added
+
+### Changed
+
+### Fixed
+- xvfb and child process of the simulations were hanging once the simulations were finished, blocking RAM. Cleanup functions are added to prevent this.
