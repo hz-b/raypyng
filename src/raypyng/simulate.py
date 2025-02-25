@@ -1,6 +1,8 @@
 import itertools
 import os 
 import shutil
+import psutil
+import signal
 import re
 import numpy as np
 from tqdm import tqdm
@@ -908,8 +910,9 @@ class Simulate():
             self._execute_simulations(multiprocessing, force, total_simulations, pbar)
             pbar.close()
             self.logger.info('Simulation completed successfully.')
-        except Exception as e:
-            self.logger.error('Simulation failed.', exc_info=True) 
+        except KeyboardInterrupt:
+            self.logger.error('Simulation Interrupted.', exc_info=True) 
+            self.cleanup_child_processes()
         if self.raypyng_analysis:
             self.logger.info('Starting cleanup')
             pp = PostProcess()
@@ -922,8 +925,40 @@ class Simulate():
             self._remove_round_folders()
         self.logger.info('End of the Simulations')
         if force_exit:
+            self.cleanup_child_processes()
             os._exit(0)
-    
+            
+    def cleanup_child_processes(self):
+        """ Clean up all child processes initiated by this process and any specific Xvfb processes. """
+        current_process = psutil.Process()
+        children = current_process.children(recursive=True)
+        
+        # First, terminate general child processes
+        for child in children:
+            try:
+                print(f"Terminating child process {child.pid}")
+                child.terminate()
+                child.wait(timeout=3)  # Give it some time to gracefully shut down
+            except psutil.NoSuchProcess:
+                continue
+        
+        # Now target specific Xvfb processes with display numbers higher than 3000
+        for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+            if 'Xvfb' in proc.info['name']:
+                cmdline = proc.info['cmdline']
+                if len(cmdline) > 1:
+                    display_part = cmdline[1]  # The part of the cmdline where ':XXXX' is expected
+                    if display_part.startswith(':') and display_part[1:].isdigit():
+                        display_number = int(display_part[1:])
+                        if display_number > 3000:
+                            # print(f"Killing Xvfb process on display {display_number} with PID {proc.pid}")
+                            os.kill(proc.pid, signal.SIGTERM)  # Terminate the Xvfb process
+                            try:
+                                proc.wait(timeout=3)  # Wait for the process to terminate
+                            except psutil.TimeoutExpired:
+                                proc.kill()  # Force kill if not terminated after timeout
+                                
+                                
     def _remove_round_folders(self):
         for round_n in range(self._repeat):
             round_folder_path = os.path.join(self.sim_path, 'round_'+str(round_n))
