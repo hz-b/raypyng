@@ -1,13 +1,14 @@
 ###############################################################################
 # RayUI process handling and RayUI command API
 
-from sre_constants import SUCCESS
+# from sre_constants import SUCCESS
 from . import config
 from .errors import RayPyRunnerError,RayPyError,TimeoutError
 import os
-import subprocess,signal
+import subprocess
 import time
 import psutil
+import atexit
 
 #import sys # used for some debugging
 
@@ -82,6 +83,7 @@ class RayUIRunner:
                                             stderr=subprocess.STDOUT, 
                                             env=env
                                             )
+            atexit.register(self.kill)
         return self
 
     @property
