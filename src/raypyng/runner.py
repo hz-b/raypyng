@@ -52,7 +52,7 @@ class RayUIRunner:
         self._process = None
         self._verbose = False
         if hide:
-            self._hide = "xvfb-run --auto-servernum --server-num=1 "
+            self._hide = "xvfb-run --auto-servernum --server-num=3000 "
         else: 
             self._hide = ''
 
