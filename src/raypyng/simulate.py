@@ -17,6 +17,7 @@ from .rml import ObjectElement,ParamElement, BeamlineElement
 from .runner import RayUIAPI,RayUIRunner
 from .recipes import SimulationRecipe
 from .postprocessing import PostProcess
+from .helper_functions import collect_unique_values
 
 ################################################################
 class SimulationParams():
@@ -522,6 +523,7 @@ class Simulate():
         self._exports = value
         self._exports_list = self._generate_exports_list(value)
         self._exported_obj_names_list = self._generate_exported_obj_names_list(value)
+        self._exported_file_type = collect_unique_values(self._exports)
 
     def _validate_export_list(self, export_list):
         """
@@ -916,11 +918,11 @@ class Simulate():
         if self.raypyng_analysis:
             self.logger.info('Starting cleanup')
             pp = PostProcess()
-            pp.cleanup(self.sim_path, self.repeat, self._exported_obj_names_list, undulator_table=self.undulator_table)
+            pp.cleanup(self.sim_path, self.repeat, self._exported_obj_names_list, exported_file_type=self._exported_file_type, undulator_table=self.undulator_table)
             self.logger.info('Done with the cleanup')
             if self.analyze == False and self.raypyng_analysis == True:
                 self.logger.info('Create Pandas Recap Files')
-                self._create_results_dataframe()
+                self._create_results_dataframe(self._exported_file_type)
         if remove_round_folders:
             self._remove_round_folders()
         self.logger.info('End of the Simulations')
@@ -965,11 +967,11 @@ class Simulate():
             if os.path.exists(round_folder_path):
                 shutil.rmtree(round_folder_path)
         
-    def _create_results_dataframe(self):
+    def _create_results_dataframe(self, exported_file_type):
         looper_path = os.path.join(self.sim_path, 'looper.csv')
         looper = pd.read_csv(looper_path)
         for export in self._exported_obj_names_list:
-            for in_out in ['RawRaysIncoming', 'RawRaysOutgoing']:
+            for in_out in exported_file_type:
                 oe_path = os.path.join(self.sim_path,f'{export}_{in_out}.csv')
                 # Reading the data into a DataFrame, specify no comment handling and read headers normally
                 res = pd.read_csv(oe_path, comment=None, header=0, index_col=False)
