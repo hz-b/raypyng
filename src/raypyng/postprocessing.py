@@ -346,7 +346,7 @@ class PostProcess():
         else: 
             return np.nan
 
-    def cleanup(self,dir_path:str=None, repeat:int=1, exp_elements:list=None, undulator_table=None):
+    def cleanup(self,dir_path:str=None, repeat:int=1, exp_elements:list=None, exported_file_type=None, undulator_table=None):
         """Reads all the results of the postprocessing process and summarize 
         them in a single file for each exported object.
         
@@ -360,7 +360,7 @@ class PostProcess():
             exp_elements (list, optional): the exported elements names as str. Defaults to None.
         """        
         for d in exp_elements:
-            for exp in ['RawRaysOutgoing', 'RawRaysIncoming']:
+            for exp in exported_file_type:
                 for round in range(repeat):
                     dir_path_round=os.path.join(dir_path,"round_"+str(round))
                     files = self._list_files(dir_path_round, d+"_analyzed_rays_"+exp+self.format_saved_files)
