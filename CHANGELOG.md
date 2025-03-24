@@ -54,3 +54,12 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - xvfb and child process of the simulations were hanging once the simulations were finished, blocking RAM. Cleanup functions are added to prevent this.
+
+
+## [1.2.913] - ???
+### Added
+
+### Changed
+
+### Fixed
+- issue [#46](https://github.com/hz-b/raypyng/issues/46), RawRaysOutgoing and RawRaysIncoming recap files were created even if not requested by the user, and even if individual files were not exported.
