@@ -2,47 +2,54 @@
 # RayUI process handling and RayUI command API
 
 # from sre_constants import SUCCESS
-from . import config
-from .errors import RayPyRunnerError,RayPyError,TimeoutError
+import atexit
 import os
 import subprocess
 import time
-import psutil
-import atexit
 
-#import sys # used for some debugging
+import psutil
+
+from . import config
+from .errors import RayPyError, RayPyRunnerError, TimeoutError
+
+# import sys # used for some debugging
+
 
 ###############################################################################
 class RayUIRunner:
-    """RayUIRunner class implements all logic to start a RayUI process, load and rml file, trace and export.
+    """RayUIRunner class implements all logic to start a RayUI process,
+    load and rml file, trace and export.
 
     Args:
-            ray_path (str, optional): the path to the RAY-UI installation folder. 
+            ray_path (str, optional): the path to the RAY-UI installation folder.
                                       Defaults to config.ray_path, that will look for the
                                       ray_path in the standard installation folders.
-            ray_binary (_type_, optional): the binary file of RAY-UI. 
+            ray_binary (_type_, optional): the binary file of RAY-UI.
                                             Defaults to "rayui.sh".
             background (bool, optional): activate background mode. Defaults to True.
-            hide (bool, optional): Hide the RAY-UI graphical instances. 
-                                   Available only if xvfb is installed. 
+            hide (bool, optional): Hide the RAY-UI graphical instances.
+                                   Available only if xvfb is installed.
                                    Defaults to False.
     """
-    def __init__(self,ray_path=config.ray_path,ray_binary=config.ray_binary,background=True,hide=False) -> None:
+
+    def __init__(
+        self, ray_path=config.ray_path, ray_binary=config.ray_binary, background=True, hide=False
+    ) -> None:
         """
         Args:
-            ray_path (str, optional): the path to the RAY-UI installation folder. 
+            ray_path (str, optional): the path to the RAY-UI installation folder.
                                       Defaults to config.ray_path, that will look for the
                                       ray_path in the standard installation folders.
-            ray_binary (_type_, optional): the binary file of RAY-UI. 
+            ray_binary (_type_, optional): the binary file of RAY-UI.
                                             Defaults to "rayui.sh".
             background (bool, optional): activate background mode. Defaults to True.
-            hide (bool, optional): Hide the RAY-UI graphical instances. 
-                                   Available only if xvfb is installed. 
+            hide (bool, optional): Hide the RAY-UI graphical instances.
+                                   Available only if xvfb is installed.
                                    Defaults to False.
 
         Raises:
             Exception: _description_
-        """        
+        """
         if ray_path is None:
             ray_path = self.__detect_ray_path()
         if ray_path is None:
@@ -54,13 +61,11 @@ class RayUIRunner:
         self._verbose = False
         if hide:
             self._hide = "xvfb-run --auto-servernum --server-num=3000 "
-        else: 
-            self._hide = ''
-
-
+        else:
+            self._hide = ""
 
         # internal configuration parameters
-        self._auto_flush = True     # flush on write calls
+        self._auto_flush = True  # flush on write calls
 
     def run(self):
         """Open one instance of RAY-UI using subprocess
@@ -68,21 +73,21 @@ class RayUIRunner:
         Raises:
             RayPyRunnerError: if the RAY-UI executable is not found raise an error
 
-        """        
+        """
         if not self.isrunning:
-            fullpath = os.path.join(self._path,self._binary)
+            fullpath = os.path.join(self._path, self._binary)
             if not os.path.isfile(fullpath):
                 raise RayPyRunnerError("Ray executable {0} is not found".format(fullpath))
             fullpath = self._hide + fullpath
-            env = dict(os.environ) # TODO:: rethink a bit about this line 
+            env = dict(os.environ)  # TODO:: rethink a bit about this line
             self._process = subprocess.Popen(
-                                            fullpath+" -b", 
-                                            shell=True, 
-                                            stdin=subprocess.PIPE, 
-                                            stdout=subprocess.PIPE,
-                                            stderr=subprocess.STDOUT, 
-                                            env=env
-                                            )
+                fullpath + " -b",
+                shell=True,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                env=env,
+            )
             atexit.register(self.kill)
         return self
 
@@ -92,7 +97,7 @@ class RayUIRunner:
 
         Returns:
             bool: returns True if the process is running, otherwise False
-        """        
+        """
         if self._process is None:
             return False
         else:
@@ -105,8 +110,7 @@ class RayUIRunner:
                 return True
 
     def kill(self):
-        """kill a RAY-UI process
-        """
+        """kill a RAY-UI process"""
         if self.isrunning:
             pid = self._process.pid
             process = psutil.Process(pid)
@@ -126,7 +130,7 @@ class RayUIRunner:
         else:
             return None
 
-    def _write(self, instr:str, endline="\n"):
+    def _write(self, instr: str, endline="\n"):
         """Write command to RayUI interface
 
         Args:
@@ -135,29 +139,28 @@ class RayUIRunner:
 
         Raises:
             RayPyRunnerError: _description_
-        """     
+        """
         if self.isrunning:
-            payload = bytes(instr+endline,"utf8")
+            payload = bytes(instr + endline, "utf8")
             self._process.stdin.write(payload)
             if self._auto_flush:
                 self._process.stdin.flush()
         else:
             raise RayPyRunnerError("RayUI process is not started")
-    
-    def _readline(self)->str:
+
+    def _readline(self) -> str:
         """Read a line from the stdout of the process and convert to a string
 
         Returns:
             str: line read from the input
         """
         if self.isrunning:
-            line =  self._process.stdout.readline().decode('utf8').rstrip('\n')
-            if self._verbose: # verbose
+            line = self._process.stdout.readline().decode("utf8").rstrip("\n")
+            if self._verbose:  # verbose
                 print(line)
             return line
         else:
             return None
-
 
     def __detect_ray_path(self) -> str:
         """Internal function to autodetect installation path of RAY-UI
@@ -168,82 +171,88 @@ class RayUIRunner:
         Returns:
             str: string with the detected RAY-UI installation path
         """
-        basepaths = ("~", "~/Applications","/opt","/Applications")
-        installpaths = ("RAY-UI-development","RAY-UI", "Ray-UI")
-        pathlist = [os.path.expanduser(p) for p in [os.path.join(x,y) for x in basepaths for y in installpaths]]
+        basepaths = ("~", "~/Applications", "/opt", "/Applications")
+        installpaths = ("RAY-UI-development", "RAY-UI", "Ray-UI")
+        pathlist = [
+            os.path.expanduser(p)
+            for p in [os.path.join(x, y) for x in basepaths for y in installpaths]
+        ]
         for ray_path in pathlist:
             if os.path.isdir(ray_path):
                 return ray_path
         raise RayPyRunnerError("Can not detect rayui installation path! Please provide it manually")
- 
+
+
 ###############################################################################
 class RayUIAPI:
-    """RayUIAPI class implements (hopefully all) command interface of the RAY-UI
-    """
-    def __init__(self,runner:RayUIRunner=None) -> None:
+    """RayUIAPI class implements (hopefully all) command interface of the RAY-UI"""
+
+    def __init__(self, runner: RayUIRunner = None) -> None:
         """Optional Reference to an existing RayUIRunner
         Args:
-            runner (RayUIRunner, optional): reference to existing runner. 
-                                            If set to None a new runner instance will 
+            runner (RayUIRunner, optional): reference to existing runner.
+                                            If set to None a new runner instance will
                                             be automaticlly created. Defaults to None.
         """
         if runner is None:
             runner = RayUIRunner().run()
         self._runner = runner
-        self._read_wait_delay = 0.01    # if rayui does not send anything to stdio this delay will be used before next attempt to read
-        self._quit_timeout = 300         # default timeout for commands like quit
+        # if rayui does not send anything to stdio this delay
+        # will be used before next attempt to read
+        self._read_wait_delay = 0.01
+        self._quit_timeout = 300  # default timeout for commands like quit
         self._simulation_done = False
 
     def quit(self):
-        """quit RAY-UI if it is running
-        """
+        """quit RAY-UI if it is running"""
         if self._runner.isrunning:
             self._runner._write("quit")
             try:
                 self._runner._process.wait(self._quit_timeout)
             except subprocess.TimeoutExpired:
-                raise TimeoutError("Timeout while trying to quit")
-        
-    def load(self,rml_path,**kwargs):
+                raise TimeoutError("Timeout while trying to quit") from None
+
+    def load(self, rml_path, **kwargs):
         """Load an rml file
 
         Args:
             rml_path (str): path to the rml file
-        """        
+        """
         self._simulation_done = False
-        return self._cmd_io("load",rml_path,**kwargs)
+        return self._cmd_io("load", rml_path, **kwargs)
 
-    def save(self,rml_path,**kwargs):
+    def save(self, rml_path, **kwargs):
         """Save an rml file
 
         Args:
             rml_path (path): path to save the rml file
-        """        
-        return self._cmd_io("save",rml_path,**kwargs)
+        """
+        return self._cmd_io("save", rml_path, **kwargs)
 
-    def trace(self,analyze=True,**kwargs):
-        """Trace an rml file (must have been loaded before). 
+    def trace(self, analyze=True, **kwargs):
+        """Trace an rml file (must have been loaded before).
 
         Args:
-            analyze (bool, optional): If True RAY-UI will perform analysis of the rays. 
+            analyze (bool, optional): If True RAY-UI will perform analysis of the rays.
                                       Defaults to True.
 
-        """        
-        return self._cmd_io("trace",None if analyze else "noanalyze", **kwargs)
+        """
+        return self._cmd_io("trace", None if analyze else "noanalyze", **kwargs)
 
-    def export(self,objects:str, parameters:str, export_path:str, data_prefix:str, **kwargs):
+    def export(self, objects: str, parameters: str, export_path: str, data_prefix: str, **kwargs):
         """Export simulation results from RAY-UI.
 
         Args:
             objects (str): string with objects list, e.g. "Dipole,DetectorAtFocus"
-            parameters (str): stromg with parameters to export, e.g. "ScalarBeamProperties,ScalarElementProperties"
+            parameters (str): stromg with parameters to export,
+            e.g. "ScalarBeamProperties,ScalarElementProperties"
             export_path (str): path where to save the data
             data_prefix (str): prefix for the putput files
         """
-        payload = '"'+objects + '"' + " " + parameters + " " + export_path + " " + data_prefix
-        return self._cmd_io("export",payload,**kwargs)
+        payload = '"' + objects + '"' + " " + parameters + " " + export_path + " " + data_prefix
+        return self._cmd_io("export", payload, **kwargs)
 
-    def _cmd_io(self,cmd:str,payload:str=None,/, cbNewLine=None):
+    def _cmd_io(self, cmd: str, payload: str = None, /, cbNewLine=None):
         """The _cmd_io is an internal method which helps to execute a RAY-UI command.
         All commands are run in the following way:
         1. A command is sent to RAY-UI
@@ -253,43 +262,47 @@ class RayUIAPI:
 
         Args:
             cmd (str): string with command (e.g. "load" or "trace")
-            payload (str, optional): possible payload for the command (e.g. rml 
+            payload (str, optional): possible payload for the command (e.g. rml
                                     file path for the load command). Defaults to None.
         Raises:
-            RayPyError: in case of an unsupported reply 
+            RayPyError: in case of an unsupported reply
 
         Returns:
             bool: True on success, False on RAY-UI side error
         """
         if payload is None:
             payload = ""
-        if cmd == 'load':
+        if cmd == "load":
             self._simulation_done = False
-        cmdstr = cmd+" "+payload
+        cmdstr = cmd + " " + payload
         self._runner._write(cmdstr)
-        status = self._wait_for_cmd_io(cmd,cbdataread=cbNewLine)        
-        if status=="success":
-            if cmd == 'trace':
+        status = self._wait_for_cmd_io(cmd, cbdataread=cbNewLine)
+        if status == "success":
+            if cmd == "trace":
                 self._simulation_done = True
             return True
-        elif status=="failed":
+        elif status == "failed":
             return False
-        elif status=="ed failed": # specical workaround case for the "loaded failed" reply to laod command
+        elif (
+            status == "ed failed"
+        ):  # specical workaround case for the "loaded failed" reply to laod command
             return False
         else:
             raise RayPyError("Got unsupported reply from ray while waiting for command IO")
-        
-    def _wait_for_cmd_io(self,cmd,timeout=None,cbdataread=None):
+
+    def _wait_for_cmd_io(self, cmd, timeout=None, cbdataread=None):
         timecnt = 0.0
         line = ""
-        cmd_seen = False # we shall see cmd twice - once as ACK for the execution and once as status return
+        # we shall see cmd twice - once as ACK for the execution
+        # and once as status return
+        cmd_seen = False
         while True:
             line = self._runner._readline()
             if line is None:
                 time.sleep(self._read_wait_delay)
-                timecnt+=self._read_wait_delay
+                timecnt += self._read_wait_delay
                 continue
-            if (line.startswith(cmd)):
+            if line.startswith(cmd):
                 if cmd_seen:
                     break
                 else:
@@ -297,8 +310,6 @@ class RayUIAPI:
             else:
                 if cbdataread is not None:
                     cbdataread(line)
-            if timeout is not None and timecnt>timeout:
+            if timeout is not None and timecnt > timeout:
                 raise TimeoutError("timeout while waiting ray command io")
         return line.lstrip(cmd).strip()
-
-

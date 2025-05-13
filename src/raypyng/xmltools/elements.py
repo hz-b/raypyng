@@ -1,7 +1,7 @@
 import typing
 
-from .dictionaries import *
-from .attributes import *
+# from .attributes import *
+from .dictionaries import MappedDict, SafeValueDict, sanitizeName
 
 
 ###############################################################################
@@ -11,30 +11,41 @@ class XmlElement:
     Raises:
         AttributeError: _description_
     """
+
     #####################################
-    def __init__(self, name:str, attributes:typing.MutableMapping, parent=None, **kwargs):
+    def __init__(self, name: str, attributes: typing.MutableMapping, parent=None, **kwargs):
         """_summary_
 
         Args:
             name (str): element name
             attributes (dict): element attributes as a dict-like object
         """
-        if name is not None and not isinstance(name,str):
-            raise TypeError("name parameter of 'XmlElement' class must be a string or 'None', got {}".format(type(name)))
+        if name is not None and not isinstance(name, str):
+            raise TypeError(
+                "name parameter of 'XmlElement' class must be a string \
+                    or 'None', got {}".format(
+                    type(name)
+                )
+            )
         self._original_name = name
         self._name = sanitizeName(name)
-        if attributes is not None and not isinstance(attributes,typing.MutableMapping):
-            raise TypeError("attributes parameter of 'XmlElement' class must be a dict-line object or 'None', got {}".format(type(attributes)))
-        
+        if attributes is not None and not isinstance(attributes, typing.MutableMapping):
+            raise TypeError(
+                "attributes parameter of 'XmlElement' class must be a \
+                    dict-line object or 'None', got {}".format(
+                    type(attributes)
+                )
+            )
+
         # converting attributes ...
         _attributes = SafeValueDict()
         if attributes is not None:
-            if isinstance(attributes,MappedDict):
+            if isinstance(attributes, MappedDict):
                 _attribute_items = attributes.original().items()
             else:
                 _attribute_items = attributes.items()
-            for k,v in _attribute_items:
-                _attributes[k] = v#XmlAttribute(v)
+            for k, v in _attribute_items:
+                _attributes[k] = v  # XmlAttribute(v)
         self._attributes = _attributes
 
         self._children = []
@@ -47,39 +58,39 @@ class XmlElement:
 
         Returns:
             str: path of the xml object
-        """        
+        """
         if self._parent is None:
             return self.resolvable_name()
         else:
-            return self._parent.get_full_path()+"."+self.resolvable_name()
+            return self._parent.get_full_path() + "." + self.resolvable_name()
 
     def resolvable_name(self):
         """Returns the name of the objects, removing lab.beamline.
 
         Returns:
             str: name of the object
-        """        
+        """
         if self._parent is None:
             return self._name
         else:
-            if hasattr(self._parent,"_name_attribute"):
+            if hasattr(self._parent, "_name_attribute"):
                 return self[self._parent._name_attribute]
             else:
-                return self._name#"NOTFOUND"
+                return self._name  # "NOTFOUND"
 
-    #@property
+    # @property
     def children(self):
         return self._children
 
-    #@property
+    # @property
     def attributes(self):
         return self._attributes
 
-    #@property
+    # @property
     def original_name(self):
         return self._original_name
 
-    #@property
+    # @property
     def name(self):
         return self._name
 
@@ -109,7 +120,6 @@ class XmlElement:
             return [e for e in self._children if e._name == name]
         else:
             return self._children
-
 
     # dictionary line access to the elements
     def __getitem__(self, key):
@@ -152,7 +162,7 @@ class XmlElement:
                 self.cdata,
             )
         else:
-            return f'{self.id}'
+            return f"{self.id}"
 
     def __nonzero__(self):
         return self.is_root or self._name is not None
@@ -161,7 +171,7 @@ class XmlElement:
     #     return self.cdata == val
 
     def __hash__(self) -> int:
-        return hash((frozenset(self._children),frozenset(self._attributes.items()),self._name))
+        return hash((frozenset(self._children), frozenset(self._attributes.items()), self._name))
 
     def __dir__(self):
         children_names = [x._name for x in self._children]
@@ -173,19 +183,18 @@ class XmlElement:
     def __contains__(self, key):
         return key in dir(self)
 
-
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        pass#return True
+        pass  # return True
+
 
 ###############################################################################
 class XmlAttributedNameElement(XmlElement):
-    def __init__(self, name_attribute:str, name: str, attributes: dict, **kwargs):
-        super().__init__(name, attributes,**kwargs)
+    def __init__(self, name_attribute: str, name: str, attributes: dict, **kwargs):
+        super().__init__(name, attributes, **kwargs)
         self._name_attribute = name_attribute
-
 
     def __dir__(self):
         """enumerating child objects by its attibute name
@@ -196,18 +205,10 @@ class XmlAttributedNameElement(XmlElement):
         children_names = [x._attributes[self._name_attribute] for x in self._children]
         return children_names
 
-    # def __setattr__(self, __name: str, __value) -> None:
-    #     if __name!="_name" and __name!="_attributes" and __name!="children" and __name!="is_root"  and __name!="cdata" and __name!="_name_attribute":
-    #         raise AttributeError("XmlAttributedNameElement object attribute '{}' is read-only".format(__name))
-
-    # def __setattr__(self, __name: str, __value) -> None:
-    #     if hasattr(self,__name):
-    #         return super().__setattr__(__name, __value)
-    #     else:
-    #         raise AttributeError("XmlAttributedNameElement object attribute '{}' is read-only".format(__name))
-
     def __getattr__(self, key):
-        matching_children = [x for x in self._children if x._attributes[self._name_attribute] == key]
+        matching_children = [
+            x for x in self._children if x._attributes[self._name_attribute] == key
+        ]
         if matching_children:
             if len(matching_children) == 1:
                 self.__dict__[key] = matching_children[0]
