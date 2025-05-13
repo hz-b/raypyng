@@ -1,8 +1,9 @@
-import os
-import pandas as pd
 import numpy as np
+import pandas as pd
+
 from .diodes_data.AXUV import AXUV_dict
 from .diodes_data.GaAsP import GaAsP_dict
+
 
 class Diode:
     def __init__(self, diode_dict, conversion_column):
@@ -36,7 +37,7 @@ class Diode:
             np.array: Boolean array where True indicates the energy is below the minimum.
         """
         # Check for energy values less than the minimum energy in the CSV file
-        min_energy = self.diode['Energy[keV]'].min()
+        min_energy = self.diode["Energy[keV]"].min()
         return energy_keV < min_energy
 
     def convert_photons_to_amp(self, energy_eV, n_photons):
@@ -58,11 +59,13 @@ class Diode:
         n_photons = np.atleast_1d(np.asarray(n_photons))
         # Check if energy_eV and n_photons have the same number of elements
         if energy_eV.shape != n_photons.shape:
-            raise ValueError("The 'energy_eV' and 'n_photons' arrays must have the same number of elements.")
+            raise ValueError(
+                "The 'energy_eV' and 'n_photons' arrays must have the same number of elements."
+            )
 
         # Convert energy from eV to keV
         energy_keV = energy_eV / 1000.0
-        
+
         # Initialize an array to store conversion factors
         conversion_factors = np.zeros_like(energy_keV, dtype=float)
 
@@ -73,17 +76,20 @@ class Diode:
         conversion_factors = self.calculate_conversion_factors(energy_keV, below_boundary)
 
         # Calculate the current in amperes
-        current_in_amperes = (n_photons / conversion_factors) / 1e9  # Convert from nanoamperes to amperes
+        current_in_amperes = (
+            n_photons / conversion_factors
+        ) / 1e9  # Convert from nanoamperes to amperes
 
         return current_in_amperes
 
     def calculate_conversion_factors(self, energy_keV, below_boundary):
         """
-        Calculates conversion factors for converting photon counts to current based on the diode data.
+        Calculates conversion factors photon counts to current.
 
         Args:
             energy_keV (np.array): Energy values in keV for which to find conversion factors.
-            below_boundary (np.array): Array of booleans indicating energies below the minimum allowed.
+            below_boundary (np.array): Array of booleans indicating energies below the
+                                        minimum allowed.
 
         Returns:
             np.array: Array of conversion factors for each energy value.
@@ -92,41 +98,43 @@ class Diode:
         for i, energy in enumerate(energy_keV):
             if below_boundary[i]:
                 conversion_factors[i] = np.nan  # Assign NaN for energies below the minimum
-            elif energy in self.diode['Energy[keV]'].values:
-                conversion_factors[i] = self.diode.loc[self.diode['Energy[keV]'] == energy, self.conversion_column].iloc[0]
+            elif energy in self.diode["Energy[keV]"].values:
+                conversion_factors[i] = self.diode.loc[
+                    self.diode["Energy[keV]"] == energy, self.conversion_column
+                ].iloc[0]
             else:
                 # Perform linear interpolation
-                conversion_factors[i] = np.interp(energy,
-                                                  self.diode['Energy[keV]'],
-                                                  self.diode[self.conversion_column])
+                conversion_factors[i] = np.interp(
+                    energy, self.diode["Energy[keV]"], self.diode[self.conversion_column]
+                )
         return conversion_factors
+
 
 def load_data_from_py_AXUV():
     # Convert the dictionary back to a DataFrame
-    df = pd.DataFrame(list(AXUV_dict.items()),
-    columns=['Energy[keV]', 'Photon_to_nAmp_BestOf'])    
+    df = pd.DataFrame(list(AXUV_dict.items()), columns=["Energy[keV]", "Photon_to_nAmp_BestOf"])
     return df
+
 
 def load_data_from_py_GaAsP():
     # Convert the dictionary back to a DataFrame
-    df = pd.DataFrame(list(GaAsP_dict.items()),
-    columns=['Energy[keV]', 'Photon_to_nAmp'])
+    df = pd.DataFrame(list(GaAsP_dict.items()), columns=["Energy[keV]", "Photon_to_nAmp"])
     return df
+
 
 class AXUVDiode(Diode):
     def __init__(self):
         """
-        Initializes the AXUVDiode subclass, specifying the CSV file and conversion column for AXUV diodes.
+        Initializes AXUVDiode class.
         """
         axuv = load_data_from_py_AXUV()
-        super().__init__(axuv, 'Photon_to_nAmp_BestOf')
+        super().__init__(axuv, "Photon_to_nAmp_BestOf")
+
 
 class GaASPDiode(Diode):
     def __init__(self):
         """
-        Initializes the GaASPDiode subclass, specifying the CSV file and conversion column for GaASP diodes.
+        Initializes GaASPDiode class.
         """
         gaasp = load_data_from_py_GaAsP()
-        super().__init__(gaasp, 'Photon_to_nAmp')
-
-
+        super().__init__(gaasp, "Photon_to_nAmp")
