@@ -1,20 +1,36 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
- 
-## [1.2.900] - 2025-02-03
+## [1.2.913] - 13-May-2025
 ### Added
- - When raypyng analyzes the results, if the number of photons is available, it calculates the **current generated in a AXUV or a GaAsP diode**. Pull Request [#32](https://github.com/hz-b/raypyng/pull/32)
- - Added **options to save space on disk** via pull request [#34](https://github.com/hz-b/raypyng/pull/34). If raypyng is doing the analysis, it means that RawRays files are exported, which can be pretty large. This pull request introduces the following changes:
-   - individual analyzed rays files are deleted once they have been summarized
-   - when running the simulations it is now possible to set the following two parameters in the run method:
-    - remove_rawrays (bool, optional): removes RawRaysIncoming and RawRaysOutgoing files, if present. 
-    - remove_round_folders (bool, optional): remove the round folders after the simulations are done.
+- add precommit, with black and ruff
+- add possibility to multiply the results for an arbitrary efficiency, and relative example
+### Changed
+
+### Fixed
+- issue [#46](https://github.com/hz-b/raypyng/issues/46), RawRaysOutgoing and RawRaysIncoming recap files were created even if not requested by the user, and even if individual files were not exported.
+
+
+
+## [1.2.912] - 25-Feb-2025
+### Added
 
 ### Changed
- 
+
 ### Fixed
-- issue [#29](https://github.com/hz-b/raypyng/issues/29), Simulate.params used to throw an error when attempting list step-wise operation.
+- xvfb and child process of the simulations were hanging once the simulations were finished, blocking RAM. Cleanup functions are added to prevent this.
+
+
+
+## [1.2.911] - 05-Feb-2025
+### Added
+
+### Changed
+
+### Fixed
+- fix pandas version to 2.1.4 to avoid warnings
+- remove debug print statements
+
 
 
 ## [1.2.910] - 2025-02-05
@@ -37,20 +53,21 @@ All notable changes to this project will be documented in this file.
 - issue [#29](https://github.com/hz-b/raypyng/issues/29), Simulate.params used to throw an error when attempting list step-wise operation.
 
 
-## [1.2.911] - 2025-02-05
+
+## [1.2.900] - 03-Feb-2025
 ### Added
+ - When raypyng analyzes the results, if the number of photons is available, it calculates the **current generated in a AXUV or a GaAsP diode**. Pull Request [#32](https://github.com/hz-b/raypyng/pull/32)
+ - Added **options to save space on disk** via pull request [#34](https://github.com/hz-b/raypyng/pull/34). If raypyng is doing the analysis, it means that RawRays files are exported, which can be pretty large. This pull request introduces the following changes:
+   - individual analyzed rays files are deleted once they have been summarized
+   - when running the simulations it is now possible to set the following two parameters in the run method:
+    - remove_rawrays (bool, optional): removes RawRaysIncoming and RawRaysOutgoing files, if present. 
+    - remove_round_folders (bool, optional): remove the round folders after the simulations are done.
 
 ### Changed
-
+ 
 ### Fixed
-- fix pandas version to 2.1.4 to avoid warnings
-- remove debug print statements
+- issue [#29](https://github.com/hz-b/raypyng/issues/29), Simulate.params used to throw an error when attempting list step-wise operation.
 
 
-## [1.2.912] - 2025-02-25
-### Added
 
-### Changed
 
-### Fixed
-- xvfb and child process of the simulations were hanging once the simulations were finished, blocking RAM. Cleanup functions are added to prevent this.

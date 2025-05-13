@@ -1,15 +1,16 @@
-from multiprocessing import parent_process
-from xml.sax import make_parser, handler
-from .elements import *
-from .dictionaries import *
+from xml.sax import handler, make_parser
 
+# from .dictionaries import *
+from .elements import SafeValueDict, XmlElement
 
 ###############################################################################
-global_known_classes = {} # part of the development code
+global_known_classes = {}  # part of the development code
+
+
 class Handler(handler.ContentHandler):
-    
+
     #####################################
-    def __init__(self,/,known_classes=None):
+    def __init__(self, /, known_classes=None):
         self.root = XmlElement(None, None)
         self.root.is_root = True
         self.elements = []
@@ -17,7 +18,6 @@ class Handler(handler.ContentHandler):
             self._known_classes = global_known_classes
         else:
             self._known_classes = known_classes
-
 
     #####################################
     def startElement(self, name, attributes):
@@ -27,17 +27,17 @@ class Handler(handler.ContentHandler):
             name (_type_): _description_
             attributes (_type_): _description_
         """
-        #print("DEBUG::startElement::name=",name)
+        # print("DEBUG::startElement::name=",name)
 
         # store attributes in a dictionary
-        # local copy is nessesary, input object can change and we should not 
+        # local copy is nessesary, input object can change and we should not
         # save reference to it
 
-        # Shall it be moved into the 
+        # Shall it be moved into the
         attrs = SafeValueDict()
         for k, v in attributes.items():
-            attrs[k] = v#self.protectName(v)
-        
+            attrs[k] = v  # self.protectName(v)
+
         # create a new element
         if len(self.elements) > 0:
             parent = self.elements[-1]
@@ -47,7 +47,7 @@ class Handler(handler.ContentHandler):
         if name in self._known_classes.keys():
             element = self._known_classes[name](name, attrs, parent=parent)
         else:
-            element = XmlElement(name, attrs,paren=parent)
+            element = XmlElement(name, attrs, paren=parent)
         # and add it to the known element list
         parent.add_child(element)
         self.elements.append(element)
@@ -70,8 +70,9 @@ class Handler(handler.ContentHandler):
         """
         self.elements[-1].add_cdata(cdata.strip())
 
+
 ###############################################################################
-def parse(filename:str, /, known_classes = None, **parser_features)->XmlElement:
+def parse(filename: str, /, known_classes=None, **parser_features) -> XmlElement:
     if filename is None:
         raise ValueError("parse() takes a filename")
     parser = make_parser()
@@ -81,4 +82,3 @@ def parse(filename:str, /, known_classes = None, **parser_features)->XmlElement:
     parser.setContentHandler(sax_handler)
     parser.parse(filename)
     return sax_handler.root
-

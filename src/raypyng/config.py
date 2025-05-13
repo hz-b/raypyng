@@ -1,4 +1,4 @@
-# this is shared configuration space 
+# this is shared configuration space
 
 """ray_path contains default path to the ray installation
 """

@@ -1,9 +1,10 @@
-from ..collections import MappedList, MappedDict
 import keyword
+
+from ..collections import MappedDict, MappedList
 
 
 ###############################################################################
-def sanitizeName(name:str)->str:
+def sanitizeName(name: str) -> str:
     """convert name into python attribute safe name
 
     Args:
@@ -29,14 +30,14 @@ def sanitizeName(name:str)->str:
         name += "_"
     return name
 
+
 ###############################################################################
 class SafeValueDict(MappedDict):
     def __init__(self, dict=None, **kwargs):
         super().__init__(sanitizeName, dict, **kwargs)
 
+
 ###############################################################################
 class SafeValueList(MappedList):
     def __init__(self, initlist=None):
         super().__init__(sanitizeName, initlist)
-
-
