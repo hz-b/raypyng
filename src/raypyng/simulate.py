@@ -325,6 +325,7 @@ class Simulate:
         self._exports_list = []  # Processed list of exports
         self._exported_obj_names_list = []  # List containing the names of the objects to export
         self._undulator_table = None  # holder for undulator table pandas dataframe
+        self._efficiency = None  # holder for efficiency pandas dataframe
         self.sp = None  # SimulationParams instance
         self.sim_list_path = []  # Paths to RML files
         self.sim_path = None  # Simulation directory path
@@ -471,13 +472,37 @@ class Simulate:
         self._prefix = value
 
     @property
-    def undulator_table(self):
+    def efficiency(self):
         """The parameters to scan, as a list of dictionaries.
 
         For each dictionary the keys are the parameters elements
         of the beamline, and the values are the
         values to be assigned.
         """
+
+        return self._efficiency
+
+    @efficiency.setter
+    def efficiency(self, value):
+        self._validate_efficiency(value)
+        self._efficiency = value
+
+    def _validate_efficiency(self, value):
+        # Check if the value is an instance of pandas DataFrame
+        if not isinstance(value, pd.DataFrame):
+            raise TypeError("The efficiency must be a pandas DataFrame.")
+
+        # Check that the column names are "Efficiency" and 'Energy[eV]'
+        required_columns = {"Efficiency", "Energy[eV]"}
+        if not required_columns.issubset(value.columns):
+            raise ValueError(
+                f"The DataFrame must contain the following \
+                             columns: {required_columns}"
+            )
+
+    @property
+    def undulator_table(self):
+        """The undulator table, as a pandas DataFrame."""
 
         return self._undulator_table
 
@@ -983,7 +1008,6 @@ class Simulate:
                 self.repeat,
                 self._exported_obj_names_list,
                 exported_file_type=self._exported_file_type,
-                undulator_table=self.undulator_table,
             )
             self.logger.info("Done with the cleanup")
             if self.analyze is False and self.raypyng_analysis is True:
@@ -1190,6 +1214,7 @@ class Simulate:
                 self.ray_path,
                 self.remove_rawrays,
                 self.undulator_table,
+                self.efficiency,
             ),
             exp_list,
         )
@@ -1337,6 +1362,7 @@ def run_rml_func(parameters):
         ray_path,
         remove_rawrays,
         undulator_table,
+        efficiency,
     ), exports = parameters
     runner = RayUIRunner(ray_path=ray_path, hide=hide)
     api = RayUIAPI(runner)
@@ -1356,6 +1382,7 @@ def run_rml_func(parameters):
                     suffix=export_params[1],
                     remove_rawrays=remove_rawrays,
                     undulator_table=undulator_table,
+                    efficiency=efficiency,
                 )
     except Exception as e:
         print(f"WARNING! Got exception while processing {rml_filename}, the error was: {e}")

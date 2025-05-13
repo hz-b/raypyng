@@ -240,6 +240,7 @@ class PostProcess:
         suffix: str = None,
         remove_rawrays: bool = False,
         undulator_table=None,
+        efficiency=None,
     ):
         """
         PostProcess routine of the RawRaysOutgoing extracted files.
@@ -297,8 +298,14 @@ class PostProcess:
                 ray_properties.df["SourcePhotonFlux"].iloc[0] = source_photon_flux
                 ray_properties.df["NumberRaysSurvived"].iloc[0] = self._extract_intensity(rays)
                 ray_properties.df["PercentageRaysSurvived"].iloc[0] = (
-                    ray_properties.df["NumberRaysSurvived"].iloc[0] / source_n_rays * 100
+                    self._calculate_percentage_rays(
+                        ray_properties.df["NumberRaysSurvived"].iloc[0],
+                        source_n_rays,
+                        efficiency=efficiency,
+                        photon_energy=energy,
+                    )
                 )
+
                 bw = self._extract_fwhm(rays[f"{exported_element}_EN"])
                 ray_properties.df["Bandwidth"].iloc[0] = bw
                 ray_properties.df["HorizontalFocusFWHM"].iloc[0] = self._extract_fwhm(
@@ -426,13 +433,38 @@ class PostProcess:
         else:
             return np.nan
 
+    def _calculate_percentage_rays(
+        self, n_rays_survived, source_n_rays, efficiency=None, photon_energy=None
+    ):
+        """Calculate the percentage of rays that survived.
+        Args:
+            n__rays_survived (int): Number of rays that survived.
+            source_n_rays (int): Total number of rays from the source.
+            efficiency (float, optional): Efficiency factor. Defaults to None.
+        Returns:
+            float: Percentage of rays that survived.
+        """
+        perc = n_rays_survived / source_n_rays * 100
+        if efficiency is not None and photon_energy is not None:
+            # Ensure the DataFrame is sorted by 'Energy[eV]' for interpolation
+            efficiency = efficiency.sort_values(by="Energy[eV]")
+
+            # Perform linear interpolation to find the efficiency at the given photon energy
+            interpolated_efficiency = np.interp(
+                photon_energy, efficiency["Energy[eV]"], efficiency["Efficiency"]
+            )
+
+            # Multiply the percentage by the interpolated efficiency
+            perc *= interpolated_efficiency
+
+        return perc
+
     def cleanup(
         self,
         dir_path: str = None,
         repeat: int = 1,
         exp_elements: list = None,
         exported_file_type=None,
-        undulator_table=None,
     ):
         """Reads all the results of the postprocessing process and summarize
         them in a single file for each exported object.
