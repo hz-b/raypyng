@@ -60,6 +60,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 ### Changed
+- add precommit, with black and ruff
 
 ### Fixed
 - issue [#46](https://github.com/hz-b/raypyng/issues/46), RawRaysOutgoing and RawRaysIncoming recap files were created even if not requested by the user, and even if individual files were not exported.
