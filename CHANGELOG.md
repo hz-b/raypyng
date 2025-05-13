@@ -7,10 +7,10 @@ All notable changes to this project will be documented in this file.
 - add possibility to multiply the results for an arbitrary efficiency, and relative example
 ### Changed
 
-
-
 ### Fixed
 - issue [#46](https://github.com/hz-b/raypyng/issues/46), RawRaysOutgoing and RawRaysIncoming recap files were created even if not requested by the user, and even if individual files were not exported.
+
+
 
 ## [1.2.912] - 25-Feb-2025
 ### Added
