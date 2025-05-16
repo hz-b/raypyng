@@ -1,6 +1,15 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.2.914] - 16-May-2025
+### Added
+- add slope_error and alignment_error functions to Simulate class, to switch on and off slope errors and alignment errors on all elements.
+### Changed
+
+### Fixed
+- errors in formatting docstrings for readthedocs
+
+
 ## [1.2.913] - 13-May-2025
 ### Added
 - add precommit, with black and ruff

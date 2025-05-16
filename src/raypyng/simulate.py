@@ -1326,15 +1326,15 @@ class Simulate:
             self.exports = recipe.exports(self)
             self.simulation_name = recipe.simulation_name(self)
 
-    def reflectivity(self, reflectivity=True):
-        """Switch the reflectivity of all the optical elements in the beamline on or off.
+    def reflectivity(self, value):
+        """
+        Switch the reflectivity of all the optical elements in the beamline on or off.
 
         Args:
-            reflectivity (bool, optional): If :code:`True` the reflectivity is switched on,
+            value (bool, optional): If :code:`True` the reflectivity is switched on,
                                            if :code:`False` the reflectivity is switched off.
-                                           Defaults to True.
         """
-        if reflectivity:
+        if value:
             on_off = "1"
         else:
             on_off = "0"
@@ -1342,6 +1342,45 @@ class Simulate:
         for oe in self.rml.beamline.children():
             if hasattr(oe, "reflectivityType"):
                 oe.reflectivityType.cdata = on_off
+
+    def slope_errors(self, slope_errors):
+        """
+        Switch the slope errors of all the optical elements in the beamline on or off.
+
+        Args:
+            value (bool, optional): If `True` the slope errors are switched on,
+                                           if `False` the slope errors are switched off.
+        """
+        if slope_errors:
+            on_off = "0"
+        else:
+            on_off = "1"
+
+        for oe in self.rml.beamline.children():
+            if hasattr(oe, "slopeError"):
+                oe.slopeError.cdata = on_off
+                # oe.slopeError.attributes()['enabled'] = enabled
+
+    def alignment_errors(self, value):
+        """
+        Switch the alignment errors of all the optical elements in the beamline on or off.
+
+        Args:
+            value (bool, optional): If `True`, the alignment errors are switched on.
+                If `False`, the alignment errors are switched off.
+
+        Returns:
+            None
+        """
+
+        if value:
+            on_off = "0"
+        else:
+            on_off = "1"
+
+        for oe in self.rml.beamline.children():
+            if hasattr(oe, "alignmentError"):
+                oe.alignmentError.cdata = on_off
 
 
 def run_rml_func(parameters):
