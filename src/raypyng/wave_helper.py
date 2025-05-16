@@ -6,26 +6,23 @@ from natsort import natsorted
 
 
 class WaveHelper:
-    """Explore WAVE simulation folder and gives an easy way to convert energies into filenames
+    """
+    Explore WAVE simulation folder and gives an easy way to convert energies into filenames
 
     The class expects the WAVE simulations to be stored in a folder called WAVE.
     For instance for an undulator called 'U49' and harmonic=3, this filestructure is expected:
 
     Wave
-
     ├── U49H1allrayfiles
-
     ├── U49H3allrayfiles
-
     ├── U49H5allrayfiles
 
-
-        Args:
-            wave_folder_path (str): the path to the WAVW folder where the WAVE
-                                    simulations are stored
-            harmonics (int): the number of harmonics present.(If harmonics=2,
-                                simulations for 1st and 3rd should exist)
-            undulator (str): the undulator name as indicated in the simulation folders
+    Args:
+        wave_folder_path (str): the path to the WAVW folder where the WAVE
+                                simulations are stored
+        harmonics (int): the number of harmonics present.(If harmonics=2,
+                            simulations for 1st and 3rd should exist)
+        undulator (str): the undulator name as indicated in the simulation folders
     """
 
     def __init__(self, wave_folder_path: str, harmonics: int, undulator: str, **kwargs) -> None:
