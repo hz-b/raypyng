@@ -1,22 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>How To Guides &mdash; RayPyNG  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -29,11 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> RayPyNG
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            RayPyNG
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -49,6 +52,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#how-to-write-a-recipe">How To Write a Recipe</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-work-with-undulator-file">How to work with Undulator File</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="API.html">API</a></li>
@@ -67,8 +71,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>How To Guides</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">How To Guides</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/how_to.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -79,14 +83,14 @@
            <div itemprop="articleBody">
              
   <section id="how-to-guides">
-<h1>How To Guides<a class="headerlink" href="#how-to-guides" title="Permalink to this heading"></a></h1>
+<h1>How To Guides<a class="headerlink" href="#how-to-guides" title="Link to this heading"></a></h1>
 <p>To simplify the scripting, especially when repetitive,
 there is the possibility to write recipe for raypyng, to
 perform simulations, and automatize some tasks.</p>
 <section id="write-your-own-recipe">
-<h2>Write your own Recipe<a class="headerlink" href="#write-your-own-recipe" title="Permalink to this heading"></a></h2>
+<h2>Write your own Recipe<a class="headerlink" href="#write-your-own-recipe" title="Link to this heading"></a></h2>
 <section id="recipe-template">
-<h3>Recipe Template<a class="headerlink" href="#recipe-template" title="Permalink to this heading"></a></h3>
+<h3>Recipe Template<a class="headerlink" href="#recipe-template" title="Link to this heading"></a></h3>
 <p>This the template to use to write a recipe.
 At the beginning of the file import
 <code class="code docutils literal notranslate"><span class="pre">SimulationRecipe</span></code> from <code class="code docutils literal notranslate"><span class="pre">raypyng</span></code>
@@ -119,27 +123,27 @@ The items of the dictionary is the name of the file that you want to export
 <code class="code docutils literal notranslate"><span class="pre">possible_exports_without_analysis</span></code>.</p>
 <p>Define the name to give to the simulation folder
 in <code class="code docutils literal notranslate"><span class="pre">simulation_name()</span></code></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">raypyng.recipes</span> <span class="kn">import</span> <span class="n">SimulationRecipe</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">raypyng.recipes</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimulationRecipe</span>
 
-<span class="k">class</span> <span class="nc">Simulate</span><span class="p">:</span> <span class="k">pass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Simulate</span><span class="p">:</span> <span class="k">pass</span>
 
-<span class="k">class</span> <span class="nc">MyRecipe</span><span class="p">(</span><span class="n">SimulationRecipe</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyRecipe</span><span class="p">(</span><span class="n">SimulationRecipe</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
 
-    <span class="k">def</span> <span class="nf">params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
 
         <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">return</span> <span class="n">params</span>
 
-    <span class="k">def</span> <span class="nf">exports</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">exports</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
 
         <span class="n">exports</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">return</span> <span class="n">exports</span>
 
-    <span class="k">def</span> <span class="nf">simulation_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">simulation_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sim_folder</span> <span class="o">=</span> <span class="o">...</span>
 
@@ -148,16 +152,16 @@ in <code class="code docutils literal notranslate"><span class="pre">simulation_
 </div>
 </section>
 <section id="how-to-write-a-recipe">
-<h3>How To Write a Recipe<a class="headerlink" href="#how-to-write-a-recipe" title="Permalink to this heading"></a></h3>
+<h3>How To Write a Recipe<a class="headerlink" href="#how-to-write-a-recipe" title="Link to this heading"></a></h3>
 <p>An example of how to write a recipe that exports
 file for each element present in the beamline automatically.</p>
 <blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ExportEachElement</span><span class="p">(</span><span class="n">SimulationRecipe</span><span class="p">):</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ExportEachElement</span><span class="p">(</span><span class="n">SimulationRecipe</span><span class="p">):</span>
 <span class="sd">&quot;&quot;&quot;At one defined energy export a file for each</span>
 <span class="sd">optical elements</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">energy</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span><span class="o">/</span><span class="p">,</span><span class="n">nrays</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">sim_folder</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">energy</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span><span class="o">/</span><span class="p">,</span><span class="n">nrays</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">sim_folder</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Args:</span>
 <span class="sd">        energy_range (np.array, list): the energies to simulate in eV</span>
 <span class="sd">        nrays (int): number of rays for the source</span>
@@ -172,7 +176,7 @@ file for each element present in the beamline automatically.</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">nrays</span>  <span class="o">=</span> <span class="n">nrays</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">sim_folder</span> <span class="o">=</span> <span class="n">sim_folder</span>
 
-<span class="k">def</span> <span class="nf">params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
     <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># find source and add to param with defined user energy range</span>
@@ -197,7 +201,7 @@ file for each element present in the beamline automatically.</p>
     <span class="c1"># all done, return resulting params</span>
     <span class="k">return</span> <span class="n">params</span>
 
-<span class="k">def</span> <span class="nf">exports</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">exports</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
     <span class="c1"># find all the elements in the beamline</span>
     <span class="n">oe_list</span><span class="o">=</span><span class="p">[]</span>
     <span class="k">for</span> <span class="n">oe</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">rml</span><span class="o">.</span><span class="n">beamline</span><span class="o">.</span><span class="n">children</span><span class="p">():</span>
@@ -208,15 +212,15 @@ file for each element present in the beamline automatically.</p>
         <span class="n">exports</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">oe</span><span class="p">:</span><span class="s1">&#39;RawRaysOutgoing&#39;</span><span class="p">})</span>
     <span class="k">return</span> <span class="n">exports</span>
 
-<span class="k">def</span> <span class="nf">simulation_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">simulation_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sim</span><span class="p">:</span><span class="n">Simulate</span><span class="p">):</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_folder</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="s1">&#39;ExportEachElement&#39;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_folder</span>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">raypyng</span> <span class="kn">import</span> <span class="n">Simulate</span>
-    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-    <span class="kn">import</span> <span class="nn">os</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">raypyng</span><span class="w"> </span><span class="kn">import</span> <span class="n">Simulate</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
     <span class="n">rml_file</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;rml_file.rml&#39;</span><span class="p">)</span>
     <span class="n">sim</span>      <span class="o">=</span> <span class="n">Simulate</span><span class="p">(</span><span class="n">rml_file</span><span class="p">,</span> <span class="n">hide</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -232,6 +236,48 @@ file for each element present in the beamline automatically.</p>
 </div>
 </div></blockquote>
 </section>
+</section>
+<section id="how-to-work-with-undulator-file">
+<h2>How to work with Undulator File<a class="headerlink" href="#how-to-work-with-undulator-file" title="Link to this heading"></a></h2>
+<p>The <cite>WaveHelper</cite> class helps to inspect a WAVE simulation folder and
+provides a simple way to extract the absolute path of the simulation files
+to feed to the <cite>Undulator File</cite>. In this example we use the <cite>WAVE</cite> folder provided in the example
+folder at this <a class="reference external" href="https://github.com/hz-b/raypyng/tree/main/examples">link</a>. Inside the folder there are
+WAVE simulation files for the first, third and fifth harmonic, and the Undulator is called <cite>U49</cite></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">raypyng.wave_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">WaveHelper</span>
+
+<span class="n">WH</span> <span class="o">=</span> <span class="n">WaveHelper</span><span class="p">(</span><span class="n">wave_folder_path</span><span class="o">=</span><span class="s1">&#39;WAVE&#39;</span><span class="p">,</span> <span class="n">harmonic</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">undulator</span><span class="o">=</span><span class="s1">&#39;U49&#39;</span><span class="p">)</span>
+
+<span class="n">WH</span><span class="o">.</span><span class="n">report_available_energies</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This produces the following output:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">I</span> <span class="n">found</span> <span class="n">the</span> <span class="n">following</span> <span class="n">harmonics</span><span class="p">:</span> <span class="n">dict_keys</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="n">the</span> <span class="n">energy</span> <span class="n">points</span> <span class="k">for</span> <span class="n">each</span> <span class="n">harmonic</span> <span class="n">are</span> <span class="n">equally</span> <span class="n">spaced</span>
+<span class="n">Harmonic</span> <span class="n">number</span> <span class="mi">1</span><span class="p">,</span> <span class="n">available</span> <span class="n">energies</span><span class="p">:</span>
+<span class="n">start</span> <span class="mi">80</span>
+<span class="n">stop</span> <span class="mi">570</span>
+<span class="n">step</span> <span class="mi">10</span>
+<span class="n">Harmonic</span> <span class="n">number</span> <span class="mi">3</span><span class="p">,</span> <span class="n">available</span> <span class="n">energies</span><span class="p">:</span>
+<span class="n">start</span> <span class="mi">240</span>
+<span class="n">stop</span> <span class="mi">1710</span>
+<span class="n">step</span> <span class="mi">30</span>
+<span class="n">Harmonic</span> <span class="n">number</span> <span class="mi">5</span><span class="p">,</span> <span class="n">available</span> <span class="n">energies</span><span class="p">:</span>
+<span class="n">start</span> <span class="mi">400</span>
+<span class="n">stop</span> <span class="mi">2850</span>
+<span class="n">step</span> <span class="mi">50</span>
+</pre></div>
+</div>
+<p>We can now extract the file location for all the energies or a subset of the
+energies available for the first harmonic of the undulator:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">energies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="mi">570</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">energy_files</span> <span class="o">=</span> <span class="n">WH</span><span class="o">.</span><span class="n">convert_energies_to_file_list</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">energies</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><cite>energy_files</cite> contains the absolute path to the WAVE simulation file for each energy.
+This can be used to change the energy of an Undulator by calling the parameter <cite>undulatorFile</cite>.</p>
 </section>
 </section>
 

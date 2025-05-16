@@ -1,48 +1,55 @@
 \indexentry{Simulate (class in raypyng.simulate)@\spxentry{Simulate}\spxextra{class in raypyng.simulate}|hyperpage}{17}
+\indexentry{alignment\_errors() (raypyng.simulate.Simulate method)@\spxentry{alignment\_errors()}\spxextra{raypyng.simulate.Simulate method}|hyperpage}{17}
 \indexentry{analyze (raypyng.simulate.Simulate property)@\spxentry{analyze}\spxextra{raypyng.simulate.Simulate property}|hyperpage}{17}
+\indexentry{cleanup\_child\_processes() (raypyng.simulate.Simulate method)@\spxentry{cleanup\_child\_processes()}\spxextra{raypyng.simulate.Simulate method}|hyperpage}{17}
+\indexentry{efficiency (raypyng.simulate.Simulate property)@\spxentry{efficiency}\spxextra{raypyng.simulate.Simulate property}|hyperpage}{17}
 \indexentry{exports (raypyng.simulate.Simulate property)@\spxentry{exports}\spxextra{raypyng.simulate.Simulate property}|hyperpage}{17}
-\indexentry{params (raypyng.simulate.Simulate property)@\spxentry{params}\spxextra{raypyng.simulate.Simulate property}|hyperpage}{17}
-\indexentry{path (raypyng.simulate.Simulate property)@\spxentry{path}\spxextra{raypyng.simulate.Simulate property}|hyperpage}{17}
+\indexentry{params (raypyng.simulate.Simulate property)@\spxentry{params}\spxextra{raypyng.simulate.Simulate property}|hyperpage}{18}
+\indexentry{path (raypyng.simulate.Simulate property)@\spxentry{path}\spxextra{raypyng.simulate.Simulate property}|hyperpage}{18}
 \indexentry{possible\_exports (raypyng.simulate.Simulate property)@\spxentry{possible\_exports}\spxextra{raypyng.simulate.Simulate property}|hyperpage}{18}
 \indexentry{possible\_exports\_without\_analysis (raypyng.simulate.Simulate property)@\spxentry{possible\_exports\_without\_analysis}\spxextra{raypyng.simulate.Simulate property}|hyperpage}{18}
 \indexentry{raypyng\_analysis (raypyng.simulate.Simulate property)@\spxentry{raypyng\_analysis}\spxextra{raypyng.simulate.Simulate property}|hyperpage}{18}
 \indexentry{reflectivity() (raypyng.simulate.Simulate method)@\spxentry{reflectivity()}\spxextra{raypyng.simulate.Simulate method}|hyperpage}{18}
 \indexentry{repeat (raypyng.simulate.Simulate property)@\spxentry{repeat}\spxextra{raypyng.simulate.Simulate property}|hyperpage}{18}
-\indexentry{rml (raypyng.simulate.Simulate property)@\spxentry{rml}\spxextra{raypyng.simulate.Simulate property}|hyperpage}{18}
-\indexentry{rml\_list() (raypyng.simulate.Simulate method)@\spxentry{rml\_list()}\spxextra{raypyng.simulate.Simulate method}|hyperpage}{18}
-\indexentry{run() (raypyng.simulate.Simulate method)@\spxentry{run()}\spxextra{raypyng.simulate.Simulate method}|hyperpage}{18}
-\indexentry{save\_parameters\_to\_file() (raypyng.simulate.Simulate method)@\spxentry{save\_parameters\_to\_file()}\spxextra{raypyng.simulate.Simulate method}|hyperpage}{19}
+\indexentry{rml (raypyng.simulate.Simulate property)@\spxentry{rml}\spxextra{raypyng.simulate.Simulate property}|hyperpage}{19}
+\indexentry{rml\_list() (raypyng.simulate.Simulate method)@\spxentry{rml\_list()}\spxextra{raypyng.simulate.Simulate method}|hyperpage}{19}
+\indexentry{run() (raypyng.simulate.Simulate method)@\spxentry{run()}\spxextra{raypyng.simulate.Simulate method}|hyperpage}{19}
 \indexentry{simulation\_name (raypyng.simulate.Simulate property)@\spxentry{simulation\_name}\spxextra{raypyng.simulate.Simulate property}|hyperpage}{19}
-\indexentry{SimulationParams (class in raypyng.simulate)@\spxentry{SimulationParams}\spxextra{class in raypyng.simulate}|hyperpage}{19}
-\indexentry{params (raypyng.simulate.SimulationParams property)@\spxentry{params}\spxextra{raypyng.simulate.SimulationParams property}|hyperpage}{19}
-\indexentry{rml (raypyng.simulate.SimulationParams property)@\spxentry{rml}\spxextra{raypyng.simulate.SimulationParams property}|hyperpage}{19}
+\indexentry{slope\_errors() (raypyng.simulate.Simulate method)@\spxentry{slope\_errors()}\spxextra{raypyng.simulate.Simulate method}|hyperpage}{19}
+\indexentry{undulator\_table (raypyng.simulate.Simulate property)@\spxentry{undulator\_table}\spxextra{raypyng.simulate.Simulate property}|hyperpage}{19}
+\indexentry{SimulationParams (class in raypyng.simulate)@\spxentry{SimulationParams}\spxextra{class in raypyng.simulate}|hyperpage}{20}
+\indexentry{rml (raypyng.simulate.SimulationParams attribute)@\spxentry{rml}\spxextra{raypyng.simulate.SimulationParams attribute}|hyperpage}{20}
+\indexentry{params (raypyng.simulate.SimulationParams attribute)@\spxentry{params}\spxextra{raypyng.simulate.SimulationParams attribute}|hyperpage}{20}
+\indexentry{simulation\_parameters\_generator() (raypyng.simulate.SimulationParams method)@\spxentry{simulation\_parameters\_generator()}\spxextra{raypyng.simulate.SimulationParams method}|hyperpage}{20}
 \indexentry{WaveHelper (class in raypyng.wave\_helper)@\spxentry{WaveHelper}\spxextra{class in raypyng.wave\_helper}|hyperpage}{20}
 \indexentry{convert\_energies\_to\_file\_list() (raypyng.wave\_helper.WaveHelper method)@\spxentry{convert\_energies\_to\_file\_list()}\spxextra{raypyng.wave\_helper.WaveHelper method}|hyperpage}{20}
-\indexentry{report\_available\_energies() (raypyng.wave\_helper.WaveHelper method)@\spxentry{report\_available\_energies()}\spxextra{raypyng.wave\_helper.WaveHelper method}|hyperpage}{20}
-\indexentry{ResolvingPower (class in raypyng.recipes)@\spxentry{ResolvingPower}\spxextra{class in raypyng.recipes}|hyperpage}{20}
+\indexentry{report\_available\_energies() (raypyng.wave\_helper.WaveHelper method)@\spxentry{report\_available\_energies()}\spxextra{raypyng.wave\_helper.WaveHelper method}|hyperpage}{21}
+\indexentry{ResolvingPower (class in raypyng.recipes)@\spxentry{ResolvingPower}\spxextra{class in raypyng.recipes}|hyperpage}{21}
 \indexentry{Flux (class in raypyng.recipes)@\spxentry{Flux}\spxextra{class in raypyng.recipes}|hyperpage}{21}
 \indexentry{PostProcess (class in raypyng.postprocessing)@\spxentry{PostProcess}\spxextra{class in raypyng.postprocessing}|hyperpage}{21}
-\indexentry{cleanup() (raypyng.postprocessing.PostProcess method)@\spxentry{cleanup()}\spxextra{raypyng.postprocessing.PostProcess method}|hyperpage}{21}
+\indexentry{cleanup() (raypyng.postprocessing.PostProcess method)@\spxentry{cleanup()}\spxextra{raypyng.postprocessing.PostProcess method}|hyperpage}{22}
+\indexentry{extract\_bw\_from\_source() (raypyng.postprocessing.PostProcess method)@\spxentry{extract\_bw\_from\_source()}\spxextra{raypyng.postprocessing.PostProcess method}|hyperpage}{22}
+\indexentry{extract\_energy\_from\_source() (raypyng.postprocessing.PostProcess method)@\spxentry{extract\_energy\_from\_source()}\spxextra{raypyng.postprocessing.PostProcess method}|hyperpage}{22}
 \indexentry{extract\_nrays\_from\_source() (raypyng.postprocessing.PostProcess method)@\spxentry{extract\_nrays\_from\_source()}\spxextra{raypyng.postprocessing.PostProcess method}|hyperpage}{22}
 \indexentry{postprocess\_RawRays() (raypyng.postprocessing.PostProcess method)@\spxentry{postprocess\_RawRays()}\spxextra{raypyng.postprocessing.PostProcess method}|hyperpage}{22}
-\indexentry{PostProcessAnalyzed (class in raypyng.postprocessing)@\spxentry{PostProcessAnalyzed}\spxextra{class in raypyng.postprocessing}|hyperpage}{22}
-\indexentry{moving\_average() (raypyng.postprocessing.PostProcessAnalyzed method)@\spxentry{moving\_average()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}|hyperpage}{22}
-\indexentry{retrieve\_bw\_and\_focusSize() (raypyng.postprocessing.PostProcessAnalyzed method)@\spxentry{retrieve\_bw\_and\_focusSize()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}|hyperpage}{22}
-\indexentry{retrieve\_flux\_beamline() (raypyng.postprocessing.PostProcessAnalyzed method)@\spxentry{retrieve\_flux\_beamline()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}|hyperpage}{23}
+\indexentry{PostProcessAnalyzed (class in raypyng.postprocessing)@\spxentry{PostProcessAnalyzed}\spxextra{class in raypyng.postprocessing}|hyperpage}{23}
+\indexentry{moving\_average() (raypyng.postprocessing.PostProcessAnalyzed method)@\spxentry{moving\_average()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}|hyperpage}{23}
+\indexentry{retrieve\_bw\_and\_focusSize() (raypyng.postprocessing.PostProcessAnalyzed method)@\spxentry{retrieve\_bw\_and\_focusSize()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}|hyperpage}{23}
+\indexentry{retrieve\_flux\_beamline() (raypyng.postprocessing.PostProcessAnalyzed method)@\spxentry{retrieve\_flux\_beamline()}\spxextra{raypyng.postprocessing.PostProcessAnalyzed method}|hyperpage}{24}
 \indexentry{RayProperties (class in raypyng.postprocessing)@\spxentry{RayProperties}\spxextra{class in raypyng.postprocessing}|hyperpage}{24}
 \indexentry{concat() (raypyng.postprocessing.RayProperties method)@\spxentry{concat()}\spxextra{raypyng.postprocessing.RayProperties method}|hyperpage}{24}
 \indexentry{save() (raypyng.postprocessing.RayProperties method)@\spxentry{save()}\spxextra{raypyng.postprocessing.RayProperties method}|hyperpage}{24}
 \indexentry{RayUIRunner (class in raypyng.runner)@\spxentry{RayUIRunner}\spxextra{class in raypyng.runner}|hyperpage}{24}
-\indexentry{isrunning (raypyng.runner.RayUIRunner property)@\spxentry{isrunning}\spxextra{raypyng.runner.RayUIRunner property}|hyperpage}{24}
-\indexentry{kill() (raypyng.runner.RayUIRunner method)@\spxentry{kill()}\spxextra{raypyng.runner.RayUIRunner method}|hyperpage}{24}
+\indexentry{isrunning (raypyng.runner.RayUIRunner property)@\spxentry{isrunning}\spxextra{raypyng.runner.RayUIRunner property}|hyperpage}{25}
+\indexentry{kill() (raypyng.runner.RayUIRunner method)@\spxentry{kill()}\spxextra{raypyng.runner.RayUIRunner method}|hyperpage}{25}
 \indexentry{pid (raypyng.runner.RayUIRunner property)@\spxentry{pid}\spxextra{raypyng.runner.RayUIRunner property}|hyperpage}{25}
 \indexentry{run() (raypyng.runner.RayUIRunner method)@\spxentry{run()}\spxextra{raypyng.runner.RayUIRunner method}|hyperpage}{25}
 \indexentry{RayUIAPI (class in raypyng.runner)@\spxentry{RayUIAPI}\spxextra{class in raypyng.runner}|hyperpage}{25}
 \indexentry{export() (raypyng.runner.RayUIAPI method)@\spxentry{export()}\spxextra{raypyng.runner.RayUIAPI method}|hyperpage}{25}
 \indexentry{load() (raypyng.runner.RayUIAPI method)@\spxentry{load()}\spxextra{raypyng.runner.RayUIAPI method}|hyperpage}{25}
 \indexentry{quit() (raypyng.runner.RayUIAPI method)@\spxentry{quit()}\spxextra{raypyng.runner.RayUIAPI method}|hyperpage}{25}
-\indexentry{save() (raypyng.runner.RayUIAPI method)@\spxentry{save()}\spxextra{raypyng.runner.RayUIAPI method}|hyperpage}{25}
-\indexentry{trace() (raypyng.runner.RayUIAPI method)@\spxentry{trace()}\spxextra{raypyng.runner.RayUIAPI method}|hyperpage}{25}
+\indexentry{save() (raypyng.runner.RayUIAPI method)@\spxentry{save()}\spxextra{raypyng.runner.RayUIAPI method}|hyperpage}{26}
+\indexentry{trace() (raypyng.runner.RayUIAPI method)@\spxentry{trace()}\spxextra{raypyng.runner.RayUIAPI method}|hyperpage}{26}
 \indexentry{RMLFile (class in raypyng.rml)@\spxentry{RMLFile}\spxextra{class in raypyng.rml}|hyperpage}{26}
 \indexentry{read() (raypyng.rml.RMLFile method)@\spxentry{read()}\spxextra{raypyng.rml.RMLFile method}|hyperpage}{26}
 \indexentry{write() (raypyng.rml.RMLFile method)@\spxentry{write()}\spxextra{raypyng.rml.RMLFile method}|hyperpage}{26}
@@ -52,7 +59,7 @@
 \indexentry{get\_attribute() (raypyng.rml.BeamlineElement method)@\spxentry{get\_attribute()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{26}
 \indexentry{get\_elements() (raypyng.rml.BeamlineElement method)@\spxentry{get\_elements()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{26}
 \indexentry{get\_full\_path() (raypyng.rml.BeamlineElement method)@\spxentry{get\_full\_path()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{26}
-\indexentry{resolvable\_name() (raypyng.rml.BeamlineElement method)@\spxentry{resolvable\_name()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{26}
+\indexentry{resolvable\_name() (raypyng.rml.BeamlineElement method)@\spxentry{resolvable\_name()}\spxextra{raypyng.rml.BeamlineElement method}|hyperpage}{27}
 \indexentry{ObjectElement (class in raypyng.rml)@\spxentry{ObjectElement}\spxextra{class in raypyng.rml}|hyperpage}{27}
 \indexentry{add\_cdata() (raypyng.rml.ObjectElement method)@\spxentry{add\_cdata()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{27}
 \indexentry{add\_child() (raypyng.rml.ObjectElement method)@\spxentry{add\_child()}\spxextra{raypyng.rml.ObjectElement method}|hyperpage}{27}
@@ -63,7 +70,7 @@
 \indexentry{ParamElement (class in raypyng.rml)@\spxentry{ParamElement}\spxextra{class in raypyng.rml}|hyperpage}{27}
 \indexentry{add\_cdata() (raypyng.rml.ParamElement method)@\spxentry{add\_cdata()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{27}
 \indexentry{add\_child() (raypyng.rml.ParamElement method)@\spxentry{add\_child()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{27}
-\indexentry{get\_attribute() (raypyng.rml.ParamElement method)@\spxentry{get\_attribute()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{27}
-\indexentry{get\_elements() (raypyng.rml.ParamElement method)@\spxentry{get\_elements()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{27}
-\indexentry{get\_full\_path() (raypyng.rml.ParamElement method)@\spxentry{get\_full\_path()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{27}
-\indexentry{resolvable\_name() (raypyng.rml.ParamElement method)@\spxentry{resolvable\_name()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{27}
+\indexentry{get\_attribute() (raypyng.rml.ParamElement method)@\spxentry{get\_attribute()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{28}
+\indexentry{get\_elements() (raypyng.rml.ParamElement method)@\spxentry{get\_elements()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{28}
+\indexentry{get\_full\_path() (raypyng.rml.ParamElement method)@\spxentry{get\_full\_path()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{28}
+\indexentry{resolvable\_name() (raypyng.rml.ParamElement method)@\spxentry{resolvable\_name()}\spxextra{raypyng.rml.ParamElement method}|hyperpage}{28}

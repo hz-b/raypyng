@@ -1,22 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tutorial &mdash; RayPyNG  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -29,11 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> RayPyNG
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            RayPyNG
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -46,7 +49,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#manipulate-an-rml-file">Manipulate an RML file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ray-ui-api">RAY-UI API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#simulations">Simulations</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#perform-simulations">Perform Simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#perform-simulations">Perform Simulations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#note-on-multiprocessing">Note on multiprocessing</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#simulation-output">Simulation Output</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#analysis-performed-by-ray-ui">Analysis performed by RAY-UI</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#analysis-performed-by-raypyng">Analysis performed by raypyng</a></li>
@@ -75,8 +81,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Tutorial</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Tutorial</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/tutorial.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -87,11 +93,11 @@
            <div itemprop="articleBody">
              
   <section id="tutorial">
-<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this heading"></a></h1>
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Link to this heading"></a></h1>
 <section id="manipulate-an-rml-file">
-<h2>Manipulate an RML file<a class="headerlink" href="#manipulate-an-rml-file" title="Permalink to this heading"></a></h2>
+<h2>Manipulate an RML file<a class="headerlink" href="#manipulate-an-rml-file" title="Link to this heading"></a></h2>
 <p>Using the <code class="code docutils literal notranslate"><span class="pre">RMLFile</span></code> class it is possible to manupulate an beamline file produced by RAY-UI.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">raypyng.rml</span> <span class="kn">import</span> <span class="n">RMLFile</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="kn">from</span><span class="w"> </span><span class="nn">raypyng.rml</span><span class="w"> </span><span class="kn">import</span> <span class="n">RMLFile</span>
  <span class="o">...</span><span class="p">:</span> <span class="n">rml</span> <span class="o">=</span> <span class="n">RMLFile</span><span class="p">(</span><span class="s1">&#39;rml/elisa.rml&#39;</span><span class="p">)</span>
  <span class="o">...</span><span class="p">:</span> <span class="n">rml</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="n">RMLFile</span><span class="p">(</span><span class="s1">&#39;rml/elisa.rml&#39;</span><span class="p">,</span><span class="n">template</span><span class="o">=</span><span class="s1">&#39;rml/elisa.rml&#39;</span><span class="p">)</span>
@@ -174,12 +180,12 @@ For instance, to print all the parameters of the Dipole:</p>
 </div>
 </section>
 <section id="ray-ui-api">
-<h2>RAY-UI API<a class="headerlink" href="#ray-ui-api" title="Permalink to this heading"></a></h2>
+<h2>RAY-UI API<a class="headerlink" href="#ray-ui-api" title="Link to this heading"></a></h2>
 <p>Using the <code class="code docutils literal notranslate"><span class="pre">RayUIRunner</span></code> and the <code class="code docutils literal notranslate"><span class="pre">RayUIAPI</span></code> classes it is possible
 to interact with RAY-UI directly from python.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">os</span>
- <span class="o">...</span><span class="p">:</span> <span class="kn">import</span> <span class="nn">time</span>
- <span class="o">...</span><span class="p">:</span> <span class="kn">from</span> <span class="nn">raypyng.runner</span> <span class="kn">import</span> <span class="n">RayUIRunner</span><span class="p">,</span> <span class="n">RayUIAPI</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+ <span class="o">...</span><span class="p">:</span> <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+ <span class="o">...</span><span class="p">:</span> <span class="kn">from</span><span class="w"> </span><span class="nn">raypyng.runner</span><span class="w"> </span><span class="kn">import</span> <span class="n">RayUIRunner</span><span class="p">,</span> <span class="n">RayUIAPI</span>
  <span class="o">...</span><span class="p">:</span>
  <span class="o">...</span><span class="p">:</span> <span class="n">r</span> <span class="o">=</span> <span class="n">RayUIRunner</span><span class="p">(</span><span class="n">ray_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hide</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
  <span class="o">...</span><span class="p">:</span> <span class="n">a</span> <span class="o">=</span> <span class="n">RayUIAPI</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
@@ -226,15 +232,15 @@ instance if you change the photon energy, it will update the source flux)</p>
 </div>
 </section>
 <section id="simulations">
-<h2>Simulations<a class="headerlink" href="#simulations" title="Permalink to this heading"></a></h2>
+<h2>Simulations<a class="headerlink" href="#simulations" title="Link to this heading"></a></h2>
 <section id="perform-simulations">
-<h3>Perform Simulations<a class="headerlink" href="#perform-simulations" title="Permalink to this heading"></a></h3>
+<h3>Perform Simulations<a class="headerlink" href="#perform-simulations" title="Link to this heading"></a></h3>
 <p>raypyng is not able to create a beamline from scratch. To do so, use RAY-UI,
 create a beamline, and save it. What you save is <code class="code docutils literal notranslate"><span class="pre">.rml</span></code> file, which you have to
 pass as an argument to the <code class="code docutils literal notranslate"><span class="pre">Simulate</span></code> class. In the following example, we
 use the file for a beamline called <cite>elisa</cite>, and the file is saved in <code class="code docutils literal notranslate"><span class="pre">rml/elisa.rml</span></code>.
 The <code class="code docutils literal notranslate"><span class="pre">hide</span></code> parameter can be set to true only if <cite>xvfb</cite> is installed.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">raypyng</span> <span class="kn">import</span> <span class="n">Simulate</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">raypyng</span><span class="w"> </span><span class="kn">import</span> <span class="n">Simulate</span>
 <span class="n">rml_file</span> <span class="o">=</span> <span class="s1">&#39;rml/elisa.rml&#39;</span>
 
 <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulate</span><span class="p">(</span><span class="n">rml_file</span><span class="p">,</span> <span class="n">hide</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -353,10 +359,22 @@ To let RAY-UI analyze the results, one has to set:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">multiprocessing</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>where the <cite>multiprocessing</cite> parameter can be set either to False or to an int, corresponding to the number of parallel instances of RAY-UI to be used. Generally speaking, the number of instances of RAY-UI must be lower than the number of cores available. If the simulation uses many rays, monitor the RAM usage of your computer. If the computation uses all the possible RAM of the computer the program may get blocked or not execute correctly.</p>
+<p>where the <cite>multiprocessing</cite> parameter can be an integer greater or equal to 1, corresponding to the number of parallel instances of RAY-UI to be used. Generally speaking, the number of instances of RAY-UI must be lower or equal than the number of available cores. If the simulation uses many rays, monitor the RAM usage of your computer. If the computation uses all the possible RAM of the computer the program may get blocked or not execute correctly.</p>
+<section id="note-on-multiprocessing">
+<h4>Note on multiprocessing<a class="headerlink" href="#note-on-multiprocessing" title="Link to this heading"></a></h4>
+<p>The speed increase due to opening many RAY-UI instances is effective only when RAY-UI is not performing the analysis of the results.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">.</span><span class="n">analyze</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># don&#39;t let RAY-UI analyze the results</span>
+</pre></div>
+</div>
+<p>There is little/no difference having RayPyNG analyzing the results
+.. code-block:: python</p>
+<blockquote>
+<div><p>sim.raypyng_analysis=True # let raypyng analyze the results</p>
+</div></blockquote>
+</section>
 </section>
 <section id="simulation-output">
-<h3>Simulation Output<a class="headerlink" href="#simulation-output" title="Permalink to this heading"></a></h3>
+<h3>Simulation Output<a class="headerlink" href="#simulation-output" title="Link to this heading"></a></h3>
 <p>Expect this folders and subfolders to be created:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>RAYPy_simulation_mySimulation
 ├── round_0
@@ -379,7 +397,7 @@ To let RAY-UI analyze the results, one has to set:</p>
 </pre></div>
 </div>
 <section id="analysis-performed-by-ray-ui">
-<h4>Analysis performed by RAY-UI<a class="headerlink" href="#analysis-performed-by-ray-ui" title="Permalink to this heading"></a></h4>
+<h4>Analysis performed by RAY-UI<a class="headerlink" href="#analysis-performed-by-ray-ui" title="Link to this heading"></a></h4>
 <p>If you decided to let RAY-UI do the analysis, you should expect the following files to be
 saved in your simulation folder:</p>
 <ul class="simple">
@@ -398,7 +416,7 @@ you will have a list of files <cite>0_Dipole-ScalarElementProperties.csv</cite><
 </ul>
 </section>
 <section id="analysis-performed-by-raypyng">
-<h4>Analysis performed by raypyng<a class="headerlink" href="#analysis-performed-by-raypyng" title="Permalink to this heading"></a></h4>
+<h4>Analysis performed by raypyng<a class="headerlink" href="#analysis-performed-by-raypyng" title="Link to this heading"></a></h4>
 <p>If you decided to let raypyng do the analysis, you should expect the following files to
 be saved in your simulation folder:</p>
 <ul class="simple">
@@ -433,7 +451,7 @@ in one single file. For the dipole, the file is called <cite>Dipole.dat</cite></
 </section>
 </section>
 <section id="recipes">
-<h2>Recipes<a class="headerlink" href="#recipes" title="Permalink to this heading"></a></h2>
+<h2>Recipes<a class="headerlink" href="#recipes" title="Link to this heading"></a></h2>
 <p>raypyng provides some recipes to make simulations,
 that simplify the syntax in the script.
 Two recipes are provided, one to make <a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_RP.py">Resolving Power</a> simulations,
@@ -441,7 +459,7 @@ one to make <a class="reference external" href="https://github.com/hz-b/raypyng/
 simulations.</p>
 </section>
 <section id="list-of-available-examples">
-<h2>List of available examples<a class="headerlink" href="#list-of-available-examples" title="Permalink to this heading"></a></h2>
+<h2>List of available examples<a class="headerlink" href="#list-of-available-examples" title="Link to this heading"></a></h2>
 <p>In the example folder, the following examples are available:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_rml.py">example_rml.py</a>
@@ -473,6 +491,10 @@ and it exports the RawRaysOutgoing file from each optical element. It then uses 
 simple geometrical x-ray tracer to propagate each ray until the next optical
 element and plots the results (both top view and side view). This is still
 experimental and it may fail.</p></li>
+<li><p><a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_rml.py">example_waveHelper.py</a>
+The WaveHelper class can help to inspect a folder produced by <a class="reference external" href="https://www.helmholtz-berlin.de/forschung/oe/wi/undulators/arbeitsgebiete/wave_en.html">WAVE</a>
+and provides a simple API to get the path of the simulation files depending on the harmonic and
+on the energy.</p></li>
 </ul>
 </section>
 </section>

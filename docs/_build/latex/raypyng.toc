@@ -5,30 +5,31 @@
 \contentsline {section}{\numberline {1.3}Install raypyng}{3}{section.1.3}%
 \contentsline {chapter}{\numberline {2}Tutorial}{5}{chapter.2}%
 \contentsline {section}{\numberline {2.1}Manipulate an RML file}{5}{section.2.1}%
-\contentsline {section}{\numberline {2.2}RAY\sphinxhyphen {}UI API}{7}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Simulations}{8}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Perform Simulations}{8}{subsection.2.3.1}%
+\contentsline {section}{\numberline {2.2}RAY\sphinxhyphen {}UI API}{6}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Simulations}{7}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Perform Simulations}{7}{subsection.2.3.1}%
+\contentsline {subsubsection}{Note on multiprocessing}{10}{subsubsection*.3}%
 \contentsline {subsection}{\numberline {2.3.2}Simulation Output}{10}{subsection.2.3.2}%
-\contentsline {subsubsection}{Analysis performed by RAY\sphinxhyphen {}UI}{11}{subsubsection*.3}%
-\contentsline {subsubsection}{Analysis performed by raypyng}{11}{subsubsection*.4}%
-\contentsline {section}{\numberline {2.4}Recipes}{12}{section.2.4}%
-\contentsline {section}{\numberline {2.5}List of available examples}{12}{section.2.5}%
+\contentsline {subsubsection}{Analysis performed by RAY\sphinxhyphen {}UI}{10}{subsubsection*.4}%
+\contentsline {subsubsection}{Analysis performed by raypyng}{11}{subsubsection*.5}%
+\contentsline {section}{\numberline {2.4}Recipes}{11}{section.2.4}%
+\contentsline {section}{\numberline {2.5}List of available examples}{11}{section.2.5}%
 \contentsline {chapter}{\numberline {3}How To Guides}{13}{chapter.3}%
 \contentsline {section}{\numberline {3.1}Write your own Recipe}{13}{section.3.1}%
 \contentsline {subsection}{\numberline {3.1.1}Recipe Template}{13}{subsection.3.1.1}%
 \contentsline {subsection}{\numberline {3.1.2}How To Write a Recipe}{14}{subsection.3.1.2}%
-\contentsline {section}{\numberline {3.2}How to work with Undulator File}{16}{section.3.2}%
+\contentsline {section}{\numberline {3.2}How to work with Undulator File}{15}{section.3.2}%
 \contentsline {chapter}{\numberline {4}API}{17}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Simulation}{17}{section.4.1}%
 \contentsline {subsection}{\numberline {4.1.1}Simulate}{17}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {4.1.2}SimulationParams}{19}{subsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.1.2}SimulationParams}{20}{subsection.4.1.2}%
 \contentsline {subsection}{\numberline {4.1.3}WaveHelper}{20}{subsection.4.1.3}%
-\contentsline {section}{\numberline {4.2}Recipes}{20}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Resolving Power}{20}{subsection.4.2.1}%
+\contentsline {section}{\numberline {4.2}Recipes}{21}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Resolving Power}{21}{subsection.4.2.1}%
 \contentsline {subsection}{\numberline {4.2.2}Flux}{21}{subsection.4.2.2}%
 \contentsline {section}{\numberline {4.3}Process simulation files}{21}{section.4.3}%
 \contentsline {subsection}{\numberline {4.3.1}PostProcess rays analyzed by raypyng}{21}{subsection.4.3.1}%
-\contentsline {subsection}{\numberline {4.3.2}PostProcess rays analyzed by RAY\sphinxhyphen {}UI}{22}{subsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.3.2}PostProcess rays analyzed by RAY\sphinxhyphen {}UI}{23}{subsection.4.3.2}%
 \contentsline {subsection}{\numberline {4.3.3}RayProperties}{24}{subsection.4.3.3}%
 \contentsline {section}{\numberline {4.4}RAY\sphinxhyphen {}UI API}{24}{section.4.4}%
 \contentsline {subsection}{\numberline {4.4.1}RayUIRunner}{24}{subsection.4.4.1}%
@@ -38,4 +39,4 @@
 \contentsline {subsection}{\numberline {4.5.2}BeamlineElement}{26}{subsection.4.5.2}%
 \contentsline {subsection}{\numberline {4.5.3}ObjectElement}{27}{subsection.4.5.3}%
 \contentsline {subsection}{\numberline {4.5.4}ParamElement}{27}{subsection.4.5.4}%
-\contentsline {chapter}{Index}{29}{section*.74}%
+\contentsline {chapter}{Index}{29}{section*.82}%
