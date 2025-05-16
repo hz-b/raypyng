@@ -245,25 +245,32 @@ class PostProcess:
         """
         PostProcess routine of the RawRaysOutgoing extracted files.
 
-        The method looks in the folder dir_path for a file with the filename:
-            :code:`filename = os.path.join(dir_path, sim_number + exported_element +
-                                            '-' + exported_object + '.csv')`
+        The method looks in the folder `dir_path` for a file with the filename:
+
+            ``filename = os.path.join(dir_path, sim_number + exported_element +
+            '-' + exported_object + '.csv')``
 
         For each file, it calculates the number of rays, bandwidth, horizontal and vertical
         focus size. It saves the results in an array formatted as:
-            :code:`[n_rays, bandwidth, hor_focus, vert_focus]`
+
+            ``[n_rays, bandwidth, hor_focus, vert_focus]``
 
         The array is then saved to:
-            :code:`os.path.join(dir_path, sim_number + exported_element + '_analyzed_rays.npy')`
+
+            ``os.path.join(dir_path, sim_number + exported_element + '_analyzed_rays.npy')``
 
         Args:
             exported_element (list, optional): List of exported element names as strings.
-                                            Defaults to None.
+                Defaults to None.
+
             exported_object (str, optional): The exported object, tested only with RawRaysOutgoing.
-                                             Defaults to None.
-            dir_path (str, optional): Folder where the file to process is located. Defaults to None.
+                Defaults to None.
+
+            dir_path (str, optional): Folder where the file to process is located.
+                Defaults to None.
+
             sim_number (str, optional): Prefix of the file, typically the simulation number with a
-                                            prepended '_', e.g., '0_'. Defaults to None.
+                prepended `_`, e.g., ``0_``. Defaults to None.
         """
 
         if suffix is None:
