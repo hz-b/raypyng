@@ -269,7 +269,8 @@ class SimulationParams:
         # Generate all combinations of independent values
         all_combinations = list(itertools.product(*value_lists))
         # Loop through each simulation index
-        for i, values_combination in enumerate(all_combinations):
+        index = 0
+        for _i, values_combination in enumerate(all_combinations):
             # Start with independent parameters
             simulation_params = dict(zip(keys, values_combination, strict=False))
 
@@ -277,11 +278,11 @@ class SimulationParams:
             if self.dep_par and self.dep_value_dependency:
                 for j, dep_param in enumerate(self.dep_par):
                     try:
-                        simulation_params[dep_param] = self.dep_value_dependency[i][j]
+                        simulation_params[dep_param] = self.dep_value_dependency[index][j]
                     except IndexError:
-                        i = 0
-                        simulation_params[dep_param] = self.dep_value_dependency[i][j]
-
+                        index = 0
+                        simulation_params[dep_param] = self.dep_value_dependency[index][j]
+            index += 1
             yield simulation_params
 
 
