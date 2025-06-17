@@ -299,14 +299,14 @@ class PostProcess:
             bw_source = self.extract_bw_from_source(rml_filename)
             if rays.shape[0] == 0:  # if no rays survived
                 # source photon flux
-                ray_properties.df["SourcePhotonFlux"].iloc[0] = source_photon_flux
+                ray_properties.df.loc[0, "SourcePhotonFlux"] = source_photon_flux
                 pass
             else:
-                ray_properties.df["SourcePhotonFlux"].iloc[0] = source_photon_flux
-                ray_properties.df["NumberRaysSurvived"].iloc[0] = self._extract_intensity(rays)
-                ray_properties.df["PercentageRaysSurvived"].iloc[0] = (
+                ray_properties.df.loc[0, "SourcePhotonFlux"] = source_photon_flux
+                ray_properties.df.loc[0, "NumberRaysSurvived"] = self._extract_intensity(rays)
+                ray_properties.df.loc[0, "PercentageRaysSurvived"] = (
                     self._calculate_percentage_rays(
-                        ray_properties.df["NumberRaysSurvived"].iloc[0],
+                        ray_properties.df.loc[0, "NumberRaysSurvived"],
                         source_n_rays,
                         efficiency=efficiency,
                         photon_energy=energy,
@@ -314,33 +314,33 @@ class PostProcess:
                 )
 
                 bw = self._extract_fwhm(rays[f"{exported_element}_EN"])
-                ray_properties.df["Bandwidth"].iloc[0] = bw
-                ray_properties.df["HorizontalFocusFWHM"].iloc[0] = self._extract_fwhm(
+                ray_properties.df.loc[0, "Bandwidth"] = bw
+                ray_properties.df.loc[0, "HorizontalFocusFWHM"] = self._extract_fwhm(
                     rays[f"{exported_element}_OX"]
                 )
-                ray_properties.df["VerticalFocusFWHM"].iloc[0] = self._extract_fwhm(
+                ray_properties.df.loc[0, "VerticalFocusFWHM"] = self._extract_fwhm(
                     rays[f"{exported_element}_OY"]
                 )
                 if undulator_table is None:
                     photon_flux = (
                         source_photon_flux
                         / 100
-                        * ray_properties.df["PercentageRaysSurvived"].iloc[0]
+                        * ray_properties.df.loc[0, "PercentageRaysSurvived"]
                     )
-                    ray_properties.df["PhotonFlux"].iloc[0] = photon_flux
-                    ray_properties.df["EnergyPerMilPerBw"].iloc[0] = self._energy_permil_perbw(
+                    ray_properties.df.loc[0, "PhotonFlux"] = photon_flux
+                    ray_properties.df.loc[0, "EnergyPerMilPerBw"] = self._energy_permil_perbw(
                         bw, bw_source
                     )
-                    ray_properties.df["FluxPerMilPerBwPerc"].iloc[0] = self._flux_permil_perbw(
-                        bw, bw_source, ray_properties.df["PercentageRaysSurvived"].iloc[0]
+                    ray_properties.df.loc[0, "FluxPerMilPerBwPerc"] = self._flux_permil_perbw(
+                        bw, bw_source, ray_properties.df.loc[0, "PercentageRaysSurvived"]
                     )
-                    ray_properties.df["FluxPerMilPerBwAbs"].iloc[0] = self._flux_permil_perbw(
-                        bw, bw_source, ray_properties.df["PhotonFlux"].iloc[0]
+                    ray_properties.df.loc[0, "FluxPerMilPerBwAbs"] = self._flux_permil_perbw(
+                        bw, bw_source, ray_properties.df.loc[0, "PhotonFlux"]
                     )
-                    ray_properties.df["AXUVCurrentAmp"].iloc[0] = (
+                    ray_properties.df.loc[0, "AXUVCurrentAmp"] = (
                         self.axuv_diode.convert_photons_to_amp(energy, photon_flux)
                     )
-                    ray_properties.df["GaAsPCurrentAmp"].iloc[0] = (
+                    ray_properties.df.loc[0, "GaAsPCurrentAmp"] = (
                         self.gaasp_diode.convert_photons_to_amp(energy, photon_flux)
                     )
                 else:
@@ -348,27 +348,27 @@ class PostProcess:
                         harmonic = 1 + ind * 2
                         photon_flux = self._calculate_flux_undulator_table(
                             energy,
-                            ray_properties.df["PercentageRaysSurvived"].iloc[0],
+                            ray_properties.df.loc[0, "PercentageRaysSurvived"],
                             undulator_table,
                             harmonic,
                         )
-                        ray_properties.df[f"PhotonFlux{harmonic}"].iloc[0] = photon_flux
+                        ray_properties.df.loc[0, f"PhotonFlux{harmonic}"] = photon_flux
                         if ind == 0:
-                            ray_properties.df["EnergyPerMilPerBw"] = self._energy_permil_perbw(
+                            ray_properties.df.loc[0, "EnergyPerMilPerBw"] = self._energy_permil_perbw(
                                 bw, bw_source
                             )
-                            ray_properties.df["FluxPerMilPerBwPerc"] = self._flux_permil_perbw(
-                                bw, bw_source, ray_properties.df["PercentageRaysSurvived"].iloc[0]
+                            ray_properties.df.loc[0, "FluxPerMilPerBwPerc"] = self._flux_permil_perbw(
+                                bw, bw_source, ray_properties.df.loc[0, "PercentageRaysSurvived"]
                             )
-                        ray_properties.df[f"FluxPerMilPerBwAbs{harmonic}"].iloc[0] = (
+                        ray_properties.df.loc[0, f"FluxPerMilPerBwAbs{harmonic}"] = (
                             self._flux_permil_perbw(
-                                bw, bw_source, ray_properties.df[f"PhotonFlux{harmonic}"].iloc[0]
+                                bw, bw_source, ray_properties.df.loc[0, f"PhotonFlux{harmonic}"]
                             )
                         )
-                        ray_properties.df[f"AXUVCurrentAmp{harmonic}"].iloc[0] = (
+                        ray_properties.df.loc[0, f"AXUVCurrentAmp{harmonic}"] = (
                             self.axuv_diode.convert_photons_to_amp(energy, photon_flux)
                         )
-                        ray_properties.df[f"GaAsPCurrentAmp{harmonic}"].iloc[0] = (
+                        ray_properties.df.loc[0, f"GaAsPCurrentAmp{harmonic}"] = (
                             self.gaasp_diode.convert_photons_to_amp(energy, photon_flux)
                         )
 
@@ -377,29 +377,29 @@ class PostProcess:
             # traceback.print_exc()
             # tb_str = traceback.format_exc()
             # print(tb_str)
-            ray_properties.df["SourcePhotonFlux"].iloc[0] = np.nan
-            ray_properties.df["NumberRaysSurvived"].iloc[0] = np.nan
-            ray_properties.df["PercentageRaysSurvived"].iloc[0] = np.nan
-            ray_properties.df["Bandwidth"].iloc[0] = np.nan
-            ray_properties.df["HorizontalFocusFWHM"].iloc[0] = np.nan
-            ray_properties.df["VerticalFocusFWHM"].iloc[0] = np.nan
+            ray_properties.df.loc[0, "SourcePhotonFlux"] = np.nan
+            ray_properties.df.loc[0, "NumberRaysSurvived"] = np.nan
+            ray_properties.df.loc[0, "PercentageRaysSurvived"] = np.nan
+            ray_properties.df.loc[0, "Bandwidth"] = np.nan
+            ray_properties.df.loc[0, "HorizontalFocusFWHM"] = np.nan
+            ray_properties.df.loc[0, "VerticalFocusFWHM"] = np.nan
             if undulator_table is None:
-                ray_properties.df["PhotonFlux"].iloc[0] = np.nan
-                ray_properties.df["EnergyPerMilPerBw"].iloc[0] = np.nan
-                ray_properties.df["FluxPerMilPerBwPerc"].iloc[0] = np.nan
-                ray_properties.df["FluxPerMilPerBwAbs"].iloc[0] = np.nan
-                ray_properties.df["AXUVCurrentAmp"].iloc[0] = np.nan
-                ray_properties.df["GaAsPCurrentAmp"].iloc[0] = np.nan
+                ray_properties.df.loc[0, "PhotonFlux"] = np.nan
+                ray_properties.df.loc[0, "EnergyPerMilPerBw"] = np.nan
+                ray_properties.df.loc[0, "FluxPerMilPerBwPerc"] = np.nan
+                ray_properties.df.loc[0, "FluxPerMilPerBwAbs"] = np.nan
+                ray_properties.df.loc[0, "AXUVCurrentAmp"] = np.nan
+                ray_properties.df.loc[0, "GaAsPCurrentAmp"] = np.nan
             else:
                 for ind in range(int(len(undulator_table.columns) / 2)):
                     harmonic = 1 + ind * 2
-                    ray_properties.df[f"PhotonFlux{harmonic}"].iloc[0] = np.nan
+                    ray_properties.df.loc[0, f"PhotonFlux{harmonic}"] = np.nan
                     if ind == 0:
-                        ray_properties.df["EnergyPerMilPerBw"].iloc[0] = np.nan
-                        ray_properties.df["FluxPerMilPerBwPerc"].iloc[0] = np.nan
-                    ray_properties.df[f"FluxPerMilPerBwAbs{harmonic}"].iloc[0] = np.nan
-                    ray_properties.df[f"AXUVCurrentAmp{harmonic}"].iloc[0] = np.nan
-                    ray_properties.df[f"GaAsPCurrentAmp{harmonic}"].iloc[0] = np.nan
+                        ray_properties.df.loc[0, "EnergyPerMilPerBw"] = np.nan
+                        ray_properties.df.loc[0, "FluxPerMilPerBwPerc"] = np.nan
+                    ray_properties.df.loc[0, f"FluxPerMilPerBwAbs{harmonic}"] = np.nan
+                    ray_properties.df.loc[0, f"AXUVCurrentAmp{harmonic}"] = np.nan
+                    ray_properties.df.loc[0, f"GaAsPCurrentAmp{harmonic}"] = np.nan
         new_filename = os.path.join(
             dir_path, sim_number + exported_element + "_analyzed_rays" + suffix + ".dat"
         )
