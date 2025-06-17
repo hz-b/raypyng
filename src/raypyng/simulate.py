@@ -6,6 +6,7 @@ import re
 import shutil
 import signal
 import time
+import traceback
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 import numpy as np
@@ -55,7 +56,7 @@ class SimulationParams:
         self.simulations_param_list = []  # List of simulations based on the parameters
         self.ind_param_values = []  # Independent parameter values for simulations
         self.ind_par = []  # Independent parameters
-        self.dep_param_dependency = {}  # Dependencies between parameters
+        self.dep_param_dependency = []  # Dependencies between parameters
         self.dep_value_dependency = []  # Values dependent on other parameters
         self.dep_par = []  # Dependent parameters
         self.loop = []  # Product of independent parameter values for generating simulations
@@ -155,25 +156,39 @@ class SimulationParams:
     def _reset_extraction_variables(self):
         """Reset or initialize variables for a new extraction."""
         self.ind_param_values, self.ind_par = [], []
-        self.dep_param_dependency, self.dep_value_dependency, self.dep_par = {}, {}, []
+        self.dep_param_dependency, self.dep_value_dependency, self.dep_par = {}, [], []
 
     def _process_parameter_dict(self, parameters_dict):
         """Process each dictionary of parameters."""
         keys = list(parameters_dict.keys())
         items = list(parameters_dict.items())
-        # add independent params
-        self.ind_par.append(keys[0])
-        self.ind_param_values.append(items[0])
 
-        if len(keys) > 1:
-            for k in keys[1:]:
-                self.dep_param_dependency[k] = keys[0]
-                self.dep_par.append(k)
-                for ind, ind_par_value in enumerate(items[0][1]):
-                    if ind_par_value in list(self.dep_value_dependency.keys()):
-                        self.dep_value_dependency[ind_par_value].append(parameters_dict[k][ind])
-                    else:
-                        self.dep_value_dependency[ind_par_value] = [parameters_dict[k][ind]]
+        # First key is always considered independent
+        independent_param = keys[0]
+        independent_values = items[0][1]
+        self.ind_par.append(independent_param)
+        self.ind_param_values.append((independent_param, independent_values))
+
+        # If no dependent params, nothing else to do
+        if len(keys) == 1:
+            return
+
+        # Register dependent param relationships
+        for dep_param in keys[1:]:
+            self.dep_param_dependency[dep_param] = independent_param
+            if dep_param not in self.dep_par:
+                self.dep_par.append(dep_param)
+
+        # Ensure dep_value_dependency is big enough
+        num_values = len(independent_values)
+        while len(self.dep_value_dependency) < num_values:
+            self.dep_value_dependency.append([])
+
+        # Fill each simulation step with dependent values
+        for i in range(num_values):
+            for dep_param in keys[1:]:
+                dep_value = parameters_dict[dep_param][i]
+                self.dep_value_dependency[i].append(dep_value)
 
     def _validate_dependency_length(self, parameters_dict, independent_key, dependent_key):
         """Ensure dependent parameters match the length of their independent counterparts."""
@@ -247,21 +262,26 @@ class SimulationParams:
         Yields:
             dict: A dictionary of parameters for a single simulation.
         """
-        # Extract the keys (first elements of tuples) and the lists of
-        # possible values (second elements)
+
+        # Unpack independent parameters and their value lists
         keys, value_lists = zip(*self.ind_param_values, strict=False)
-        # Generate all combinations of values using itertools.product
-        for values_combination in itertools.product(*value_lists):
-            # Create a dictionary for the current combination, pairing keys
-            # with their respective values
+
+        # Generate all combinations of independent values
+        all_combinations = list(itertools.product(*value_lists))
+        # Loop through each simulation index
+        for i, values_combination in enumerate(all_combinations):
+            # Start with independent parameters
             simulation_params = dict(zip(keys, values_combination, strict=False))
-            # add dependen parameters
-            if len(self.dep_param_dependency.keys()) > 0:
-                for ind, dep_par in enumerate(self.dep_param_dependency.keys()):
-                    depending_param = self.dep_param_dependency[dep_par]
-                    value_depending_param = simulation_params[depending_param]
-                    dep_par_value = self.dep_value_dependency[value_depending_param][ind]
-                    simulation_params[dep_par] = dep_par_value
+
+            # Add dependent parameters if present
+            if self.dep_par and self.dep_value_dependency:
+                for j, dep_param in enumerate(self.dep_par):
+                    try:
+                        simulation_params[dep_param] = self.dep_value_dependency[i][j]
+                    except IndexError:
+                        i = 0
+                        simulation_params[dep_param] = self.dep_value_dependency[i][j]
+
             yield simulation_params
 
 
@@ -724,9 +744,9 @@ class Simulate:
             filename += ".dat"
             filepath = os.path.join(dir, filename)
             with open(filepath, "w") as f:
-                values = list(self.sp.dep_value_dependency.items())
+                values = self.sp.dep_value_dependency
                 for item in values:
-                    f.write(f"{item[1][i]}\n")
+                    f.write(f"{item[i]}\n")
 
     def rml_list(self, recipe=None, overwrite_rml=True):
         """
@@ -1155,6 +1175,7 @@ class Simulate:
                             executor.shutdown(wait=False, cancel_futures=True)
                             break
         except Exception as e:
+            traceback.print_exc()
             self.logger.info(f"Error in _execute simulations: {e}")
             executor.shutdown(wait=False)
             self.logger.info("Executor shutdown completed.")
