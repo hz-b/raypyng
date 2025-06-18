@@ -144,12 +144,8 @@ class SimulationParams:
             result[-1] = 0
         return result
 
-    def _extract_param(self, verbose: bool = True):
+    def _extract_param(self):
         """Extracts and organizes parameters from the input parameter list.
-
-        Args:
-            verbose (bool, optional): If set to True, prints the results of
-                                        the parameter extraction. Defaults to False.
 
         Returns:
             tuple: A tuple containing the organized parameters and their values.
@@ -165,9 +161,6 @@ class SimulationParams:
         self.skip_params = self.compute_skip_factors(skip_params)
         for parameters_dict in self.params:
             self._process_parameter_dict(parameters_dict)
-        if verbose:
-            self._print_extraction_results()
-        # return self._compilation_results()
 
     def _reset_extraction_variables(self):
         """Reset or initialize variables for a new extraction."""
@@ -178,11 +171,6 @@ class SimulationParams:
         """Ensure dependent parameters match the length of their independent counterparts."""
         if len(parameters_dict[dependent_key]) != len(parameters_dict[independent_key]):
             raise ValueError(f"Dependent parameter lengths do not match for {dependent_key}.")
-
-    def _print_extraction_results(self):
-        """Print the results of the parameter extraction."""
-        print("Independent parameters:", len(self.ind_par))
-        print("Dependent parameters:", len(self.dep_par))
 
     def _get_dependency_indices(self):
         """Get indices of independent parameters that dependent parameters rely on."""
@@ -263,7 +251,6 @@ class SimulationParams:
         # Create list of ring buffer
         num_values = len(independent_values)
         for dep_param in keys[1:]:
-            print(dep_param, self.skip_params[self.count_dep_params])
             self.dep_value_dependency.append(
                 RingBuffer(skip=self.skip_params[self.count_dep_params])
             )
