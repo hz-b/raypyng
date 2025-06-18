@@ -14,7 +14,7 @@ import pandas as pd
 import psutil
 from tqdm import tqdm
 
-from .helper_functions import collect_unique_values
+from .helper_functions import RingBuffer, collect_unique_values
 from .postprocessing import PostProcess
 from .recipes import SimulationRecipe
 from .rml import ObjectElement, ParamElement, RMLFile
@@ -136,7 +136,15 @@ class SimulationParams:
         if not isinstance(value, list):
             param[key] = [value] if isinstance(value, (float, int, str)) else list(value)
 
-    def _extract_param(self, verbose: bool = False):
+    def compute_skip_factors(self, skip_params):
+        result = [1] * len(skip_params)
+        for i in range(len(skip_params) - 2, -1, -1):
+            result[i] = skip_params[i + 1] * result[i + 1]
+        if result:
+            result[-1] = 0
+        return result
+
+    def _extract_param(self, verbose: bool = True):
         """Extracts and organizes parameters from the input parameter list.
 
         Args:
@@ -147,6 +155,14 @@ class SimulationParams:
             tuple: A tuple containing the organized parameters and their values.
         """
         self._reset_extraction_variables()
+
+        skip_params = []
+        self.count_dep_params = 0
+
+        for parameters_dict in self.params:
+            if len(parameters_dict.keys()) > 1:
+                skip_params.append(len(next(iter(parameters_dict.values()))))
+        self.skip_params = self.compute_skip_factors(skip_params)
         for parameters_dict in self.params:
             self._process_parameter_dict(parameters_dict)
         if verbose:
@@ -157,38 +173,6 @@ class SimulationParams:
         """Reset or initialize variables for a new extraction."""
         self.ind_param_values, self.ind_par = [], []
         self.dep_param_dependency, self.dep_value_dependency, self.dep_par = {}, [], []
-
-    def _process_parameter_dict(self, parameters_dict):
-        """Process each dictionary of parameters."""
-        keys = list(parameters_dict.keys())
-        items = list(parameters_dict.items())
-
-        # First key is always considered independent
-        independent_param = keys[0]
-        independent_values = items[0][1]
-        self.ind_par.append(independent_param)
-        self.ind_param_values.append((independent_param, independent_values))
-
-        # If no dependent params, nothing else to do
-        if len(keys) == 1:
-            return
-
-        # Register dependent param relationships
-        for dep_param in keys[1:]:
-            self.dep_param_dependency[dep_param] = independent_param
-            if dep_param not in self.dep_par:
-                self.dep_par.append(dep_param)
-
-        # Ensure dep_value_dependency is big enough
-        num_values = len(independent_values)
-        while len(self.dep_value_dependency) < num_values:
-            self.dep_value_dependency.append([])
-
-        # Fill each simulation step with dependent values
-        for i in range(num_values):
-            for dep_param in keys[1:]:
-                dep_value = parameters_dict[dep_param][i]
-                self.dep_value_dependency[i].append(dep_value)
 
     def _validate_dependency_length(self, parameters_dict, independent_key, dependent_key):
         """Ensure dependent parameters match the length of their independent counterparts."""
@@ -255,6 +239,40 @@ class SimulationParams:
         sim_per_round = reduce(mul, (len(value_list) for _, value_list in self.ind_param_values), 1)
         return sim_per_round
 
+    def _process_parameter_dict(self, parameters_dict):
+        """Process each dictionary of parameters."""
+        keys = list(parameters_dict.keys())
+        items = list(parameters_dict.items())
+
+        # First key is always considered independent
+        independent_param = keys[0]
+        independent_values = items[0][1]
+        self.ind_par.append(independent_param)
+        self.ind_param_values.append((independent_param, independent_values))
+
+        # If no dependent params, nothing else to do
+        if len(keys) == 1:
+            return
+
+        # Register dependent param relationships
+        for dep_param in keys[1:]:
+            self.dep_param_dependency[dep_param] = independent_param
+            if dep_param not in self.dep_par:
+                self.dep_par.append(dep_param)
+
+        # Create list of ring buffer
+        num_values = len(independent_values)
+        for dep_param in keys[1:]:
+            print(dep_param, self.skip_params[self.count_dep_params])
+            self.dep_value_dependency.append(
+                RingBuffer(skip=self.skip_params[self.count_dep_params])
+            )
+            index = len(self.dep_value_dependency) - 1
+            for i in range(num_values):
+                dep_value = parameters_dict[dep_param][i]
+                self.dep_value_dependency[index].add(dep_value)
+        self.count_dep_params += 1
+
     def simulation_parameters_generator(self):
         """Generates a dictionary of parameters for each simulation
         based on the input parameter list.
@@ -267,22 +285,14 @@ class SimulationParams:
         keys, value_lists = zip(*self.ind_param_values, strict=False)
 
         # Generate all combinations of independent values
-        all_combinations = list(itertools.product(*value_lists))
+        self._calc_number_sim()
         # Loop through each simulation index
-        index = 0
-        for _i, values_combination in enumerate(all_combinations):
+        for values_combination in itertools.product(*value_lists):
             # Start with independent parameters
             simulation_params = dict(zip(keys, values_combination, strict=False))
-
-            # Add dependent parameters if present
-            if self.dep_par and self.dep_value_dependency:
-                for j, dep_param in enumerate(self.dep_par):
-                    try:
-                        simulation_params[dep_param] = self.dep_value_dependency[index][j]
-                    except IndexError:
-                        index = 0
-                        simulation_params[dep_param] = self.dep_value_dependency[index][j]
-            index += 1
+            if self.dep_par:
+                for value_index, dep_par in enumerate(self.dep_par):
+                    simulation_params[dep_par] = self.dep_value_dependency[value_index].next()
             yield simulation_params
 
 
@@ -745,9 +755,9 @@ class Simulate:
             filename += ".dat"
             filepath = os.path.join(dir, filename)
             with open(filepath, "w") as f:
-                values = self.sp.dep_value_dependency
-                for item in values:
-                    f.write(f"{item[i]}\n")
+                dependency = self.sp.dep_value_dependency[i]
+                for values in dependency._data:
+                    f.write(f"{values}\n")
 
     def rml_list(self, recipe=None, overwrite_rml=True):
         """

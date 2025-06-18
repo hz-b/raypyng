@@ -354,11 +354,15 @@ class PostProcess:
                         )
                         ray_properties.df.loc[0, f"PhotonFlux{harmonic}"] = photon_flux
                         if ind == 0:
-                            ray_properties.df.loc[0, "EnergyPerMilPerBw"] = self._energy_permil_perbw(
-                                bw, bw_source
+                            ray_properties.df.loc[0, "EnergyPerMilPerBw"] = (
+                                self._energy_permil_perbw(bw, bw_source)
                             )
-                            ray_properties.df.loc[0, "FluxPerMilPerBwPerc"] = self._flux_permil_perbw(
-                                bw, bw_source, ray_properties.df.loc[0, "PercentageRaysSurvived"]
+                            ray_properties.df.loc[0, "FluxPerMilPerBwPerc"] = (
+                                self._flux_permil_perbw(
+                                    bw,
+                                    bw_source,
+                                    ray_properties.df.loc[0, "PercentageRaysSurvived"],
+                                )
                             )
                         ray_properties.df.loc[0, f"FluxPerMilPerBwAbs{harmonic}"] = (
                             self._flux_permil_perbw(

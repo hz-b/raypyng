@@ -26,31 +26,45 @@ sim = Simulate('rml/dipole_beamline.rml', hide=True)
 rml=sim.rml
 beamline = sim.rml.beamline
 
-energy = np.arange(500, 2000.1, 1500)    
+energy = np.array([500, 1000])    
 rounds = 1
 nrays  = 1e4
 
-slopes = {beamline.M1.slopeErrorMer:  np.array([1,2,3]), 
-            beamline.M1.slopeErrorSag:np.array([10,20,30]), 
-            beamline.PremirrorM2.slopeErrorMer:np.array([100,200,300]), 
+slopes = {beamline.M1.slopeErrorMer:  np.array([1,2]), 
+            beamline.M1.slopeErrorSag:np.array([10,20]), 
+            beamline.PremirrorM2.slopeErrorMer:np.array([100, 200]), 
             # beamline.PremirrorM2.slopeErrorSag:np.arange(0.5, 1.1, 0.1),
             # beamline.PG.slopeErrorMer:np.arange(0.05, 0.21, 0.05), 
             # beamline.PG.slopeErrorSag:np.arange(0.5, 1.1, 0.1), 
             # beamline.M3.slopeErrorSag:np.arange(0.5, 2.1, 0.5), 
             # beamline.M3.slopeErrorMer:np.arange(0.3, 0.61, 0.3), 
             }
-
 slopes_dict = make_slopes_params(slopes)
+print(slopes_dict)
 # define a list of dictionaries with the parameters to scan
 params = [  
-            {beamline.Dipole.photonEnergy:energy},
+            {beamline.PG.cFactor: [2,5]},
+            {beamline.Dipole.photonEnergy:energy,
+            beamline.Dipole.energySpread:energy/1000},
             {beamline.Dipole.numberRays:nrays}, 
         ]
 
 params.append(slopes_dict)  # append the slopes dictionary to the list of parameters
-
+# print(params)
 #and then plug them into the Simulation class
 sim.params=params
+
+# from raypyng.simulate import SimulationParams
+# sp = SimulationParams('rml/dipole_beamline.rml')
+# sp.params = params
+# for i, result in enumerate(sp.simulation_parameters_generator(), 1):
+#     formatted = " | ".join(f"{k['id']}: {v}" for k, v in result.items())
+#     print(f"Simulation {i:02d} → {formatted}")
+
+
+
+
+
 
 # sim.simulation_folder = '/home/simone/Documents/RAYPYNG/raypyng/test'
 sim.simulation_name = 'test_noAnalyze_slopes'
