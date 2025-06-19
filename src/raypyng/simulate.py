@@ -52,15 +52,11 @@ class SimulationParams:
             rml, **kwargs
         )  # Initializes the RML file or RMLFile object
         self.params = param_list or []  # List of dictionaries for parameters to simulate
-        self.param_to_simulate = []  # List of parameters to be simulated
-        self.simulations_param_list = []  # List of simulations based on the parameters
         self.ind_param_values = []  # Independent parameter values for simulations
         self.ind_par = []  # Independent parameters
         self.dep_param_dependency = []  # Dependencies between parameters
         self.dep_value_dependency = []  # Values dependent on other parameters
         self.dep_par = []  # Dependent parameters
-        self.loop = []  # Product of independent parameter values for generating simulations
-        self.par = None  # Compiled result of parameters for simulation
 
     def _initialize_rml(self, rml, **kwargs):
         """Initializes the RML file or RMLFile object based on the provided RML path or object.
