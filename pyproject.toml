@@ -21,7 +21,7 @@ dependencies = [
             'matplotlib>=3.5.1',
             'natsort>=8.2.0 ', 
             'tqdm>=4.66.1', 
-            'pandas==2.1.4'
+            'pandas>=2.3.0'
 ]
 
 [tool.setuptools.package-data]
