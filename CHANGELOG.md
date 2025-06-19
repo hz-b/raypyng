@@ -1,6 +1,15 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.2.915] - 19-June-2025
+### Added
+
+### Changed
+
+### Fixed
+- Fixed dependency parameter: previously unique parameters values had to be used. Now it is free.
+
+
 ## [1.2.914] - 16-May-2025
 ### Added
 - add slope_error and alignment_error functions to Simulate class, to switch on and off slope errors and alignment errors on all elements.
