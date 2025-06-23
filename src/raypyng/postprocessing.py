@@ -505,8 +505,8 @@ class PostProcess:
                         elif round >= 1:  # other rounds: sum the values
                             tmp = pd.read_csv(f)
                             for n in analyzed_rays.columns:
-                                if isinstance(tmp[n].iloc[0], (int, float)):
-                                    analyzed_rays[n][f_ind] += float(tmp[n].iloc[0])
+                                if isinstance(tmp.loc[0, n], (int, float)):
+                                    analyzed_rays.loc[f_ind, n] += float(tmp.loc[0, n])
                         os.remove(f)
 
                 def divide_numeric_rows(row):
