@@ -1,16 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.3.0] - 23-June-2025
+## [1.3.01] - 23-June-2025
 ### Added
-- Add Dipole flux calculations and its example
 
 ### Changed
-- reworked name of the examples
 
 ### Fixed
-- Fixed dependency parameter: previously unique parameters values had to be used. Now it is free.
-- fixed issue [#42](https://github.com/hz-b/raypyng/issues/42), Pandas Warnings
+- Bug in dipole flux calculations
 
 
 ## [1.2.914] - 16-May-2025
