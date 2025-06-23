@@ -1,11 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.3.0] - 19-June-2025
+## [1.3.0] - 23-June-2025
 ### Added
-- Add Dipole flux calculations
+- Add Dipole flux calculations and its example
 
 ### Changed
+- reworked name of the examples
 
 ### Fixed
 - Fixed dependency parameter: previously unique parameters values had to be used. Now it is free.
