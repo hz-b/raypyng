@@ -96,10 +96,8 @@ ParamElement
 
 Dipole
 ==================
-Based on 
+Based on  `srxraylib <https://srxraylib.readthedocs.io/en/latest/>`_
 
-RMLFile
-----------------
 .. autoclass:: raypyng.dipole_flux.Dipole
    :members:
    :inherited-members:
