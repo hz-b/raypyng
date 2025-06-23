@@ -1,8 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.2.915] - 19-June-2025
+## [1.3.0] - 19-June-2025
 ### Added
+- Add Dipole flux calculations
 
 ### Changed
 
