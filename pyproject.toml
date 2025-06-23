@@ -1,28 +1,32 @@
 [project]
 name = "raypyng"
-version = "1.2.914"
+version = "1.3.00"
 
 authors = [
-  { name="Simone Vadilonga, Ruslan Ovsyannikov, Sebastian Sachse", email="simone.vadilonga@helmholtz-berlin.de" },
+  { name = "Simone Vadilonga, Ruslan Ovsyannikov, Sebastian Sachse", email = "simone.vadilonga@helmholtz-berlin.de" },
 ]
 description = "Python interface for RAY-UI x-ray tracing program"
 readme = "README.md"
-license = { file="LICENSE" }
+license = { file = "LICENSE" }
 requires-python = ">=3.10"
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License"
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License"
 ]
 
 dependencies = [
-            'numpy>=1.22.0',
-            'psutil>=5.9.1',
-            'joblib>=1.1.0',
-            'matplotlib>=3.5.1',
-            'natsort>=8.2.0 ', 
-            'tqdm>=4.66.1', 
-            'pandas>=2.3.0'
+  "numpy>=1.22.0",
+  "psutil>=5.9.1",
+  "joblib>=1.1.0",
+  "matplotlib>=3.5.1",
+  "natsort>=8.2.0",
+  "tqdm>=4.66.1",
+  "pandas>=2.0.3",
+  "srxraylib>=1.0.61"
 ]
 
+[tool.setuptools]
+package-dir = {"" = "src"}
+
 [tool.setuptools.package-data]
-mypkg = ["*.csv"]
+raypyng = ["*.csv"]  # or include other patterns if needed

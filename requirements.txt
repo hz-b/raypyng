@@ -6,5 +6,6 @@ natsort>=8.2.0
 sphinx_rtd_theme>=1.0.0
 sphinx
 sphinx-autodoc-typehints
-pandas>=2.3.0
+pandas>=2.0.3
 tqdm>=4.66.1
+srxraylib>=1.0.61
