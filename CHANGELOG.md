@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Fixed dependency parameter: previously unique parameters values had to be used. Now it is free.
+- fixed issue [#42](https://github.com/hz-b/raypyng/issues/42), Pandas Warnings
 
 
 ## [1.2.914] - 16-May-2025
