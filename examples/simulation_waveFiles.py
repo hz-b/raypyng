@@ -40,7 +40,7 @@ params = [
 sim.params=params
 
 # sim.simulation_folder = '/home/simone/Documents/RAYPYNG/raypyng/test'
-sim.simulation_name = 'test_noAnalyze_undulator_wave'
+sim.simulation_name = 'WaveFiles'
 
 # repeat the simulations as many time as needed
 sim.repeat = 2

@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 
-simulation_folder = 'RAYPy_Simulation_test_permil'
+simulation_folder = 'RAYPy_Simulation_Permil'
 # loading the data B2
 oe = 'DetectorAtFocus' + '_RawRaysOutgoing.csv'
 data = pd.read_csv(os.path.join(simulation_folder, oe))

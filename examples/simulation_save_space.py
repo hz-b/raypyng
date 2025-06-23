@@ -1,7 +1,6 @@
 from raypyng import Simulate
 import numpy as np
 import os
-import pandas as pd
 
 this_file_dir=os.path.dirname(os.path.realpath(__file__))
 rml_file = os.path.join(this_file_dir,'rml/dipole_beamline.rml')
@@ -34,23 +33,18 @@ params = [
 sim.params=params
 
 # sim.simulation_folder = '/home/simone/Documents/RAYPYNG/raypyng/test'
-sim.simulation_name = 'test_noAnalyze_efficiency'
+sim.simulation_name = 'saveSpace'
 
 # repeat the simulations as many time as needed
-sim.repeat = 1
+sim.repeat = 2
 
 sim.analyze = False # don't let RAY-UI analyze the results
 sim.raypyng_analysis=True # let raypyng analyze the results
 
 ## This must be a list of dictionaries
-sim.exports  =  [{beamline.DetectorAtFocus:['RawRaysOutgoing']},
+sim.exports  =  [{beamline.Dipole:['RawRaysOutgoing']},
+                {beamline.DetectorAtFocus:['RawRaysOutgoing']},
                 ]
-
-eff = pd.DataFrame({
-    "Efficiency": [0.9, 0.8, 0.7],
-    "Energy[eV]": [100, 200, 300]
-})
-sim.efficiency = eff
 
 #uncomment to run the simulations
 sim.run(multiprocessing=5, force=True, remove_rawrays=True, remove_round_folders=True)

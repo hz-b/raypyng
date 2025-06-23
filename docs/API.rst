@@ -94,6 +94,14 @@ ParamElement
    :members:
    :inherited-members:
 
+Dipole
+==================
+Based on 
 
+RMLFile
+----------------
+.. autoclass:: raypyng.dipole_flux.Dipole
+   :members:
+   :inherited-members:
 
 
