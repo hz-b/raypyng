@@ -102,7 +102,7 @@ class Dipole:
         Returns:
             np.ndarray: Array of photon fluxes for each dipole case.
         """
-        self.photon_energies = photon_energy_array / 1000
+        self.photon_energies = photon_energy_array
         if isinstance(hdiv, int):
             hdiv = np.ones_like(photon_energy_array) * hdiv
         self.all_fluxes = []
@@ -110,7 +110,7 @@ class Dipole:
         for ec_ev, hdiv_val in zip(self.energy_critical_keV * 1000, hdiv, strict=False):
             flux = sync_ene(
                 0,
-                photon_energy_array * 1000,
+                photon_energy_array,
                 ec_ev=ec_ev,
                 polarization=0,
                 e_gev=self.beam_energy_GeV,
