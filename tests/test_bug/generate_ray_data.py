@@ -1,7 +1,7 @@
 from raypyng import Simulate
 from raypyng_recipe import ML
 
-rml_file = "rml/elisa.rml"
+rml_file = "rml/dipole.rml"
 sim = Simulate(rml_file, hide=True)
 
 

@@ -20,6 +20,8 @@ class RayProperties:
             "Bandwidth",
             "HorizontalFocusFWHM",
             "VerticalFocusFWHM",
+            "HorizontalCenter",
+            "VerticalCenter",
         ]
         additional_columns = [
             "PhotonFlux",
@@ -321,6 +323,10 @@ class PostProcess:
                 ray_properties.df.loc[0, "VerticalFocusFWHM"] = self._extract_fwhm(
                     rays[f"{exported_element}_OY"]
                 )
+                ray_properties.df.loc[0, "HorizontalCenter"] = np.mean(
+                    rays[f"{exported_element}_OX"]
+                )
+                ray_properties.df.loc[0, "VerticalCenter"] = np.mean(rays[f"{exported_element}_OY"])
                 if undulator_table is None:
                     photon_flux = (
                         source_photon_flux
@@ -387,6 +393,8 @@ class PostProcess:
             ray_properties.df.loc[0, "Bandwidth"] = np.nan
             ray_properties.df.loc[0, "HorizontalFocusFWHM"] = np.nan
             ray_properties.df.loc[0, "VerticalFocusFWHM"] = np.nan
+            ray_properties.df.loc[0, "HorizontalCenter"] = np.nan
+            ray_properties.df.loc[0, "VerticalCenter"] = np.nan
             if undulator_table is None:
                 ray_properties.df.loc[0, "PhotonFlux"] = np.nan
                 ray_properties.df.loc[0, "EnergyPerMilPerBw"] = np.nan
