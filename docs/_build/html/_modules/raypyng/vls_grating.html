@@ -1,0 +1,208 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>raypyng.vls_grating &mdash; RayPyNG  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            RayPyNG
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../how_to.html">How To Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">RayPyNG</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">raypyng.vls_grating</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for raypyng.vls_grating</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<div class="viewcode-block" id="calculate_vls_coeff">
+<a class="viewcode-back" href="../../API.html#raypyng.vls_grating.calculate_vls_coeff">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_vls_coeff</span><span class="p">(</span><span class="n">alpha_g_deg</span><span class="o">=</span><span class="mf">89.778</span><span class="p">,</span> <span class="n">beta_g_deg</span><span class="o">=</span><span class="mf">85.5733</span><span class="p">,</span>
+                        <span class="n">N0_lpm</span><span class="o">=</span><span class="mf">2400.0</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">en_eV</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">,</span>
+                        <span class="n">source_vls_distance</span><span class="o">=</span><span class="mf">81.0</span><span class="p">,</span> 
+                        <span class="n">vls_image_distance</span><span class="o">=</span><span class="mf">35.0</span><span class="p">,</span>
+                        <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate B2–B5 coefficients for a Variable Line Spacing (VLS) grating</span>
+<span class="sd">    using normal incidence and diffraction angles.</span>
+
+<span class="sd">    The coefficients correspond to terms in the groove density expansion:</span>
+<span class="sd">        n(z) = N0 * (1 + 2*B2*z + 3*B3*z^2 + 4*B4*z^3 + 5*B5*z^4 + ...)</span>
+<span class="sd">    where:</span>
+<span class="sd">        - B2  : Cancels primary defocus</span>
+<span class="sd">        - B3  : Cancels primary coma</span>
+<span class="sd">        - B4  : Reduces spherical aberration</span>
+<span class="sd">        - B5  : Cancels secondary coma</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    alpha_g_deg : float</span>
+<span class="sd">        Normal incidence angle [degrees from the grating normal].</span>
+<span class="sd">    beta_g_deg : float</span>
+<span class="sd">        Normal diffraction (exit) angle [degrees from the grating normal].</span>
+<span class="sd">    N0_lpm : float</span>
+<span class="sd">        Central groove density [lines/mm].</span>
+<span class="sd">    m : int</span>
+<span class="sd">        Diffraction order (positive for same side, negative for opposite side).</span>
+<span class="sd">    en_eV : float</span>
+<span class="sd">        Photon energy [eV].</span>
+<span class="sd">    source_vls_distance : float</span>
+<span class="sd">        Source-to-grating distance [m].</span>
+<span class="sd">    vls_image_distance : float</span>
+<span class="sd">        Grating-to-image distance [m].</span>
+<span class="sd">    verbose : bool</span>
+<span class="sd">        If True, prints a detailed recap of input parameters and results.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    B2 : float</span>
+<span class="sd">        Dimensionless coefficient for defocus correction.</span>
+<span class="sd">    B3 : float</span>
+<span class="sd">        Dimensionless coefficient for primary coma correction.</span>
+<span class="sd">    B4 : float</span>
+<span class="sd">        Dimensionless coefficient for spherical aberration correction.</span>
+<span class="sd">    B5 : float</span>
+<span class="sd">        Dimensionless coefficient for secondary coma correction.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Distances &amp; wavelength in mm</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">source_vls_distance</span> <span class="o">*</span> <span class="mf">1000.0</span>
+    <span class="n">rprime</span> <span class="o">=</span> <span class="n">vls_image_distance</span> <span class="o">*</span> <span class="mf">1000.0</span>
+    <span class="n">lam_mm</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1239.841984</span> <span class="o">/</span> <span class="n">en_eV</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e-6</span>  <span class="c1"># nm → mm</span>
+
+    <span class="c1"># Convert to radians (already grazing-from-surface)</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">alpha_g_deg</span><span class="p">)</span>
+    <span class="n">beta</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">beta_g_deg</span><span class="p">)</span>
+
+    <span class="c1"># B2 (defocus cancellation)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">r</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">beta</span> <span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">rprime</span>
+    <span class="n">n1</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">m</span> <span class="o">*</span> <span class="n">lam_mm</span><span class="p">)</span>          <span class="c1"># [1/mm^2]</span>
+    <span class="n">B2</span> <span class="o">=</span> <span class="n">n1</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">N0_lpm</span><span class="p">)</span>
+
+    <span class="c1"># B3 (primary coma cancellation)</span>
+    <span class="n">term_a</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">r</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">term_b</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">beta</span> <span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">beta</span> <span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">rprime</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">n2</span> <span class="o">=</span> <span class="p">(</span><span class="n">term_a</span> <span class="o">+</span> <span class="n">term_b</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">m</span> <span class="o">*</span> <span class="n">lam_mm</span><span class="p">)</span>   <span class="c1"># [1/mm^3]</span>
+    <span class="n">B3</span> <span class="o">=</span> <span class="n">n2</span> <span class="o">/</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">*</span> <span class="n">N0_lpm</span><span class="p">)</span>
+
+    <span class="c1"># B4  (spherical term)</span>
+    <span class="n">n3</span> <span class="o">=</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">m</span> <span class="o">*</span> <span class="n">lam_mm</span> <span class="o">*</span> <span class="n">r</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span>
+          <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">beta</span> <span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">beta</span> <span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">m</span> <span class="o">*</span> <span class="n">lam_mm</span> <span class="o">*</span> <span class="n">rprime</span><span class="o">**</span><span class="mi">3</span><span class="p">))</span>   <span class="c1"># [1/mm^4]</span>
+    <span class="n">B4</span> <span class="o">=</span> <span class="n">n3</span> <span class="o">/</span> <span class="p">(</span><span class="mf">4.0</span> <span class="o">*</span> <span class="n">N0_lpm</span><span class="p">)</span>
+
+    <span class="c1"># n4 → B5  (secondary coma term)</span>
+    <span class="n">n4</span> <span class="o">=</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">m</span> <span class="o">*</span> <span class="n">lam_mm</span> <span class="o">*</span> <span class="n">r</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span> <span class="o">+</span>
+          <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">beta</span> <span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">beta</span> <span class="p">)</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">m</span> <span class="o">*</span> <span class="n">lam_mm</span> <span class="o">*</span> <span class="n">rprime</span><span class="o">**</span><span class="mi">4</span><span class="p">))</span>   <span class="c1"># [1/mm^5]</span>
+    <span class="n">B5</span> <span class="o">=</span> <span class="n">n4</span> <span class="o">/</span> <span class="p">(</span><span class="mf">5.0</span> <span class="o">*</span> <span class="n">N0_lpm</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== VLS Grating Parameters Recap ===&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Photon energy :      </span><span class="si">{</span><span class="n">en_eV</span><span class="si">}</span><span class="s2"> [eV]&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wavelength :         </span><span class="si">{</span><span class="n">lam_mm</span><span class="si">:</span><span class="s2">.6e</span><span class="si">}</span><span class="s2"> [mm]&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Line density N0 :    </span><span class="si">{</span><span class="n">N0_lpm</span><span class="si">}</span><span class="s2"> [l/mm]&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Diffraction order:   </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Alpha_g :            </span><span class="si">{</span><span class="n">alpha_g_deg</span><span class="si">}</span><span class="s2"> [deg]&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Beta_g :             </span><span class="si">{</span><span class="n">beta_g_deg</span><span class="si">}</span><span class="s2"> [deg]&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Source distance r :  </span><span class="si">{</span><span class="n">r</span><span class="o">/</span><span class="mi">1000</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> [m]&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image distance r&#39; :  </span><span class="si">{</span><span class="n">rprime</span><span class="o">/</span><span class="mi">1000</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> [m]&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--- Results ---&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;B2 - defocus:        </span><span class="si">{</span><span class="n">B2</span><span class="si">:</span><span class="s2">.6e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;B3 - primary coma:   </span><span class="si">{</span><span class="n">B3</span><span class="si">:</span><span class="s2">.6e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;B4 - spherical:      </span><span class="si">{</span><span class="n">B4</span><span class="si">:</span><span class="s2">.6e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;B5 - secondary coma: </span><span class="si">{</span><span class="n">B5</span><span class="si">:</span><span class="s2">.6e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===============================&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">B2</span><span class="p">,</span> <span class="n">B3</span><span class="p">,</span> <span class="n">B4</span><span class="p">,</span> <span class="n">B5</span></div>
+
+    
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Simone Vadilonga, Ruslan Ovsyannikov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

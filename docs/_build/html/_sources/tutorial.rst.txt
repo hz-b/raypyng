@@ -365,6 +365,8 @@ Expect this folders and subfolders to be created:
 
 Analysis performed by RAY-UI 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**This is discouraged, as this approach is very slow.**
+
 If you decided to let RAY-UI do the analysis, you should expect the following files to be 
 saved in your simulation folder:
 
@@ -397,20 +399,26 @@ be saved in your simulation folder:
   If for instance, you exported the `RawRaysOutgoing` of the Dipole, you will 
   have a list of files `0_Dipole-RawRaysOutgoing.csv`
 - for each `RawRaysOutgoing` file, raypyng calculates some properties, 
-  and saves a corresponding file, for instance `0_Dipole_analyzed_rays.dat`. Each of these files contains the following information:
-
-  - SourcePhotonFlux
-  - NumberRaysSurvived     
-  - PercentageRaysSurvived   
-  - PhotonFlux        
-  - Bandwidth        
-  - HorizontalFocusFWHM     
-  - VerticalFocusFWHM
-
+  and saves a corresponding file, for instance `0_Dipole_analyzed_rays.dat`. 
 - In the simulation folder, all the for each exported element 
-  is united (and in case of more rounds of simulations averaged) 
-  in one single file. For the dipole, the file is called `Dipole.dat`
-- `looper.csv` each simulation and its parameters.
+  is brought together (and averaged in case of more rounds of simulations ) 
+  in one single file. For the dipole, the file is called `Dipole_RawRaysOutgoing.csv`. 
+  It contains the following columns, beside the input parameters:
+
+    - Simulation Number  
+    - SourcePhotonFlux  
+    - NumberRaysSurvived  
+    - PercentageRaysSurvived  
+    - PhotonEnergy  
+    - Bandwidth  
+    - HorizontalFocusFWHM  
+    - VerticalFocusFWHM  
+    - PhotonFlux  
+    - EnergyPerMilPerBw  
+    - FluxPerMilPerBwPerc  
+    - FluxPerMilPerBwAbs  
+    - AXUVCurrentAmp  
+    - GaAsPCurrentAmp  
 
 Recipes
 ========
@@ -425,50 +433,8 @@ simulations.
 
 List of available examples 
 ===========================
-In the example folder, the following examples are available:
+Examples are available at the following link: Examples are available at the following link: `raypyng examples <https://github.com/hz-b/raypyng/blob/main/examples>`_.
 
-- `example_rml.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/example_rml.py>`_
-  in this example is shown how to read, manipulate and save an rml file.   
-- `example_runner.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/example_runner.py>`_
-  in this example is shown how to use the RAY-UI API to start RAY-UI, load a file,
-  trace it and export the desired results.  
-- `example_simulation_analyze.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_analyze.py>`_ simulate a beamline, 
-  let Ray-UI do the analysis
-- `example_simulation_noanalyze.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_noanalyze.py>`_ 
-  simulate a beamline, 
-  let raypyng do the analysis
-- `example_eval_noanalyze_and_analyze.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/example_eval_noanalyze_and_analyze.py>`_
-  plots the results 
-  of the two previous simulations
-- `example_simulation_Flux.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_Flux.py>`_
-  simulations using the flux recipe,
-  useful if you intend to simulate the flux of your beamline
-- `example_simulation_RP.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_RP.py>`_
-  simulations using the resolving power 
-  (RP) recipe, useful if you intend to simulate the RP of your beamline. 
-  The reflectivity of every optical element is switched to 100% and not 
-  calculated using the substrate and coating(s) material(s). The 
-  information about the Flux of the beamline is therefore not reliable.
-- `example_beamwaist.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/example_beamwaist.py>`_
-  raypyng can plot the beam waist of 
-  the x-rays across your beamline. It performs simulations using the beam waist recipe, 
-  and it exports the RawRaysOutgoing file from each optical element. It then uses a 
-  simple geometrical x-ray tracer to propagate each ray until the next optical 
-  element and plots the results (both top view and side view). This is still 
-  experimental and it may fail. 
-- `example_waveHelper.py <https://github.com/hz-b/raypyng/blob/main/examples/example_rml.py>`_ 
-  The WaveHelper class can help to inspect a folder produced by `WAVE <https://www.helmholtz-berlin.de/forschung/oe/wi/undulators/arbeitsgebiete/wave_en.html>`_ 
-  and provides a simple API to get the path of the simulation files depending on the harmonic and 
-  on the energy.
- 
 
   
   

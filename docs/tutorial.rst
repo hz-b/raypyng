@@ -404,6 +404,7 @@ be saved in your simulation folder:
   is brought together (and averaged in case of more rounds of simulations ) 
   in one single file. For the dipole, the file is called `Dipole_RawRaysOutgoing.csv`. 
   It contains the following columns, beside the input parameters:
+
     - Simulation Number  
     - SourcePhotonFlux  
     - NumberRaysSurvived  
@@ -432,8 +433,7 @@ simulations.
 
 List of available examples 
 ===========================
-Examples are available at the following link: `raypyng examples
-  <https://github.com/hz-b/raypyng/blob/main/examples>`.
+Examples are available at the following link: Examples are available at the following link: `raypyng examples <https://github.com/hz-b/raypyng/blob/main/examples>`_.
 
 
   

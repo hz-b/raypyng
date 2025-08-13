@@ -62,6 +62,10 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#vls-grating-coefficient-calculation">VLS Grating Coefficient Calculation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#raypyng.vls_grating.calculate_vls_coeff"><code class="docutils literal notranslate"><span class="pre">calculate_vls_coeff()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#recipes">Recipes</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#resolving-power">Resolving Power</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#raypyng.recipes.ResolvingPower"><code class="docutils literal notranslate"><span class="pre">ResolvingPower</span></code></a></li>
@@ -118,6 +122,14 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#dipole">Dipole</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#raypyng.dipole_flux.Dipole"><code class="docutils literal notranslate"><span class="pre">Dipole</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#raypyng.dipole_flux.Dipole.calculate_spectrum"><code class="docutils literal notranslate"><span class="pre">Dipole.calculate_spectrum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#raypyng.dipole_flux.Dipole.plot_spectrum"><code class="docutils literal notranslate"><span class="pre">Dipole.plot_spectrum()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -154,7 +166,7 @@
 <h3>Simulate<a class="headerlink" href="#simulate" title="Link to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.simulate.</span></span><span class="sig-name descname"><span class="pre">Simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hide</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ray_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.simulate.Simulate" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.simulate.</span></span><span class="sig-name descname"><span class="pre">Simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hide</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ray_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/simulate.html#Simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.simulate.Simulate" title="Link to this definition"></a></dt>
 <dd><p>A class that takes care of performing the simulations with RAY-UI</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -172,7 +184,7 @@ the standard installation paths.</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.alignment_errors">
-<span class="sig-name descname"><span class="pre">alignment_errors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.simulate.Simulate.alignment_errors" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">alignment_errors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/simulate.html#Simulate.alignment_errors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.simulate.Simulate.alignment_errors" title="Link to this definition"></a></dt>
 <dd><p>Switch the alignment errors of all the optical elements in the beamline on or off.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -187,7 +199,7 @@ If <cite>False</cite>, the alignment errors are switched off.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.analyze">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">analyze</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.analyze" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">analyze</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.analyze" title="Link to this definition"></a></dt>
 <dd><p>Turn on or off the RAY-UI analysis of the results.
 The analysis of the results takes time, so turn it on only if needed</p>
 <dl class="field-list simple">
@@ -202,14 +214,14 @@ The analysis of the results takes time, so turn it on only if needed</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.cleanup_child_processes">
-<span class="sig-name descname"><span class="pre">cleanup_child_processes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.simulate.Simulate.cleanup_child_processes" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">cleanup_child_processes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/simulate.html#Simulate.cleanup_child_processes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.simulate.Simulate.cleanup_child_processes" title="Link to this definition"></a></dt>
 <dd><p>Clean up all child processes initiated by this process
 and any specific Xvfb processes.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.efficiency">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">efficiency</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.efficiency" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">efficiency</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.efficiency" title="Link to this definition"></a></dt>
 <dd><p>The parameters to scan, as a list of dictionaries.</p>
 <p>For each dictionary the keys are the parameters elements
 of the beamline, and the values are the
@@ -218,13 +230,13 @@ values to be assigned.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.exports">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exports</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.exports" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exports</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.exports" title="Link to this definition"></a></dt>
 <dd><p>Get the list of files to export after the simulation is complete.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.params">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">params</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.params" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">params</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.params" title="Link to this definition"></a></dt>
 <dd><p>The parameters to scan, as a list of dictionaries.</p>
 <p>For each dictionary the keys are the parameters elements of the beamline,
 and the values are the values to be assigned.</p>
@@ -232,7 +244,7 @@ and the values are the values to be assigned.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.path">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.path" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.path" title="Link to this definition"></a></dt>
 <dd><p>The path where to execute the simlations</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -247,7 +259,7 @@ the program is executed</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.possible_exports">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">possible_exports</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.possible_exports" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">possible_exports</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.possible_exports" title="Link to this definition"></a></dt>
 <dd><p>A list of the files that can be exported by RAY-UI</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -261,7 +273,7 @@ the program is executed</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.possible_exports_without_analysis">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">possible_exports_without_analysis</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.possible_exports_without_analysis" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">possible_exports_without_analysis</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.possible_exports_without_analysis" title="Link to this definition"></a></dt>
 <dd><p>A list of the files that can be exported by RAY-UI when the
 analysis option is turned off</p>
 <dl class="field-list simple">
@@ -276,7 +288,7 @@ analysis option is turned off</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.raypyng_analysis">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raypyng_analysis</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.raypyng_analysis" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raypyng_analysis</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.raypyng_analysis" title="Link to this definition"></a></dt>
 <dd><p>Turn on or off the RAYPyNG analysis of the results.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -290,7 +302,7 @@ analysis option is turned off</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.reflectivity">
-<span class="sig-name descname"><span class="pre">reflectivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.simulate.Simulate.reflectivity" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">reflectivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/simulate.html#Simulate.reflectivity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.simulate.Simulate.reflectivity" title="Link to this definition"></a></dt>
 <dd><p>Switch the reflectivity of all the optical elements in the beamline on or off.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -302,7 +314,7 @@ if <code class="code docutils literal notranslate"><span class="pre">False</span
 
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.repeat">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">repeat</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.repeat" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">repeat</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.repeat" title="Link to this definition"></a></dt>
 <dd><p>The simulations can be repeated an arbitrary number of times</p>
 <p>If the statitcs are not good enough using 2 millions of rays is suggested
 to repeat them instead of increasing the number of rays</p>
@@ -318,13 +330,13 @@ to repeat them instead of increasing the number of rays</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.rml">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rml</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.rml" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rml</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.rml" title="Link to this definition"></a></dt>
 <dd><p>RMLFile object instantiated in init</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.rml_list">
-<span class="sig-name descname"><span class="pre">rml_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recipe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite_rml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.simulate.Simulate.rml_list" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">rml_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recipe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite_rml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/simulate.html#Simulate.rml_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.simulate.Simulate.rml_list" title="Link to this definition"></a></dt>
 <dd><p>Creates the folder structure and RML files needed for simulation.
 This method organizes simulation parameters into RML files and prepares
 the directory structure for simulations, which is useful for
@@ -343,7 +355,7 @@ Defaults to True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recipe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiprocessing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite_rml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_exit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_rawrays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_round_folders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.simulate.Simulate.run" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recipe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiprocessing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite_rml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_exit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_rawrays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_round_folders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/simulate.html#Simulate.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.simulate.Simulate.run" title="Link to this definition"></a></dt>
 <dd><p>Execute simulations with optional recipe, multiprocessing, and file management options.</p>
 <p>This method orchestrates the setup and execution of simulations, managing multiprocessing,
 file generation, and progress tracking.</p>
@@ -370,13 +382,13 @@ are done.</p></li>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.simulation_name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">simulation_name</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.simulation_name" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">simulation_name</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.simulation_name" title="Link to this definition"></a></dt>
 <dd><p>A string to append to the folder where the simulations will be executed.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.slope_errors">
-<span class="sig-name descname"><span class="pre">slope_errors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slope_errors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.simulate.Simulate.slope_errors" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">slope_errors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slope_errors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/simulate.html#Simulate.slope_errors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.simulate.Simulate.slope_errors" title="Link to this definition"></a></dt>
 <dd><p>Switch the slope errors of all the optical elements in the beamline on or off.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -388,7 +400,7 @@ if <cite>False</cite> the slope errors are switched off.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.simulate.Simulate.undulator_table">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">undulator_table</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.undulator_table" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">undulator_table</span></span><a class="headerlink" href="#raypyng.simulate.Simulate.undulator_table" title="Link to this definition"></a></dt>
 <dd><p>The undulator table, as a pandas DataFrame.</p>
 </dd></dl>
 
@@ -399,10 +411,12 @@ if <cite>False</cite> the slope errors are switched off.</p>
 <h3>SimulationParams<a class="headerlink" href="#simulationparams" title="Link to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.simulate.SimulationParams">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.simulate.</span></span><span class="sig-name descname"><span class="pre">SimulationParams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.simulate.SimulationParams" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.simulate.</span></span><span class="sig-name descname"><span class="pre">SimulationParams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/simulate.html#SimulationParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.simulate.SimulationParams" title="Link to this definition"></a></dt>
 <dd><p>Handles the setup and management of simulation parameters for RAY-UI simulations.</p>
 <p>This class is responsible for organizing simulation parameters, both independent and dependent,
 and generating the necessary parameter sets for conducting simulations.</p>
+<dl class="field-list simple">
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="raypyng.simulate.SimulationParams.rml">
 <span class="sig-name descname"><span class="pre">rml</span></span><a class="headerlink" href="#raypyng.simulate.SimulationParams.rml" title="Link to this definition"></a></dt>
@@ -431,7 +445,7 @@ to simulate.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.simulate.SimulationParams.simulation_parameters_generator">
-<span class="sig-name descname"><span class="pre">simulation_parameters_generator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.simulate.SimulationParams.simulation_parameters_generator" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">simulation_parameters_generator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/simulate.html#SimulationParams.simulation_parameters_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.simulate.SimulationParams.simulation_parameters_generator" title="Link to this definition"></a></dt>
 <dd><p>Generates a dictionary of parameters for each simulation
 based on the input parameter list.</p>
 <dl class="field-list simple">
@@ -451,7 +465,7 @@ insertion device with WAVE. This class inspects the folder where the WAVES resul
 stored and provides a simple way to get a list of absolute paths to the simulation files.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.wave_helper.WaveHelper">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.wave_helper.</span></span><span class="sig-name descname"><span class="pre">WaveHelper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wave_folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">harmonics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undulator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.wave_helper.WaveHelper" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.wave_helper.</span></span><span class="sig-name descname"><span class="pre">WaveHelper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wave_folder_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">harmonics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undulator</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/wave_helper.html#WaveHelper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.wave_helper.WaveHelper" title="Link to this definition"></a></dt>
 <dd><p>Explore WAVE simulation folder and gives an easy way to convert energies into filenames</p>
 <p>The class expects the WAVE simulations to be stored in a folder called WAVE.
 For instance for an undulator called ‘U49’ and harmonic=3, this filestructure is expected:</p>
@@ -472,7 +486,7 @@ simulations for 1st and 3rd should exist)</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.wave_helper.WaveHelper.convert_energies_to_file_list">
-<span class="sig-name descname"><span class="pre">convert_energies_to_file_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">harmonic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.wave_helper.WaveHelper.convert_energies_to_file_list" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">convert_energies_to_file_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">harmonic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energies</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/wave_helper.html#WaveHelper.convert_energies_to_file_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.wave_helper.WaveHelper.convert_energies_to_file_list" title="Link to this definition"></a></dt>
 <dd><p>Takes the harmonic and a list of energies and returns the files location</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -495,7 +509,7 @@ simulations for 1st and 3rd should exist)</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.wave_helper.WaveHelper.report_available_energies">
-<span class="sig-name descname"><span class="pre">report_available_energies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.wave_helper.WaveHelper.report_available_energies" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">report_available_energies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/wave_helper.html#WaveHelper.report_available_energies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.wave_helper.WaveHelper.report_available_energies" title="Link to this definition"></a></dt>
 <dd><p>Report about the availbale energies and explore the WAVE folder</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -509,13 +523,60 @@ Defaults to True.</p>
 
 </section>
 </section>
+<section id="vls-grating-coefficient-calculation">
+<h2>VLS Grating Coefficient Calculation<a class="headerlink" href="#vls-grating-coefficient-calculation" title="Link to this heading"></a></h2>
+<p>This function calculates the VLS grating coefficients (B₂–B₅) for a plane
+variable line spacing grating, given grazing incidence and diffraction angles,
+central groove density, photon energy, and source/image distances.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="raypyng.vls_grating.calculate_vls_coeff">
+<span class="sig-prename descclassname"><span class="pre">raypyng.vls_grating.</span></span><span class="sig-name descname"><span class="pre">calculate_vls_coeff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha_g_deg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">89.778</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta_g_deg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">85.5733</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N0_lpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2400.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">en_eV</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_vls_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">81.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vls_image_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">35.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/vls_grating.html#calculate_vls_coeff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.vls_grating.calculate_vls_coeff" title="Link to this definition"></a></dt>
+<dd><p>Calculate B2–B5 coefficients for a Variable Line Spacing (VLS) grating
+using normal incidence and diffraction angles.</p>
+<dl class="simple">
+<dt>The coefficients correspond to terms in the groove density expansion:</dt><dd><p>n(z) = N0 * (1 + 2*B2*z + 3*B3*z^2 + 4*B4*z^3 + 5*B5*z^4 + …)</p>
+</dd>
+<dt>where:</dt><dd><ul class="simple">
+<li><p>B2  : Cancels primary defocus</p></li>
+<li><p>B3  : Cancels primary coma</p></li>
+<li><p>B4  : Reduces spherical aberration</p></li>
+<li><p>B5  : Cancels secondary coma</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha_g_deg</strong> (<em>float</em>) – Normal incidence angle [degrees from the grating normal].</p></li>
+<li><p><strong>beta_g_deg</strong> (<em>float</em>) – Normal diffraction (exit) angle [degrees from the grating normal].</p></li>
+<li><p><strong>N0_lpm</strong> (<em>float</em>) – Central groove density [lines/mm].</p></li>
+<li><p><strong>m</strong> (<em>int</em>) – Diffraction order (positive for same side, negative for opposite side).</p></li>
+<li><p><strong>en_eV</strong> (<em>float</em>) – Photon energy [eV].</p></li>
+<li><p><strong>source_vls_distance</strong> (<em>float</em>) – Source-to-grating distance [m].</p></li>
+<li><p><strong>vls_image_distance</strong> (<em>float</em>) – Grating-to-image distance [m].</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – If True, prints a detailed recap of input parameters and results.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>B2</strong> (<em>float</em>) – Dimensionless coefficient for defocus correction.</p></li>
+<li><p><strong>B3</strong> (<em>float</em>) – Dimensionless coefficient for primary coma correction.</p></li>
+<li><p><strong>B4</strong> (<em>float</em>) – Dimensionless coefficient for spherical aberration correction.</p></li>
+<li><p><strong>B5</strong> (<em>float</em>) – Dimensionless coefficient for secondary coma correction.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="recipes">
 <h2>Recipes<a class="headerlink" href="#recipes" title="Link to this heading"></a></h2>
 <section id="resolving-power">
 <h3>Resolving Power<a class="headerlink" href="#resolving-power" title="Link to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.recipes.ResolvingPower">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.recipes.</span></span><span class="sig-name descname"><span class="pre">ResolvingPower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exported_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#raypyng.rml.ObjectElement" title="raypyng.rml.ObjectElement"><span class="pre">ObjectElement</span></a></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#raypyng.rml.ObjectElement" title="raypyng.rml.ObjectElement"><span class="pre">ObjectElement</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.recipes.ResolvingPower" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.recipes.</span></span><span class="sig-name descname"><span class="pre">ResolvingPower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exported_object</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/recipes.html#ResolvingPower"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.recipes.ResolvingPower" title="Link to this definition"></a></dt>
 <dd><p>Recipe for resolving power simulations.</p>
 <p>The eflectivity is automatically switched off for all elements,
 the source if automatically recognized.</p>
@@ -539,7 +600,7 @@ filename will be used. Defaults to None.</p></li>
 <h3>Flux<a class="headerlink" href="#flux" title="Link to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.recipes.Flux">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.recipes.</span></span><span class="sig-name descname"><span class="pre">Flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exported_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#raypyng.rml.ObjectElement" title="raypyng.rml.ObjectElement"><span class="pre">ObjectElement</span></a></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#raypyng.rml.ObjectElement" title="raypyng.rml.ObjectElement"><span class="pre">ObjectElement</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.recipes.Flux" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.recipes.</span></span><span class="sig-name descname"><span class="pre">Flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exported_object</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/recipes.html#Flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.recipes.Flux" title="Link to this definition"></a></dt>
 <dd><p>Recipe for flux simulations.</p>
 <p>The reflectivity is automatically switched on for all elements,
 and the source is automatically identified.</p>
@@ -566,12 +627,14 @@ filename will be used. Defaults to None.</p></li>
 <h3>PostProcess rays analyzed by raypyng<a class="headerlink" href="#postprocess-rays-analyzed-by-raypyng" title="Link to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.postprocessing.PostProcess">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.postprocessing.</span></span><span class="sig-name descname"><span class="pre">PostProcess</span></span><a class="headerlink" href="#raypyng.postprocessing.PostProcess" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.postprocessing.</span></span><span class="sig-name descname"><span class="pre">PostProcess</span></span><a class="reference internal" href="_modules/raypyng/postprocessing.html#PostProcess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.postprocessing.PostProcess" title="Link to this definition"></a></dt>
 <dd><p>class to post-process the data.</p>
 <p>It works only if the exported data are RawRaysOutgoing</p>
+<dl class="field-list simple">
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.postprocessing.PostProcess.cleanup">
-<span class="sig-name descname"><span class="pre">cleanup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp_elements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exported_file_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.postprocessing.PostProcess.cleanup" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">cleanup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp_elements</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exported_file_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/postprocessing.html#PostProcess.cleanup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.postprocessing.PostProcess.cleanup" title="Link to this definition"></a></dt>
 <dd><p>Reads all the results of the postprocessing process and summarize
 them in a single file for each exported object.</p>
 <p>This functions reads all the temporary files created by <code class="code docutils literal notranslate"><span class="pre">self.postprocess_RawRays()</span></code>
@@ -590,7 +653,7 @@ If more than one round of simulations was done, the values are averaged.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.postprocessing.PostProcess.extract_bw_from_source">
-<span class="sig-name descname"><span class="pre">extract_bw_from_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml_filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.postprocessing.PostProcess.extract_bw_from_source" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">extract_bw_from_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml_filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/postprocessing.html#PostProcess.extract_bw_from_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.postprocessing.PostProcess.extract_bw_from_source" title="Link to this definition"></a></dt>
 <dd><p>Extract photon energy from rml file, find source automatically</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -607,7 +670,7 @@ If more than one round of simulations was done, the values are averaged.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.postprocessing.PostProcess.extract_energy_from_source">
-<span class="sig-name descname"><span class="pre">extract_energy_from_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml_filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.postprocessing.PostProcess.extract_energy_from_source" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">extract_energy_from_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml_filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/postprocessing.html#PostProcess.extract_energy_from_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.postprocessing.PostProcess.extract_energy_from_source" title="Link to this definition"></a></dt>
 <dd><p>Extract photon energy from rml file, find source automatically</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -624,7 +687,7 @@ If more than one round of simulations was done, the values are averaged.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.postprocessing.PostProcess.extract_nrays_from_source">
-<span class="sig-name descname"><span class="pre">extract_nrays_from_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml_filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.postprocessing.PostProcess.extract_nrays_from_source" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">extract_nrays_from_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml_filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/postprocessing.html#PostProcess.extract_nrays_from_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.postprocessing.PostProcess.extract_nrays_from_source" title="Link to this definition"></a></dt>
 <dd><p>Extract photon flux from rml file, find source automatically</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -641,7 +704,7 @@ If more than one round of simulations was done, the values are averaged.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.postprocessing.PostProcess.postprocess_RawRays">
-<span class="sig-name descname"><span class="pre">postprocess_RawRays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exported_element</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exported_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rml_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_rawrays</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undulator_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">efficiency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.postprocessing.PostProcess.postprocess_RawRays" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">postprocess_RawRays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exported_element</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exported_object</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rml_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_rawrays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undulator_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">efficiency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/postprocessing.html#PostProcess.postprocess_RawRays"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.postprocessing.PostProcess.postprocess_RawRays" title="Link to this definition"></a></dt>
 <dd><p>PostProcess routine of the RawRaysOutgoing extracted files.</p>
 <p>The method looks in the folder <cite>dir_path</cite> for a file with the filename:</p>
 <blockquote>
@@ -668,6 +731,9 @@ Defaults to None.</p></li>
 Defaults to None.</p></li>
 <li><p><strong>sim_number</strong> (<em>str</em><em>, </em><em>optional</em>) – Prefix of the file, typically the simulation number with a
 prepended <cite>_</cite>, e.g., <code class="docutils literal notranslate"><span class="pre">0_</span></code>. Defaults to None.</p></li>
+<li><p><strong>rml_filename</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>suffix</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>remove_rawrays</strong> (<em>bool</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -680,11 +746,13 @@ prepended <cite>_</cite>, e.g., <code class="docutils literal notranslate"><span
 <h3>PostProcess rays analyzed by RAY-UI<a class="headerlink" href="#postprocess-rays-analyzed-by-ray-ui" title="Link to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.postprocessing.PostProcessAnalyzed">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.postprocessing.</span></span><span class="sig-name descname"><span class="pre">PostProcessAnalyzed</span></span><a class="headerlink" href="#raypyng.postprocessing.PostProcessAnalyzed" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.postprocessing.</span></span><span class="sig-name descname"><span class="pre">PostProcessAnalyzed</span></span><a class="reference internal" href="_modules/raypyng/postprocessing.html#PostProcessAnalyzed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.postprocessing.PostProcessAnalyzed" title="Link to this definition"></a></dt>
 <dd><p>class to analyze the data exported by RAY-UI</p>
+<dl class="field-list simple">
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.postprocessing.PostProcessAnalyzed.moving_average">
-<span class="sig-name descname"><span class="pre">moving_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.postprocessing.PostProcessAnalyzed.moving_average" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">moving_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/postprocessing.html#PostProcessAnalyzed.moving_average"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.postprocessing.PostProcessAnalyzed.moving_average" title="Link to this definition"></a></dt>
 <dd><p>Computes the morivng average with window w on the array x</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -704,7 +772,7 @@ prepended <cite>_</cite>, e.g., <code class="docutils literal notranslate"><span
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.postprocessing.PostProcessAnalyzed.retrieve_bw_and_focusSize">
-<span class="sig-name descname"><span class="pre">retrieve_bw_and_focusSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsimulations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.postprocessing.PostProcessAnalyzed.retrieve_bw_and_focusSize" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">retrieve_bw_and_focusSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsimulations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rounds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/postprocessing.html#PostProcessAnalyzed.retrieve_bw_and_focusSize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.postprocessing.PostProcessAnalyzed.retrieve_bw_and_focusSize" title="Link to this definition"></a></dt>
 <dd><p>Extract the bandwidth and focus size from ScalarBeamProperties of an object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -728,7 +796,7 @@ foc_y np.array: the vertical focus</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.postprocessing.PostProcessAnalyzed.retrieve_flux_beamline">
-<span class="sig-name descname"><span class="pre">retrieve_flux_beamline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsimulations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.postprocessing.PostProcessAnalyzed.retrieve_flux_beamline" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">retrieve_flux_beamline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsimulations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/postprocessing.html#PostProcessAnalyzed.retrieve_flux_beamline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.postprocessing.PostProcessAnalyzed.retrieve_flux_beamline" title="Link to this definition"></a></dt>
 <dd><p>Extract the flux from ScalarBeamProperties and from ScalarElementProperties.</p>
 <p>This function takes as arguments the name of the
 simulation folder, the exported objet in RAY-UI and there
@@ -771,16 +839,16 @@ source_Photon_flux (np.array) : the photon flux of the source</p>
 <h3>RayProperties<a class="headerlink" href="#rayproperties" title="Link to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.postprocessing.RayProperties">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.postprocessing.</span></span><span class="sig-name descname"><span class="pre">RayProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undulator_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.postprocessing.RayProperties" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.postprocessing.</span></span><span class="sig-name descname"><span class="pre">RayProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undulator_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/postprocessing.html#RayProperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.postprocessing.RayProperties" title="Link to this definition"></a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="raypyng.postprocessing.RayProperties.concat">
-<span class="sig-name descname"><span class="pre">concat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.postprocessing.RayProperties.concat" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">concat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/postprocessing.html#RayProperties.concat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.postprocessing.RayProperties.concat" title="Link to this definition"></a></dt>
 <dd><p>Concatenates another RayProperties object to current.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.postprocessing.RayProperties.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.postprocessing.RayProperties.save" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/postprocessing.html#RayProperties.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.postprocessing.RayProperties.save" title="Link to this definition"></a></dt>
 <dd><p>Save current object into a CSV file.</p>
 </dd></dl>
 
@@ -794,7 +862,7 @@ source_Photon_flux (np.array) : the photon flux of the source</p>
 <h3>RayUIRunner<a class="headerlink" href="#rayuirunner" title="Link to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.runner.RayUIRunner">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.runner.</span></span><span class="sig-name descname"><span class="pre">RayUIRunner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ray_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ray_binary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rayui.sh'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hide</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.runner.RayUIRunner" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.runner.</span></span><span class="sig-name descname"><span class="pre">RayUIRunner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ray_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ray_binary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rayui.sh'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hide</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/runner.html#RayUIRunner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.runner.RayUIRunner" title="Link to this definition"></a></dt>
 <dd><p>RayUIRunner class implements all logic to start a RayUI process,
 load and rml file, trace and export.</p>
 <dl class="field-list simple">
@@ -814,7 +882,7 @@ Defaults to False.</p></li>
 </dl>
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.runner.RayUIRunner.isrunning">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">isrunning</span></span><a class="headerlink" href="#raypyng.runner.RayUIRunner.isrunning" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">isrunning</span></span><a class="headerlink" href="#raypyng.runner.RayUIRunner.isrunning" title="Link to this definition"></a></dt>
 <dd><p>Check weather a process is running and rerutn a boolean</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -828,13 +896,13 @@ Defaults to False.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.runner.RayUIRunner.kill">
-<span class="sig-name descname"><span class="pre">kill</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.runner.RayUIRunner.kill" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">kill</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/runner.html#RayUIRunner.kill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.runner.RayUIRunner.kill" title="Link to this definition"></a></dt>
 <dd><p>kill a RAY-UI process</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="raypyng.runner.RayUIRunner.pid">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pid</span></span><a class="headerlink" href="#raypyng.runner.RayUIRunner.pid" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pid</span></span><a class="headerlink" href="#raypyng.runner.RayUIRunner.pid" title="Link to this definition"></a></dt>
 <dd><p>Get process id of the RayUI process</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -848,7 +916,7 @@ Defaults to False.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.runner.RayUIRunner.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.runner.RayUIRunner.run" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/runner.html#RayUIRunner.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.runner.RayUIRunner.run" title="Link to this definition"></a></dt>
 <dd><p>Open one instance of RAY-UI using subprocess</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
@@ -864,11 +932,16 @@ Defaults to False.</p></li>
 <h3>RayUIAPI<a class="headerlink" href="#rayuiapi" title="Link to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.runner.RayUIAPI">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.runner.</span></span><span class="sig-name descname"><span class="pre">RayUIAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#raypyng.runner.RayUIRunner" title="raypyng.runner.RayUIRunner"><span class="pre">RayUIRunner</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.runner.RayUIAPI" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.runner.</span></span><span class="sig-name descname"><span class="pre">RayUIAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/runner.html#RayUIAPI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.runner.RayUIAPI" title="Link to this definition"></a></dt>
 <dd><p>RayUIAPI class implements (hopefully all) command interface of the RAY-UI</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>runner</strong> (<a class="reference internal" href="#raypyng.runner.RayUIRunner" title="raypyng.runner.RayUIRunner"><em>RayUIRunner</em></a>)</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.runner.RayUIAPI.export">
-<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objects</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.runner.RayUIAPI.export" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objects</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_prefix</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/runner.html#RayUIAPI.export"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.runner.RayUIAPI.export" title="Link to this definition"></a></dt>
 <dd><p>Export simulation results from RAY-UI.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -886,7 +959,7 @@ Defaults to False.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.runner.RayUIAPI.load">
-<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml_path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.runner.RayUIAPI.load" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml_path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/runner.html#RayUIAPI.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.runner.RayUIAPI.load" title="Link to this definition"></a></dt>
 <dd><p>Load an rml file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -897,13 +970,13 @@ Defaults to False.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.runner.RayUIAPI.quit">
-<span class="sig-name descname"><span class="pre">quit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.runner.RayUIAPI.quit" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">quit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/runner.html#RayUIAPI.quit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.runner.RayUIAPI.quit" title="Link to this definition"></a></dt>
 <dd><p>quit RAY-UI if it is running</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.runner.RayUIAPI.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml_path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.runner.RayUIAPI.save" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rml_path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/runner.html#RayUIAPI.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.runner.RayUIAPI.save" title="Link to this definition"></a></dt>
 <dd><p>Save an rml file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -914,7 +987,7 @@ Defaults to False.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.runner.RayUIAPI.trace">
-<span class="sig-name descname"><span class="pre">trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyze</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.runner.RayUIAPI.trace" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyze</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/runner.html#RayUIAPI.trace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.runner.RayUIAPI.trace" title="Link to this definition"></a></dt>
 <dd><p>Trace an rml file (must have been loaded before).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -934,7 +1007,7 @@ Defaults to True.</p>
 <h3>RMLFile<a class="headerlink" href="#rmlfile" title="Link to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.rml.RMLFile">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.rml.</span></span><span class="sig-name descname"><span class="pre">RMLFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.rml.RMLFile" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.rml.</span></span><span class="sig-name descname"><span class="pre">RMLFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/rml.html#RMLFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.rml.RMLFile" title="Link to this definition"></a></dt>
 <dd><p>Read/Write wrapper for the Ray RML files</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -947,7 +1020,7 @@ Defaults to None.</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.rml.RMLFile.read">
-<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.rml.RMLFile.read" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/rml.html#RMLFile.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.rml.RMLFile.read" title="Link to this definition"></a></dt>
 <dd><p>Read rml file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -960,7 +1033,7 @@ initilizatino of the class. Defaults to None.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raypyng.rml.RMLFile.write">
-<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.rml.RMLFile.write" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/rml.html#RMLFile.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.rml.RMLFile.write" title="Link to this definition"></a></dt>
 <dd><p>Write the rml to <code class="code docutils literal notranslate"><span class="pre">file</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -976,8 +1049,16 @@ initilizatino of the class. Defaults to None.</p>
 <h3>BeamlineElement<a class="headerlink" href="#beamlineelement" title="Link to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.rml.BeamlineElement">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.rml.</span></span><span class="sig-name descname"><span class="pre">BeamlineElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.rml.BeamlineElement" title="Link to this definition"></a></dt>
-<dd><dl class="py method">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.rml.</span></span><span class="sig-name descname"><span class="pre">BeamlineElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/rml.html#BeamlineElement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.rml.BeamlineElement" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+<li><p><strong>attributes</strong> (<em>dict</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
 <dt class="sig sig-object py" id="raypyng.rml.BeamlineElement.add_cdata">
 <span class="sig-name descname"><span class="pre">add_cdata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cdata</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.rml.BeamlineElement.add_cdata" title="Link to this definition"></a></dt>
 <dd><p>Store cdata</p>
@@ -1036,8 +1117,16 @@ initilizatino of the class. Defaults to None.</p>
 <h3>ObjectElement<a class="headerlink" href="#objectelement" title="Link to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.rml.ObjectElement">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.rml.</span></span><span class="sig-name descname"><span class="pre">ObjectElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.rml.ObjectElement" title="Link to this definition"></a></dt>
-<dd><dl class="py method">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.rml.</span></span><span class="sig-name descname"><span class="pre">ObjectElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/rml.html#ObjectElement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.rml.ObjectElement" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+<li><p><strong>attributes</strong> (<em>dict</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
 <dt class="sig sig-object py" id="raypyng.rml.ObjectElement.add_cdata">
 <span class="sig-name descname"><span class="pre">add_cdata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cdata</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.rml.ObjectElement.add_cdata" title="Link to this definition"></a></dt>
 <dd><p>Store cdata</p>
@@ -1096,8 +1185,16 @@ initilizatino of the class. Defaults to None.</p>
 <h3>ParamElement<a class="headerlink" href="#paramelement" title="Link to this heading"></a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="raypyng.rml.ParamElement">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.rml.</span></span><span class="sig-name descname"><span class="pre">ParamElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.rml.ParamElement" title="Link to this definition"></a></dt>
-<dd><dl class="py method">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.rml.</span></span><span class="sig-name descname"><span class="pre">ParamElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/rml.html#ParamElement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.rml.ParamElement" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+<li><p><strong>attributes</strong> (<em>dict</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
 <dt class="sig sig-object py" id="raypyng.rml.ParamElement.add_cdata">
 <span class="sig-name descname"><span class="pre">add_cdata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cdata</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raypyng.rml.ParamElement.add_cdata" title="Link to this definition"></a></dt>
 <dd><p>Store cdata</p>
@@ -1152,6 +1249,59 @@ initilizatino of the class. Defaults to None.</p>
 </dd></dl>
 
 </section>
+</section>
+<section id="dipole">
+<h2>Dipole<a class="headerlink" href="#dipole" title="Link to this heading"></a></h2>
+<p>Based on  <a class="reference external" href="https://srxraylib.readthedocs.io/en/latest/">srxraylib</a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="raypyng.dipole_flux.Dipole">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raypyng.dipole_flux.</span></span><span class="sig-name descname"><span class="pre">Dipole</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bending_radius_m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magnetic_field_T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_energy_GeV</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_A</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/dipole_flux.html#Dipole"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.dipole_flux.Dipole" title="Link to this definition"></a></dt>
+<dd><p>Synchrotron dipole radiation spectrum calculator.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="raypyng.dipole_flux.Dipole.calculate_spectrum">
+<span class="sig-name descname"><span class="pre">calculate_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">photon_energy_array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hdiv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/dipole_flux.html#Dipole.calculate_spectrum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.dipole_flux.Dipole.calculate_spectrum" title="Link to this definition"></a></dt>
+<dd><p>Calculates the photon flux spectrum for the dipole source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>photon_energy_array</strong> (<em>np.ndarray</em>) – Photon energies in eV.</p></li>
+<li><p><strong>hdiv</strong> (<em>float</em><em> or </em><em>array-like</em>) – Horizontal divergence in mrad.
+Can be a scalar (applied uniformly) or an array matching the photon energy array.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of photon fluxes for each dipole case.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="raypyng.dipole_flux.Dipole.plot_spectrum">
+<span class="sig-name descname"><span class="pre">plot_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xscale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'log'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yscale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'log'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/raypyng/dipole_flux.html#Dipole.plot_spectrum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#raypyng.dipole_flux.Dipole.plot_spectrum" title="Link to this definition"></a></dt>
+<dd><p>Plots the dipole radiation spectrum for all cases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>show</strong> (<em>bool</em>) – If True, display the plot using <cite>plt.show()</cite>.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to save the figure (e.g., ‘plot.png’).</p></li>
+<li><p><strong>xscale</strong> (<em>str</em>) – X-axis scale, usually ‘log’ or ‘linear’.</p></li>
+<li><p><strong>yscale</strong> (<em>str</em>) – Y-axis scale, usually ‘log’ or ‘linear’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(matplotlib.figure.Figure, matplotlib.axes._subplots.AxesSubplot)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 
