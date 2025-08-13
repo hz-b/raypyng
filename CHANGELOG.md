@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.3.02] - 13-August-2025
+## [1.3.03] - 13-August-2025
 ### Added
 - VLS grating parameter calculations (beta)
 ### Changed
