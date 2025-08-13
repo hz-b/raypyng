@@ -23,6 +23,15 @@ stored and provides a simple way to get a list of absolute paths to the simulati
 .. autoclass:: raypyng.wave_helper.WaveHelper
    :members:
 
+VLS Grating Coefficient Calculation
+====================================
+
+This function calculates the VLS grating coefficients (B₂–B₅) for a plane
+variable line spacing grating, given grazing incidence and diffraction angles,
+central groove density, photon energy, and source/image distances.
+
+.. autofunction:: raypyng.vls_grating.calculate_vls_coeff
+    
 Recipes
 ==================
 
@@ -94,6 +103,12 @@ ParamElement
    :members:
    :inherited-members:
 
+Dipole
+==================
+Based on  `srxraylib <https://srxraylib.readthedocs.io/en/latest/>`_
 
+.. autoclass:: raypyng.dipole_flux.Dipole
+   :members:
+   :inherited-members:
 
 

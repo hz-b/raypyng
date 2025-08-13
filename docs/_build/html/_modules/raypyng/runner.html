@@ -1,0 +1,446 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>raypyng.runner &mdash; RayPyNG  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            RayPyNG
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../how_to.html">How To Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">RayPyNG</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">raypyng.runner</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for raypyng.runner</h1><div class="highlight"><pre>
+<span></span><span class="c1">###############################################################################</span>
+<span class="c1"># RayUI process handling and RayUI command API</span>
+
+<span class="c1"># from sre_constants import SUCCESS</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">atexit</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">RayPyError</span><span class="p">,</span> <span class="n">RayPyRunnerError</span><span class="p">,</span> <span class="ne">TimeoutError</span>
+
+<span class="c1"># import sys # used for some debugging</span>
+
+
+<span class="c1">###############################################################################</span>
+<div class="viewcode-block" id="RayUIRunner">
+<a class="viewcode-back" href="../../API.html#raypyng.runner.RayUIRunner">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RayUIRunner</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;RayUIRunner class implements all logic to start a RayUI process,</span>
+<span class="sd">    load and rml file, trace and export.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">            ray_path (str, optional): the path to the RAY-UI installation folder.</span>
+<span class="sd">                                      Defaults to config.ray_path, that will look for the</span>
+<span class="sd">                                      ray_path in the standard installation folders.</span>
+<span class="sd">            ray_binary (_type_, optional): the binary file of RAY-UI.</span>
+<span class="sd">                                            Defaults to &quot;rayui.sh&quot;.</span>
+<span class="sd">            background (bool, optional): activate background mode. Defaults to True.</span>
+<span class="sd">            hide (bool, optional): Hide the RAY-UI graphical instances.</span>
+<span class="sd">                                   Available only if xvfb is installed.</span>
+<span class="sd">                                   Defaults to False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">ray_path</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">ray_path</span><span class="p">,</span> <span class="n">ray_binary</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">ray_binary</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">hide</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            ray_path (str, optional): the path to the RAY-UI installation folder.</span>
+<span class="sd">                                      Defaults to config.ray_path, that will look for the</span>
+<span class="sd">                                      ray_path in the standard installation folders.</span>
+<span class="sd">            ray_binary (_type_, optional): the binary file of RAY-UI.</span>
+<span class="sd">                                            Defaults to &quot;rayui.sh&quot;.</span>
+<span class="sd">            background (bool, optional): activate background mode. Defaults to True.</span>
+<span class="sd">            hide (bool, optional): Hide the RAY-UI graphical instances.</span>
+<span class="sd">                                   Available only if xvfb is installed.</span>
+<span class="sd">                                   Defaults to False.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            Exception: _description_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ray_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ray_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__detect_ray_path</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ray_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ray_path must be defined for now!&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">ray_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_binary</span> <span class="o">=</span> <span class="n">ray_binary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="s2">&quot;-b&quot;</span> <span class="k">if</span> <span class="n">background</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_process</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">hide</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hide</span> <span class="o">=</span> <span class="s2">&quot;xvfb-run --auto-servernum --server-num=3000 &quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hide</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># internal configuration parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_auto_flush</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># flush on write calls</span>
+
+<div class="viewcode-block" id="RayUIRunner.run">
+<a class="viewcode-back" href="../../API.html#raypyng.runner.RayUIRunner.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Open one instance of RAY-UI using subprocess</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            RayPyRunnerError: if the RAY-UI executable is not found raise an error</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">isrunning</span><span class="p">:</span>
+            <span class="n">fullpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binary</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fullpath</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">RayPyRunnerError</span><span class="p">(</span><span class="s2">&quot;Ray executable </span><span class="si">{0}</span><span class="s2"> is not found&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fullpath</span><span class="p">))</span>
+            <span class="n">fullpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hide</span> <span class="o">+</span> <span class="n">fullpath</span>
+            <span class="n">env</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span>  <span class="c1"># TODO:: rethink a bit about this line</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
+                <span class="n">fullpath</span> <span class="o">+</span> <span class="s2">&quot; -b&quot;</span><span class="p">,</span>
+                <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">stdin</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+                <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+                <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">,</span>
+                <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kill</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">isrunning</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check weather a process is running and rerutn a boolean</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: returns True if the process is running, otherwise False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">poll_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">poll_result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># we have an exit code, so process is not valid any more and clean it it up</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_process</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="RayUIRunner.kill">
+<a class="viewcode-back" href="../../API.html#raypyng.runner.RayUIRunner.kill">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">kill</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;kill a RAY-UI process&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isrunning</span><span class="p">:</span>
+            <span class="n">pid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">pid</span>
+            <span class="n">process</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">proc</span> <span class="ow">in</span> <span class="n">process</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                <span class="n">proc</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+            <span class="n">process</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get process id of the RayUI process</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: PID of the process if it running, None otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isrunning</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">pid</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">endline</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write command to RayUI interface</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            instr (str): _description_</span>
+<span class="sd">            endline (str, optional): _description_. Defaults to endline character.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            RayPyRunnerError: _description_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isrunning</span><span class="p">:</span>
+            <span class="n">payload</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">instr</span> <span class="o">+</span> <span class="n">endline</span><span class="p">,</span> <span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auto_flush</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">RayPyRunnerError</span><span class="p">(</span><span class="s2">&quot;RayUI process is not started&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_readline</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read a line from the stdout of the process and convert to a string</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: line read from the input</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isrunning</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>  <span class="c1"># verbose</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">line</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__detect_ray_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Internal function to autodetect installation path of RAY-UI</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            RayPyRunnerError: is case no RAY-UI installations can be detected</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: string with the detected RAY-UI installation path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">basepaths</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">,</span> <span class="s2">&quot;~/Applications&quot;</span><span class="p">,</span> <span class="s2">&quot;/opt&quot;</span><span class="p">,</span> <span class="s2">&quot;/Applications&quot;</span><span class="p">)</span>
+        <span class="n">installpaths</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;RAY-UI-development&quot;</span><span class="p">,</span> <span class="s2">&quot;RAY-UI&quot;</span><span class="p">,</span> <span class="s2">&quot;Ray-UI&quot;</span><span class="p">)</span>
+        <span class="n">pathlist</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">basepaths</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">installpaths</span><span class="p">]</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">ray_path</span> <span class="ow">in</span> <span class="n">pathlist</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">ray_path</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">ray_path</span>
+        <span class="k">raise</span> <span class="n">RayPyRunnerError</span><span class="p">(</span><span class="s2">&quot;Can not detect rayui installation path! Please provide it manually&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="c1">###############################################################################</span>
+<div class="viewcode-block" id="RayUIAPI">
+<a class="viewcode-back" href="../../API.html#raypyng.runner.RayUIAPI">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RayUIAPI</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;RayUIAPI class implements (hopefully all) command interface of the RAY-UI&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runner</span><span class="p">:</span> <span class="n">RayUIRunner</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optional Reference to an existing RayUIRunner</span>
+<span class="sd">        Args:</span>
+<span class="sd">            runner (RayUIRunner, optional): reference to existing runner.</span>
+<span class="sd">                                            If set to None a new runner instance will</span>
+<span class="sd">                                            be automaticlly created. Defaults to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">runner</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">runner</span> <span class="o">=</span> <span class="n">RayUIRunner</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span> <span class="o">=</span> <span class="n">runner</span>
+        <span class="c1"># if rayui does not send anything to stdio this delay</span>
+        <span class="c1"># will be used before next attempt to read</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_read_wait_delay</span> <span class="o">=</span> <span class="mf">0.01</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_quit_timeout</span> <span class="o">=</span> <span class="mi">300</span>  <span class="c1"># default timeout for commands like quit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_simulation_done</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="RayUIAPI.quit">
+<a class="viewcode-back" href="../../API.html#raypyng.runner.RayUIAPI.quit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">quit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;quit RAY-UI if it is running&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span><span class="o">.</span><span class="n">isrunning</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span><span class="o">.</span><span class="n">_write</span><span class="p">(</span><span class="s2">&quot;quit&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_quit_timeout</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">TimeoutExpired</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="s2">&quot;Timeout while trying to quit&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="RayUIAPI.load">
+<a class="viewcode-back" href="../../API.html#raypyng.runner.RayUIAPI.load">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rml_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load an rml file</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rml_path (str): path to the rml file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_simulation_done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmd_io</span><span class="p">(</span><span class="s2">&quot;load&quot;</span><span class="p">,</span> <span class="n">rml_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RayUIAPI.save">
+<a class="viewcode-back" href="../../API.html#raypyng.runner.RayUIAPI.save">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rml_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save an rml file</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rml_path (path): path to save the rml file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmd_io</span><span class="p">(</span><span class="s2">&quot;save&quot;</span><span class="p">,</span> <span class="n">rml_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RayUIAPI.trace">
+<a class="viewcode-back" href="../../API.html#raypyng.runner.RayUIAPI.trace">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">trace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">analyze</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Trace an rml file (must have been loaded before).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            analyze (bool, optional): If True RAY-UI will perform analysis of the rays.</span>
+<span class="sd">                                      Defaults to True.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmd_io</span><span class="p">(</span><span class="s2">&quot;trace&quot;</span><span class="p">,</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">analyze</span> <span class="k">else</span> <span class="s2">&quot;noanalyze&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RayUIAPI.export">
+<a class="viewcode-back" href="../../API.html#raypyng.runner.RayUIAPI.export">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objects</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">export_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Export simulation results from RAY-UI.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            objects (str): string with objects list, e.g. &quot;Dipole,DetectorAtFocus&quot;</span>
+<span class="sd">            parameters (str): stromg with parameters to export,</span>
+<span class="sd">            e.g. &quot;ScalarBeamProperties,ScalarElementProperties&quot;</span>
+<span class="sd">            export_path (str): path where to save the data</span>
+<span class="sd">            data_prefix (str): prefix for the putput files</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="s1">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="n">objects</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">parameters</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">export_path</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">data_prefix</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmd_io</span><span class="p">(</span><span class="s2">&quot;export&quot;</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_cmd_io</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">payload</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="n">cbNewLine</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The _cmd_io is an internal method which helps to execute a RAY-UI command.</span>
+<span class="sd">        All commands are run in the following way:</span>
+<span class="sd">        1. A command is sent to RAY-UI</span>
+<span class="sd">        2. If Ray-UI acknowleges the command it prints it back</span>
+<span class="sd">        3. Some extra output can happen (depending on the command)</span>
+<span class="sd">        4. RAY-UI  writes info &quot;success&quot; or &quot;failed&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cmd (str): string with command (e.g. &quot;load&quot; or &quot;trace&quot;)</span>
+<span class="sd">            payload (str, optional): possible payload for the command (e.g. rml</span>
+<span class="sd">                                    file path for the load command). Defaults to None.</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            RayPyError: in case of an unsupported reply</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True on success, False on RAY-UI side error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">payload</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">payload</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;load&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_simulation_done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">cmdstr</span> <span class="o">=</span> <span class="n">cmd</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">payload</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span><span class="o">.</span><span class="n">_write</span><span class="p">(</span><span class="n">cmdstr</span><span class="p">)</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wait_for_cmd_io</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">cbdataread</span><span class="o">=</span><span class="n">cbNewLine</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="s2">&quot;success&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;trace&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_simulation_done</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">status</span> <span class="o">==</span> <span class="s2">&quot;failed&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">status</span> <span class="o">==</span> <span class="s2">&quot;ed failed&quot;</span>
+        <span class="p">):</span>  <span class="c1"># specical workaround case for the &quot;loaded failed&quot; reply to laod command</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">RayPyError</span><span class="p">(</span><span class="s2">&quot;Got unsupported reply from ray while waiting for command IO&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_wait_for_cmd_io</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cbdataread</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">timecnt</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1"># we shall see cmd twice - once as ACK for the execution</span>
+        <span class="c1"># and once as status return</span>
+        <span class="n">cmd_seen</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span><span class="o">.</span><span class="n">_readline</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">line</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_read_wait_delay</span><span class="p">)</span>
+                <span class="n">timecnt</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_wait_delay</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">cmd</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">cmd_seen</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">cmd_seen</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">cbdataread</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">cbdataread</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">timecnt</span> <span class="o">&gt;</span> <span class="n">timeout</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="s2">&quot;timeout while waiting ray command io&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">line</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Simone Vadilonga, Ruslan Ovsyannikov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

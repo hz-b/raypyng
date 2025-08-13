@@ -398,6 +398,7 @@ To let RAY-UI analyze the results, one has to set:</p>
 </div>
 <section id="analysis-performed-by-ray-ui">
 <h4>Analysis performed by RAY-UI<a class="headerlink" href="#analysis-performed-by-ray-ui" title="Link to this heading"></a></h4>
+<p><strong>This is discouraged, as this approach is very slow.</strong></p>
 <p>If you decided to let RAY-UI do the analysis, you should expect the following files to be
 saved in your simulation folder:</p>
 <ul class="simple">
@@ -419,7 +420,7 @@ you will have a list of files <cite>0_Dipole-ScalarElementProperties.csv</cite><
 <h4>Analysis performed by raypyng<a class="headerlink" href="#analysis-performed-by-raypyng" title="Link to this heading"></a></h4>
 <p>If you decided to let raypyng do the analysis, you should expect the following files to
 be saved in your simulation folder:</p>
-<ul class="simple">
+<ul>
 <li><p>one file for each parameter you set with the values that you passed to the program.
 If for instance, you input the Dipole numberRays, you will find a file called
 <cite>input_param_Dipole_numberRays.dat</cite></p></li>
@@ -431,21 +432,30 @@ you set in <cite>sim.params</cite>, these are the <cite>.rml</cite> files, that 
 If for instance, you exported the <cite>RawRaysOutgoing</cite> of the Dipole, you will
 have a list of files <cite>0_Dipole-RawRaysOutgoing.csv</cite></p></li>
 <li><p>for each <cite>RawRaysOutgoing</cite> file, raypyng calculates some properties,
-and saves a corresponding file, for instance <cite>0_Dipole_analyzed_rays.dat</cite>. Each of these files contains the following information:</p>
-<ul>
+and saves a corresponding file, for instance <cite>0_Dipole_analyzed_rays.dat</cite>.</p></li>
+<li><p>In the simulation folder, all the for each exported element
+is brought together (and averaged in case of more rounds of simulations )
+in one single file. For the dipole, the file is called <cite>Dipole_RawRaysOutgoing.csv</cite>.
+It contains the following columns, beside the input parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Simulation Number</p></li>
 <li><p>SourcePhotonFlux</p></li>
 <li><p>NumberRaysSurvived</p></li>
 <li><p>PercentageRaysSurvived</p></li>
-<li><p>PhotonFlux</p></li>
+<li><p>PhotonEnergy</p></li>
 <li><p>Bandwidth</p></li>
 <li><p>HorizontalFocusFWHM</p></li>
 <li><p>VerticalFocusFWHM</p></li>
+<li><p>PhotonFlux</p></li>
+<li><p>EnergyPerMilPerBw</p></li>
+<li><p>FluxPerMilPerBwPerc</p></li>
+<li><p>FluxPerMilPerBwAbs</p></li>
+<li><p>AXUVCurrentAmp</p></li>
+<li><p>GaAsPCurrentAmp</p></li>
 </ul>
+</div></blockquote>
 </li>
-<li><p>In the simulation folder, all the for each exported element
-is united (and in case of more rounds of simulations averaged)
-in one single file. For the dipole, the file is called <cite>Dipole.dat</cite></p></li>
-<li><p><cite>looper.csv</cite> each simulation and its parameters.</p></li>
 </ul>
 </section>
 </section>
@@ -460,42 +470,7 @@ simulations.</p>
 </section>
 <section id="list-of-available-examples">
 <h2>List of available examples<a class="headerlink" href="#list-of-available-examples" title="Link to this heading"></a></h2>
-<p>In the example folder, the following examples are available:</p>
-<ul class="simple">
-<li><p><a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_rml.py">example_rml.py</a>
-in this example is shown how to read, manipulate and save an rml file.</p></li>
-<li><p><a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_runner.py">example_runner.py</a>
-in this example is shown how to use the RAY-UI API to start RAY-UI, load a file,
-trace it and export the desired results.</p></li>
-<li><p><a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_analyze.py">example_simulation_analyze.py</a> simulate a beamline,
-let Ray-UI do the analysis</p></li>
-<li><p><a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_noanalyze.py">example_simulation_noanalyze.py</a>
-simulate a beamline,
-let raypyng do the analysis</p></li>
-<li><p><a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_eval_noanalyze_and_analyze.py">example_eval_noanalyze_and_analyze.py</a>
-plots the results
-of the two previous simulations</p></li>
-<li><p><a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_Flux.py">example_simulation_Flux.py</a>
-simulations using the flux recipe,
-useful if you intend to simulate the flux of your beamline</p></li>
-<li><p><a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_simulation_RP.py">example_simulation_RP.py</a>
-simulations using the resolving power
-(RP) recipe, useful if you intend to simulate the RP of your beamline.
-The reflectivity of every optical element is switched to 100% and not
-calculated using the substrate and coating(s) material(s). The
-information about the Flux of the beamline is therefore not reliable.</p></li>
-<li><p><a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_beamwaist.py">example_beamwaist.py</a>
-raypyng can plot the beam waist of
-the x-rays across your beamline. It performs simulations using the beam waist recipe,
-and it exports the RawRaysOutgoing file from each optical element. It then uses a
-simple geometrical x-ray tracer to propagate each ray until the next optical
-element and plots the results (both top view and side view). This is still
-experimental and it may fail.</p></li>
-<li><p><a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples/example_rml.py">example_waveHelper.py</a>
-The WaveHelper class can help to inspect a folder produced by <a class="reference external" href="https://www.helmholtz-berlin.de/forschung/oe/wi/undulators/arbeitsgebiete/wave_en.html">WAVE</a>
-and provides a simple API to get the path of the simulation files depending on the harmonic and
-on the energy.</p></li>
-</ul>
+<p>Examples are available at the following link: Examples are available at the following link: <a class="reference external" href="https://github.com/hz-b/raypyng/blob/main/examples">raypyng examples</a>.</p>
 </section>
 </section>
 
