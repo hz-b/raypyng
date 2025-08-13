@@ -14,6 +14,7 @@ class RayProperties:
     def __init__(self, input=None, filename=None, undulator_table=None):
         base_columns = [
             "SourcePhotonFlux",
+            "SourceBandwidth",
             "NumberRaysSurvived",
             "PercentageRaysSurvived",
             "PhotonEnergy",
@@ -304,7 +305,10 @@ class PostProcess:
                 ray_properties.df.loc[0, "SourcePhotonFlux"] = source_photon_flux
                 pass
             else:
-                ray_properties.df.loc[0, "SourcePhotonFlux"] = source_photon_flux
+                ray_properties.df.loc[0, "SourcePhotonFlux"] = (
+                    source_photon_flux * 0.1 / (bw_source / energy * 100)
+                )
+                ray_properties.df.loc[0, "SourceBandwidth"] = bw_source
                 ray_properties.df.loc[0, "NumberRaysSurvived"] = self._extract_intensity(rays)
                 ray_properties.df.loc[0, "PercentageRaysSurvived"] = (
                     self._calculate_percentage_rays(
