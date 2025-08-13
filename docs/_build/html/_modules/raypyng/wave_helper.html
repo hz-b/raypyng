@@ -1,0 +1,259 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>raypyng.wave_helper &mdash; RayPyNG  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            RayPyNG
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../how_to.html">How To Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">RayPyNG</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">raypyng.wave_helper</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for raypyng.wave_helper</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">natsort</span><span class="w"> </span><span class="kn">import</span> <span class="n">natsorted</span>
+
+
+<div class="viewcode-block" id="WaveHelper">
+<a class="viewcode-back" href="../../API.html#raypyng.wave_helper.WaveHelper">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">WaveHelper</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Explore WAVE simulation folder and gives an easy way to convert energies into filenames</span>
+
+<span class="sd">    The class expects the WAVE simulations to be stored in a folder called WAVE.</span>
+<span class="sd">    For instance for an undulator called &#39;U49&#39; and harmonic=3, this filestructure is expected:</span>
+
+<span class="sd">    Wave</span>
+<span class="sd">    ├── U49H1allrayfiles</span>
+<span class="sd">    ├── U49H3allrayfiles</span>
+<span class="sd">    ├── U49H5allrayfiles</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        wave_folder_path (str): the path to the WAVW folder where the WAVE</span>
+<span class="sd">                                simulations are stored</span>
+<span class="sd">        harmonics (int): the number of harmonics present.(If harmonics=2,</span>
+<span class="sd">                            simulations for 1st and 3rd should exist)</span>
+<span class="sd">        undulator (str): the undulator name as indicated in the simulation folders</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wave_folder_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">harmonics</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">undulator</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">wave_folder_path</span> <span class="o">=</span> <span class="n">wave_folder_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">harmonics</span> <span class="o">=</span> <span class="n">harmonics</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">undulator</span> <span class="o">=</span> <span class="n">undulator</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_folders_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_files_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energies_array</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">energies_to_file_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_harmonics_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">folders_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">wave_folder_content</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wave_folder_path</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">wave_folder_content</span><span class="p">:</span>
+            <span class="n">f_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wave_folder_path</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">undulator</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">f_path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;allrayfiles&quot;</span><span class="p">):</span>
+                <span class="n">folders_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f_path</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">folders_list</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_folders_dict</span><span class="p">[</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">ind</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)]</span> <span class="o">=</span> <span class="n">f</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_energies</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">harm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_folders_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">file_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">energies_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">natsorted</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_folders_dict</span><span class="p">[</span><span class="n">harm</span><span class="p">])):</span>
+                <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;fo.dat&quot;</span><span class="p">):</span>
+                    <span class="n">file_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+                    <span class="n">res</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;_(.*)eV_&quot;</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+                    <span class="n">energies_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_files_dict</span><span class="p">[</span><span class="n">harm</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_list</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span><span class="p">[</span><span class="n">harm</span><span class="p">]</span> <span class="o">=</span> <span class="n">energies_list</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_numpy_array_from_energies</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">harm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span><span class="p">[</span><span class="n">harm</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">stop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span><span class="p">[</span><span class="n">harm</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span><span class="p">[</span><span class="n">harm</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span><span class="p">[</span><span class="n">harm</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="o">+</span> <span class="n">step</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span><span class="p">[</span><span class="n">harm</span><span class="p">])</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energies_array</span><span class="p">[</span><span class="n">harm</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="o">+</span> <span class="n">step</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energies_array</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">break</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_energy_to_file_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">harm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_folders_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">energies_keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span><span class="p">[</span><span class="n">harm</span><span class="p">]</span>
+            <span class="n">energy_files</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_files_dict</span><span class="p">[</span><span class="n">harm</span><span class="p">]:</span>
+                <span class="n">energy_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_folders_dict</span><span class="p">[</span><span class="n">harm</span><span class="p">],</span> <span class="n">f</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">energies_to_file_dict</span><span class="p">[</span><span class="n">harm</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">energies_keys</span><span class="p">,</span> <span class="n">energy_files</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_explore_wave_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_find_harmonics_folder</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_find_energies</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_make_energy_to_file_dict</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;self._harmonic_to_folders_dict </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_folders_dict</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;self._harmonic_to_energy_files_dict </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_files_dict</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;self._harmonic_to_energy_dict </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;self._harmonic_to_energies_array </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energies_array</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="WaveHelper.report_available_energies">
+<a class="viewcode-back" href="../../API.html#raypyng.wave_helper.WaveHelper.report_available_energies">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">report_available_energies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Report about the availbale energies and explore the WAVE folder</span>
+
+
+<span class="sd">        Args:</span>
+<span class="sd">            verbose (bool, optional): If Ture a report about the neergie is printed.</span>
+<span class="sd">                                        Defaults to True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_explore_wave_folder</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;I found the following harmonics: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energies_array</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;the energy points for each harmonic are equally spaced&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">harm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Harmonic number </span><span class="si">{</span><span class="n">harm</span><span class="si">}</span><span class="s2">, available energies:&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;start </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span><span class="p">[</span><span class="n">harm</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;stop </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span><span class="p">[</span><span class="n">harm</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;step </span><span class="se">\</span>
+<span class="s2">                        </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span><span class="p">[</span><span class="n">harm</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span><span class="p">[</span><span class="n">harm</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">harm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Harmonic number </span><span class="si">{</span><span class="n">harm</span><span class="si">}</span><span class="s2">, available energies:&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_harmonic_to_energy_dict</span><span class="p">[</span><span class="n">harm</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="WaveHelper.convert_energies_to_file_list">
+<a class="viewcode-back" href="../../API.html#raypyng.wave_helper.WaveHelper.convert_energies_to_file_list">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_energies_to_file_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">harmonic</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">energies</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Takes the harmonic and a list of energies and returns the files location</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            harmonic (int): the harmonic that you want to have</span>
+<span class="sd">            energies (list): list of int, the x-ray energies</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If an energy is not present in the WAVE simulation folder.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: list of absolute paths for each energy given as an input</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">en_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">en_to_file_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energies_to_file_dict</span><span class="p">[</span><span class="n">harmonic</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">en</span> <span class="ow">in</span> <span class="n">energies</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">en</span> <span class="ow">in</span> <span class="n">en_to_file_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">en_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">en_to_file_dict</span><span class="p">[</span><span class="n">en</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;There is no file for harmonic </span><span class="si">{</span><span class="n">harmonic</span><span class="si">}</span><span class="s2"> energy </span><span class="si">{</span><span class="n">en</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">en_list</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Simone Vadilonga, Ruslan Ovsyannikov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

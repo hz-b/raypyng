@@ -1,0 +1,846 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>raypyng.postprocessing &mdash; RayPyNG  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            RayPyNG
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../how_to.html">How To Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">RayPyNG</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">raypyng.postprocessing</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for raypyng.postprocessing</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">natsort</span><span class="w"> </span><span class="kn">import</span> <span class="n">natsorted</span><span class="p">,</span> <span class="n">ns</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.diodes</span><span class="w"> </span><span class="kn">import</span> <span class="n">AXUVDiode</span><span class="p">,</span> <span class="n">GaASPDiode</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.rml</span><span class="w"> </span><span class="kn">import</span> <span class="n">RMLFile</span>
+
+
+<div class="viewcode-block" id="RayProperties">
+<a class="viewcode-back" href="../../API.html#raypyng.postprocessing.RayProperties">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RayProperties</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">undulator_table</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">base_columns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;SourcePhotonFlux&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;NumberRaysSurvived&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PercentageRaysSurvived&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PhotonEnergy&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Bandwidth&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;HorizontalFocusFWHM&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;VerticalFocusFWHM&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;HorizontalCenter&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;VerticalCenter&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">additional_columns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;PhotonFlux&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;EnergyPerMilPerBw&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;FluxPerMilPerBwPerc&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;FluxPerMilPerBwAbs&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;AXUVCurrentAmp&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;GaAsPCurrentAmp&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">base_columns</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># Use copy to avoid modifying the original list</span>
+        <span class="k">if</span> <span class="n">undulator_table</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">additional_column</span> <span class="ow">in</span> <span class="n">additional_columns</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">additional_column</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;EnergyPerMilPerBw&quot;</span><span class="p">,</span> <span class="s2">&quot;FluxPerMilPerBwPerc&quot;</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">additional_column</span><span class="p">)</span>  <span class="c1"># Only append once per your logic</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">undulator_table</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">additional_column</span><span class="si">}{</span><span class="nb">int</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ind</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">additional_column</span> <span class="ow">in</span> <span class="n">additional_columns</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">additional_column</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">input</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Initialize an empty DataFrame with specified columns</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">col</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">})</span>
+
+<div class="viewcode-block" id="RayProperties.save">
+<a class="viewcode-back" href="../../API.html#raypyng.postprocessing.RayProperties.save">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save current object into a CSV file.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RayProperties.concat">
+<a class="viewcode-back" href="../../API.html#raypyng.postprocessing.RayProperties.concat">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">concat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Concatenates another RayProperties object to current.&quot;&quot;&quot;</span>
+        <span class="n">concatenated_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">df</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">RayProperties</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">concatenated_df</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;String representation for easy viewing.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="PostProcess">
+<a class="viewcode-back" href="../../API.html#raypyng.postprocessing.PostProcess">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PostProcess</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;class to post-process the data.</span>
+
+<span class="sd">    It works only if the exported data are RawRaysOutgoing</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">format_saved_files</span> <span class="o">=</span> <span class="s2">&quot;.dat&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axuv_diode</span> <span class="o">=</span> <span class="n">AXUVDiode</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gaasp_diode</span> <span class="o">=</span> <span class="n">GaASPDiode</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_list_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">contain_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">end_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        List all the files in dir_path that contain a certain string and/or</span>
+<span class="sd">        end with a specified string.</span>
+<span class="sd">        At least one of contain_str or end_filename must be provided.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dir_path (str): Path to a folder.</span>
+<span class="sd">            contain_str (str, optional): String that must be contained in the filenames.</span>
+<span class="sd">                                        Defaults to None.</span>
+<span class="sd">            end_filename (str, optional): String that the filenames must end with.</span>
+<span class="sd">                                        Defaults to None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of files in dir_path that meet the criteria.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">contain_str</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">end_filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;At least one of &#39;contain_str&#39; or &#39;end_filename&#39; must be provided.&quot;</span><span class="p">)</span>
+
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># List to store files</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">dir_path</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">contain_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">contain_str</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">end_filename</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">end_filename</span><span class="p">):</span>
+                    <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_path</span><span class="p">,</span> <span class="n">file</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">end_filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">end_filename</span><span class="p">):</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_path</span><span class="p">,</span> <span class="n">file</span><span class="p">))</span>
+
+        <span class="c1"># Assuming natsorted and ns are properly imported and available in the context</span>
+        <span class="k">return</span> <span class="n">natsorted</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">alg</span><span class="o">=</span><span class="n">ns</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_fwhm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rays</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the fwhm of the rays.</span>
+
+<span class="sd">        If less than 100 rays are passed check what is the standard deviation of the array.</span>
+<span class="sd">        Else, make histogram with 30 bins and check when the array falls at less than half max</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rays (np:array): the energy of the x-rays</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: fwhm</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># if I have less than 100 rays calculate the standard deviation</span>
+        <span class="k">if</span> <span class="n">rays</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">rays</span><span class="p">)</span>
+        <span class="c1"># else actually look for the fwhm</span>
+        <span class="c1"># iterate over the number of bins to amke sure we get</span>
+        <span class="c1"># a result that makes sense, check if fwhm is negative</span>
+        <span class="k">for</span> <span class="n">bins</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">30000</span><span class="p">,</span> <span class="mi">300000</span><span class="p">]:</span>
+            <span class="c1"># make an histogram, get back a tuple of values and bins</span>
+            <span class="n">gh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">rays</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">gh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">x_bins</span> <span class="o">=</span> <span class="n">gh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="c1"># take the average of each pari of bins to get the middle</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_bins</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">x_bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+
+            <span class="c1"># Find the maximum y value</span>
+            <span class="n">max_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+            <span class="c1"># check where y becomes higher that max_y/2</span>
+            <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">y</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">max_y</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">]</span>
+            <span class="n">fwhm</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">fwhm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="c1"># if fwhm still negative fall back to use np.std</span>
+        <span class="k">if</span> <span class="n">fwhm</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">fwhm</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">rays</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fwhm</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_intensity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rays</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;calculate how many rays there are</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rays (np.array): contains rays information</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">rays</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<div class="viewcode-block" id="PostProcess.extract_nrays_from_source">
+<a class="viewcode-back" href="../../API.html#raypyng.postprocessing.PostProcess.extract_nrays_from_source">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extract_nrays_from_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rml_filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract photon flux from rml file, find source automatically</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rml_filename (str): the rml file to use to extract the photon flux</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: the photon flux</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">RMLFile</span><span class="p">(</span><span class="n">rml_filename</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">oe</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">beamline</span><span class="o">.</span><span class="n">children</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">oe</span><span class="p">,</span> <span class="s2">&quot;numberRays&quot;</span><span class="p">):</span>
+                <span class="n">source</span> <span class="o">=</span> <span class="n">oe</span>
+                <span class="k">break</span>
+        <span class="n">nrays</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">numberRays</span><span class="o">.</span><span class="n">cdata</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">flux</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">photonFlux</span><span class="o">.</span><span class="n">cdata</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">flux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">flux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="k">return</span> <span class="n">flux</span><span class="p">,</span> <span class="n">nrays</span></div>
+
+
+<div class="viewcode-block" id="PostProcess.extract_bw_from_source">
+<a class="viewcode-back" href="../../API.html#raypyng.postprocessing.PostProcess.extract_bw_from_source">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extract_bw_from_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rml_filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract photon energy from rml file, find source automatically</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rml_filename (str): the rml file to use to extract the photon flux</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: the photon energy</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">RMLFile</span><span class="p">(</span><span class="n">rml_filename</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">oe</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">beamline</span><span class="o">.</span><span class="n">children</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">oe</span><span class="p">,</span> <span class="s2">&quot;numberRays&quot;</span><span class="p">):</span>
+                <span class="n">source</span> <span class="o">=</span> <span class="n">oe</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">source</span><span class="o">.</span><span class="n">energySpreadType</span><span class="o">.</span><span class="n">comment</span> <span class="o">!=</span> <span class="s2">&quot;whiteband&quot;</span>
+            <span class="ow">and</span> <span class="n">source</span><span class="o">.</span><span class="n">energySpreadType</span><span class="o">.</span><span class="n">comment</span> <span class="o">!=</span> <span class="s2">&quot;white band&quot;</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="n">bandwidth</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">energySpread</span><span class="o">.</span><span class="n">cdata</span><span class="p">)</span>
+        <span class="c1"># most of the sources have the energySpreadUnit</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="s2">&quot;energySpreadUnit&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">source</span><span class="o">.</span><span class="n">energySpreadUnit</span><span class="o">.</span><span class="n">comment</span> <span class="o">==</span> <span class="s2">&quot;%&quot;</span><span class="p">:</span>
+                <span class="n">energy</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">photonEnergy</span><span class="o">.</span><span class="n">cdata</span><span class="p">)</span>
+                <span class="n">bandwidth</span> <span class="o">=</span> <span class="n">energy</span> <span class="o">*</span> <span class="n">bandwidth</span> <span class="o">/</span> <span class="mi">100</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="c1"># but not the undulatorFile, so in that case we skip the control</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">energy</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">photonEnergy</span><span class="o">.</span><span class="n">cdata</span><span class="p">)</span>
+            <span class="n">bandwidth</span> <span class="o">=</span> <span class="n">energy</span> <span class="o">*</span> <span class="n">bandwidth</span> <span class="o">/</span> <span class="mi">100</span>
+        <span class="k">return</span> <span class="n">bandwidth</span></div>
+
+
+<div class="viewcode-block" id="PostProcess.extract_energy_from_source">
+<a class="viewcode-back" href="../../API.html#raypyng.postprocessing.PostProcess.extract_energy_from_source">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extract_energy_from_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rml_filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract photon energy from rml file, find source automatically</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rml_filename (str): the rml file to use to extract the photon flux</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: the photon energy</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">RMLFile</span><span class="p">(</span><span class="n">rml_filename</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">oe</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">beamline</span><span class="o">.</span><span class="n">children</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">oe</span><span class="p">,</span> <span class="s2">&quot;numberRays&quot;</span><span class="p">):</span>
+                <span class="n">source</span> <span class="o">=</span> <span class="n">oe</span>
+                <span class="k">break</span>
+        <span class="n">energy</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">photonEnergy</span><span class="o">.</span><span class="n">cdata</span>
+
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">energy</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PostProcess.postprocess_RawRays">
+<a class="viewcode-back" href="../../API.html#raypyng.postprocessing.PostProcess.postprocess_RawRays">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">postprocess_RawRays</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">exported_element</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">exported_object</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">dir_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">sim_number</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">rml_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">remove_rawrays</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">undulator_table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">efficiency</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        PostProcess routine of the RawRaysOutgoing extracted files.</span>
+
+<span class="sd">        The method looks in the folder `dir_path` for a file with the filename:</span>
+
+<span class="sd">            ``filename = os.path.join(dir_path, sim_number + exported_element +</span>
+<span class="sd">            &#39;-&#39; + exported_object + &#39;.csv&#39;)``</span>
+
+<span class="sd">        For each file, it calculates the number of rays, bandwidth, horizontal and vertical</span>
+<span class="sd">        focus size. It saves the results in an array formatted as:</span>
+
+<span class="sd">            ``[n_rays, bandwidth, hor_focus, vert_focus]``</span>
+
+<span class="sd">        The array is then saved to:</span>
+
+<span class="sd">            ``os.path.join(dir_path, sim_number + exported_element + &#39;_analyzed_rays.npy&#39;)``</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exported_element (list, optional): List of exported element names as strings.</span>
+<span class="sd">                Defaults to None.</span>
+
+<span class="sd">            exported_object (str, optional): The exported object, tested only with RawRaysOutgoing.</span>
+<span class="sd">                Defaults to None.</span>
+
+<span class="sd">            dir_path (str, optional): Folder where the file to process is located.</span>
+<span class="sd">                Defaults to None.</span>
+
+<span class="sd">            sim_number (str, optional): Prefix of the file, typically the simulation number with a</span>
+<span class="sd">                prepended `_`, e.g., ``0_``. Defaults to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">suffix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">suffix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;_&quot;</span><span class="p">:</span>
+                <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">suffix</span>
+        <span class="n">source_photon_flux</span><span class="p">,</span> <span class="n">source_n_rays</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_nrays_from_source</span><span class="p">(</span><span class="n">rml_filename</span><span class="p">)</span>
+        <span class="c1"># deal with the case that the source has no photon flux</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">source_photon_flux</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">source_photon_flux</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="n">source_photon_flux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">source_n_rays</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">source_n_rays</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">dir_path</span><span class="p">,</span> <span class="n">sim_number</span> <span class="o">+</span> <span class="n">exported_element</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">exported_object</span> <span class="o">+</span> <span class="s2">&quot;.csv&quot;</span>
+        <span class="p">)</span>
+        <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+            <span class="n">rays</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">skip_header</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ray_properties</span> <span class="o">=</span> <span class="n">RayProperties</span><span class="p">(</span><span class="n">undulator_table</span><span class="o">=</span><span class="n">undulator_table</span><span class="p">)</span>
+        <span class="c1"># account for the case that no rays survived</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_energy_from_source</span><span class="p">(</span><span class="n">rml_filename</span><span class="p">)</span>
+            <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;PhotonEnergy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">energy</span>
+            <span class="n">bw_source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_bw_from_source</span><span class="p">(</span><span class="n">rml_filename</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rays</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># if no rays survived</span>
+                <span class="c1"># source photon flux</span>
+                <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;SourcePhotonFlux&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">source_photon_flux</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;SourcePhotonFlux&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">source_photon_flux</span>
+                <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;NumberRaysSurvived&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_intensity</span><span class="p">(</span><span class="n">rays</span><span class="p">)</span>
+                <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;PercentageRaysSurvived&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_percentage_rays</span><span class="p">(</span>
+                        <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;NumberRaysSurvived&quot;</span><span class="p">],</span>
+                        <span class="n">source_n_rays</span><span class="p">,</span>
+                        <span class="n">efficiency</span><span class="o">=</span><span class="n">efficiency</span><span class="p">,</span>
+                        <span class="n">photon_energy</span><span class="o">=</span><span class="n">energy</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+                <span class="n">bw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_fwhm</span><span class="p">(</span><span class="n">rays</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">exported_element</span><span class="si">}</span><span class="s2">_EN&quot;</span><span class="p">])</span>
+                <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Bandwidth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bw</span>
+                <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;HorizontalFocusFWHM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_fwhm</span><span class="p">(</span>
+                    <span class="n">rays</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">exported_element</span><span class="si">}</span><span class="s2">_OX&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;VerticalFocusFWHM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_fwhm</span><span class="p">(</span>
+                    <span class="n">rays</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">exported_element</span><span class="si">}</span><span class="s2">_OY&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;HorizontalCenter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
+                    <span class="n">rays</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">exported_element</span><span class="si">}</span><span class="s2">_OX&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;VerticalCenter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rays</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">exported_element</span><span class="si">}</span><span class="s2">_OY&quot;</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">undulator_table</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">photon_flux</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">source_photon_flux</span>
+                        <span class="o">/</span> <span class="mi">100</span>
+                        <span class="o">*</span> <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;PercentageRaysSurvived&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;PhotonFlux&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">photon_flux</span>
+                    <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;EnergyPerMilPerBw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_energy_permil_perbw</span><span class="p">(</span>
+                        <span class="n">bw</span><span class="p">,</span> <span class="n">bw_source</span>
+                    <span class="p">)</span>
+                    <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;FluxPerMilPerBwPerc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flux_permil_perbw</span><span class="p">(</span>
+                        <span class="n">bw</span><span class="p">,</span> <span class="n">bw_source</span><span class="p">,</span> <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;PercentageRaysSurvived&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;FluxPerMilPerBwAbs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flux_permil_perbw</span><span class="p">(</span>
+                        <span class="n">bw</span><span class="p">,</span> <span class="n">bw_source</span><span class="p">,</span> <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;PhotonFlux&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;AXUVCurrentAmp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">axuv_diode</span><span class="o">.</span><span class="n">convert_photons_to_amp</span><span class="p">(</span><span class="n">energy</span><span class="p">,</span> <span class="n">photon_flux</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;GaAsPCurrentAmp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">gaasp_diode</span><span class="o">.</span><span class="n">convert_photons_to_amp</span><span class="p">(</span><span class="n">energy</span><span class="p">,</span> <span class="n">photon_flux</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">undulator_table</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)):</span>
+                        <span class="n">harmonic</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">ind</span> <span class="o">*</span> <span class="mi">2</span>
+                        <span class="n">photon_flux</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_flux_undulator_table</span><span class="p">(</span>
+                            <span class="n">energy</span><span class="p">,</span>
+                            <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;PercentageRaysSurvived&quot;</span><span class="p">],</span>
+                            <span class="n">undulator_table</span><span class="p">,</span>
+                            <span class="n">harmonic</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;PhotonFlux</span><span class="si">{</span><span class="n">harmonic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">photon_flux</span>
+                        <span class="k">if</span> <span class="n">ind</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;EnergyPerMilPerBw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">_energy_permil_perbw</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="n">bw_source</span><span class="p">)</span>
+                            <span class="p">)</span>
+                            <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;FluxPerMilPerBwPerc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">_flux_permil_perbw</span><span class="p">(</span>
+                                    <span class="n">bw</span><span class="p">,</span>
+                                    <span class="n">bw_source</span><span class="p">,</span>
+                                    <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;PercentageRaysSurvived&quot;</span><span class="p">],</span>
+                                <span class="p">)</span>
+                            <span class="p">)</span>
+                        <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;FluxPerMilPerBwAbs</span><span class="si">{</span><span class="n">harmonic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_flux_permil_perbw</span><span class="p">(</span>
+                                <span class="n">bw</span><span class="p">,</span> <span class="n">bw_source</span><span class="p">,</span> <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;PhotonFlux</span><span class="si">{</span><span class="n">harmonic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
+                        <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;AXUVCurrentAmp</span><span class="si">{</span><span class="n">harmonic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">axuv_diode</span><span class="o">.</span><span class="n">convert_photons_to_amp</span><span class="p">(</span><span class="n">energy</span><span class="p">,</span> <span class="n">photon_flux</span><span class="p">)</span>
+                        <span class="p">)</span>
+                        <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;GaAsPCurrentAmp</span><span class="si">{</span><span class="n">harmonic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">gaasp_diode</span><span class="o">.</span><span class="n">convert_photons_to_amp</span><span class="p">(</span><span class="n">energy</span><span class="p">,</span> <span class="n">photon_flux</span><span class="p">)</span>
+                        <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="c1"># print(f&#39;error: {e}&#39;)</span>
+            <span class="c1"># traceback.print_exc()</span>
+            <span class="c1"># tb_str = traceback.format_exc()</span>
+            <span class="c1"># print(tb_str)</span>
+            <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;SourcePhotonFlux&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;NumberRaysSurvived&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;PercentageRaysSurvived&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Bandwidth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;HorizontalFocusFWHM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;VerticalFocusFWHM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;HorizontalCenter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;VerticalCenter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="k">if</span> <span class="n">undulator_table</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;PhotonFlux&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;EnergyPerMilPerBw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;FluxPerMilPerBwPerc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;FluxPerMilPerBwAbs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;AXUVCurrentAmp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;GaAsPCurrentAmp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">undulator_table</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)):</span>
+                    <span class="n">harmonic</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">ind</span> <span class="o">*</span> <span class="mi">2</span>
+                    <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;PhotonFlux</span><span class="si">{</span><span class="n">harmonic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                    <span class="k">if</span> <span class="n">ind</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;EnergyPerMilPerBw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                        <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;FluxPerMilPerBwPerc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                    <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;FluxPerMilPerBwAbs</span><span class="si">{</span><span class="n">harmonic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                    <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;AXUVCurrentAmp</span><span class="si">{</span><span class="n">harmonic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                    <span class="n">ray_properties</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;GaAsPCurrentAmp</span><span class="si">{</span><span class="n">harmonic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">new_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">dir_path</span><span class="p">,</span> <span class="n">sim_number</span> <span class="o">+</span> <span class="n">exported_element</span> <span class="o">+</span> <span class="s2">&quot;_analyzed_rays&quot;</span> <span class="o">+</span> <span class="n">suffix</span> <span class="o">+</span> <span class="s2">&quot;.dat&quot;</span>
+        <span class="p">)</span>
+        <span class="n">ray_properties</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">new_filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">remove_rawrays</span><span class="p">:</span>
+            <span class="n">remove_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_flux_undulator_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">energy</span><span class="p">,</span> <span class="n">percent</span><span class="p">,</span> <span class="n">undulator_table</span><span class="p">,</span> <span class="n">harmonic</span><span class="p">):</span>
+        <span class="n">energy_column</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Energy</span><span class="si">{</span><span class="n">harmonic</span><span class="si">}</span><span class="s2">[eV]&quot;</span>
+        <span class="n">photons_column</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Photons</span><span class="si">{</span><span class="n">harmonic</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="c1"># Ensure the energy values are sorted, which is a requirement for np.interp</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">undulator_table</span><span class="p">[</span><span class="n">energy_column</span><span class="p">]</span><span class="o">.</span><span class="n">is_monotonic_increasing</span><span class="p">:</span>
+            <span class="n">undulator_table</span> <span class="o">=</span> <span class="n">undulator_table</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">energy_column</span><span class="p">)</span>
+
+        <span class="c1"># Use numpy to interpolate the photon flux at the given energy</span>
+        <span class="n">source_photon_flux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">energy</span><span class="p">,</span>
+            <span class="n">xp</span><span class="o">=</span><span class="n">undulator_table</span><span class="p">[</span><span class="n">energy_column</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>  <span class="c1"># Convert to numpy array for np.interp</span>
+            <span class="n">fp</span><span class="o">=</span><span class="n">undulator_table</span><span class="p">[</span><span class="n">photons_column</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>  <span class="c1"># Convert to numpy array for np.interp</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Calculate the flux based on the percentage</span>
+        <span class="n">flux</span> <span class="o">=</span> <span class="n">source_photon_flux</span> <span class="o">*</span> <span class="p">(</span><span class="n">percent</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">flux</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_flux_permil_perbw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bandwidth</span><span class="p">,</span> <span class="n">source_bandwidth</span><span class="p">,</span> <span class="n">photon_flux</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">bandwidth</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">photon_flux</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="n">bandwidth</span> <span class="o">*</span> <span class="n">source_bandwidth</span>
+            <span class="c1"># return energy/1000/bandwidth*photon_flux.astype(float)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_energy_permil_perbw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bw</span><span class="p">,</span> <span class="n">source_bandwidth</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">bw</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">source_bandwidth</span> <span class="o">/</span> <span class="n">bw</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_percentage_rays</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">n_rays_survived</span><span class="p">,</span> <span class="n">source_n_rays</span><span class="p">,</span> <span class="n">efficiency</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">photon_energy</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the percentage of rays that survived.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            n__rays_survived (int): Number of rays that survived.</span>
+<span class="sd">            source_n_rays (int): Total number of rays from the source.</span>
+<span class="sd">            efficiency (float, optional): Efficiency factor. Defaults to None.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Percentage of rays that survived.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">perc</span> <span class="o">=</span> <span class="n">n_rays_survived</span> <span class="o">/</span> <span class="n">source_n_rays</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="k">if</span> <span class="n">efficiency</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">photon_energy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Ensure the DataFrame is sorted by &#39;Energy[eV]&#39; for interpolation</span>
+            <span class="n">efficiency</span> <span class="o">=</span> <span class="n">efficiency</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;Energy[eV]&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Perform linear interpolation to find the efficiency at the given photon energy</span>
+            <span class="n">interpolated_efficiency</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
+                <span class="n">photon_energy</span><span class="p">,</span> <span class="n">efficiency</span><span class="p">[</span><span class="s2">&quot;Energy[eV]&quot;</span><span class="p">],</span> <span class="n">efficiency</span><span class="p">[</span><span class="s2">&quot;Efficiency&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Multiply the percentage by the interpolated efficiency</span>
+            <span class="n">perc</span> <span class="o">*=</span> <span class="n">interpolated_efficiency</span>
+
+        <span class="k">return</span> <span class="n">perc</span>
+
+<div class="viewcode-block" id="PostProcess.cleanup">
+<a class="viewcode-back" href="../../API.html#raypyng.postprocessing.PostProcess.cleanup">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cleanup</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dir_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">repeat</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">exp_elements</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">exported_file_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reads all the results of the postprocessing process and summarize</span>
+<span class="sd">        them in a single file for each exported object.</span>
+
+<span class="sd">        This functions reads all the temporary files created by :code:`self.postprocess_RawRays()`</span>
+<span class="sd">        saves one file for each exported element in dir_path, and deletes the temporary files.</span>
+<span class="sd">        If more than one round of simulations was done, the values are averaged.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dir_path (str, optional): The path to the folder to cleanup. Defaults to None.</span>
+<span class="sd">            repeat (int, optional): number of rounds of simulations. Defaults to 1.</span>
+<span class="sd">            exp_elements (list, optional): the exported elements names as str. Defaults to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">exp_elements</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">exp</span> <span class="ow">in</span> <span class="n">exported_file_type</span><span class="p">:</span>
+                <span class="k">for</span> <span class="nb">round</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repeat</span><span class="p">):</span>
+                    <span class="n">dir_path_round</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_path</span><span class="p">,</span> <span class="s2">&quot;round_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">))</span>
+                    <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list_files</span><span class="p">(</span>
+                        <span class="n">dir_path_round</span><span class="p">,</span> <span class="n">d</span> <span class="o">+</span> <span class="s2">&quot;_analyzed_rays_&quot;</span> <span class="o">+</span> <span class="n">exp</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_saved_files</span>
+                    <span class="p">)</span>
+                    <span class="k">for</span> <span class="n">f_ind</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="nb">round</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">f_ind</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># first round, first file, create</span>
+                            <span class="n">analyzed_rays</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="nb">round</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">f_ind</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># first round, following files, concatenate</span>
+                            <span class="n">tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                            <span class="n">analyzed_rays</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">analyzed_rays</span><span class="p">,</span> <span class="n">tmp</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="nb">round</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># other rounds: sum the values</span>
+                            <span class="n">tmp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">analyzed_rays</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">],</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+                                    <span class="n">analyzed_rays</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">f_ind</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">])</span>
+                        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+                <span class="k">def</span><span class="w"> </span><span class="nf">divide_numeric_rows</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+                    <span class="c1"># Check if all elements in the row are of a numeric type</span>
+                    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)))</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                        <span class="k">return</span> <span class="n">row</span> <span class="o">/</span> <span class="n">repeat</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">row</span>
+
+                <span class="n">analyzed_rays</span> <span class="o">=</span> <span class="n">analyzed_rays</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">divide_numeric_rows</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># Apply the function across the DataFrame</span>
+                <span class="c1"># save the file</span>
+                <span class="n">fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir_path</span><span class="p">,</span> <span class="n">d</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">exp</span> <span class="o">+</span> <span class="s2">&quot;.csv&quot;</span><span class="p">)</span>
+                <span class="n">analyzed_rays</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fn</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="PostProcessAnalyzed">
+<a class="viewcode-back" href="../../API.html#raypyng.postprocessing.PostProcessAnalyzed">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PostProcessAnalyzed</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;class to analyze the data exported by RAY-UI&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="PostProcessAnalyzed.retrieve_flux_beamline">
+<a class="viewcode-back" href="../../API.html#raypyng.postprocessing.PostProcessAnalyzed.retrieve_flux_beamline">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">retrieve_flux_beamline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder_name</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">oe</span><span class="p">,</span> <span class="n">nsimulations</span><span class="p">,</span> <span class="n">rounds</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">current</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract the flux from ScalarBeamProperties and from ScalarElementProperties.</span>
+
+<span class="sd">        This function takes as arguments the name of the</span>
+<span class="sd">        simulation folder, the exported objet in RAY-UI and there</span>
+<span class="sd">        number of simulations and returns the flux at the optical element in</span>
+<span class="sd">        percentage and in number of photons, and the flux produced</span>
+<span class="sd">        by the dipole.</span>
+<span class="sd">        It requires ScalarBeamProperties to be exported for the desired optical element,</span>
+<span class="sd">        if the source is a dipole it requires ScalarElementProperties to be exported for the Dipole</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            folder_name (str): the path to the folder where the simulations are</span>
+<span class="sd">            source (str): the source name</span>
+<span class="sd">            oe (str): the optical element name</span>
+<span class="sd">            nsimulations (int): the number of simulations</span>
+<span class="sd">            rounds (int): the number of rounds of simulations</span>
+<span class="sd">            current (float, optional): the ring current in Ampere. Defaults to 0.3.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            if the source is a Dipole:</span>
+<span class="sd">                photon_flux (np.array) : the photon flux at the optical element</span>
+<span class="sd">                flux_percent (np.array) : the photon flux in percentage relative to the source</span>
+<span class="sd">                source_Photon_flux (np.array) : the photon flux of the source</span>
+<span class="sd">            else:</span>
+<span class="sd">                flux_percent (np.array) : the photon flux in percentage relative to the source</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scale_factor</span> <span class="o">=</span> <span class="n">current</span> <span class="o">/</span> <span class="mf">0.1</span>
+        <span class="n">flux_percent</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nsimulations</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">source</span> <span class="o">==</span> <span class="s2">&quot;Dipole&quot;</span><span class="p">:</span>
+            <span class="n">flux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nsimulations</span><span class="p">)</span>
+            <span class="n">flux_dipole</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nsimulations</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsimulations</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rounds</span><span class="p">):</span>
+                    <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span>
+                        <span class="n">folder_name</span>
+                        <span class="o">+</span> <span class="s2">&quot;/round_&quot;</span>
+                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="s2">&quot;_&quot;</span>
+                        <span class="o">+</span> <span class="n">oe</span>
+                        <span class="o">+</span> <span class="s2">&quot;-ScalarBeamProperties.csv&quot;</span><span class="p">,</span>
+                        <span class="n">skiprows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">flux_percent</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+=</span> <span class="n">temp</span><span class="p">[</span><span class="mi">25</span><span class="p">]</span> <span class="o">/</span> <span class="n">rounds</span>
+                    <span class="k">if</span> <span class="n">source</span> <span class="o">==</span> <span class="s2">&quot;Dipole&quot;</span><span class="p">:</span>
+                        <span class="n">dipole_abs_flux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span>
+                            <span class="n">folder_name</span>
+                            <span class="o">+</span> <span class="s2">&quot;/round_&quot;</span>
+                            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+                            <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+                            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                            <span class="o">+</span> <span class="s2">&quot;_Dipole-ScalarElementProperties.csv&quot;</span><span class="p">,</span>
+                            <span class="n">skiprows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="n">flux</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">dipole_abs_flux</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">*</span> <span class="n">temp</span><span class="p">[</span><span class="mi">25</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span> <span class="o">/</span> <span class="n">rounds</span>
+                        <span class="n">flux_dipole</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dipole_abs_flux</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">/</span> <span class="n">rounds</span>
+
+            <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;######################&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="n">n</span><span class="p">,</span>
+                    <span class="s2">&quot;NOT FOUND:</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="o">+</span> <span class="n">folder_name</span>
+                    <span class="o">+</span> <span class="s2">&quot;/round_&quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="s2">&quot;_&quot;</span>
+                    <span class="o">+</span> <span class="n">oe</span>
+                    <span class="o">+</span> <span class="s2">&quot;-ScalarBeamProperties.csv&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">continue</span>
+        <span class="n">flux_percent</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flux_percent</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">source</span> <span class="o">==</span> <span class="s2">&quot;Dipole&quot;</span><span class="p">:</span>
+            <span class="n">flux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flux</span><span class="p">)</span>
+            <span class="n">flux_dipole</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flux_dipole</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">flux</span> <span class="o">*</span> <span class="n">scale_factor</span><span class="p">,</span> <span class="n">flux_percent</span><span class="p">,</span> <span class="n">flux_dipole</span> <span class="o">*</span> <span class="n">scale_factor</span>
+        <span class="k">return</span> <span class="n">flux_percent</span> <span class="o">*</span> <span class="n">scale_factor</span></div>
+
+
+<div class="viewcode-block" id="PostProcessAnalyzed.retrieve_bw_and_focusSize">
+<a class="viewcode-back" href="../../API.html#raypyng.postprocessing.PostProcessAnalyzed.retrieve_bw_and_focusSize">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">retrieve_bw_and_focusSize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">oe</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">nsimulations</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">rounds</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract the bandwidth and focus size from ScalarBeamProperties of an object.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            folder_name (str): the path to the folder where the simulations are</span>
+<span class="sd">            oe (str): the optical element name</span>
+<span class="sd">            nsimulations (int): the number of simulations</span>
+<span class="sd">            rounds (int): the number of rounds of simulations</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bw np.array: the bandwidth</span>
+<span class="sd">            foc_x np.array: the horizontal focus</span>
+<span class="sd">            foc_y np.array: the vertical focus</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bw_ind</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="n">fx_ind</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">fy_ind</span> <span class="o">=</span> <span class="mi">7</span>
+        <span class="n">bw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nsimulations</span><span class="p">)</span>
+        <span class="n">foc_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nsimulations</span><span class="p">)</span>
+        <span class="n">foc_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nsimulations</span><span class="p">)</span>
+        <span class="n">n0</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rounds</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsimulations</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span>
+                        <span class="n">folder_name</span>
+                        <span class="o">+</span> <span class="s2">&quot;/round_&quot;</span>
+                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="s2">&quot;_&quot;</span>
+                        <span class="o">+</span> <span class="n">oe</span>
+                        <span class="o">+</span> <span class="s2">&quot;-ScalarBeamProperties.csv&quot;</span><span class="p">,</span>
+                        <span class="n">skiprows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">bw</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="n">bw_ind</span><span class="p">])</span> <span class="o">/</span> <span class="n">rounds</span>
+                    <span class="n">foc_x</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="n">fx_ind</span><span class="p">])</span> <span class="o">/</span> <span class="n">rounds</span>
+                    <span class="n">foc_y</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="n">fy_ind</span><span class="p">])</span> <span class="o">/</span> <span class="n">rounds</span>
+                    <span class="k">if</span> <span class="n">n0</span> <span class="o">==</span> <span class="p">(</span><span class="n">nsimulations</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                        <span class="n">n0</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">n0</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;######################&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;NOT FOUND:</span><span class="se">\n</span><span class="s2">&quot;</span>
+                        <span class="o">+</span> <span class="n">folder_name</span>
+                        <span class="o">+</span> <span class="s2">&quot;/round_&quot;</span>
+                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="s2">&quot;_&quot;</span>
+                        <span class="o">+</span> <span class="n">oe</span>
+                        <span class="o">+</span> <span class="s2">&quot;-ScalarBeamProperties.csv&quot;</span>
+                    <span class="p">)</span>
+                    <span class="n">bw</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">0</span>
+                    <span class="n">foc_x</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">0</span>
+                    <span class="n">foc_y</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="n">bw</span><span class="p">,</span> <span class="n">foc_x</span><span class="p">,</span> <span class="n">foc_y</span></div>
+
+
+<div class="viewcode-block" id="PostProcessAnalyzed.moving_average">
+<a class="viewcode-back" href="../../API.html#raypyng.postprocessing.PostProcessAnalyzed.moving_average">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">moving_average</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the morivng average with window w on the array x</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (array): the array to average</span>
+<span class="sd">            w (int): the window for the moving average</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.array: the x array once the moving average was applied</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">w</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">w</span><span class="p">),</span> <span class="s2">&quot;valid&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">w</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">remove_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to remove </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Simone Vadilonga, Ruslan Ovsyannikov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

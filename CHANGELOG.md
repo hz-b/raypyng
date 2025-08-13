@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.3.02] - 13-August-2025
+### Added
+- VLS grating parameter calculations (beta)
+### Changed
+
+### Fixed
+
+
 ## [1.3.02] - 24-June-2025
 ### Added
 - report center of rays in the recap file
