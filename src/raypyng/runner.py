@@ -54,8 +54,20 @@ class RayUIRunner:
             ray_path = self.__detect_ray_path()
         if ray_path is None:
             raise Exception("ray_path must be defined for now!")
+
         self._path = ray_path
         self._binary = ray_binary
+
+        full_path = os.path.join(self._path, self._binary)
+        if not os.path.isfile(full_path):
+            raise FileNotFoundError(f"{full_path} does not exist.")
+        elif not os.access(full_path, os.X_OK):
+            raise PermissionError(
+                f"{full_path} exists but is NOT executable.\n"
+                f"To make it executable, run:\n\n"
+                f'    chmod +x "{full_path}"\n'
+            )
+
         self._options = "-b" if background else ""
         self._process = None
         self._verbose = False
