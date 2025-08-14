@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.3.04] - 14-August-2025
+### Added
+
+### Changed
+
+### Fixed
+- issue [#60](https://github.com/hz-b/raypyng/issues/60), check that rayui.sh exists and it is executable, if not throw an Exception
+
 ## [1.3.03] - 13-August-2025
 ### Added
 - VLS grating parameter calculations (beta)
