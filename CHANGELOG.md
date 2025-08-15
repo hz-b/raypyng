@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.3.05] - 15-August-2025
+### Added
+
+### Changed
+
+### Fixed
+- Fix flux calculation
+
 ## [1.3.04] - 14-August-2025
 ### Added
 
