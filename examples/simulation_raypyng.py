@@ -5,7 +5,7 @@ import os
 this_file_dir=os.path.dirname(os.path.realpath(__file__))
 rml_file = os.path.join(this_file_dir,'rml/dipole_beamline.rml')
 
-sim = Simulate(rml_file, hide=True)
+sim = Simulate(rml_file, hide=False)
 
 rml=sim.rml
 beamline = sim.rml.beamline

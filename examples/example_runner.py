@@ -2,7 +2,7 @@ import os
 import time
 from raypyng.runner import RayUIRunner, RayUIAPI
 
-r = RayUIRunner(ray_path=None, hide=True)
+r = RayUIRunner(ray_path=None, hide=False)
 a = RayUIAPI(r)
 
 
@@ -15,7 +15,7 @@ print("RAY-UI is running with pid", r.pid)
 
 # load an rml file
 print("Loading rml file")
-a.load('rml/elisa.rml')
+a.load('rml/dipole_beamline.rml')
 
 print("Trace...")
 a.trace(analyze=True)

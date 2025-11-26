@@ -10,6 +10,6 @@ ray_path = None
 """
 opsys = os.popen("uname").read().strip()
 if opsys == "Darwin":
-    ray_binary = "Contents/MacOS/Ray-UI"
+    ray_binary = "Ray-UI.app/Contents/MacOS/Ray-UI"
 else:
     ray_binary = "rayui.sh"
