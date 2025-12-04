@@ -1,7 +1,8 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.3.52] - 15-August-2025
+## [1.3.52] - 4-December-2025
+
 ### Added
 
 ### Changed
@@ -10,6 +11,14 @@ All notable changes to this project will be documented in this file.
 - Prevent simulations to stop if not simulations duration is available
  
  
+## [1.3.51] - 18-August-2025
+### Added
+
+### Changed
+
+### Fixed
+- Revert Flux calculation, do not normalize to 0.1% source bandwidth
+
 ## [1.3.5] - 15-August-2025
 ### Added
 
@@ -18,7 +27,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Fix flux calculation
 
-## [1.3.04] - 14-August-2025
+## [1.3.4] - 14-August-2025
 ### Added
 
 ### Changed
@@ -26,7 +35,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - issue [#60](https://github.com/hz-b/raypyng/issues/60), check that rayui.sh exists and it is executable, if not throw an Exception
 
-## [1.3.03] - 13-August-2025
+## [1.3.3] - 13-August-2025
 ### Added
 - VLS grating parameter calculations (beta)
 ### Changed
@@ -35,7 +44,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 
-## [1.3.02] - 24-June-2025
+## [1.3.2] - 24-June-2025
 ### Added
 - report center of rays in the recap file
 
@@ -44,7 +53,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 
-## [1.3.01] - 23-June-2025
+## [1.3.1] - 23-June-2025
 ### Added
 
 ### Changed

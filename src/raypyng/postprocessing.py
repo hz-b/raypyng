@@ -305,9 +305,7 @@ class PostProcess:
                 ray_properties.df.loc[0, "SourcePhotonFlux"] = source_photon_flux
                 pass
             else:
-                ray_properties.df.loc[0, "SourcePhotonFlux"] = (
-                    source_photon_flux * (bw_source / energy * 100) / 0.1
-                )
+                ray_properties.df.loc[0, "SourcePhotonFlux"] = source_photon_flux
                 ray_properties.df.loc[0, "SourceBandwidth"] = bw_source
                 ray_properties.df.loc[0, "NumberRaysSurvived"] = self._extract_intensity(rays)
                 ray_properties.df.loc[0, "PercentageRaysSurvived"] = (
