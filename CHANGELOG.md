@@ -1,7 +1,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.3.05] - 15-August-2025
+## [1.3.52] - 15-August-2025
+### Added
+
+### Changed
+
+### Fixed
+- Prevent simulations to stop if not simulations duration is available
+ 
+ 
+## [1.3.5] - 15-August-2025
 ### Added
 
 ### Changed

@@ -1290,17 +1290,23 @@ class Simulate:
                 self.logger.info(f"Exception checking simulations: {e}")
             if wait_time >= 0:
                 self.logger.info(
-                    f"Found all simulations of the batch, \
+                    f"Found all simulations of the batch,\
                         futures missed {remaining_simulations} simulations"
                 )
             else:
                 self.logger.info(
-                    f"Found most simulations of the batch, \
+                    f"Found most simulations of the batch,\
                         futures missed at least {remaining_simulations} simulations"
                 )
+
+            if len(simulations_durations) == 0:
+                simulations_durations.append(self._simulation_timeout)
+            self.logger.info("Updating progress bar")
             for _i in range(remaining_simulations):
-                self._update_progress_bar(simulations_durations, pbar)
-            self.logger.info("Updated progress bar")
+                try:
+                    self._update_progress_bar(simulations_durations, pbar)
+                except Exception as e:
+                    self.logger.info(f"Exception updating progress bar: {e}")
 
         simulation_params_batch.clear()  # Reset batch for next set of simulations
         self.logger.info("Batch Completed")
