@@ -1,6 +1,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.3.52] - 4-December-2025
+
+### Added
+
+### Changed
+
+### Fixed
+- Prevent simulations to stop if not simulations duration is available
+ 
+ 
 ## [1.3.51] - 18-August-2025
 ### Added
 
@@ -10,7 +20,6 @@ All notable changes to this project will be documented in this file.
 - Revert Flux calculation, do not normalize to 0.1% source bandwidth
 
 ## [1.3.5] - 15-August-2025
-
 ### Added
 
 ### Changed
