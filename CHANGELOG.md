@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.3.53] - 4-December-2025
+## [1.3.53] - 26-January-2026
 
 ### Added
 - Added analytical computation of the CFF required to maintain a fixed focus position when scanning photon energy with a plane VLS grating.
