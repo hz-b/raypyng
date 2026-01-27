@@ -26,19 +26,12 @@ stored and provides a simple way to get a list of absolute paths to the simulati
 VLS Grating Coefficient Calculation
 ====================================
 
-This function calculates the VLS grating coefficients (B₂–B₅) for a plane
-variable line spacing grating, given grazing incidence and diffraction angles,
-central groove density, photon energy, and source/image distances.
+This is a set of helper functions that can be used to calculate VLS gratings.
 
 .. autofunction:: raypyng.vls_grating.calculate_vls_coeff
 
-Convert SHADOW N1 coefficient of the grating density expansionto the B2 coefficient used by RAY-UI.
-to the B2 coefficient used by RAY-UI.
 
 .. autofunction:: raypyng.vls_grating.N1_to_b2
-
-Compute the cff (c-value) required to keep the image (focus) position fixed 
-when scanning photon energy with a plane VLS grating.
 
 .. autofunction:: raypyng.vls_grating.cff_for_fixed_focus
 
