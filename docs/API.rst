@@ -32,7 +32,13 @@ central groove density, photon energy, and source/image distances.
 
 .. autofunction:: raypyng.vls_grating.calculate_vls_coeff
 
+Convert SHADOW N1 coefficient of the grating density expansionto the B2 coefficient used by RAY-UI.
+to the B2 coefficient used by RAY-UI.
+
 .. autofunction:: raypyng.vls_grating.N1_to_b2
+
+Compute the cff (c-value) required to keep the image (focus) position fixed 
+when scanning photon energy with a plane VLS grating.
 
 .. autofunction:: raypyng.vls_grating.cff_for_fixed_focus
 
