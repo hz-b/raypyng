@@ -31,7 +31,12 @@ variable line spacing grating, given grazing incidence and diffraction angles,
 central groove density, photon energy, and source/image distances.
 
 .. autofunction:: raypyng.vls_grating.calculate_vls_coeff
-    
+
+.. autofunction:: raypyng.vls_grating.N1_to_b2
+
+.. autofunction:: raypyng.vls_grating.cff_for_fixed_focus
+
+
 Recipes
 ==================
 
