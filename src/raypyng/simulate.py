@@ -960,7 +960,7 @@ class Simulate:
         multiprocessing=1,
         force=False,
         overwrite_rml=True,
-        force_exit=True,
+        force_exit=False,
         remove_rawrays=False,
         remove_round_folders=False,
     ):
@@ -978,8 +978,8 @@ class Simulate:
             force (bool, optional): Force re-execution of simulations.
                                                     Defaults to False.
             overwrite_rml (bool, optional): Overwrite existing RML files. Defaults to True.
-            force_exit (bool, optional): calls os.exit when the simulations are complete.
-                                            Nothing else will run after it. Defaults to True.
+            force_exit (bool, optional): emergency fallback that calls os._exit when the
+                                            simulations are complete. Defaults to False.
             remove_rawrays (bool, optional): removes RawRaysIncoming and RawRaysOutgoing files,
                                                 if present.
             remove_round_folders (bool, optional): remove the round folders after the simulations
@@ -1128,6 +1128,7 @@ class Simulate:
             pbar (tqdm): Progress bar object for tracking simulation progress.
         """
         simulations_durations = []  # Track durations of all simulations for average calculation
+        executor = None
 
         try:
             with ProcessPoolExecutor(max_workers=multiprocessing) as executor:
@@ -1166,13 +1167,13 @@ class Simulate:
                                     stop the simulations loop"
                             )
                             self._final_check_on_simulations_and_shutdown(executor, pbar)
-                            executor.shutdown(wait=False, cancel_futures=True)
                             break
         except Exception as e:
             traceback.print_exc()
             self.logger.info(f"Error in _execute simulations: {e}")
-            executor.shutdown(wait=False)
-            self.logger.info("Executor shutdown completed.")
+            if executor is not None:
+                executor.shutdown(cancel_futures=True)
+                self.logger.info("Executor shutdown completed.")
 
     def _final_check_on_simulations_and_shutdown(self, executor, old_pbar):
 
@@ -1188,9 +1189,6 @@ class Simulate:
                         f"This simulation is missing: round {round_number}, number {sim_number}"
                     )
                     missing_sim.append({"round": round_number, "sim_number": sim_number})
-
-        executor.shutdown(wait=False)
-        self.logger.info("Executor shutdown completed.")
 
         if len(missing_sim) >= 1 and self.simulations_checked is False:
             self.logger.info("Finish missing simulations")
