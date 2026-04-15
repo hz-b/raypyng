@@ -109,6 +109,11 @@ class PostProcess:
         # Assuming natsorted and ns are properly imported and available in the context
         return natsorted(res, alg=ns.IGNORECASE)
 
+    def _extract_sim_index(self, filepath: str):
+        filename = os.path.basename(filepath)
+        sim_index = filename.split("_", 1)[0]
+        return int(sim_index) if sim_index.isdigit() else None
+
     def _extract_fwhm(self, rays: np.array):
         """Calculate the fwhm of the rays.
 
@@ -499,25 +504,48 @@ class PostProcess:
             repeat (int, optional): number of rounds of simulations. Defaults to 1.
             exp_elements (list, optional): the exported elements names as str. Defaults to None.
         """
+        expected_simulations = len(
+            {
+                self._extract_sim_index(path)
+                for path in self._list_files(
+                    os.path.join(dir_path, "round_0"),
+                    contain_str=".rml",
+                )
+                if self._extract_sim_index(path) is not None
+            }
+        )
         for d in exp_elements:
             for exp in exported_file_type:
+                analyzed_rays = None
                 for round in range(repeat):
                     dir_path_round = os.path.join(dir_path, "round_" + str(round))
                     files = self._list_files(
                         dir_path_round, d + "_analyzed_rays_" + exp + self.format_saved_files
                     )
-                    for f_ind, f in enumerate(files):
-                        if round == 0 and f_ind == 0:  # first round, first file, create
-                            analyzed_rays = pd.read_csv(f)
-                        elif round == 0 and f_ind != 0:  # first round, following files, concatenate
-                            tmp = pd.read_csv(f)
-                            analyzed_rays = pd.concat([analyzed_rays, tmp], ignore_index=True)
-                        elif round >= 1:  # other rounds: sum the values
-                            tmp = pd.read_csv(f)
-                            for n in analyzed_rays.columns:
-                                if isinstance(tmp.loc[0, n], (int, float)):
-                                    analyzed_rays.loc[f_ind, n] += float(tmp.loc[0, n])
+                    for f in files:
+                        sim_index = self._extract_sim_index(f)
+                        if sim_index is None or sim_index >= expected_simulations:
+                            continue
+                        tmp = pd.read_csv(f)
+                        tmp["_sim_index"] = sim_index
+                        if round == 0 and analyzed_rays is None:
+                            analyzed_rays = tmp
+                            analyzed_rays.set_index("_sim_index", inplace=True)
+                        elif round == 0:
+                            tmp.set_index("_sim_index", inplace=True)
+                            analyzed_rays = pd.concat([analyzed_rays, tmp], axis=0)
+                        else:
+                            tmp.set_index("_sim_index", inplace=True)
+                            if sim_index not in analyzed_rays.index:
+                                analyzed_rays = pd.concat([analyzed_rays, tmp], axis=0)
+                            else:
+                                for n in analyzed_rays.columns:
+                                    if isinstance(tmp.iloc[0][n], (int, float)):
+                                        analyzed_rays.loc[sim_index, n] += float(tmp.iloc[0][n])
                         os.remove(f)
+
+                if analyzed_rays is None:
+                    continue
 
                 def divide_numeric_rows(row):
                     # Check if all elements in the row are of a numeric type
@@ -527,6 +555,7 @@ class PostProcess:
                         return row
 
                 analyzed_rays = analyzed_rays.apply(divide_numeric_rows, axis=1)
+                analyzed_rays = analyzed_rays.sort_index().reset_index(drop=True)
                 # Apply the function across the DataFrame
                 # save the file
                 fn = os.path.join(dir_path, d + "_" + exp + ".csv")

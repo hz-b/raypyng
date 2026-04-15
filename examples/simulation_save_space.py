@@ -13,7 +13,7 @@ beamline = sim.rml.beamline
 
 
 # define the values of the parameters to scan 
-energy    = np.arange(200, 7201,250)
+energy    = np.arange(200, 7201,15)
 SlitSize  = np.array([0.1])
 cff       = np.array([2.25, 3])
 nrays     = 5e3
@@ -47,7 +47,7 @@ sim.exports  =  [{beamline.Dipole:['RawRaysOutgoing']},
                 ]
 
 #uncomment to run the simulations
-sim.run(multiprocessing=5, force=True, remove_rawrays=True, remove_round_folders=True)
+sim.run(multiprocessing=30, force=True, remove_rawrays=True, remove_round_folders=True)
 
 
 
