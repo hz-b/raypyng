@@ -56,7 +56,6 @@ eff = pd.DataFrame({
 # calculated by the RAY-UI
 sim.efficiency = eff
 
-#uncomment to run the simulations
 sim.run(
     multiprocessing="auto",
     force=True,

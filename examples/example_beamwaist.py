@@ -1,6 +1,5 @@
 from raypyng.simulate import Simulate
 from raypyng.beamwaist import PlotBeamwaist 
-from raypyng.recipes import BeamWaist
 import os
 
 
@@ -37,5 +36,4 @@ xh,yh,x,y=bw.plot(save_img=True,img_name='high_energy_branch',extension='.png',s
 
 # one can use xh,yh,x,y to buld his own plots:
 # suggested usage: ax.pcolormesh(x,y,np.log(self.xh), cmap='inferno')
-
 

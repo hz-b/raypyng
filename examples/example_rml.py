@@ -29,6 +29,6 @@ rml.beamline.Dipole.photonEnergy.cdata = str(2000)
 print('New Dipole photon energy: ',rml.beamline.Dipole.photonEnergy.cdata)
 
 # Save the rml file with a new name
-rml.write('rml/new_elisa.rml')
+rml.write('rml/new_dipole_beamline.rml')
 
         

@@ -43,7 +43,6 @@ sim.exports  =  [{beamline.Dipole:['ScalarElementProperties']},
                 ]
 
 
-#uncomment to run the simulations
 sim.run(multiprocessing="auto", force=True)
 
 
