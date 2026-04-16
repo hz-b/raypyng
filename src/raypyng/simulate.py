@@ -1,5 +1,6 @@
 import csv
 import itertools
+import json
 import logging
 import os
 import re
@@ -1076,6 +1077,7 @@ class Simulate:
             if self.analyze is False and self.raypyng_analysis is True:
                 self.logger.info("Create Pandas Recap Files")
                 self._create_results_dataframe(self._exported_file_type)
+            self._write_analysis_metadata_file()
         if remove_round_folders:
             self._remove_round_folders()
         self.logger.info("End of the Simulations")
@@ -1138,6 +1140,74 @@ class Simulate:
                 res_combined = pd.concat([looper, res], axis=1)
                 res_combined = res_combined.loc[:, ~res_combined.columns.str.contains("^Unnamed")]
                 res_combined.to_csv(os.path.join(self.sim_path, f"{export}_{in_out}.csv"))
+
+    def _unit_for_output_column(self, column_name):
+        analysis_units = {
+            "Simulation Number": "index",
+            "SourcePhotonFlux": "photons/s",
+            "SourceBandwidth": "eV",
+            "NumberRaysSurvived": "count",
+            "PercentageRaysSurvived": "%",
+            "PhotonEnergy": "eV",
+            "Bandwidth": "eV",
+            "HorizontalFocusFWHM": "mm",
+            "VerticalFocusFWHM": "mm",
+            "HorizontalDivergenceFWHM": "deg",
+            "VerticalDivergenceFWHM": "deg",
+            "HorizontalCenter": "mm",
+            "VerticalCenter": "mm",
+            "PhotonFlux": "photons/s",
+            "EnergyPerMilPerBw": None,
+            "FluxPerMilPerBwPerc": None,
+            "FluxPerMilPerBwAbs": None,
+            "AXUVCurrentAmp": "A",
+            "GaAsPCurrentAmp": "A",
+        }
+        parameter_units = {
+            "photonEnergy": "eV",
+            "numberRays": "count",
+            "totalHeight": "mm",
+            "cFactor": None,
+        }
+
+        if column_name.startswith("Unnamed:"):
+            return None
+        if column_name in analysis_units:
+            return analysis_units[column_name]
+        if "." in column_name:
+            param_id = column_name.split(".")[-1]
+            return parameter_units.get(param_id)
+        return None
+
+    def _write_analysis_metadata_file(self):
+        sample_columns = None
+        for export in self._exported_obj_names_list:
+            for in_out in self._exported_file_type:
+                output_path = os.path.join(self.sim_path, f"{export}_{in_out}.csv")
+                if os.path.exists(output_path):
+                    sample_columns = list(pd.read_csv(output_path, nrows=0).columns)
+                    break
+            if sample_columns is not None:
+                break
+
+        if sample_columns is None:
+            return
+
+        first_analysis_column = "SourcePhotonFlux"
+        if first_analysis_column in sample_columns:
+            sample_columns = sample_columns[sample_columns.index(first_analysis_column) :]
+
+        metadata = {
+            "applies_to": "all raypyng analysis output files in this folder",
+            "columns": [
+                {"name": column_name, "unit": self._unit_for_output_column(column_name)}
+                for column_name in sample_columns
+            ],
+        }
+
+        metadata_path = os.path.join(self.sim_path, "raypyng_analysis_metadata.json")
+        with open(metadata_path, "w", encoding="utf-8") as metadata_file:
+            json.dump(metadata, metadata_file, indent=2)
 
     def _remove_recap_files(
         self,
