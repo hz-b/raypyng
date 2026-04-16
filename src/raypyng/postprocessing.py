@@ -21,6 +21,8 @@ class RayProperties:
             "Bandwidth",
             "HorizontalFocusFWHM",
             "VerticalFocusFWHM",
+            "HorizontalDivergenceFWHM",
+            "VerticalDivergenceFWHM",
             "HorizontalCenter",
             "VerticalCenter",
         ]
@@ -153,6 +155,14 @@ class PostProcess:
         if fwhm <= 0:
             fwhm = 2 * np.sqrt(2 * np.log(2)) * np.std(rays)
         return fwhm
+
+    def _extract_divergence_fwhm(self, direction_component: np.array, dz_component: np.array):
+        with np.errstate(divide="ignore", invalid="ignore"):
+            divergence = np.degrees(np.arctan(direction_component / dz_component))
+        divergence = divergence[np.isfinite(divergence)]
+        if divergence.size == 0:
+            return np.nan
+        return self._extract_fwhm(divergence)
 
     def _extract_intensity(self, rays: np.array):
         """calculate how many rays there are
@@ -330,6 +340,16 @@ class PostProcess:
                 ray_properties.df.loc[0, "VerticalFocusFWHM"] = self._extract_fwhm(
                     rays[f"{exported_element}_OY"]
                 )
+                ray_properties.df.loc[0, "HorizontalDivergenceFWHM"] = (
+                    self._extract_divergence_fwhm(
+                        rays[f"{exported_element}_DX"], rays[f"{exported_element}_DZ"]
+                    )
+                )
+                ray_properties.df.loc[0, "VerticalDivergenceFWHM"] = (
+                    self._extract_divergence_fwhm(
+                        rays[f"{exported_element}_DY"], rays[f"{exported_element}_DZ"]
+                    )
+                )
                 ray_properties.df.loc[0, "HorizontalCenter"] = np.mean(
                     rays[f"{exported_element}_OX"]
                 )
@@ -400,6 +420,8 @@ class PostProcess:
             ray_properties.df.loc[0, "Bandwidth"] = np.nan
             ray_properties.df.loc[0, "HorizontalFocusFWHM"] = np.nan
             ray_properties.df.loc[0, "VerticalFocusFWHM"] = np.nan
+            ray_properties.df.loc[0, "HorizontalDivergenceFWHM"] = np.nan
+            ray_properties.df.loc[0, "VerticalDivergenceFWHM"] = np.nan
             ray_properties.df.loc[0, "HorizontalCenter"] = np.nan
             ray_properties.df.loc[0, "VerticalCenter"] = np.nan
             if undulator_table is None:
