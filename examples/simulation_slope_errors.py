@@ -61,4 +61,9 @@ sim.raypyng_analysis = True # let RAY-UI analyze the results
 sim.exports  =  [{beamline.DetectorAtFocus:['RawRaysOutgoing']}]
 
 #uncomment to run the simulations
-sim.run(multiprocessing=5, force=False, remove_round_folders=False, remove_rawrays=False)
+sim.run(
+    multiprocessing="auto",
+    force=False,
+    remove_round_folders=False,
+    remove_rawrays=False,
+)

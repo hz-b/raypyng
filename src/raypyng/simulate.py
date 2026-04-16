@@ -997,6 +997,29 @@ class Simulate:
         self.logger = logging.getLogger(__name__)
         self.logger.info(f"Simulation started, using {self._workers} workers")
 
+    def _resolve_multiprocessing_workers(self, multiprocessing):
+        if isinstance(multiprocessing, str):
+            mode = multiprocessing.lower()
+            if mode not in {"auto", "max"}:
+                raise ValueError(
+                    "The 'multiprocessing' argument must be an integer greater than 0, "
+                    "or one of: 'auto', 'max'."
+                )
+
+            cpu_count = os.cpu_count() or 1
+            available_ram_gb = max(1, int(psutil.virtual_memory().available / (1024**3)))
+
+            if mode == "auto":
+                return max(1, min(cpu_count, available_ram_gb - 2))
+            return max(1, min(cpu_count, available_ram_gb))
+
+        if not isinstance(multiprocessing, int) or multiprocessing < 1:
+            raise ValueError(
+                "The 'multiprocessing' argument must be an integer greater than 0, "
+                "or one of: 'auto', 'max'."
+            )
+        return multiprocessing
+
     def run(
         self,
         recipe=None,
@@ -1016,8 +1039,9 @@ class Simulate:
         Args:
             recipe (SimulationRecipe, optional): Recipe for simulation setup.
                                                     Defaults to None.
-            multiprocessing (int, optional): Number of processes for parallel execution.
-                                                    Defaults to 1.
+            multiprocessing (int or str, optional): Number of processes for parallel execution,
+                                                    or 'auto'/'max' to derive it from available
+                                                    CPUs and RAM. Defaults to 1.
             force (bool, optional): Force re-execution of simulations.
                                                     Defaults to False.
             overwrite_rml (bool, optional): Overwrite existing RML files. Defaults to True.
@@ -1028,8 +1052,7 @@ class Simulate:
             remove_round_folders (bool, optional): remove the round folders after the simulations
                                                     are done.
         """
-        if not isinstance(multiprocessing, int) or multiprocessing < 1:
-            raise ValueError("The 'multiprocessing' argument must be an integer greater than 0.")
+        multiprocessing = self._resolve_multiprocessing_workers(multiprocessing)
 
         if remove_rawrays and not self.raypyng_analysis:
             raise Exception(

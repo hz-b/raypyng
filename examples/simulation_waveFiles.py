@@ -54,6 +54,5 @@ sim.exports  =  [{beamline.Undulator:['RawRaysOutgoing']},
                 ]
 
 #uncomment to run the simulations
-sim.run(multiprocessing=5, force=True)
-
+sim.run(multiprocessing="auto", force=True)
 

@@ -23,7 +23,7 @@ sim.analyze = False
 rp = ResolvingPower(energy_range, [beamline.Dipole, beamline.DetectorAtFocus],ES,cff)
 
 # test resolving power simulations
-sim.run(rp, multiprocessing=5, force=True)
+sim.run(rp, multiprocessing="auto", force=True)
 
 
         

@@ -47,7 +47,12 @@ sim.exports  =  [{beamline.Dipole:['RawRaysOutgoing']},
                 ]
 
 #uncomment to run the simulations
-sim.run(multiprocessing=30, force=True, remove_rawrays=True, remove_round_folders=True)
+sim.run(
+    multiprocessing="auto",
+    force=True,
+    remove_rawrays=True,
+    remove_round_folders=True,
+)
 
 
 

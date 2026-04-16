@@ -23,7 +23,7 @@ sim.analyze = True
 flux = Flux(energy_range, [beamline.Dipole, beamline.DetectorAtFocus],ES,cff)
 
 # test resolving power simulations
-sim.run(flux, multiprocessing=5, force=True)
+sim.run(flux, multiprocessing="auto", force=True)
 
 
         

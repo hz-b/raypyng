@@ -317,9 +317,15 @@ Finally, the simulations can be run using
 
 .. code-block:: python
 
-    sim.run(multiprocessing=5, force=True)
+    sim.run(multiprocessing="auto", force=True)
 
-where the `multiprocessing` parameter can be an integer greater or equal to 1, corresponding to the number of parallel instances of RAY-UI to be used. Generally speaking, the number of instances of RAY-UI must be lower or equal than the number of available cores. If the simulation uses many rays, monitor the RAM usage of your computer. If the computation uses all the possible RAM of the computer the program may get blocked or not execute correctly.
+where the `multiprocessing` parameter can be:
+
+- an integer greater or equal to 1, corresponding to the number of parallel instances of RAY-UI to be used
+- `"auto"`, which uses the minimum between the available CPU count and the available RAM in GB minus 2
+- `"max"`, which uses the minimum between the available CPU count and the available RAM in GB
+
+Generally speaking, the number of instances of RAY-UI must be lower or equal than the number of available cores. If the simulation uses many rays, monitor the RAM usage of your computer. If the computation uses all the possible RAM of the computer the program may get blocked or not execute correctly.
 
 Note on multiprocessing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -342,24 +348,23 @@ Expect this folders and subfolders to be created:
 
 ::
 
-    RAYPy_simulation_mySimulation
-    ├── round_0          
-    │   ├── 0_*.rml
-    │   └── 0_*.csv
-    │   └── 0_*.dat (only if raypyng analyzes the results)
+    RAYPy_Simulation_mySimulation
+    ├── looper.csv
+    ├── looper.txt
+    ├── Dipole_RawRaysOutgoing.csv                    (if raypyng analyzes the results)
+    ├── DetectorAtFocus_RawRaysOutgoing.csv           (if raypyng analyzes the results)
+    ├── raypyng_analysis_metadata.json                (if raypyng analyzes the results)
+    ├── round_0
+    │   ├── 0_mySimulation.rml
+    │   ├── 0_Dipole-RawRaysOutgoing.csv
+    │   ├── 0_Dipole_analyzed_rays_RawRaysOutgoing.dat        (if raypyng analyzes the results)
+    │   ├── 0_DetectorAtFocus-RawRaysOutgoing.csv
+    │   ├── 0_DetectorAtFocus_analyzed_rays_RawRaysOutgoing.dat (if raypyng analyzes the results)
     │   └── ...
-    │   └── looper.py
-    ...
-    ├── round_n          
-    │   ├── 0_*.rml
-    │   └── 0_*.csv
-    │   └── 0_*.dat (only if raypyng analyzes the results)
+    ├── round_1
     │   └── ...
-    │   └── looper.py
-    ├── input_param_1.dat
-    ...
-    ├── input_param_k.dat
-    ├── output_simulation.dat (only if raypyng analyzes the results)
+    └── round_n
+        └── ...
 
 
 
@@ -370,9 +375,6 @@ Analysis performed by RAY-UI
 If you decided to let RAY-UI do the analysis, you should expect the following files to be 
 saved in your simulation folder:
 
-- one file for each parameter you set with the values that you passed to the program. 
-  If for instance, you input the Dipole numberRays, you will find a file called 
-  `input_param_Dipole_numberRays.dat`
 - one folder called `round_n` for each repetition of the simulations. 
   For instance, if you set :code:`sim.repeat=2` you will have two folders `round_0` and `round_1`
 - inside each `round_n` folder you will find the beamline files modified 
@@ -388,9 +390,7 @@ Analysis performed by raypyng
 If you decided to let raypyng do the analysis, you should expect the following files to 
 be saved in your simulation folder:
 
-- one file for each parameter you set with the values that you passed to the program. 
-  If for instance, you input the Dipole numberRays, you will find a file called 
-  `input_param_Dipole_numberRays.dat`
+- `looper.csv` and `looper.txt`, containing the simulation number and the scanned input parameters
 - one folder called `round_n` for each repetition of the simulations. 
   For instance, if you set :code:`sim.repeat=2` you will have two folders `round_0` and `round_1`
 - inside each `round_n` folder you will find the beamline files modified with the parameters 
@@ -399,26 +399,49 @@ be saved in your simulation folder:
   If for instance, you exported the `RawRaysOutgoing` of the Dipole, you will 
   have a list of files `0_Dipole-RawRaysOutgoing.csv`
 - for each `RawRaysOutgoing` file, raypyng calculates some properties, 
-  and saves a corresponding file, for instance `0_Dipole_analyzed_rays.dat`. 
-- In the simulation folder, all the for each exported element 
-  is brought together (and averaged in case of more rounds of simulations ) 
-  in one single file. For the dipole, the file is called `Dipole_RawRaysOutgoing.csv`. 
-  It contains the following columns, beside the input parameters:
+  and saves a corresponding file, for instance `0_Dipole_analyzed_rays_RawRaysOutgoing.dat`
+- in the simulation folder, the analyzed results for each exported element are brought together
+  (and averaged in case of more rounds of simulations) in one single file.
+  For the dipole, the file is called `Dipole_RawRaysOutgoing.csv`
+- one shared metadata sidecar, `raypyng_analysis_metadata.json`, describing the units of the
+  analyzed output columns. This metadata file is written only if :code:`sim.raypyng_analysis=True`
 
-    - Simulation Number  
-    - SourcePhotonFlux  
-    - NumberRaysSurvived  
-    - PercentageRaysSurvived  
-    - PhotonEnergy  
-    - Bandwidth  
-    - HorizontalFocusFWHM  
-    - VerticalFocusFWHM  
-    - PhotonFlux  
-    - EnergyPerMilPerBw  
-    - FluxPerMilPerBwPerc  
-    - FluxPerMilPerBwAbs  
-    - AXUVCurrentAmp  
-    - GaAsPCurrentAmp  
+The combined recap files contain the scanned input parameters from `looper.csv`,
+followed by the analyzed output columns. The analyzed columns currently include:
+
+- `SourcePhotonFlux` (`photons/s`)
+- `SourceBandwidth` (`eV`)
+- `NumberRaysSurvived` (`count`)
+- `PercentageRaysSurvived` (`%`)
+- `PhotonEnergy` (`eV`)
+- `Bandwidth` (`eV`)
+- `HorizontalFocusFWHM` (`mm`)
+- `VerticalFocusFWHM` (`mm`)
+- `HorizontalDivergenceFWHM` (`deg`)
+- `VerticalDivergenceFWHM` (`deg`)
+- `HorizontalCenter` (`mm`)
+- `VerticalCenter` (`mm`)
+- `PhotonFlux` (`photons/s`)
+- `EnergyPerMilPerBw` (dimensionless)
+- `FluxPerMilPerBwPerc` (dimensionless)
+- `FluxPerMilPerBwAbs` (dimensionless)
+- `AXUVCurrentAmp` (`A`)
+- `GaAsPCurrentAmp` (`A`)
+
+Shared metadata sidecar
+^^^^^^^^^^^^^^^^^^^^^^^^
+When raypyng performs the analysis, it also writes one metadata file in the simulation folder:
+
+- `raypyng_analysis_metadata.json`
+
+This file:
+
+- applies to all raypyng-analyzed output CSV files in the same simulation folder
+- lists only the analyzed-output columns, starting at `SourcePhotonFlux`
+- stores a column-to-unit mapping without modifying the CSV headers
+
+This keeps existing scripts based on exact CSV column names compatible, while still making the
+units available in a machine-readable format.
 
 Recipes
 ========
