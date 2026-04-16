@@ -22,6 +22,61 @@ from .rml import ObjectElement, ParamElement, RMLFile
 from .runner import RayUIAPI, RayUIRunner
 
 
+class _ReadOnlyList(list):
+    """List-like view that raises on in-place mutation.
+
+    Simulate.params and Simulate.exports rely on setter-side validation and
+    derived-state recomputation, so mutating the returned value directly is unsafe.
+    """
+
+    def __init__(self, iterable, property_name):
+        super().__init__(iterable)
+        self._property_name = property_name
+
+    def _raise(self):
+        raise TypeError(
+            f"In-place mutation of '{self._property_name}' is not supported. "
+            f"Assign a new list instead, for example: "
+            f"sim.{self._property_name} = sim.{self._property_name} + [new_item]"
+        )
+
+    def append(self, item):
+        self._raise()
+
+    def extend(self, iterable):
+        self._raise()
+
+    def insert(self, index, item):
+        self._raise()
+
+    def pop(self, index=-1):
+        self._raise()
+
+    def remove(self, item):
+        self._raise()
+
+    def clear(self):
+        self._raise()
+
+    def reverse(self):
+        self._raise()
+
+    def sort(self, *args, **kwargs):
+        self._raise()
+
+    def __setitem__(self, key, value):
+        self._raise()
+
+    def __delitem__(self, key):
+        self._raise()
+
+    def __iadd__(self, other):
+        self._raise()
+
+    def __imul__(self, other):
+        self._raise()
+
+
 ################################################################
 class SimulationParams:
     """Handles the setup and management of simulation parameters for RAY-UI simulations.
@@ -87,13 +142,38 @@ class SimulationParams:
 
     @property
     def params(self):
-        return self._params
+        return _ReadOnlyList(self._params, "params")
 
     @params.setter
     def params(self, value):
-        self._validate_params(value)
-        self._params = value
+        copied_value = self._copy_params_list(value)
+        self._validate_params(copied_value)
+        self._params = copied_value
         self._extract_param()
+
+    def _copy_params_list(self, value):
+        if not isinstance(value, list):
+            return value
+
+        copied_params = []
+        for item in value:
+            if not isinstance(item, dict):
+                copied_params.append(item)
+                continue
+
+            copied_item = {}
+            for key, param_value in item.items():
+                if isinstance(param_value, list):
+                    copied_item[key] = list(param_value)
+                elif isinstance(param_value, (float, int, str)):
+                    copied_item[key] = param_value
+                elif hasattr(param_value, "__iter__"):
+                    copied_item[key] = list(param_value)
+                else:
+                    copied_item[key] = param_value
+            copied_params.append(copied_item)
+
+        return copied_params
 
     def _validate_params(self, value):
         """Validates the input parameter list to ensure it is in the correct format.
@@ -565,7 +645,15 @@ class Simulate:
     @property
     def exports(self):
         """Get the list of files to export after the simulation is complete."""
-        return self._exports
+        copied_exports = []
+        for export_dict in self._exports:
+            copied_exports.append(
+                {
+                    object_element: list(export_files)
+                    for object_element, export_files in export_dict.items()
+                }
+            )
+        return _ReadOnlyList(copied_exports, "exports")
 
     @exports.setter
     def exports(self, value):
@@ -578,11 +666,32 @@ class Simulate:
         Raises:
             TypeError: If the input is not a list or the contents of the list are not as expected.
         """
-        self._validate_export_list(value)
-        self._exports = value
-        self._exports_list = self._generate_exports_list(value)
-        self._exported_obj_names_list = self._generate_exported_obj_names_list(value)
+        copied_value = self._copy_export_list(value)
+        self._validate_export_list(copied_value)
+        self._exports = copied_value
+        self._exports_list = self._generate_exports_list(copied_value)
+        self._exported_obj_names_list = self._generate_exported_obj_names_list(copied_value)
         self._exported_file_type = collect_unique_values(self._exports)
+
+    def _copy_export_list(self, value):
+        if not isinstance(value, list):
+            return value
+
+        copied_exports = []
+        for export_dict in value:
+            if not isinstance(export_dict, dict):
+                copied_exports.append(export_dict)
+                continue
+
+            copied_exports.append(
+                {
+                    object_element: list(export_files)
+                    if isinstance(export_files, list)
+                    else export_files
+                    for object_element, export_files in export_dict.items()
+                }
+            )
+        return copied_exports
 
     def _validate_export_list(self, export_list):
         """
@@ -704,7 +813,7 @@ class Simulate:
         if hasattr(self.sp, "params"):
             value = self.sp.params
         else:
-            value = []
+            value = _ReadOnlyList([], "params")
         return value
 
     @params.setter
@@ -1060,6 +1169,9 @@ class Simulate:
             )
         if remove_rawrays:
             self.remove_rawrays = remove_rawrays
+        self._setup_simulation_environment(recipe)
+        self._validate_run_configuration()
+
         # test that we car run RAY-UI
         runner = RayUIRunner(ray_path=self.ray_path, hide=True)
         runner.kill()
@@ -1067,7 +1179,7 @@ class Simulate:
         self._batch_number = 0
         self._workers = multiprocessing
         self.batch_size = int(self._workers) * 5
-        self._prepare_simulation_environment(recipe, overwrite_rml)
+        self._prepare_simulation_environment(overwrite_rml)
         self._init_logging()
         total_simulations = self.sp._calc_number_sim() * self.repeat
         self.simulations_checked = False
@@ -1245,7 +1357,7 @@ class Simulate:
             if os.path.exists(to_be_removed):
                 os.remove(to_be_removed)
 
-    def _prepare_simulation_environment(self, recipe, overwrite_rml):
+    def _prepare_simulation_environment(self, overwrite_rml):
         """
         Prepares the simulation environment based on a given recipe and file management options.
 
@@ -1254,11 +1366,18 @@ class Simulate:
             overwrite_rml (bool, optional): Overwrite existing RML files. Defaults to True.
         """
         self.overwrite_rml = overwrite_rml
-        self._setup_simulation_environment(recipe)
         self._initialize_simulation_directory()
         self._save_parameters_to_file(self.sim_path)
         self._remove_recap_files()
         self._print_simulations_info()
+
+    def _validate_run_configuration(self):
+        if self.sp is None or len(self.sp.params) == 0:
+            raise ValueError(
+                "Simulation parameters are not configured. Assign 'sim.params = [...]' "
+                "before calling run(). In-place mutations such as "
+                "'sim.params.append(...)' are not supported."
+            )
 
     def _execute_simulations(
         self, multiprocessing, force, total_simulations, pbar, update_reacap_files=True
