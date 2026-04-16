@@ -337,6 +337,7 @@ The speed increase due to opening many RAY-UI instances is effective only when R
 
 
 There is little/no difference having RayPyNG analyzing the results
+
 .. code-block:: python
 
     sim.raypyng_analysis=True # let raypyng analyze the results
