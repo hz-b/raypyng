@@ -4,8 +4,6 @@ from raypyng import Simulate
 # define the values of the parameters to scan 
 def make_slopes_params(param_dict):
     # Start with the number of parameters
-    expanded_entries = []
-
     # First entry is the all-zero base
     total_steps = 1 + sum(len(v) for v in param_dict.values())
 
@@ -55,10 +53,14 @@ sim.simulation_name = 'SlopeErrors'
 # repeat the simulations as many time as needed
 sim.repeat = rounds
 
-sim.analyze = False # let RAY-UI analyze the results
-sim.raypyng_analysis = True # let RAY-UI analyze the results
+sim.analyze = False # don't let RAY-UI analyze the results
+sim.raypyng_analysis = True # let raypyng analyze the results
 ## This must be a list of dictionaries
 sim.exports  =  [{beamline.DetectorAtFocus:['RawRaysOutgoing']}]
 
-#uncomment to run the simulations
-sim.run(multiprocessing=5, force=False, remove_round_folders=False, remove_rawrays=False)
+sim.run(
+    multiprocessing="auto",
+    force=False,
+    remove_round_folders=False,
+    remove_rawrays=False,
+)

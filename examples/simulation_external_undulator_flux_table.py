@@ -35,7 +35,7 @@ params = [
 sim.params=params
 
 # sim.simulation_folder = '/home/simone/Documents/RAYPYNG/raypyng/test'
-sim.simulation_name = 'test_noAnalyze_undulator'
+sim.simulation_name = 'external_undulator_flux_table'
 
 # repeat the simulations as many time as needed
 sim.repeat = 2
@@ -56,7 +56,4 @@ undulator = pd.read_csv(undulator_file_path)
 
 sim.undulator_table=undulator
 
-#uncomment to run the simulations
-sim.run(multiprocessing=6, force=True)
-
-
+sim.run(multiprocessing="auto", force=True)

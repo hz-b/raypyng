@@ -160,7 +160,7 @@ file for each element present in the beamline automatically.
         myRecipe = ExportEachElement(energy=1000,nrays=10000,sim_folder='MyRecipeTest')
 
         # test resolving power simulations
-        sim.run(myRecipe, multiprocessing=5, force=True)
+        sim.run(myRecipe, multiprocessing="auto", force=True)
 
 How to work with Undulator File
 ================================

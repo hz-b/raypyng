@@ -22,8 +22,8 @@ sim.analyze = True
 #sim.params,sim.exports, sim.simulation_name = ResolvingPower(energy_range, beamline.DetectorAtFocus,ES,cff)
 flux = Flux(energy_range, [beamline.Dipole, beamline.DetectorAtFocus],ES,cff)
 
-# test resolving power simulations
-sim.run(flux, multiprocessing=5, force=True)
+# test flux simulations
+sim.run(flux, multiprocessing="auto", force=True)
 
 
         

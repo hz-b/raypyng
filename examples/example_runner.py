@@ -15,7 +15,7 @@ print("RAY-UI is running with pid", r.pid)
 
 # load an rml file
 print("Loading rml file")
-a.load('rml/elisa.rml')
+a.load('rml/dipole_beamline.rml')
 
 print("Trace...")
 a.trace(analyze=True)

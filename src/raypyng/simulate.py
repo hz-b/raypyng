@@ -1,5 +1,6 @@
 import csv
 import itertools
+import json
 import logging
 import os
 import re
@@ -871,7 +872,7 @@ class Simulate:
             bool: True if the simulation is missing any export files, False otherwise.
         """
         round_folder = "round_" + str(repeat)
-        folder = os.path.join(self._sim_folder, round_folder)
+        folder = os.path.join(self.sim_path, round_folder)
         for export_config in self._exports_list:
             if self.raypyng_analysis:
                 export_file = os.path.join(
@@ -885,6 +886,48 @@ class Simulate:
                 return True  # Missing at least one export file
 
         return False
+
+    def _missing_simulations_for_round(self, round_number):
+        """Return missing simulation indices for a round using a single directory scan."""
+        round_folder = os.path.join(self.sim_path, "round_" + str(round_number))
+        expected_ids = set(range(self.sp._calc_number_sim()))
+
+        if self.raypyng_analysis:
+            expected_suffixes = [
+                f"_{export_config[0]}_analyzed_rays_{export_config[1]}.dat"
+                for export_config in self._exports_list
+            ]
+        else:
+            expected_suffixes = [
+                f"_{export_config[0]}-{export_config[1]}.csv" for export_config in self._exports_list
+            ]
+
+        found_per_export = {suffix: set() for suffix in expected_suffixes}
+        self.logger.info(f"Scanning round {round_number} outputs in {round_folder}")
+
+        with os.scandir(round_folder) as entries:
+            for entry in entries:
+                if not entry.is_file():
+                    continue
+                filename = entry.name
+                for suffix in expected_suffixes:
+                    if not filename.endswith(suffix):
+                        continue
+                    sim_index = filename[: -len(suffix)].split("_", 1)[0]
+                    if sim_index.isdigit():
+                        sim_index = int(sim_index)
+                        if sim_index in expected_ids:
+                            found_per_export[suffix].add(sim_index)
+                    break
+
+        completed_ids = expected_ids.copy()
+        for suffix, found_ids in found_per_export.items():
+            self.logger.info(
+                f"Round {round_number}: found {len(found_ids)}/{len(expected_ids)} files for {suffix}"
+            )
+            completed_ids &= found_ids
+
+        return sorted(expected_ids - completed_ids)
 
     def _make_exports_list(self, sim_number, round_n):
         exports_list = []
@@ -954,13 +997,36 @@ class Simulate:
         self.logger = logging.getLogger(__name__)
         self.logger.info(f"Simulation started, using {self._workers} workers")
 
+    def _resolve_multiprocessing_workers(self, multiprocessing):
+        if isinstance(multiprocessing, str):
+            mode = multiprocessing.lower()
+            if mode not in {"auto", "max"}:
+                raise ValueError(
+                    "The 'multiprocessing' argument must be an integer greater than 0, "
+                    "or one of: 'auto', 'max'."
+                )
+
+            cpu_count = os.cpu_count() or 1
+            available_ram_gb = max(1, int(psutil.virtual_memory().available / (1024**3)))
+
+            if mode == "auto":
+                return max(1, min(cpu_count, available_ram_gb - 2))
+            return max(1, min(cpu_count, available_ram_gb))
+
+        if not isinstance(multiprocessing, int) or multiprocessing < 1:
+            raise ValueError(
+                "The 'multiprocessing' argument must be an integer greater than 0, "
+                "or one of: 'auto', 'max'."
+            )
+        return multiprocessing
+
     def run(
         self,
         recipe=None,
         multiprocessing=1,
         force=False,
         overwrite_rml=True,
-        force_exit=True,
+        force_exit=False,
         remove_rawrays=False,
         remove_round_folders=False,
     ):
@@ -973,20 +1039,20 @@ class Simulate:
         Args:
             recipe (SimulationRecipe, optional): Recipe for simulation setup.
                                                     Defaults to None.
-            multiprocessing (int, optional): Number of processes for parallel execution.
-                                                    Defaults to 1.
+            multiprocessing (int or str, optional): Number of processes for parallel execution,
+                                                    or 'auto'/'max' to derive it from available
+                                                    CPUs and RAM. Defaults to 1.
             force (bool, optional): Force re-execution of simulations.
                                                     Defaults to False.
             overwrite_rml (bool, optional): Overwrite existing RML files. Defaults to True.
-            force_exit (bool, optional): calls os.exit when the simulations are complete.
-                                            Nothing else will run after it. Defaults to True.
+            force_exit (bool, optional): emergency fallback that calls os._exit when the
+                                            simulations are complete. Defaults to False.
             remove_rawrays (bool, optional): removes RawRaysIncoming and RawRaysOutgoing files,
                                                 if present.
             remove_round_folders (bool, optional): remove the round folders after the simulations
                                                     are done.
         """
-        if not isinstance(multiprocessing, int) or multiprocessing < 1:
-            raise ValueError("The 'multiprocessing' argument must be an integer greater than 0.")
+        multiprocessing = self._resolve_multiprocessing_workers(multiprocessing)
 
         if remove_rawrays and not self.raypyng_analysis:
             raise Exception(
@@ -1005,15 +1071,22 @@ class Simulate:
         self._init_logging()
         total_simulations = self.sp._calc_number_sim() * self.repeat
         self.simulations_checked = False
+        self._executor_has_unfinished_futures = False
 
         pbar = self._initialize_progress_bar(total_simulations, description="Simulations Completed")
         try:
             self._execute_simulations(multiprocessing, force, total_simulations, pbar)
-            pbar.close()
             self.logger.info("Simulation completed successfully.")
         except KeyboardInterrupt:
             self.logger.error("Simulation Interrupted.", exc_info=True)
             self.cleanup_child_processes()
+            raise
+        except Exception:
+            self.logger.error("Simulation failed.", exc_info=True)
+            self.cleanup_child_processes()
+            raise
+        finally:
+            pbar.close()
         if self.raypyng_analysis:
             self.logger.info("Starting cleanup")
             pp = PostProcess()
@@ -1027,6 +1100,7 @@ class Simulate:
             if self.analyze is False and self.raypyng_analysis is True:
                 self.logger.info("Create Pandas Recap Files")
                 self._create_results_dataframe(self._exported_file_type)
+            self._write_analysis_metadata_file()
         if remove_round_folders:
             self._remove_round_folders()
         self.logger.info("End of the Simulations")
@@ -1039,11 +1113,14 @@ class Simulate:
         and any specific Xvfb processes."""
         current_process = psutil.Process()
         children = current_process.children(recursive=True)
+        announced_cleanup = False
 
         # First, terminate general child processes
         for child in children:
             try:
-                print(f"Terminating child process {child.pid}")
+                if not announced_cleanup:
+                    print("Terminating child processes...")
+                    announced_cleanup = True
                 child.terminate()
                 child.wait(timeout=3)  # Give it some time to gracefully shut down
             except psutil.NoSuchProcess:
@@ -1087,6 +1164,74 @@ class Simulate:
                 res_combined = res_combined.loc[:, ~res_combined.columns.str.contains("^Unnamed")]
                 res_combined.to_csv(os.path.join(self.sim_path, f"{export}_{in_out}.csv"))
 
+    def _unit_for_output_column(self, column_name):
+        analysis_units = {
+            "Simulation Number": "index",
+            "SourcePhotonFlux": "photons/s",
+            "SourceBandwidth": "eV",
+            "NumberRaysSurvived": "count",
+            "PercentageRaysSurvived": "%",
+            "PhotonEnergy": "eV",
+            "Bandwidth": "eV",
+            "HorizontalFocusFWHM": "mm",
+            "VerticalFocusFWHM": "mm",
+            "HorizontalDivergenceFWHM": "deg",
+            "VerticalDivergenceFWHM": "deg",
+            "HorizontalCenter": "mm",
+            "VerticalCenter": "mm",
+            "PhotonFlux": "photons/s",
+            "EnergyPerMilPerBw": None,
+            "FluxPerMilPerBwPerc": None,
+            "FluxPerMilPerBwAbs": None,
+            "AXUVCurrentAmp": "A",
+            "GaAsPCurrentAmp": "A",
+        }
+        parameter_units = {
+            "photonEnergy": "eV",
+            "numberRays": "count",
+            "totalHeight": "mm",
+            "cFactor": None,
+        }
+
+        if column_name.startswith("Unnamed:"):
+            return None
+        if column_name in analysis_units:
+            return analysis_units[column_name]
+        if "." in column_name:
+            param_id = column_name.split(".")[-1]
+            return parameter_units.get(param_id)
+        return None
+
+    def _write_analysis_metadata_file(self):
+        sample_columns = None
+        for export in self._exported_obj_names_list:
+            for in_out in self._exported_file_type:
+                output_path = os.path.join(self.sim_path, f"{export}_{in_out}.csv")
+                if os.path.exists(output_path):
+                    sample_columns = list(pd.read_csv(output_path, nrows=0).columns)
+                    break
+            if sample_columns is not None:
+                break
+
+        if sample_columns is None:
+            return
+
+        first_analysis_column = "SourcePhotonFlux"
+        if first_analysis_column in sample_columns:
+            sample_columns = sample_columns[sample_columns.index(first_analysis_column) :]
+
+        metadata = {
+            "applies_to": "all raypyng analysis output files in this folder",
+            "columns": [
+                {"name": column_name, "unit": self._unit_for_output_column(column_name)}
+                for column_name in sample_columns
+            ],
+        }
+
+        metadata_path = os.path.join(self.sim_path, "raypyng_analysis_metadata.json")
+        with open(metadata_path, "w", encoding="utf-8") as metadata_file:
+            json.dump(metadata, metadata_file, indent=2)
+
     def _remove_recap_files(
         self,
     ):
@@ -1128,53 +1273,73 @@ class Simulate:
             pbar (tqdm): Progress bar object for tracking simulation progress.
         """
         simulations_durations = []  # Track durations of all simulations for average calculation
+        executor = None
+        rerun_missing = False
+        rerun_pbar = None
 
         try:
-            with ProcessPoolExecutor(max_workers=multiprocessing) as executor:
-                simulation_params_batch = []
-                batch_length = 0
-                remaining_simulations = total_simulations
-                for round_number in range(self.repeat):
-                    self.logger.info(f"Start round {round_number}")
-                    for sim_number, params in enumerate(self.sp.simulation_parameters_generator()):
-                        if round_number == 0 and update_reacap_files is True:
-                            self._update_simulation_recap_files(params, sim_number)
-                        if self._is_simulation_missing(sim_number, round_number) or force:
-                            self._prepare_and_submit_simulation(
-                                params,
-                                sim_number,
-                                round_number,
-                                simulation_params_batch,
-                                executor,
-                                force,
-                            )
-                        else:
-                            pbar.update(1)  # If not missing or forced, update progress bar directly
-                        batch_length += 1
-                        remaining_simulations -= 1
-                        if batch_length == self.batch_size or remaining_simulations == 0:
-                            self._wait_for_simulation_batch(
-                                simulations_durations, simulation_params_batch, executor, pbar
-                            )
-                            self.logger.info(
-                                f"Waiting For batch, {self.batch_size} simulations to go"
-                            )
-                            batch_length = 0
-                        if remaining_simulations == 0:
-                            self.logger.info(
-                                f"Remaning Simulations {remaining_simulations}, \
-                                    stop the simulations loop"
-                            )
-                            self._final_check_on_simulations_and_shutdown(executor, pbar)
-                            executor.shutdown(wait=False, cancel_futures=True)
-                            break
+            executor = ProcessPoolExecutor(max_workers=multiprocessing)
+            simulation_params_batch = []
+            batch_length = 0
+            remaining_simulations = total_simulations
+            for round_number in range(self.repeat):
+                self.logger.info(f"Start round {round_number}")
+                for sim_number, params in enumerate(self.sp.simulation_parameters_generator()):
+                    if round_number == 0 and update_reacap_files is True:
+                        self._update_simulation_recap_files(params, sim_number)
+                    if self._is_simulation_missing(sim_number, round_number) or force:
+                        self._prepare_and_submit_simulation(
+                            params,
+                            sim_number,
+                            round_number,
+                            simulation_params_batch,
+                            executor,
+                            force,
+                        )
+                    else:
+                        pbar.update(1)  # If not missing or forced, update progress bar directly
+                    batch_length += 1
+                    remaining_simulations -= 1
+                    if batch_length == self.batch_size or remaining_simulations == 0:
+                        self._wait_for_simulation_batch(
+                            simulations_durations, simulation_params_batch, executor, pbar
+                        )
+                        self.logger.info(f"Waiting For batch, {self.batch_size} simulations to go")
+                        batch_length = 0
+                    if remaining_simulations == 0:
+                        self.logger.info(
+                            f"Remaning Simulations {remaining_simulations}, \
+                                stop the simulations loop"
+                        )
+                        rerun_missing, rerun_pbar = self._final_check_on_simulations_and_shutdown(
+                            pbar
+                        )
+                        break
         except Exception as e:
             traceback.print_exc()
             self.logger.info(f"Error in _execute simulations: {e}")
-            executor.shutdown(wait=False)
-            self.logger.info("Executor shutdown completed.")
+            raise
+        finally:
+            if executor is not None:
+                shutdown_wait = not rerun_missing and not self._executor_has_unfinished_futures
+                force_cancel = rerun_missing or self._executor_has_unfinished_futures
+                executor.shutdown(wait=shutdown_wait, cancel_futures=force_cancel)
+                self.logger.info(
+                    "Executor shutdown completed%s.",
+                    " without waiting" if not shutdown_wait else "",
+                )
+                if force_cancel:
+                    self.cleanup_child_processes()
+        if rerun_missing:
+            self._execute_simulations(
+                self._workers,
+                False,
+                total_simulations,
+                rerun_pbar,
+                update_reacap_files=False,
+            )
 
-    def _final_check_on_simulations_and_shutdown(self, executor, old_pbar):
+    def _final_check_on_simulations_and_shutdown(self, old_pbar):
 
         # check that all simulatins are completed:
         self.logger.info(
@@ -1182,15 +1347,13 @@ class Simulate:
         )
         missing_sim = []
         for round_number in range(self.repeat):
-            for sim_number, _params in enumerate(self.sp.simulation_parameters_generator()):
-                if self._is_simulation_missing(sim_number, round_number):
-                    self.logger.info(
-                        f"This simulation is missing: round {round_number}, number {sim_number}"
-                    )
-                    missing_sim.append({"round": round_number, "sim_number": sim_number})
-
-        executor.shutdown(wait=False)
-        self.logger.info("Executor shutdown completed.")
+            round_missing = self._missing_simulations_for_round(round_number)
+            self.logger.info(
+                f"Round {round_number}: final check found {len(round_missing)} missing simulations"
+            )
+            for sim_number in round_missing:
+                self.logger.info(f"This simulation is missing: round {round_number}, number {sim_number}")
+                missing_sim.append({"round": round_number, "sim_number": sim_number})
 
         if len(missing_sim) >= 1 and self.simulations_checked is False:
             self.logger.info("Finish missing simulations")
@@ -1200,9 +1363,9 @@ class Simulate:
                 total_simulations, description="Checking Simulations"
             )
             self.simulations_checked = True
-            self._execute_simulations(
-                self._workers, False, total_simulations, pbar, update_reacap_files=False
-            )
+            return True, pbar
+
+        return False, old_pbar
 
     def _prepare_and_submit_simulation(
         self, params, sim_number, round_number, simulation_params_batch, executor, force
@@ -1274,6 +1437,14 @@ class Simulate:
                 )
         except Exception as e:
             self.logger.info(f"Exception during simulation: {e}")
+            unfinished_futures = [future for future in futures if not future.done()]
+            if unfinished_futures:
+                self._executor_has_unfinished_futures = True
+                self.logger.info(
+                    f"Marking executor as having {len(unfinished_futures)} unfinished futures"
+                )
+                for future in unfinished_futures:
+                    future.cancel()
             try:
                 wait_time = self._simulation_timeout / 4
                 for sim in simulation_params_batch:

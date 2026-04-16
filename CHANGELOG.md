@@ -1,6 +1,26 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 16-April-2026
+
+### Added
+- Add `HorizontalDivergenceFWHM` and `VerticalDivergenceFWHM` to raypyng-analyzed outputs, computed from the ray direction vectors and exported in degrees.
+- Add a shared `raypyng_analysis_metadata.json` sidecar file with the units of the analyzed output columns.
+- Add `multiprocessing="auto"` and `multiprocessing="max"` modes to `Simulate.run()`.
+
+### Changed
+- Update examples to use `multiprocessing="auto"` instead of hardcoded worker counts.
+- Update tutorial and how-to documentation to reflect the current simulation output structure, analyzed files, recap files, metadata sidecar, and multiprocessing options.
+- Clean up several example scripts and fix stale file references and misleading comments.
+
+### Fixed
+- Fix a severe multiprocessing shutdown bug where simulations could finish writing outputs but the Python process could still hang during executor teardown.
+- Prevent recursive retry of missing simulations while a previous `ProcessPoolExecutor` is still active.
+- Handle unfinished futures more safely during shutdown, avoiding blocking exit when output files are already present.
+- Fix postprocessing aggregation across repeated rounds by matching analyzed files by simulation index instead of file order.
+- Ignore stale out-of-range analyzed files from previous runs during recap aggregation and final output checks.
+- Reduce child-process cleanup output to a single terminal message instead of one line per PID.
+
 ## [1.3.53] - 26-January-2026
 
 ### Added
@@ -146,7 +166,6 @@ All notable changes to this project will be documented in this file.
  
 ### Fixed
 - issue [#29](https://github.com/hz-b/raypyng/issues/29), Simulate.params used to throw an error when attempting list step-wise operation.
-
 
 
 

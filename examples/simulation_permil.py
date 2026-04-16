@@ -48,8 +48,7 @@ sim.exports  =  [{beamline.Dipole:['RawRaysOutgoing']},
                 {beamline.DetectorAtFocus:['RawRaysOutgoing']}
                 ]
 
-#uncomment to run the simulations
-sim.run(multiprocessing=8, force=True)
+sim.run(multiprocessing="auto", force=True)
 
 
 

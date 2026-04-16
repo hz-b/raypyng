@@ -4,6 +4,8 @@
 # from sre_constants import SUCCESS
 import atexit
 import os
+import select
+import signal
 import subprocess
 import time
 
@@ -72,12 +74,13 @@ class RayUIRunner:
         self._process = None
         self._verbose = False
         if hide:
-            self._hide = "xvfb-run --auto-servernum --server-num=3000 "
+            self._hide = ["xvfb-run", "--auto-servernum", "--server-num=3000"]
         else:
-            self._hide = ""
+            self._hide = []
 
         # internal configuration parameters
         self._auto_flush = True  # flush on write calls
+        self._stdout_buffer = bytearray()
 
     def run(self):
         """Open one instance of RAY-UI using subprocess
@@ -90,16 +93,20 @@ class RayUIRunner:
             fullpath = os.path.join(self._path, self._binary)
             if not os.path.isfile(fullpath):
                 raise RayPyRunnerError("Ray executable {0} is not found".format(fullpath))
-            fullpath = self._hide + fullpath
+            cmd = [*self._hide, fullpath]
+            if self._options:
+                cmd.append(self._options)
             env = dict(os.environ)  # TODO:: rethink a bit about this line
             self._process = subprocess.Popen(
-                fullpath + " -b",
-                shell=True,
+                cmd,
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 env=env,
+                start_new_session=True,
             )
+            os.set_blocking(self._process.stdout.fileno(), False)
+            self._stdout_buffer.clear()
             atexit.register(self.kill)
         return self
 
@@ -113,22 +120,33 @@ class RayUIRunner:
         if self._process is None:
             return False
         else:
-            poll_result = self._process.poll()
-            if poll_result is not None:
-                # we have an exit code, so process is not valid any more and clean it it up
-                self._process = None
-                return False
-            else:
-                return True
+            return self._process.poll() is None
 
     def kill(self):
         """kill a RAY-UI process"""
+        if self._process is None:
+            return
+
         if self.isrunning:
             pid = self._process.pid
-            process = psutil.Process(pid)
-            for proc in process.children(recursive=True):
-                proc.kill()
-            process.kill()
+            try:
+                os.killpg(pid, signal.SIGTERM)
+                self._process.wait(timeout=5)
+            except (ProcessLookupError, subprocess.TimeoutExpired):
+                try:
+                    process = psutil.Process(pid)
+                    for proc in process.children(recursive=True):
+                        proc.kill()
+                    process.kill()
+                except psutil.NoSuchProcess:
+                    pass
+                try:
+                    os.killpg(pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+
+        self._close_pipes()
+        self._process = None
 
     @property
     def pid(self):
@@ -166,13 +184,65 @@ class RayUIRunner:
         Returns:
             str: line read from the input
         """
-        if self.isrunning:
-            line = self._process.stdout.readline().decode("utf8").rstrip("\n")
-            if self._verbose:  # verbose
-                print(line)
-            return line
-        else:
+        return self._readline_with_timeout(timeout=None)
+
+    def _readline_with_timeout(self, timeout=None) -> str:
+        """Read one line from stdout, optionally timing out if no new line arrives."""
+        if not self.isrunning:
             return None
+
+        deadline = None if timeout is None else time.monotonic() + timeout
+        stdout_fd = self._process.stdout.fileno()
+
+        while True:
+            newline_index = self._stdout_buffer.find(b"\n")
+            if newline_index != -1:
+                line = self._stdout_buffer[:newline_index]
+                del self._stdout_buffer[: newline_index + 1]
+                decoded_line = line.decode("utf8", errors="replace").rstrip("\r")
+                if self._verbose:
+                    print(decoded_line)
+                return decoded_line
+
+            if not self.isrunning:
+                if self._stdout_buffer:
+                    line = self._stdout_buffer.decode("utf8", errors="replace").rstrip("\r")
+                    self._stdout_buffer.clear()
+                    if self._verbose:
+                        print(line)
+                    return line
+                return None
+
+            wait_time = None
+            if deadline is not None:
+                wait_time = max(0.0, deadline - time.monotonic())
+                if wait_time == 0.0:
+                    return None
+
+            readable, _, _ = select.select([stdout_fd], [], [], wait_time)
+            if not readable:
+                return None
+
+            chunk = os.read(stdout_fd, 4096)
+            if not chunk:
+                if self._stdout_buffer:
+                    line = self._stdout_buffer.decode("utf8", errors="replace").rstrip("\r")
+                    self._stdout_buffer.clear()
+                    if self._verbose:
+                        print(line)
+                    return line
+                return None
+            self._stdout_buffer.extend(chunk)
+
+    def _close_pipes(self):
+        for stream_name in ("stdin", "stdout", "stderr"):
+            stream = getattr(self._process, stream_name, None)
+            if stream is not None:
+                try:
+                    stream.close()
+                except Exception:
+                    pass
+        self._stdout_buffer.clear()
 
     def __detect_ray_path(self) -> str:
         """Internal function to autodetect installation path of RAY-UI
@@ -309,10 +379,14 @@ class RayUIAPI:
         # and once as status return
         cmd_seen = False
         while True:
-            line = self._runner._readline()
+            poll_timeout = self._read_wait_delay if timeout is not None else None
+            line = self._runner._readline_with_timeout(timeout=poll_timeout)
             if line is None:
-                time.sleep(self._read_wait_delay)
+                if timeout is None:
+                    continue
                 timecnt += self._read_wait_delay
+                if timecnt > timeout:
+                    raise TimeoutError("timeout while waiting ray command io")
                 continue
             if line.startswith(cmd):
                 if cmd_seen:
@@ -322,6 +396,4 @@ class RayUIAPI:
             else:
                 if cbdataread is not None:
                     cbdataread(line)
-            if timeout is not None and timecnt > timeout:
-                raise TimeoutError("timeout while waiting ray command io")
         return line.lstrip(cmd).strip()
