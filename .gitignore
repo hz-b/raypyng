@@ -1,5 +1,6 @@
 # python virtual environment
 .venv/
+.token
 
 # python specific
 __pycache__/
@@ -12,12 +13,17 @@ RAYPy_Simulation_*
 
 # Ignore distribution on pip
 dist
+build/
+*.egg-info/
 src/raypyng_test.egg-info
 src/raypyng.egg-info/dependency_links.txt
 src/raypyng.egg-info/PKG-INFO
 src/raypyng.egg-info/requires.txt
 src/raypyng.egg-info/SOURCES.txt
 src/raypyng.egg-info/top_level.txt
+
+# Sphinx build output
+docs/_build/
 
 #ignore vscode stuff
 .vscode/configurationCache.log
