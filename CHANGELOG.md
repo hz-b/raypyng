@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.4.1] - 18-May-2026
+## [1.4.1/2] - 18-May-2026
 
 ### Added
 - Add regression test for mixed export-pair handling in raypyng analysis (`tests/test_raypyng_analysis_export_mismatch.py`).
