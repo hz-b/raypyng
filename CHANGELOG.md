@@ -1,6 +1,21 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.4.1] - 18-May-2026
+
+### Added
+- Add lightweight repro script for mixed raypyng-analysis export configurations (`examples/repro/simulation_raypyng_lightweight.py`).
+- Add regression test covering mixed export pairs without cartesian-product assumptions (`tests/test_raypyng_analysis_export_mismatch.py`).
+
+### Changed
+
+### Fixed
+- Fix raypyng post-processing to respect exact `(object, export_type)` pairs configured in `sim.exports`.
+- Fix false missing-file failures caused by object/type cartesian-product lookup (for example unrequested `Dipole_RawRaysIncoming.csv`).
+- Fix recap/metadata generation to iterate configured export pairs only.
+- Improve missing-output errors to report only truly configured-but-missing analysis files.
+
+
 ## [1.4.0] - 16-April-2026
 
 ### Added

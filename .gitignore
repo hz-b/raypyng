@@ -28,3 +28,8 @@ src/raypyng.egg-info/top_level.txt
 examples/rml/new_elisa.rml
 examples/test_exportDetectorAtFocus-RawRaysOutgoing.csv
 examples/test_exportDipole-RawRaysOutgoing.csv
+
+# Sphinx build output
+docs/_build/
+
+.token
