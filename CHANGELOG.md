@@ -1,6 +1,19 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.4.1] - 18-May-2026
+
+### Added
+- Add regression test for mixed export-pair handling in raypyng analysis (`tests/test_raypyng_analysis_export_mismatch.py`).
+
+### Changed
+
+### Fixed
+- Fix raypyng post-processing to respect exact `(object, export_type)` pairs configured in `sim.exports`.
+- Prevent false cartesian-product lookups that required unrequested files (for example `M1_hor_foc_RawRaysIncoming.csv` when only outgoing was requested).
+- Generate recap/dataframe and analysis metadata using configured export pairs only.
+- Raise clear missing-file errors only for truly configured-but-missing analysis outputs.
+
 ## [1.4.0] - 16-April-2026
 
 ### Added
@@ -166,6 +179,5 @@ All notable changes to this project will be documented in this file.
  
 ### Fixed
 - issue [#29](https://github.com/hz-b/raypyng/issues/29), Simulate.params used to throw an error when attempting list step-wise operation.
-
 
 
