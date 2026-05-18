@@ -15,7 +15,7 @@ import pandas as pd
 import psutil
 from tqdm import tqdm
 
-from .helper_functions import RingBuffer, collect_unique_values
+from .helper_functions import RingBuffer
 from .postprocessing import PostProcess
 from .recipes import SimulationRecipe
 from .rml import ObjectElement, ParamElement, RMLFile
@@ -418,7 +418,6 @@ class Simulate:
         self._simulation_name = None  # Custom simulation name
         self._exports = []  # Files to export after simulation
         self._exports_list = []  # Processed list of exports
-        self._exported_obj_names_list = []  # List containing the names of the objects to export
         self._undulator_table = None  # holder for undulator table pandas dataframe
         self._efficiency = None  # holder for efficiency pandas dataframe
         self.sp = None  # SimulationParams instance
@@ -670,8 +669,6 @@ class Simulate:
         self._validate_export_list(copied_value)
         self._exports = copied_value
         self._exports_list = self._generate_exports_list(copied_value)
-        self._exported_obj_names_list = self._generate_exported_obj_names_list(copied_value)
-        self._exported_file_type = collect_unique_values(self._exports)
 
     def _copy_export_list(self, value):
         if not isinstance(value, list):
@@ -782,26 +779,14 @@ class Simulate:
                     exports_list.append((object_element.attributes().original()["name"], file))
         return exports_list
 
-    def _generate_exported_obj_names_list(self, export_list):
-        """
-        Generates a list with the names of the objects that will be exported.
-
-        Args:
-            export_list (list): The validated list of export configurations.
-
-        Returns:
-            list: A list of str representing the names of the objects to export.
-        """
-        self._exported_obj_names_list = []
-        for export_dict in export_list:
-            for object_element, export_files in export_dict.items():
-                if isinstance(export_files, str):
-                    export_files = [export_files]  # Ensure it's a list
-                for _file in export_files:
-                    self._exported_obj_names_list.append(
-                        object_element.attributes().original()["name"]
-                    )
-        return self._exported_obj_names_list
+    def _iter_unique_export_pairs(self):
+        """Yield unique (object_name, export_type) pairs in first-seen order."""
+        seen = set()
+        for export_pair in self._exports_list:
+            if export_pair in seen:
+                continue
+            seen.add(export_pair)
+            yield export_pair
 
     @property
     def params(self):
@@ -1202,16 +1187,11 @@ class Simulate:
         if self.raypyng_analysis:
             self.logger.info("Starting cleanup")
             pp = PostProcess()
-            pp.cleanup(
-                self.sim_path,
-                self.repeat,
-                self._exported_obj_names_list,
-                exported_file_type=self._exported_file_type,
-            )
+            pp.cleanup(self.sim_path, self.repeat, export_pairs=self._exports_list)
             self.logger.info("Done with the cleanup")
             if self.analyze is False and self.raypyng_analysis is True:
                 self.logger.info("Create Pandas Recap Files")
-                self._create_results_dataframe(self._exported_file_type)
+                self._create_results_dataframe()
             self._write_analysis_metadata_file()
         if remove_round_folders:
             self._remove_round_folders()
@@ -1261,20 +1241,31 @@ class Simulate:
             if os.path.exists(round_folder_path):
                 shutil.rmtree(round_folder_path)
 
-    def _create_results_dataframe(self, exported_file_type):
+    def _create_results_dataframe(self):
         looper_path = os.path.join(self.sim_path, "looper.csv")
         looper = pd.read_csv(looper_path)
-        for export in self._exported_obj_names_list:
-            for in_out in exported_file_type:
-                oe_path = os.path.join(self.sim_path, f"{export}_{in_out}.csv")
-                # Reading the data into a DataFrame, specify no comment
-                # handling and read headers normally
-                res = pd.read_csv(oe_path, comment=None, header=0, index_col=False)
-                # Manually remove the '#' from the first column name
-                res.columns = [col.replace("#", "").strip() for col in res.columns]
-                res_combined = pd.concat([looper, res], axis=1)
-                res_combined = res_combined.loc[:, ~res_combined.columns.str.contains("^Unnamed")]
-                res_combined.to_csv(os.path.join(self.sim_path, f"{export}_{in_out}.csv"))
+        missing_files = []
+        for export, in_out in self._iter_unique_export_pairs():
+            oe_path = os.path.join(self.sim_path, f"{export}_{in_out}.csv")
+            if not os.path.exists(oe_path):
+                missing_files.append(oe_path)
+                continue
+
+            # Reading the data into a DataFrame, specify no comment
+            # handling and read headers normally
+            res = pd.read_csv(oe_path, comment=None, header=0, index_col=False)
+            # Manually remove the '#' from the first column name
+            res.columns = [col.replace("#", "").strip() for col in res.columns]
+            res_combined = pd.concat([looper, res], axis=1)
+            res_combined = res_combined.loc[:, ~res_combined.columns.str.contains("^Unnamed")]
+            res_combined.to_csv(os.path.join(self.sim_path, f"{export}_{in_out}.csv"))
+
+        if missing_files:
+            formatted = "\n".join(f"- {path}" for path in missing_files)
+            raise FileNotFoundError(
+                "Missing expected analysis output file(s) for configured sim.exports:\n"
+                f"{formatted}"
+            )
 
     def _unit_for_output_column(self, column_name):
         analysis_units = {
@@ -1316,13 +1307,10 @@ class Simulate:
 
     def _write_analysis_metadata_file(self):
         sample_columns = None
-        for export in self._exported_obj_names_list:
-            for in_out in self._exported_file_type:
-                output_path = os.path.join(self.sim_path, f"{export}_{in_out}.csv")
-                if os.path.exists(output_path):
-                    sample_columns = list(pd.read_csv(output_path, nrows=0).columns)
-                    break
-            if sample_columns is not None:
+        for export, in_out in self._iter_unique_export_pairs():
+            output_path = os.path.join(self.sim_path, f"{export}_{in_out}.csv")
+            if os.path.exists(output_path):
+                sample_columns = list(pd.read_csv(output_path, nrows=0).columns)
                 break
 
         if sample_columns is None:

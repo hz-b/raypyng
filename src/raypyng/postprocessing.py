@@ -511,8 +511,7 @@ class PostProcess:
         self,
         dir_path: str = None,
         repeat: int = 1,
-        exp_elements: list = None,
-        exported_file_type=None,
+        export_pairs: list = None,
     ):
         """Reads all the results of the postprocessing process and summarize
         them in a single file for each exported object.
@@ -524,8 +523,17 @@ class PostProcess:
         Args:
             dir_path (str, optional): The path to the folder to cleanup. Defaults to None.
             repeat (int, optional): number of rounds of simulations. Defaults to 1.
-            exp_elements (list, optional): the exported elements names as str. Defaults to None.
+            export_pairs (list, optional): list of (object_name, export_type) tuples.
         """
+        export_pairs = [] if export_pairs is None else export_pairs
+        unique_export_pairs = []
+        seen = set()
+        for export_pair in export_pairs:
+            if export_pair in seen:
+                continue
+            seen.add(export_pair)
+            unique_export_pairs.append(export_pair)
+
         expected_simulations = len(
             {
                 self._extract_sim_index(path)
@@ -536,52 +544,61 @@ class PostProcess:
                 if self._extract_sim_index(path) is not None
             }
         )
-        for d in exp_elements:
-            for exp in exported_file_type:
-                analyzed_rays = None
-                for round in range(repeat):
-                    dir_path_round = os.path.join(dir_path, "round_" + str(round))
-                    files = self._list_files(
-                        dir_path_round, d + "_analyzed_rays_" + exp + self.format_saved_files
-                    )
-                    for f in files:
-                        sim_index = self._extract_sim_index(f)
-                        if sim_index is None or sim_index >= expected_simulations:
-                            continue
-                        tmp = pd.read_csv(f)
-                        tmp["_sim_index"] = sim_index
-                        if round == 0 and analyzed_rays is None:
-                            analyzed_rays = tmp
-                            analyzed_rays.set_index("_sim_index", inplace=True)
-                        elif round == 0:
-                            tmp.set_index("_sim_index", inplace=True)
+        missing_pairs = []
+        for object_name, export_type in unique_export_pairs:
+            analyzed_rays = None
+            for round in range(repeat):
+                dir_path_round = os.path.join(dir_path, "round_" + str(round))
+                files = self._list_files(
+                    dir_path_round,
+                    object_name + "_analyzed_rays_" + export_type + self.format_saved_files,
+                )
+                for f in files:
+                    sim_index = self._extract_sim_index(f)
+                    if sim_index is None or sim_index >= expected_simulations:
+                        continue
+                    tmp = pd.read_csv(f)
+                    tmp["_sim_index"] = sim_index
+                    if round == 0 and analyzed_rays is None:
+                        analyzed_rays = tmp
+                        analyzed_rays.set_index("_sim_index", inplace=True)
+                    elif round == 0:
+                        tmp.set_index("_sim_index", inplace=True)
+                        analyzed_rays = pd.concat([analyzed_rays, tmp], axis=0)
+                    else:
+                        tmp.set_index("_sim_index", inplace=True)
+                        if sim_index not in analyzed_rays.index:
                             analyzed_rays = pd.concat([analyzed_rays, tmp], axis=0)
                         else:
-                            tmp.set_index("_sim_index", inplace=True)
-                            if sim_index not in analyzed_rays.index:
-                                analyzed_rays = pd.concat([analyzed_rays, tmp], axis=0)
-                            else:
-                                for n in analyzed_rays.columns:
-                                    if isinstance(tmp.iloc[0][n], (int, float)):
-                                        analyzed_rays.loc[sim_index, n] += float(tmp.iloc[0][n])
-                        os.remove(f)
+                            for n in analyzed_rays.columns:
+                                if isinstance(tmp.iloc[0][n], (int, float)):
+                                    analyzed_rays.loc[sim_index, n] += float(tmp.iloc[0][n])
+                    os.remove(f)
 
-                if analyzed_rays is None:
-                    continue
+            if analyzed_rays is None:
+                missing_pairs.append((object_name, export_type))
+                continue
 
-                def divide_numeric_rows(row):
-                    # Check if all elements in the row are of a numeric type
-                    if row.apply(lambda x: isinstance(x, (int, float))).all():
-                        return row / repeat
-                    else:
-                        return row
+            def divide_numeric_rows(row):
+                # Check if all elements in the row are of a numeric type
+                if row.apply(lambda x: isinstance(x, (int, float))).all():
+                    return row / repeat
+                else:
+                    return row
 
-                analyzed_rays = analyzed_rays.apply(divide_numeric_rows, axis=1)
-                analyzed_rays = analyzed_rays.sort_index().reset_index(drop=True)
-                # Apply the function across the DataFrame
-                # save the file
-                fn = os.path.join(dir_path, d + "_" + exp + ".csv")
-                analyzed_rays.to_csv(f"{fn}")
+            analyzed_rays = analyzed_rays.apply(divide_numeric_rows, axis=1)
+            analyzed_rays = analyzed_rays.sort_index().reset_index(drop=True)
+            # Apply the function across the DataFrame
+            # save the file
+            fn = os.path.join(dir_path, object_name + "_" + export_type + ".csv")
+            analyzed_rays.to_csv(f"{fn}")
+
+        if missing_pairs:
+            missing_text = "\n".join(f"- {obj}_{exp}" for obj, exp in missing_pairs)
+            raise FileNotFoundError(
+                "Missing analyzed ray export file(s) for configured sim.exports:\n"
+                f"{missing_text}"
+            )
 
 
 class PostProcessAnalyzed:
