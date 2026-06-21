@@ -80,86 +80,82 @@ in :code:`simulation_name()`
 How To Write a Recipe
 ---------------------
 
-An example of how to write a recipe that exports 
-file for each element present in the beamline automatically.  
- 
- .. code-block:: python
+An example of how to write a recipe that automatically exports a
+file for each element present in the beamline:
+
+.. code-block:: python
+
+    from raypyng.recipes import SimulationRecipe
+
 
     class ExportEachElement(SimulationRecipe):
-    """At one defined energy export a file for each 
-    optical elements
-    """
-    def __init__(self, energy:float,/,nrays:int=None,sim_folder:str=None):
-        """
-        Args:
-            energy_range (np.array, list): the energies to simulate in eV
-            nrays (int): number of rays for the source
-            sim_folder (str, optional): the name of the simulation folder. If None, the rml filename will be used. Defaults to None.
-        
-        """        
-    
-        if not isinstance(energy, (int,float)):
-           raise TypeError('The energy must be an a int or float, while it is a', type(energy))
+        """At one defined energy, export a file for each optical element."""
 
-        self.energy = energy
-        self.nrays  = nrays
-        self.sim_folder = sim_folder
-    
-    def params(self,sim:Simulate):
-        params = []
+        def __init__(self, energy: float, /, nrays: int = None, sim_folder: str = None):
+            """
+            Args:
+                energy (float): the energy to simulate, in eV
+                nrays (int): number of rays for the source
+                sim_folder (str, optional): the name of the simulation folder.
+                    If None, the rml filename will be used. Defaults to None.
+            """
+            if not isinstance(energy, (int, float)):
+                raise TypeError(
+                    'The energy must be an int or float, while it is a', type(energy)
+                )
 
-        # find source and add to param with defined user energy range
-        found_source = False
-        for oe in sim.rml.beamline.children():
-            if hasattr(oe,"photonEnergy"):
-            self.source = oe
-                found_source = True
-                break        
-        if found_source!=True:
-            raise AttributeError('I did not find the source')        
-        params.append({self.source.photonEnergy:self.energy})
-        
-        # set reflectivity to 100%
-        for oe in sim.rml.beamline.children():
+            self.energy = energy
+            self.nrays = nrays
+            self.sim_folder = sim_folder
+
+        def params(self, sim):
+            params = []
+
+            # find the source and scan it over the user-defined energy range
+            found_source = False
+            for oe in sim.rml.beamline.children():
+                if hasattr(oe, "photonEnergy"):
+                    self.source = oe
+                    found_source = True
+                    break
+            if not found_source:
+                raise AttributeError('I did not find the source')
+            params.append({self.source.photonEnergy: self.energy})
+
+            # set reflectivity to 100% on every element that supports it
+            for oe in sim.rml.beamline.children():
                 for par in oe:
                     try:
-                        params.append({par.reflectivityType:0})
-                    except:
+                        params.append({par.reflectivityType: 0})
+                    except Exception:
                         pass
 
-        # all done, return resulting params
-        return params
+            # all done, return the resulting params
+            return params
 
-    def exports(self,sim:Simulate):
-        # find all the elements in the beamline
-        oe_list=[]
-        for oe in sim.rml.beamline.children():
-            oe_list.append(oe)
-        # compose the export list of dictionaries
-        exports = []
-        for oe in oe_list:
-            exports.append({oe:'RawRaysOutgoing'})
-        return exports
+        def exports(self, sim):
+            # export RawRaysOutgoing for every element in the beamline
+            exports = []
+            for oe in sim.rml.beamline.children():
+                exports.append({oe: 'RawRaysOutgoing'})
+            return exports
 
-    def simulation_name(self,sim:Simulate):
-        if self.sim_folder is None:
-            return 'ExportEachElement'
-        else: 
+        def simulation_name(self, sim):
+            if self.sim_folder is None:
+                return 'ExportEachElement'
             return self.sim_folder
+
+
     if __name__ == "__main__":
         from raypyng import Simulate
-        import numpy as np
-        import os
 
-        rml_file = ('rml_file.rml')
-        sim      = Simulate(rml_file, hide=True)
-
+        rml_file = 'rml_file.rml'
+        sim = Simulate(rml_file, hide=True)
 
         sim.analyze = False
 
-        myRecipe = ExportEachElement(energy=1000,nrays=10000,sim_folder='MyRecipeTest')
+        myRecipe = ExportEachElement(energy=1000, nrays=10000, sim_folder='MyRecipeTest')
 
-        # test resolving power simulations
         sim.run(myRecipe, multiprocessing="auto", force=True)
 
 How to work with Undulator File
@@ -183,7 +179,7 @@ WAVE simulation files for the first, third and fifth harmonic, and the Undulator
 
 This produces the following output:
 
-.. code:: python
+.. code-block:: text
 
     I found the following harmonics: dict_keys([1, 3, 5])
     the energy points for each harmonic are equally spaced
@@ -198,7 +194,7 @@ This produces the following output:
     Harmonic number 5, available energies:
     start 400
     stop 2850
-    step 50 
+    step 50
 
 
 We can now extract the file location for all the energies or a subset of the 

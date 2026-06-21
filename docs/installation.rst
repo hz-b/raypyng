@@ -1,8 +1,18 @@
 Installation
 *************
-raypyng works on both **Linux** and **macOS**.
+raypyng runs the simulations on **Linux** and **macOS**.
 
-The installation has two parts that are common to every platform:
+.. warning::
+
+   **Windows is not supported for running simulations.** Driving RAY-UI from
+   Python relies on RAY-UI's *background mode*, which lets raypyng send commands
+   and read results over a pipe. RAY-UI does not provide a background mode on
+   Windows, so there is no way for raypyng to communicate with it there. The
+   pure-Python helpers that do not launch RAY-UI (for example reading/writing
+   ``.rml`` files or the standalone ``Dipole`` spectrum) may still work on
+   Windows, but the whole simulation workflow does not.
+
+The installation has two parts that are common to every supported platform:
 
 #. Install **RAY-UI**, the ray-tracing engine that raypyng drives.
 #. Install the **raypyng** Python package.
