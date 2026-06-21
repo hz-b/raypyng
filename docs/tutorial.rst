@@ -475,13 +475,13 @@ Finally, the simulations can be run using
 
    **Always guard the call to** :code:`sim.run()` **with**
    :code:`if __name__ == '__main__':`. raypyng runs the simulations in parallel
-   through Python's :code:`multiprocessing`. On macOS (and Windows) the worker
-   processes are created with the :code:`spawn` start method, which **re-imports
-   your script** in every worker. Without the guard, each worker would execute
+   through Python's :code:`multiprocessing`. On macOS the worker processes are
+   created with the :code:`spawn` start method, which **re-imports your script**
+   in every worker. Without the guard, each worker would execute
    :code:`sim.run()` again on import, leading to runaway process creation and a
    :code:`RuntimeError`. On Linux the default start method is :code:`fork`, which
    does not re-import the script, so the guard is not strictly required there —
-   but adding it is harmless and makes the same script work on every platform.
+   but adding it is harmless and keeps the script working on both platforms.
 
    A complete script therefore looks like this:
 

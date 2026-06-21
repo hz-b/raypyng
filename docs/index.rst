@@ -51,9 +51,10 @@ how to read the output.
 
 .. note::
 
-   The ``if __name__ == '__main__':`` guard is required on macOS and Windows,
-   where raypyng's parallel workers re-import your script. See the
-   :doc:`tutorial` for details.
+   The ``if __name__ == '__main__':`` guard is required on macOS, where
+   raypyng's parallel workers re-import your script. See the :doc:`tutorial`
+   for details. (raypyng runs simulations on Linux and macOS only — not on
+   Windows.)
 
 
 .. toctree::

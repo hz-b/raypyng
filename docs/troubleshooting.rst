@@ -5,19 +5,29 @@ A short list of the most common questions and pitfalls. Many of these are also
 mentioned in context in the :doc:`installation` and :doc:`tutorial` pages; they
 are collected here for convenience.
 
+Does raypyng work on Windows?
+=============================
+**No, not for running simulations.** Driving RAY-UI from Python relies on
+RAY-UI's *background mode*, which is the channel raypyng uses to send commands
+and read back results. RAY-UI does not offer a background mode on Windows, so
+there is no way for raypyng to communicate with it. The simulation workflow is
+therefore supported on **Linux and macOS only**. Pure-Python helpers that do not
+launch RAY-UI (reading/writing ``.rml`` files, the standalone ``Dipole``
+spectrum, the diode conversion, …) may still work on Windows.
+
 Do I need the ``if __name__ == '__main__':`` guard?
 ===================================================
-**Yes, on macOS and Windows.** raypyng runs the simulations in parallel through
-Python's :code:`multiprocessing`. On macOS and Windows the worker processes are
-created with the :code:`spawn` start method, which **re-imports your script** in
-every worker. If the call to :code:`sim.run()` is not protected by
+**Yes, on macOS.** raypyng runs the simulations in parallel through Python's
+:code:`multiprocessing`. On macOS the worker processes are created with the
+:code:`spawn` start method, which **re-imports your script** in every worker. If
+the call to :code:`sim.run()` is not protected by
 :code:`if __name__ == '__main__':`, each worker re-runs it on import, leading to
 runaway process creation and a :code:`RuntimeError` about the bootstrapping
 phase.
 
 On Linux the default start method is :code:`fork`, which does not re-import the
 script, so the guard is not strictly required there — but adding it is harmless
-and makes the same script work on every platform.
+and keeps the same script working on both supported platforms.
 
 I get a ``RuntimeError`` about "bootstrapping phase"
 ====================================================
