@@ -1,7 +1,7 @@
 # python virtual environment
 .venv/
 .token
-
+docs
 # python specific
 __pycache__/
 
@@ -22,8 +22,9 @@ src/raypyng.egg-info/requires.txt
 src/raypyng.egg-info/SOURCES.txt
 src/raypyng.egg-info/top_level.txt
 
-# Sphinx build output
+# Sphinx build output and docs venvs
 docs/_build/
+venv_docs/
 
 #ignore vscode stuff
 .vscode/configurationCache.log
