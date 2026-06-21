@@ -73,7 +73,8 @@ class RayUIRunner:
         self._options = "-b" if background else ""
         self._process = None
         self._verbose = False
-        if hide:
+        if hide and config.opsys != "Darwin":
+            # xvfb-run is Linux-only; on macOS the app runs headlessly via -b alone
             self._hide = ["xvfb-run", "--auto-servernum", "--server-num=3000"]
         else:
             self._hide = []
