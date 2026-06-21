@@ -2,10 +2,12 @@ import csv
 import itertools
 import json
 import logging
+import multiprocessing as _mp
 import os
 import re
 import shutil
 import signal
+import sys
 import time
 import traceback
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -682,9 +684,9 @@ class Simulate:
 
             copied_exports.append(
                 {
-                    object_element: list(export_files)
-                    if isinstance(export_files, list)
-                    else export_files
+                    object_element: (
+                        list(export_files) if isinstance(export_files, list) else export_files
+                    )
                     for object_element, export_files in export_dict.items()
                 }
             )
@@ -993,7 +995,8 @@ class Simulate:
             ]
         else:
             expected_suffixes = [
-                f"_{export_config[0]}-{export_config[1]}.csv" for export_config in self._exports_list
+                f"_{export_config[0]}-{export_config[1]}.csv"
+                for export_config in self._exports_list
             ]
 
         found_per_export = {suffix: set() for suffix in expected_suffixes}
@@ -1017,7 +1020,8 @@ class Simulate:
         completed_ids = expected_ids.copy()
         for suffix, found_ids in found_per_export.items():
             self.logger.info(
-                f"Round {round_number}: found {len(found_ids)}/{len(expected_ids)} files for {suffix}"
+                f"Round {round_number}: found {len(found_ids)}/{len(expected_ids)} "
+                f"files for {suffix}"
             )
             completed_ids &= found_ids
 
@@ -1214,9 +1218,14 @@ class Simulate:
                     print("Terminating child processes...")
                     announced_cleanup = True
                 child.terminate()
-                child.wait(timeout=3)  # Give it some time to gracefully shut down
+                child.wait(timeout=3)
             except psutil.NoSuchProcess:
                 continue
+            except psutil.TimeoutExpired:
+                try:
+                    child.kill()
+                except psutil.NoSuchProcess:
+                    pass
 
         # Now target specific Xvfb processes with display numbers higher than 3000
         for proc in psutil.process_iter(["pid", "name", "cmdline"]):
@@ -1385,7 +1394,11 @@ class Simulate:
         rerun_pbar = None
 
         try:
-            executor = ProcessPoolExecutor(max_workers=multiprocessing)
+            # macOS defaults to 'spawn' which re-imports __main__ in each worker and
+            # breaks scripts that lack an `if __name__ == '__main__':` guard.
+            # Force 'fork' so workers inherit the parent's memory, matching Linux behaviour.
+            mp_context = _mp.get_context("fork") if sys.platform == "darwin" else None
+            executor = ProcessPoolExecutor(max_workers=multiprocessing, mp_context=mp_context)
             simulation_params_batch = []
             batch_length = 0
             remaining_simulations = total_simulations
@@ -1459,7 +1472,9 @@ class Simulate:
                 f"Round {round_number}: final check found {len(round_missing)} missing simulations"
             )
             for sim_number in round_missing:
-                self.logger.info(f"This simulation is missing: round {round_number}, number {sim_number}")
+                self.logger.info(
+                    f"This simulation is missing: round {round_number}, number {sim_number}"
+                )
                 missing_sim.append({"round": round_number, "sim_number": sim_number})
 
         if len(missing_sim) >= 1 and self.simulations_checked is False:
