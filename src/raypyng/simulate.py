@@ -6,6 +6,7 @@ import os
 import re
 import shutil
 import signal
+import sys
 import time
 import traceback
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -682,9 +683,9 @@ class Simulate:
 
             copied_exports.append(
                 {
-                    object_element: list(export_files)
-                    if isinstance(export_files, list)
-                    else export_files
+                    object_element: (
+                        list(export_files) if isinstance(export_files, list) else export_files
+                    )
                     for object_element, export_files in export_dict.items()
                 }
             )
@@ -993,7 +994,8 @@ class Simulate:
             ]
         else:
             expected_suffixes = [
-                f"_{export_config[0]}-{export_config[1]}.csv" for export_config in self._exports_list
+                f"_{export_config[0]}-{export_config[1]}.csv"
+                for export_config in self._exports_list
             ]
 
         found_per_export = {suffix: set() for suffix in expected_suffixes}
@@ -1017,7 +1019,8 @@ class Simulate:
         completed_ids = expected_ids.copy()
         for suffix, found_ids in found_per_export.items():
             self.logger.info(
-                f"Round {round_number}: found {len(found_ids)}/{len(expected_ids)} files for {suffix}"
+                f"Round {round_number}: found {len(found_ids)}/{len(expected_ids)} "
+                f"files for {suffix}"
             )
             completed_ids &= found_ids
 
@@ -1200,23 +1203,62 @@ class Simulate:
             self.cleanup_child_processes()
             os._exit(0)
 
+    @staticmethod
+    def _is_rayui_or_xvfb_process(proc):
+        """Return True only for leftover RAY-UI / Xvfb processes.
+
+        The multiprocessing resource_tracker and the ProcessPoolExecutor worker
+        processes (``spawn_main``) must never be terminated here: killing the
+        resource_tracker corrupts its bookkeeping and triggers
+        'resource_tracker: process died unexpectedly' warnings plus KeyErrors.
+        The executor reaps its own workers via shutdown(); we only mop up the
+        RAY-UI/Xvfb subprocesses those workers may have left behind.
+        """
+        rayui_markers = ("ray-ui", "rayui")
+        try:
+            name = (proc.name() or "").lower()
+            cmdline = " ".join(proc.cmdline()).lower()
+        except (psutil.NoSuchProcess, psutil.AccessDenied):
+            return False
+
+        # Never touch Python multiprocessing machinery.
+        if "resource_tracker" in cmdline or "spawn_main" in cmdline:
+            return False
+
+        if "xvfb" in name or "xvfb" in cmdline:
+            return True
+        return any(marker in name or marker in cmdline for marker in rayui_markers)
+
     def cleanup_child_processes(self):
-        """Clean up all child processes initiated by this process
-        and any specific Xvfb processes."""
+        """Clean up leftover RAY-UI and Xvfb processes.
+
+        Only RAY-UI/Xvfb processes are targeted; the multiprocessing
+        resource_tracker and the executor's worker processes are left alone.
+        """
         current_process = psutil.Process()
         children = current_process.children(recursive=True)
         announced_cleanup = False
 
-        # First, terminate general child processes
+        # Terminate only leftover RAY-UI / Xvfb child processes
         for child in children:
+            if not self._is_rayui_or_xvfb_process(child):
+                continue
             try:
                 if not announced_cleanup:
-                    print("Terminating child processes...")
+                    print("Terminating leftover RAY-UI processes...")
                     announced_cleanup = True
                 child.terminate()
-                child.wait(timeout=3)  # Give it some time to gracefully shut down
+                child.wait(timeout=3)
             except psutil.NoSuchProcess:
                 continue
+            except psutil.TimeoutExpired:
+                # On macOS SIGKILL on a GUI app triggers the crash reporter dialog;
+                # leave it to be reaped rather than force-killing.
+                if sys.platform != "darwin":
+                    try:
+                        child.kill()
+                    except psutil.NoSuchProcess:
+                        pass
 
         # Now target specific Xvfb processes with display numbers higher than 3000
         for proc in psutil.process_iter(["pid", "name", "cmdline"]):
@@ -1459,7 +1501,9 @@ class Simulate:
                 f"Round {round_number}: final check found {len(round_missing)} missing simulations"
             )
             for sim_number in round_missing:
-                self.logger.info(f"This simulation is missing: round {round_number}, number {sim_number}")
+                self.logger.info(
+                    f"This simulation is missing: round {round_number}, number {sim_number}"
+                )
                 missing_sim.append({"round": round_number, "sim_number": sim_number})
 
         if len(missing_sim) >= 1 and self.simulations_checked is False:

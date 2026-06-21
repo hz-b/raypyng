@@ -1,18 +1,56 @@
 Installation
 *************
-raypyng will work only if using a Linux or a macOS distribution.
+raypyng works on both **Linux** and **macOS**.
+
+The installation has two parts that are common to every platform:
+
+#. Install **RAY-UI**, the ray-tracing engine that raypyng drives.
+#. Install the **raypyng** Python package.
+
+On Linux there is one extra step: installing **xvfb** so that RAY-UI can run
+headless. On macOS xvfb is **not** needed and must not be installed.
+
+Pick the section for your operating system below.
+
 
 Install RAY-UI
---------------
-Download the RAY-UI installer from  `this link
-<https://www.helmholtz-berlin.de/forschung/oe/wi/optik-strahlrohre/arbeitsgebiete/ray_en.html>`_, 
-and run the installer.
+==============
+Download the RAY-UI installer from `this link
+<https://www.helmholtz-berlin.de/forschung/oe/wi/optik-strahlrohre/arbeitsgebiete/ray_en.html>`_
+and run it. The installer is available for both Linux and macOS.
+
+On macOS the installer creates a ``Ray-UI.app`` bundle inside the chosen
+installation folder (for example ``~/Applications/RAY-UI/Ray-UI.app``). raypyng
+detects this layout automatically.
 
 
+Install raypyng (Python package)
+================================
+You will need Python 3.10 or newer. From a shell ("Terminal" on macOS), check
+your current Python version:
 
-Install xvfb 
-------------
-xvfb is a virtual X11 framebuffer server that let you run RAY-UI headless
+.. code-block:: bash
+
+  python3 --version
+
+If that version is older than 3.10, update it before continuing.
+
+We strongly recommend installing raypyng into a **virtual environment** so that
+this installation does not interfere with any existing Python software. Setting
+up and activating a virtual environment is outside the scope of this guide;
+please refer to your preferred tool's documentation.
+
+Once your environment is ready, install raypyng:
+
+.. code-block:: bash
+
+   python3 -m pip install --upgrade raypyng
+
+
+Linux installation
+===================
+On Linux, RAY-UI needs a virtual X11 framebuffer to run without a visible
+graphical display. This is provided by **xvfb**.
 
 Install xvfb:
 
@@ -20,67 +58,26 @@ Install xvfb:
 
   sudo apt install xvfb
 
+.. note::
+
+  The ``xvfb-run`` script is part of the xvfb distribution and runs an
+  application on a new virtual X11 server. raypyng uses it automatically to
+  launch RAY-UI headlessly.
+
+After installing RAY-UI, xvfb, and raypyng (see the sections above), you are
+ready to run simulations.
+
+
+macOS installation
+===================
+On macOS you only need to install **RAY-UI** and the **raypyng** Python package
+(see the sections above). You do **not** need to install xvfb — raypyng skips it
+automatically on macOS, and trying to install it is unnecessary.
 
 .. note::
 
-  xvfb-run script is a part of the xvfb distribution and 
-  runs an app on a new virtual X11 server.
-
-
-Install raypyng
----------------
-* You will need Python 3.8 or newer. From a shell ("Terminal" on OSX), 
-  check your current Python version.
-
-  .. code-block:: bash
-
-    python3 --version
-
-  If that version is less than 3.8, you must update it.
-
-  We recommend installing raypyng into a "virtual environment" so that this
-  installation will not interfere with any existing Python software:
-
-  .. code-block:: bash
-
-    python3 -m venv ~/raypyng-tutorial
-    source ~/raypyng-tutorial/bin/activate
-
-  Alternatively, if you are a
-  `conda <https://conda.io/docs/user-guide/install/download.html>`_ user,
-  you can create a conda environment:
-
-  .. code-block:: bash
-
-    conda create -n raypyng-tutorial "python>=3.8"
-    conda activate raypyng-tutorial
-
-* Install the latest versions of raypyng and ophyd. Also, install IPython 
-  (a Python interpreter designed by scientists for scientists).
-
-  .. code-block:: bash
-
-     python3 -m pip install --upgrade raypyng ipython
-
-* Start IPython:
-
-  .. code-block:: python
-
-     ipython --matplotlib=qt5
-
-  The flag ``--matplotlib=qt5`` is necessary for live-updating plots to work.
-
-  Or, if you wish you use raypyng from a Jupyter notebook, install a kernel like
-  so:
-
-  .. code-block:: python
-
-     ipython kernel install --user --name=raypyng-tutorial --display-name "Python (raypyng)"
-
-  You may start Jupyter from any environment where it is already installed, or
-  install it in this environment alongside raypyng and run it from there:
-
-  .. code-block:: python
-
-     pip install notebook
-     jupyter notebook
+  While simulations are running on macOS, the system may sporadically show a
+  dialog saying that **"Ray-UI is not responding" / "Ray-UI quit unexpectedly"**.
+  This is harmless: it is just macOS noticing that the headless RAY-UI instances
+  are being started and stopped rapidly. The simulations are not affected and
+  complete normally — you can safely **ignore and dismiss these dialogs**.

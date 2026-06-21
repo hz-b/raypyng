@@ -3,65 +3,49 @@ import numpy as np
 import os
 import pandas as pd
 
-this_file_dir=os.path.dirname(os.path.realpath(__file__))
-rml_file = os.path.join(this_file_dir,'rml/dipole_beamline.rml')
+if __name__ == '__main__':
+    this_file_dir = os.path.dirname(os.path.realpath(__file__))
+    rml_file = os.path.join(this_file_dir, 'rml/dipole_beamline.rml')
 
-sim = Simulate(rml_file, hide=True)
+    sim = Simulate(rml_file, hide=True)
 
-rml=sim.rml
-beamline = sim.rml.beamline
+    rml = sim.rml
+    beamline = sim.rml.beamline
 
+    # define the values of the parameters to scan
+    energy   = np.arange(200, 7201, 250)
+    SlitSize = np.array([0.1])
+    cff      = np.array([2.25, 3])
+    nrays    = 5e3
 
+    params = [
+        {beamline.Dipole.photonEnergy: energy},
+        {beamline.ExitSlit.totalHeight: SlitSize},
+        {beamline.PG.cFactor: cff},
+        {beamline.Dipole.numberRays: nrays},
+    ]
 
-# define the values of the parameters to scan 
-energy    = np.arange(200, 7201,250)
-SlitSize  = np.array([0.1])
-cff       = np.array([2.25, 3])
-nrays     = 5e3
+    sim.params = params
+    sim.simulation_name = 'ML_Mono'
+    sim.repeat = 1
+    sim.analyze = False
+    sim.raypyng_analysis = True
 
-# define a list of dictionaries with the parameters to scan
-params = [  
-            # set two parameters: "alpha" and "beta" in a dependent way. 
-            {beamline.Dipole.photonEnergy:energy}, 
-            # set a range of  values 
-            {beamline.ExitSlit.totalHeight:SlitSize},
-            # set values 
-            {beamline.PG.cFactor:cff},
-            {beamline.Dipole.numberRays:nrays}
-        ]
+    sim.exports = [{beamline.DetectorAtFocus: ['RawRaysOutgoing']}]
 
-#and then plug them into the Simulation class
-sim.params=params
+    # efficiency calculated externally; multiplied into the RAY-UI result
+    eff = pd.DataFrame({
+        "Efficiency": [0.9, 0.8, 0.7],
+        "Energy[eV]": [100, 200, 300],
+    })
+    sim.efficiency = eff
 
-# sim.simulation_folder = '/home/simone/Documents/RAYPYNG/raypyng/test'
-sim.simulation_name = 'ML_Mono'
-
-# repeat the simulations as many time as needed
-sim.repeat = 1
-
-sim.analyze = False # don't let RAY-UI analyze the results
-sim.raypyng_analysis=True # let raypyng analyze the results
-
-## This must be a list of dictionaries
-sim.exports  =  [{beamline.DetectorAtFocus:['RawRaysOutgoing']},
-                ]
-
-# the efficiency of the multilayer monochromator has been calculated with other programs
-# or, in this example is we make it up
-eff = pd.DataFrame({
-    "Efficiency": [0.9, 0.8, 0.7],
-    "Energy[eV]": [100, 200, 300]
-})
-# and then we just pass it to the simulatins class to multiply this by the efficency 
-# calculated by the RAY-UI
-sim.efficiency = eff
-
-sim.run(
-    multiprocessing="auto",
-    force=True,
-    remove_rawrays=True,
-    remove_round_folders=True,
-)
+    sim.run(
+        multiprocessing="auto",
+        force=True,
+        remove_rawrays=True,
+        remove_round_folders=True,
+    )
 
 
 

@@ -1,66 +1,53 @@
 import numpy as np
 from raypyng import Simulate
 
-# define the values of the parameters to scan 
-def make_slopes_params(param_dict):
-    # Start with the number of parameters
-    # First entry is the all-zero base
-    total_steps = 1 + sum(len(v) for v in param_dict.values())
+if __name__ == '__main__':
+    def make_slopes_params(param_dict):
+        total_steps = 1 + sum(len(v) for v in param_dict.values())
+        scan_dict = {k: [0] * total_steps for k in param_dict}
+        cursor = 1
+        for key, values in param_dict.items():
+            for v in values:
+                scan_dict[key][cursor] = v
+                cursor += 1
+        return scan_dict
 
-    # Initialize all-zero lists of correct length
-    scan_dict = {k: [0] * total_steps for k in param_dict}
+    sim = Simulate('rml/dipole_beamline.rml', hide=True)
 
-    # Fill one parameter at a time (shifted by +1)
-    cursor = 1  # Start after the zero baseline
-    for key, values in param_dict.items():
-        for v in values:
-            scan_dict[key][cursor] = v
-            cursor += 1
+    rml = sim.rml
+    beamline = sim.rml.beamline
 
-    return scan_dict
+    energy = np.array([500, 1000])
+    rounds = 1
+    nrays  = 1e4
 
-sim = Simulate('rml/dipole_beamline.rml', hide=True)
+    slopes = {
+        beamline.M1.slopeErrorMer: np.arange(0.3, 1.1, 0.1),
+        beamline.M1.slopeErrorSag: np.arange(1.5, 2.1, 0.1),
+        beamline.M3.slopeErrorSag: np.arange(0.5, 2.1, 0.5),
+        beamline.M3.slopeErrorMer: np.arange(0.3, 0.61, 0.3),
+    }
 
-rml=sim.rml
-beamline = sim.rml.beamline
+    slopes_dict = make_slopes_params(slopes)
 
-energy = np.array([500, 1000])    
-rounds = 1
-nrays  = 1e4
+    params = [
+        {beamline.PG.cFactor: [2, 5]},
+        {beamline.Dipole.photonEnergy: energy, beamline.Dipole.energySpread: energy / 1000},
+        {beamline.Dipole.numberRays: nrays},
+    ]
+    params.append(slopes_dict)
 
-slopes = {beamline.M1.slopeErrorMer:  np.arange(0.3,1.1, 0.1), 
-            beamline.M1.slopeErrorSag:np.arange(1.5, 2.1, 0.1), 
-            beamline.M3.slopeErrorSag:np.arange(0.5, 2.1, 0.5), 
-            beamline.M3.slopeErrorMer:np.arange(0.3, 0.61, 0.3), 
-            }
+    sim.params = params
+    sim.simulation_name = 'SlopeErrors'
+    sim.repeat = rounds
+    sim.analyze = False
+    sim.raypyng_analysis = True
 
-slopes_dict = make_slopes_params(slopes)
+    sim.exports = [{beamline.DetectorAtFocus: ['RawRaysOutgoing']}]
 
-# define a list of dictionaries with the parameters to scan
-params = [  
-            {beamline.PG.cFactor: [2,5]},
-            {beamline.Dipole.photonEnergy:energy,
-            beamline.Dipole.energySpread:energy/1000},
-            {beamline.Dipole.numberRays:nrays}, 
-        ]
-
-params.append(slopes_dict)  # append the slopes dictionary to the list of parameters
-#and then plug them into the Simulation class
-sim.params=params
-
-sim.simulation_name = 'SlopeErrors'
-
-# repeat the simulations as many time as needed
-sim.repeat = rounds
-
-sim.analyze = False # don't let RAY-UI analyze the results
-sim.raypyng_analysis = True # let raypyng analyze the results
-## This must be a list of dictionaries
-sim.exports  =  [{beamline.DetectorAtFocus:['RawRaysOutgoing']}]
-
-sim.run(
-    multiprocessing="auto",
-    force=False,
-    remove_round_folders=False,
-    remove_rawrays=False,
-)
+    sim.run(
+        multiprocessing="auto",
+        force=False,
+        remove_round_folders=False,
+        remove_rawrays=False,
+    )
