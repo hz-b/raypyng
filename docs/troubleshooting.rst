@@ -46,7 +46,7 @@ installation is elsewhere, pass the path explicitly:
 
 .. code-block:: python
 
-    sim = Simulate('rml/elisa.rml', hide=True, ray_path='/path/to/RAY-UI')
+    sim = Simulate('rml/dipole_beamline.rml', hide=True, ray_path='/path/to/RAY-UI')
 
 On macOS the installer creates a ``Ray-UI.app`` bundle, so the installation
 folder is the directory that *contains* ``Ray-UI.app`` (for example

@@ -15,14 +15,14 @@ Using the :code:`RMLFile` class it is possible to manipulate a beamline file pro
 
     from raypyng.rml import RMLFile
 
-    rml = RMLFile('rml/elisa.rml')
+    rml = RMLFile('rml/dipole_beamline.rml')
     print(rml)
 
 Output:
 
 .. code-block:: text
 
-    RMLFile('rml/elisa.rml', template='rml/elisa.rml')
+    RMLFile('rml/dipole_beamline.rml', template='rml/dipole_beamline.rml')
 
 The filename can be accessed with the :code:`filename` attribute:
 
@@ -34,14 +34,14 @@ Output:
 
 .. code-block:: text
 
-    rml/elisa.rml
+    rml/dipole_beamline.rml
 
 and the beamline is available under:
 
 .. code-block:: python
 
-    elisa = rml.beamline
-    print(elisa)
+    beamline = rml.beamline
+    print(beamline)
 
 Output:
 
@@ -54,7 +54,7 @@ the :code:`children()` method:
 
 .. code-block:: python
 
-    for i, oe in enumerate(elisa.children()):
+    for i, oe in enumerate(beamline.children()):
         print('OE ', i, ':', oe.resolvable_name())
 
 Output:
@@ -77,7 +77,7 @@ For instance, to print all the parameters of the Dipole:
 .. code-block:: python
 
     # print all the parameters of the Dipole
-    for param in elisa.Dipole.children():
+    for param in beamline.Dipole.children():
         print('Dipole param: ', param.id)
 
 Output:
@@ -116,13 +116,13 @@ Any parameter can be read and modified through its :code:`cdata` attribute:
 .. code-block:: python
 
     # read the current value
-    print(elisa.Dipole.photonEnergy.cdata)
+    print(beamline.Dipole.photonEnergy.cdata)
 
     # modify the value
-    elisa.Dipole.photonEnergy.cdata = str(2000)
+    beamline.Dipole.photonEnergy.cdata = str(2000)
 
     # read it back
-    print(elisa.Dipole.photonEnergy.cdata)
+    print(beamline.Dipole.photonEnergy.cdata)
 
 Output:
 
@@ -135,7 +135,7 @@ Once you are done with the modifications, you can save the rml file using the :c
 
 .. code-block:: python
 
-    rml.write('rml/new_elisa.rml')
+    rml.write('rml/new_dipole_beamline.rml')
 
 
 RAY-UI API
@@ -172,7 +172,7 @@ It is possible to load an rml file and trace it:
 
 .. code-block:: python
 
-    a.load('rml/elisa.rml')
+    a.load('rml/dipole_beamline.rml')
     a.trace(analyze=True)
 
 Export the files for the elements of interest:
@@ -192,7 +192,7 @@ instance if you change the photon energy, it will update the source flux):
 
 .. code-block:: python
 
-    a.save('rml/new_elisa')
+    a.save('rml/new_dipole_beamline')
 
 And finally we can quit the RAY-UI instance that we opened:
 
@@ -207,8 +207,8 @@ Perform Simulations
 --------------------
 raypyng is not able to create a beamline from scratch. To do so, use RAY-UI, 
 create a beamline, and save it. What you save is :code:`.rml` file, which you have to 
-pass as an argument to the :code:`Simulate` class. In the following example, we 
-use the file for a beamline called `elisa`, and the file is saved in :code:`rml/elisa.rml`. 
+pass as an argument to the :code:`Simulate` class. In the following example, we
+use a dipole beamline, saved in :code:`rml/dipole_beamline.rml`.
 On Linux, the :code:`hide` parameter can be set to :code:`True` only if `xvfb`
 is installed. On macOS xvfb is not needed and :code:`hide` is simply ignored, so
 it is safe to leave it set to :code:`True`.
@@ -216,10 +216,10 @@ it is safe to leave it set to :code:`True`.
 .. code-block:: python
 
     from raypyng import Simulate
-    rml_file = 'rml/elisa.rml'
+    rml_file = 'rml/dipole_beamline.rml'
 
     sim = Simulate(rml_file, hide=True)
-    elisa = sim.rml.beamline
+    beamline = sim.rml.beamline
 
 The elements of the beamline are now available as python objects, as well as 
 their properties. If working in ipython, tab autocompletion is available. 
@@ -228,13 +228,13 @@ For instance to access the source, a dipole in this case:
 .. code-block:: python
 
     # this is the dipole object
-    elisa.Dipole 
+    beamline.Dipole 
     # to acess its parameter, for instance, the photonFlux
-    elisa.Dipole.photonFlux
+    beamline.Dipole.photonFlux
     # to access the value 
-    elisa.Dipole.photonFlux.cdata
+    beamline.Dipole.photonFlux.cdata
     # to modify the value
-    elisa.Dipole.photonFlux.cdata = 10
+    beamline.Dipole.photonFlux.cdata = 10
 
 
 Independent and dependent parameters
@@ -275,8 +275,8 @@ aperture of the exit slit:
 
     # one key per dictionary -> both parameters are independent
     params = [
-        {elisa.Dipole.photonEnergy: energy},
-        {elisa.ExitSlit.totalHeight: SlitSize},
+        {beamline.Dipole.photonEnergy: energy},
+        {beamline.ExitSlit.totalHeight: SlitSize},
     ]
 
     # plug them into the Simulate class
@@ -332,8 +332,8 @@ the same length.
 
     # photonEnergy is independent; numberRays is dependent on it
     params = [
-        {elisa.Dipole.photonEnergy: energy, elisa.Dipole.numberRays: nrays},
-        {elisa.ExitSlit.totalHeight: SlitSize},
+        {beamline.Dipole.photonEnergy: energy, beamline.Dipole.numberRays: nrays},
+        {beamline.ExitSlit.totalHeight: SlitSize},
     ]
 
     sim.params = params
@@ -461,8 +461,8 @@ The exports are available for each optical element in the beamline, ImagePlanes 
 .. code-block:: python
 
     ## This must be a list of dictionaries
-    sim.exports  =  [{elisa.Dipole:['ScalarElementProperties']},
-                    {elisa.DetectorAtFocus:['ScalarBeamProperties']}
+    sim.exports  =  [{beamline.Dipole:['ScalarElementProperties']},
+                    {beamline.DetectorAtFocus:['ScalarBeamProperties']}
                     ]
 
 Finally, the simulations can be run using
@@ -491,16 +491,16 @@ Finally, the simulations can be run using
        from raypyng import Simulate
 
        if __name__ == '__main__':
-           rml_file = 'rml/elisa.rml'
+           rml_file = 'rml/dipole_beamline.rml'
            sim = Simulate(rml_file, hide=True)
-           elisa = sim.rml.beamline
+           beamline = sim.rml.beamline
 
            sim.params = [
-               {elisa.Dipole.photonEnergy: np.array([200, 400, 600])},
-               {elisa.ExitSlit.totalHeight: np.array([0.1])},
+               {beamline.Dipole.photonEnergy: np.array([200, 400, 600])},
+               {beamline.ExitSlit.totalHeight: np.array([0.1])},
            ]
            sim.simulation_name = 'test'
-           sim.exports = [{elisa.DetectorAtFocus: ['RawRaysOutgoing']}]
+           sim.exports = [{beamline.DetectorAtFocus: ['RawRaysOutgoing']}]
 
            sim.run(multiprocessing="auto", force=True)
 

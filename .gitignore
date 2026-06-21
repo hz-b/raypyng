@@ -32,6 +32,6 @@ venv_docs/
 .vscode/targets.log
 
 # ignore output of examples/tests
-examples/rml/new_elisa.rml
+examples/rml/new_dipole_beamline.rml
 examples/test_exportDetectorAtFocus-RawRaysOutgoing.csv
 examples/test_exportDipole-RawRaysOutgoing.csv

@@ -29,7 +29,7 @@ analyzed rays at the focus:
 
     if __name__ == '__main__':
         # a beamline previously saved from RAY-UI
-        sim = Simulate('rml/elisa.rml', hide=True)
+        sim = Simulate('rml/dipole_beamline.rml', hide=True)
         beamline = sim.rml.beamline
 
         # scan the source photon energy
