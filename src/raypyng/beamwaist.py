@@ -245,8 +245,13 @@ class PlotBeamwaist:
         fig, (ax1, ax2) = plt.subplots(2, figsize=(6.4 * g, 4.8 * g))
         pcm = ax1.pcolormesh(x / 1000, y, self.xh, cmap="inferno")
         ax1.clear()
-        ax1.pcolormesh(x / 1000, y, np.log(self.xh), cmap="inferno")
-        ax2.pcolormesh(x / 1000, y, np.log(self.yh), cmap="inferno")
+        # empty histogram bins are 0, so log() would warn about divide-by-zero;
+        # the resulting -inf renders as the lowest colour, which is what we want.
+        with np.errstate(divide="ignore"):
+            log_xh = np.log(self.xh)
+            log_yh = np.log(self.yh)
+        ax1.pcolormesh(x / 1000, y, log_xh, cmap="inferno")
+        ax2.pcolormesh(x / 1000, y, log_yh, cmap="inferno")
 
         ax1.set_title("top view")
         ax2.set_title("side view")

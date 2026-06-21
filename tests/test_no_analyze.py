@@ -112,14 +112,14 @@ class TestNoAnalyze(unittest.TestCase):
             f = find_files_in_folder(path, suffix=".rml")
             self.assertEqual(8, len(f))
 
-    def test_round_folders_rml(self):
+    def test_round_folders_dat(self):
         dirpath = "RAYPy_Simulation_test_NoAnalyze"
         for i in range(2):
             path = os.path.join(dirpath, "round_" + str(i))
             f = find_files_in_folder(path, suffix=".dat")
             self.assertEqual(16, len(f))
 
-    def test_input_Dipole_file(self):
+    def test_combined_Dipole_file(self):
         dirpath = "RAYPy_Simulation_test_NoAnalyze"
         file = "Dipole.dat"
         path = os.path.join(dirpath, file)
