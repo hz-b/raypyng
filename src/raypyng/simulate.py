@@ -2,7 +2,6 @@ import csv
 import itertools
 import json
 import logging
-import multiprocessing as _mp
 import os
 import re
 import shutil
@@ -1204,28 +1203,62 @@ class Simulate:
             self.cleanup_child_processes()
             os._exit(0)
 
+    @staticmethod
+    def _is_rayui_or_xvfb_process(proc):
+        """Return True only for leftover RAY-UI / Xvfb processes.
+
+        The multiprocessing resource_tracker and the ProcessPoolExecutor worker
+        processes (``spawn_main``) must never be terminated here: killing the
+        resource_tracker corrupts its bookkeeping and triggers
+        'resource_tracker: process died unexpectedly' warnings plus KeyErrors.
+        The executor reaps its own workers via shutdown(); we only mop up the
+        RAY-UI/Xvfb subprocesses those workers may have left behind.
+        """
+        rayui_markers = ("ray-ui", "rayui")
+        try:
+            name = (proc.name() or "").lower()
+            cmdline = " ".join(proc.cmdline()).lower()
+        except (psutil.NoSuchProcess, psutil.AccessDenied):
+            return False
+
+        # Never touch Python multiprocessing machinery.
+        if "resource_tracker" in cmdline or "spawn_main" in cmdline:
+            return False
+
+        if "xvfb" in name or "xvfb" in cmdline:
+            return True
+        return any(marker in name or marker in cmdline for marker in rayui_markers)
+
     def cleanup_child_processes(self):
-        """Clean up all child processes initiated by this process
-        and any specific Xvfb processes."""
+        """Clean up leftover RAY-UI and Xvfb processes.
+
+        Only RAY-UI/Xvfb processes are targeted; the multiprocessing
+        resource_tracker and the executor's worker processes are left alone.
+        """
         current_process = psutil.Process()
         children = current_process.children(recursive=True)
         announced_cleanup = False
 
-        # First, terminate general child processes
+        # Terminate only leftover RAY-UI / Xvfb child processes
         for child in children:
+            if not self._is_rayui_or_xvfb_process(child):
+                continue
             try:
                 if not announced_cleanup:
-                    print("Terminating child processes...")
+                    print("Terminating leftover RAY-UI processes...")
                     announced_cleanup = True
                 child.terminate()
                 child.wait(timeout=3)
             except psutil.NoSuchProcess:
                 continue
             except psutil.TimeoutExpired:
-                try:
-                    child.kill()
-                except psutil.NoSuchProcess:
-                    pass
+                # On macOS SIGKILL on a GUI app triggers the crash reporter dialog;
+                # leave it to be reaped rather than force-killing.
+                if sys.platform != "darwin":
+                    try:
+                        child.kill()
+                    except psutil.NoSuchProcess:
+                        pass
 
         # Now target specific Xvfb processes with display numbers higher than 3000
         for proc in psutil.process_iter(["pid", "name", "cmdline"]):
@@ -1394,11 +1427,7 @@ class Simulate:
         rerun_pbar = None
 
         try:
-            # macOS defaults to 'spawn' which re-imports __main__ in each worker and
-            # breaks scripts that lack an `if __name__ == '__main__':` guard.
-            # Force 'fork' so workers inherit the parent's memory, matching Linux behaviour.
-            mp_context = _mp.get_context("fork") if sys.platform == "darwin" else None
-            executor = ProcessPoolExecutor(max_workers=multiprocessing, mp_context=mp_context)
+            executor = ProcessPoolExecutor(max_workers=multiprocessing)
             simulation_params_batch = []
             batch_length = 0
             remaining_simulations = total_simulations

@@ -172,7 +172,9 @@ raypyng is not able to create a beamline from scratch. To do so, use RAY-UI,
 create a beamline, and save it. What you save is :code:`.rml` file, which you have to 
 pass as an argument to the :code:`Simulate` class. In the following example, we 
 use the file for a beamline called `elisa`, and the file is saved in :code:`rml/elisa.rml`. 
-The :code:`hide` parameter can be set to true only if `xvfb` is installed.
+On Linux, the :code:`hide` parameter can be set to :code:`True` only if `xvfb`
+is installed. On macOS xvfb is not needed and :code:`hide` is simply ignored, so
+it is safe to leave it set to :code:`True`.
 
 .. code-block:: python
 
