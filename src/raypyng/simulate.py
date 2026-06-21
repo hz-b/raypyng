@@ -376,7 +376,7 @@ class Simulate:
                                   the standard installation paths.
     """
 
-    def __init__(self, rml=None, hide=False, ray_path=None, **kwargs) -> None:
+    def __init__(self, rml=None, hide=False, ray_path=None, engine="ray-ui", **kwargs) -> None:
         """Initialize the class with a rml file
 
         Args:
@@ -388,6 +388,8 @@ class Simulate:
             ray_path (str, optional): the path to the RAY-UI installation folder.
                                       If None, the program will look for RAY-UI in
                                       the standard installation paths.
+            engine (str, optional): simulation engine to use. ``"ray-ui"`` (default)
+                                    or ``"rayx"`` (requires ``pip install rayx``).
 
         Raises:
             Exception: If the rml file is not defined an exception is raised
@@ -406,6 +408,7 @@ class Simulate:
         self.path = None  # Path for simulation execution
         self.prefix = "RAYPy_Simulation"  # Simulation prefix
         self._hide = hide  # Hide GUI leftovers
+        self._engine = engine  # Simulation engine ("ray-ui" or "rayx")
         self.analyze = True  # Enable RAY-UI analysis
         self._repeat = 1  # Number of simulation repeats
         self.raypyng_analysis = False  # Enable RAYPyNG analysis
@@ -1160,9 +1163,19 @@ class Simulate:
         self._setup_simulation_environment(recipe)
         self._validate_run_configuration()
 
-        # test that we car run RAY-UI
-        runner = RayUIRunner(ray_path=self.ray_path, hide=True)
-        runner.kill()
+        if self._engine == "ray-ui":
+            runner = RayUIRunner(ray_path=self.ray_path, hide=True)
+            runner.kill()
+        elif self._engine == "rayx":
+            try:
+                import rayx  # noqa: F401
+            except ImportError:
+                raise ImportError(
+                    "rayx is not installed or not available on this platform. "
+                    "Install it with: pip install raypyng[rayx]"
+                ) from None
+        else:
+            raise ValueError(f"Unknown engine '{self._engine}'. Choose 'ray-ui' or 'rayx'.")
 
         self._batch_number = 0
         self._workers = multiprocessing
@@ -1562,9 +1575,9 @@ class Simulate:
             executor (ProcessPoolExecutor): Executor for multiprocessing.
             pbar (tqdm): Progress bar object for tracking simulation progress.
         """
+        func = run_rml_func_rayx if self._engine == "rayx" else run_rml_func
         futures = {
-            executor.submit(run_rml_func, sim_params): sim_params
-            for sim_params in simulation_params_batch
+            executor.submit(func, sim_params): sim_params for sim_params in simulation_params_batch
         }
         completed_sim = 0
         remaining_simulations = self.batch_size
@@ -1724,6 +1737,43 @@ class Simulate:
         for oe in self.rml.beamline.children():
             if hasattr(oe, "alignmentError"):
                 oe.alignmentError.cdata = on_off
+
+
+def run_rml_func_rayx(parameters):
+    """Executes a simulation using the RAYX engine for a given RML file."""
+    st = time.time()
+    (
+        rml_filename,
+        _hide,
+        _analyze,
+        raypyng_analysis,
+        _ray_path,
+        remove_rawrays,
+        undulator_table,
+        efficiency,
+    ), exports = parameters
+    from .rayx_runner import RayXAPI
+
+    api = RayXAPI()
+    pp = PostProcess()
+    try:
+        api.load(rml_filename)
+        api.trace()
+        for export_params in exports:
+            api.export(*export_params)
+        if raypyng_analysis:
+            for export_params in exports:
+                pp.postprocess_RawRays(
+                    *export_params,
+                    rml_filename,
+                    suffix=export_params[1],
+                    remove_rawrays=remove_rawrays,
+                    undulator_table=undulator_table,
+                    efficiency=efficiency,
+                )
+    except Exception as e:
+        print(f"WARNING! Got exception while processing {rml_filename}, the error was: {e}")
+    return time.time() - st, rml_filename
 
 
 def run_rml_func(parameters):
