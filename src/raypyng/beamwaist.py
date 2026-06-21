@@ -126,6 +126,8 @@ class PlotBeamwaist:
             )
             if self.factor is not False:
                 max_n_rays = int(rays.shape[0] / self.factor)
+            else:
+                max_n_rays = rays.shape[0]
             if max_n_rays < 100:
                 sys.exit("Set a lower reduction factor, there are no more rays to plot!")
             rays = rays[0:max_n_rays]
@@ -235,9 +237,7 @@ class PlotBeamwaist:
                 dx,
             )
             print("self.yh.shape[1]*self.step_z + dx", self.yh.shape[1] * self.step_z + dx)
-            print("DEBUG:: self.distances", self.distances)
             print("DEBUG:: self.distance_list", self.distance_list)
-            print("DEBUG:: self.elements", self.elements)
             print("DEBUG:: self.elements_name_list", self.element_names_list)
 
         g = 1.5
