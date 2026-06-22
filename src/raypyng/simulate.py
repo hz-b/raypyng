@@ -1183,6 +1183,11 @@ class Simulate:
         """
         multiprocessing = self._resolve_multiprocessing_workers(multiprocessing)
 
+        if self.graxpy_efficiency and self._engine == "ray-ui":
+            raise ValueError(
+                "graxpy_efficiency is not supported with the 'ray-ui' engine: "
+                "RAY-UI already computes grating efficiency internally."
+            )
         if remove_rawrays and not self.raypyng_analysis:
             raise Exception(
                 "Setting remove_rawrays to True is allowed only raypyng_analysis is set to True"
