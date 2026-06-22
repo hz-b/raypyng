@@ -12,6 +12,7 @@ if __name__ == "__main__":
     beamline = rc.import_beamline(rml_file)
     rays = beamline.trace()
     df = rayx.rays_to_df(rays)
+    breakpoint()
 
     # find DetectorAtFocus index
     names = [el.name for el in beamline.elements]

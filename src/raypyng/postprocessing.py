@@ -165,11 +165,17 @@ class PostProcess:
         return self._extract_fwhm(divergence)
 
     def _extract_intensity(self, rays: np.array):
-        """calculate how many rays there are
+        """Return the effective ray count.
 
-        Args:
-            rays (np.array): contains rays information
+        For rayx exports the per-ray |E|² weight column ({element}_W) is present
+        and its sum gives the intensity-weighted equivalent of NumberRaysSurvived,
+        already normalised to the source ray count.  For RAY-UI exports (no weight
+        column) we fall back to a simple row count.
         """
+        if rays.dtype.names:
+            for col in rays.dtype.names:
+                if col.endswith("_W"):
+                    return float(rays[col].sum())
         return rays.shape[0]
 
     def extract_nrays_from_source(self, rml_filename):
@@ -345,10 +351,8 @@ class PostProcess:
                         rays[f"{exported_element}_DX"], rays[f"{exported_element}_DZ"]
                     )
                 )
-                ray_properties.df.loc[0, "VerticalDivergenceFWHM"] = (
-                    self._extract_divergence_fwhm(
-                        rays[f"{exported_element}_DY"], rays[f"{exported_element}_DZ"]
-                    )
+                ray_properties.df.loc[0, "VerticalDivergenceFWHM"] = self._extract_divergence_fwhm(
+                    rays[f"{exported_element}_DY"], rays[f"{exported_element}_DZ"]
                 )
                 ray_properties.df.loc[0, "HorizontalCenter"] = np.mean(
                     rays[f"{exported_element}_OX"]

@@ -28,8 +28,6 @@ dependencies = [
 [project.optional-dependencies]
 rayx = [
   "rayx>=0.4.5",
-]
-graxpy = [
   "graxpy>=0.4.4",
 ]
 dev = [

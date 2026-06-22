@@ -144,17 +144,12 @@ def read_grating_params(rml_path: str | Path) -> list[dict]:
 
         elif profile_type == "blaze":
             blaze_angle_deg = _float_param(oe, "blazeAngle")
-            aspect_angle_deg = _float_param(oe, "aspectAngle")
+            _float_param(oe, "aspectAngle")
             if blaze_angle_deg is None:
                 logger.warning("Skipping blaze grating %s: missing blazeAngle", name)
                 continue
             params["blaze_angle_deg"] = blaze_angle_deg
-            # aspectAngle in RAY-UI is the anti-blaze angle directly
-            params["anti_blaze_angle_deg"] = (
-                aspect_angle_deg
-                if aspect_angle_deg is not None and aspect_angle_deg >= 0.01
-                else None
-            )
+            params["anti_blaze_angle_deg"] = None
 
         gratings.append(params)
 

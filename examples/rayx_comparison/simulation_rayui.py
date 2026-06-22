@@ -30,6 +30,13 @@ sim.raypyng_analysis = True
 
 sim.exports = [
     {beamline.Dipole: ["RawRaysOutgoing"]},
+    {beamline.M1: ["RawRaysOutgoing"]},
+    {beamline.PremirrorM2: ["RawRaysOutgoing"]},
+    {beamline.PG: ["RawRaysOutgoing"]},
+    {beamline.M3: ["RawRaysOutgoing"]},
+    {beamline.ExitSlit: ["RawRaysOutgoing"]},
+    {beamline.KB1_hor: ["RawRaysOutgoing"]},
+    {beamline.KB2_ver: ["RawRaysOutgoing"]},
     {beamline.DetectorAtFocus: ["RawRaysOutgoing"]},
 ]
 

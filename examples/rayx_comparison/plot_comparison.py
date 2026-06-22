@@ -1,10 +1,12 @@
 """Compare RAY-UI vs RAYX simulation results for the dipole beamline.
 
 Run simulation_rayui.py and simulation_rayx.py first to generate the data.
-Produces comparison_plots.png and scatter_per_energy.png in this folder.
+Produces comparison_plots.png, scatter_per_energy.png, and grating_efficiency.png
+in this folder.
 """
 
 import os
+import xml.etree.ElementTree as ET
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -26,6 +28,18 @@ def load(sim_name, element, export_type="RawRaysOutgoing"):
     df.columns = df.columns.str.strip()
     return df
 
+
+ALL_ELEMENTS = [
+    "Dipole",
+    "M1",
+    "PremirrorM2",
+    "PG",
+    "M3",
+    "ExitSlit",
+    "KB1_hor",
+    "KB2_ver",
+    "DetectorAtFocus",
+]
 
 elements = ["Dipole", "DetectorAtFocus"]
 data = {("rayui", el): load("rayui", el) for el in elements}
@@ -185,3 +199,126 @@ fig2.tight_layout()
 out2 = os.path.join(this_dir, "scatter_per_energy.png")
 fig2.savefig(out2, dpi=150)
 print(f"Saved: {out2}")
+
+# ── Figure 3: grating efficiency — graxpy vs RAY-UI ──────────────────────────
+
+GRATING_NAME = "PG"
+
+
+def _read_rayui_pg_efficiency(sim_idx, grating_name=GRATING_NAME):
+    """Extract reflectivityParallel for *grating_name* from a saved RAY-UI RML."""
+    rml_path = os.path.join(
+        this_dir, "RAYPy_Simulation_rayui", "round_0", f"{sim_idx}_rayui.rml"
+    )
+    if not os.path.exists(rml_path):
+        return None
+    tree = ET.parse(rml_path)
+    for obj in tree.getroot().iter("object"):
+        if obj.get("name") == grating_name:
+            for param in obj.iter("param"):
+                if param.get("id") == "reflectivityParallel" and param.get("enabled") == "T":
+                    try:
+                        return float(param.text)
+                    except (TypeError, ValueError):
+                        return None
+    return None
+
+
+def _read_graxpy_efficiency(sim_idx, grating_name=GRATING_NAME):
+    """Read efficiency_p for *grating_name* from a graxpy CSV."""
+    csv_path = os.path.join(
+        this_dir, "RAYPy_Simulation_rayx", "round_0",
+        f"{sim_idx}_rayx_graxpy_efficiency.csv",
+    )
+    if not os.path.exists(csv_path):
+        return None
+    df = pd.read_csv(csv_path)
+    row = df[df["grating_name"] == grating_name]
+    if row.empty:
+        return None
+    return float(row["efficiency_p"].iloc[0])
+
+
+eff_rayui  = [_read_rayui_pg_efficiency(i) for i in sim_indices]
+eff_graxpy = [_read_graxpy_efficiency(i)   for i in sim_indices]
+
+fig3, ax3 = plt.subplots(figsize=(7, 4))
+fig3.suptitle(f"Grating efficiency — {GRATING_NAME}", fontsize=13)
+
+if any(v is not None for v in eff_rayui):
+    e_ui = [(e, v) for e, v in zip(energies_eV, eff_rayui) if v is not None]
+    ax3.plot(*zip(*e_ui), color="C0", ls="-", marker="o", ms=5, label="RAY-UI (reflectivityParallel)")
+
+if any(v is not None for v in eff_graxpy):
+    e_gx = [(e, v) for e, v in zip(energies_eV, eff_graxpy) if v is not None]
+    ax3.plot(*zip(*e_gx), color="C1", ls="--", marker="s", ms=5, label="graxpy (RCWA, p-pol)")
+
+ax3.set_xlabel("Photon energy (eV)")
+ax3.set_ylabel("Efficiency")
+ax3.legend()
+ax3.grid(True, alpha=0.3)
+
+fig3.tight_layout()
+out3 = os.path.join(this_dir, "grating_efficiency.png")
+fig3.savefig(out3, dpi=150)
+print(f"Saved: {out3}")
+
+# ── Figure 4: per-element metrics — RAY-UI vs RAYX ───────────────────────────
+
+per_elem_metrics = [
+    ("PercentageRaysSurvived", "Flux (%)"),
+    ("NumberRaysSurvived",     "Rays survived"),
+    ("HorizontalFocusFWHM",   "Hor. FWHM (mm)"),
+    ("VerticalFocusFWHM",     "Ver. FWHM (mm)"),
+    ("Bandwidth",             "Bandwidth (eV)"),
+]
+
+n_elem_cols = len(ALL_ELEMENTS)
+n_elem_rows = len(per_elem_metrics)
+
+fig4, axes4 = plt.subplots(
+    n_elem_rows, n_elem_cols,
+    figsize=(3.5 * n_elem_cols, 3 * n_elem_rows),
+    squeeze=False,
+)
+fig4.suptitle("RAY-UI vs RAYX — per element", fontsize=13)
+
+for col_idx, element in enumerate(ALL_ELEMENTS):
+    axes4[0, col_idx].set_title(element, fontsize=9)
+
+    try:
+        df_ui = load("rayui", element)
+    except FileNotFoundError:
+        df_ui = None
+    try:
+        df_rx = load("rayx", element)
+    except FileNotFoundError:
+        df_rx = None
+
+    for row_idx, (metric, ylabel) in enumerate(per_elem_metrics):
+        ax = axes4[row_idx, col_idx]
+
+        if df_ui is not None and metric in df_ui.columns:
+            ax.plot(
+                df_ui[energy_col], df_ui[metric],
+                color="C0", ls="-", marker="o", ms=3, label="RAY-UI",
+            )
+        if df_rx is not None and metric in df_rx.columns:
+            ax.plot(
+                df_rx[energy_col], df_rx[metric],
+                color="C1", ls="--", marker="s", ms=3, label="RAYX",
+            )
+
+        if col_idx == 0:
+            ax.set_ylabel(ylabel, fontsize=8)
+        ax.tick_params(labelsize=7)
+        ax.grid(True, alpha=0.3)
+        if row_idx == 0 and col_idx == 0:
+            ax.legend(fontsize=7)
+        if row_idx == n_elem_rows - 1:
+            ax.set_xlabel("Energy (eV)", fontsize=8)
+
+fig4.tight_layout()
+out4 = os.path.join(this_dir, "per_element_metrics.png")
+fig4.savefig(out4, dpi=150)
+print(f"Saved: {out4}")

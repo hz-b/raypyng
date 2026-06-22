@@ -189,7 +189,34 @@ class RayXAPI:
             surviving &= set(self._rays_df.loc[self._rays_df["object_id"] == preceding, "path_id"])
 
         mask = (self._rays_df["object_id"] == idx) & (self._rays_df["path_id"].isin(surviving))
+        # Keep only the last event per path_id at this element (the outgoing ray).
+        # Elements like the Toroid can generate multiple bounce records per ray;
+        # the highest path_event_id is the final outgoing state.
+        # Then drop rays absorbed by an aperture (event_type == 4); those are
+        # blocked and should not count as outgoing.
         df = self._rays_df[mask]
+        df = df.loc[df.groupby("path_id")["path_event_id"].idxmax()]
+        df = df[df["event_type"] != 4]
+
+        # Compute per-ray |E|² intensity weight, normalised so that summing the
+        # weights gives a number on the same scale as source_n_rays.  This lets
+        # PostProcess use the existing NumberRaysSurvived / source_n_rays formula
+        # while correctly accounting for rayx's complex electric-field amplitudes
+        # (mirror Fresnel losses, partial grating diffraction, etc.).
+        src = self._rays_df[self._rays_df["object_id"] == 0]
+        src = src.loc[src.groupby("path_id")["path_event_id"].idxmax()]
+        source_e2 = (
+            np.abs(src["electric_field_x"]) ** 2
+            + np.abs(src["electric_field_y"]) ** 2
+            + np.abs(src["electric_field_z"]) ** 2
+        ).sum()
+        source_n = float(len(src))
+        ray_e2 = (
+            np.abs(df["electric_field_x"]) ** 2
+            + np.abs(df["electric_field_y"]) ** 2
+            + np.abs(df["electric_field_z"]) ** 2
+        )
+        weights = ray_e2 / source_e2 * source_n
 
         out = pd.DataFrame(
             {
@@ -199,6 +226,7 @@ class RayXAPI:
                 f"{element_name}_DX": df["direction_x"].values,
                 f"{element_name}_DY": df["direction_y"].values,
                 f"{element_name}_DZ": df["direction_z"].values,
+                f"{element_name}_W": weights.values,
             }
         )
 
