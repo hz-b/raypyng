@@ -222,11 +222,15 @@ def compute_grating_efficiency(
                     **common,
                 )
 
+            # RAY-UI alpha is measured from the surface normal; graxpy wants the
+            # grazing angle (from the surface), so convert: grazing = 90 - alpha.
+            grazing_angle_deg = 90.0 - float(alpha_deg)
+            diffraction_order = params["diffraction_order"]
             run_kwargs: dict[str, Any] = dict(
                 grating=grating,
                 energy_ev=float(energy_ev),
-                grazing_angle_deg=float(alpha_deg),
-                diffraction_order=-params["diffraction_order"],
+                grazing_angle_deg=grazing_angle_deg,
+                diffraction_order=diffraction_order,
                 fourier_orders=fourier_orders,
                 polarization="p",
             )
@@ -234,20 +238,19 @@ def compute_grating_efficiency(
                 run_kwargs["roughness_sigma_nm"] = params["roughness_sigma_nm"]
 
             result = grax.run_simulation(**run_kwargs)
-            graxpy_order = -params["diffraction_order"]
             results[name] = {
                 "energy_ev": float(energy_ev),
-                "grazing_angle_deg": float(alpha_deg),
-                "diffraction_order": graxpy_order,
+                "grazing_angle_deg": grazing_angle_deg,
+                "diffraction_order": diffraction_order,
                 "efficiency_p": float(result.selected_efficiency),
             }
             logger.info(
-                "graxpy efficiency for %s: %.4f (E=%.1f eV, alpha=%.3f deg, order=%d)",
+                "graxpy efficiency for %s: %.4f (E=%.1f eV, grazing=%.3f deg, order=%d)",
                 name,
                 result.selected_efficiency,
                 energy_ev,
-                alpha_deg,
-                graxpy_order,
+                grazing_angle_deg,
+                diffraction_order,
             )
         except Exception as exc:
             logger.warning("graxpy simulation failed for grating %s: %s", name, exc)
