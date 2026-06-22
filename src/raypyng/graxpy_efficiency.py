@@ -254,6 +254,30 @@ def compute_grating_efficiency(
     return results
 
 
+def elements_after_first_grating(rml_path: str | Path) -> set[str]:
+    """Return the names of beamline elements at or after the first qualifying grating.
+
+    Used to decide which exported elements should have grating efficiency applied.
+    Elements upstream of the grating (e.g. the source) are excluded.
+
+    Args:
+        rml_path: Path to the RML file.
+
+    Returns:
+        Set of element names at or after the first PlaneGrating in beamline order.
+        Empty set if no PlaneGrating is found.
+    """
+    rml = RMLFile(str(rml_path))
+    elements = list(rml.beamline.children())
+    grating_idx = next(
+        (i for i, oe in enumerate(elements) if oe["type"] in ("PlaneGrating", "Plane Grating")),
+        None,
+    )
+    if grating_idx is None:
+        return set()
+    return {oe["name"] for oe in elements[grating_idx:]}
+
+
 def write_efficiency_csv(rml_path: str | Path, efficiencies: dict[str, dict]) -> Path:
     """Write per-simulation graxpy efficiency results to a CSV next to the RML file.
 

@@ -1815,8 +1815,13 @@ def run_rml_func_rayx(parameters):
 
     _rayui_update_rml(rml_filename, ray_path=_ray_path, hide=_hide)
     graxpy_eff_df = None
+    downstream_elements: set[str] = set()
     if graxpy_efficiency:
-        from .graxpy_efficiency import compute_grating_efficiency, write_efficiency_csv
+        from .graxpy_efficiency import (
+            compute_grating_efficiency,
+            elements_after_first_grating,
+            write_efficiency_csv,
+        )
 
         try:
             efficiencies = compute_grating_efficiency(
@@ -1832,9 +1837,9 @@ def run_rml_func_rayx(parameters):
                 for r in efficiencies.values():
                     combined *= r["efficiency_p"]
                 graxpy_eff_df = pd.DataFrame({"Energy[eV]": [energy_ev], "Efficiency": [combined]})
+                downstream_elements = elements_after_first_grating(rml_filename)
         except Exception as e:
             print(f"WARNING! graxpy efficiency failed for {rml_filename}: {e}")
-    active_efficiency = graxpy_eff_df if graxpy_eff_df is not None else efficiency
     api = RayXAPI()
     pp = PostProcess()
     try:
@@ -1844,13 +1849,19 @@ def run_rml_func_rayx(parameters):
             api.export(*export_params)
         if raypyng_analysis:
             for export_params in exports:
+                element_name = export_params[0]
+                eff = (
+                    graxpy_eff_df
+                    if graxpy_eff_df is not None and element_name in downstream_elements
+                    else efficiency
+                )
                 pp.postprocess_RawRays(
                     *export_params,
                     rml_filename,
                     suffix=export_params[1],
                     remove_rawrays=remove_rawrays,
                     undulator_table=undulator_table,
-                    efficiency=active_efficiency,
+                    efficiency=eff,
                 )
     except Exception as e:
         print(f"WARNING! Got exception while processing {rml_filename}, the error was: {e}")
@@ -1890,9 +1901,11 @@ def run_rml_func(parameters):
         api.trace(analyze=analyze)
         api.save(rml_filename)
         graxpy_eff_df = None
+        downstream_elements: set[str] = set()
         if graxpy_efficiency:
             from .graxpy_efficiency import (
                 compute_grating_efficiency,
+                elements_after_first_grating,
                 write_efficiency_csv,
             )
 
@@ -1912,20 +1925,26 @@ def run_rml_func(parameters):
                     graxpy_eff_df = pd.DataFrame(
                         {"Energy[eV]": [energy_ev], "Efficiency": [combined]}
                     )
+                    downstream_elements = elements_after_first_grating(rml_filename)
             except Exception as e:
                 print(f"WARNING! graxpy efficiency failed for {rml_filename}: {e}")
-        active_efficiency = graxpy_eff_df if graxpy_eff_df is not None else efficiency
         for export_params in exports:
             api.export(*export_params)
         if raypyng_analysis:
             for export_params in exports:
+                element_name = export_params[0]
+                eff = (
+                    graxpy_eff_df
+                    if graxpy_eff_df is not None and element_name in downstream_elements
+                    else efficiency
+                )
                 pp.postprocess_RawRays(
                     *export_params,
                     rml_filename,
                     suffix=export_params[1],
                     remove_rawrays=remove_rawrays,
                     undulator_table=undulator_table,
-                    efficiency=active_efficiency,
+                    efficiency=eff,
                 )
     except Exception as e:
         print(f"WARNING! Got exception while processing {rml_filename}, the error was: {e}")
