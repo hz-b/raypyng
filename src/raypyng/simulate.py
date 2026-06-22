@@ -1820,10 +1820,20 @@ def run_rml_func_rayx(parameters):
         from .graxpy_efficiency import (
             compute_grating_efficiency,
             elements_after_first_grating,
+            read_grating_params,
             write_efficiency_csv,
+            write_grating_snippet,
         )
 
         try:
+            grating_params_list = read_grating_params(rml_filename)
+            write_grating_snippet(
+                rml_filename,
+                grating_params_list,
+                fourier_orders=graxpy_fourier_orders,
+                x_resolution_nm=graxpy_x_resolution_nm,
+                z_resolution_nm=graxpy_z_resolution_nm,
+            )
             efficiencies = compute_grating_efficiency(
                 rml_filename,
                 fourier_orders=graxpy_fourier_orders,
@@ -1906,10 +1916,20 @@ def run_rml_func(parameters):
             from .graxpy_efficiency import (
                 compute_grating_efficiency,
                 elements_after_first_grating,
+                read_grating_params,
                 write_efficiency_csv,
+                write_grating_snippet,
             )
 
             try:
+                grating_params_list = read_grating_params(rml_filename)
+                write_grating_snippet(
+                    rml_filename,
+                    grating_params_list,
+                    fourier_orders=graxpy_fourier_orders,
+                    x_resolution_nm=graxpy_x_resolution_nm,
+                    z_resolution_nm=graxpy_z_resolution_nm,
+                )
                 efficiencies = compute_grating_efficiency(
                     rml_filename,
                     fourier_orders=graxpy_fourier_orders,

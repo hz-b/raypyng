@@ -310,6 +310,109 @@ def write_efficiency_csv(rml_path: str | Path, efficiencies: dict[str, dict]) ->
     return out_path
 
 
+def write_grating_snippet(
+    rml_path: str | Path,
+    grating_params_list: list[dict],
+    *,
+    fourier_orders: int,
+    x_resolution_nm: float,
+    z_resolution_nm: float,
+) -> Path:
+    """Write a runnable Python snippet showing how each grating was set up in graxpy.
+
+    The file is placed next to the RML file as ``{stem}_graxpy_snippet.py`` and
+    can be run directly to reproduce the efficiency calculation and verify the
+    parameters match the intended beamline configuration.
+
+    Args:
+        rml_path: Path to the RML file (determines output location).
+        grating_params_list: List of dicts returned by :func:`read_grating_params`.
+        fourier_orders: Fourier orders used in the simulation.
+        x_resolution_nm: Horizontal resolution used.
+        z_resolution_nm: Vertical resolution used.
+
+    Returns:
+        Path to the written snippet file.
+    """
+    rml_path = Path(rml_path)
+    out_path = rml_path.parent / (rml_path.stem + "_graxpy_snippet.py")
+
+    lines: list[str] = [
+        "import grax",
+        "",
+        f"# Generated from: {rml_path.name}",
+        "",
+    ]
+
+    for params in grating_params_list:
+        name = params["name"]
+        grazing_angle_deg = 90.0 - params["alpha_deg"]
+        energy_ev = params["energy_ev"]
+        order = params["diffraction_order"]
+
+        lines += [
+            f"# --- Grating: {name} ---",
+            f"# RAY-UI alpha (from normal): {params['alpha_deg']:.6f} deg",
+            f"# graxpy grazing angle (from surface): {grazing_angle_deg:.6f} deg",
+            f"# Energy: {energy_ev} eV  |  order: {order}  |  fourier_orders: {fourier_orders}",
+            "",
+        ]
+
+        if params["profile_type"] == "laminar":
+            lines += [
+                "grating = grax.LaminarGrating(",
+                f"    period_lpermm={int(round(params['period_lpermm']))},",
+                f"    depth_nm={params['depth_nm']},",
+                f"    width_to_period_ratio={params['width_to_period_ratio']},",
+                f"    substrate_material={params['substrate_material']!r},",
+                f"    layer_material={params['layer_material']!r},",
+                f"    layer_thickness_nm={params['layer_thickness_nm']},",
+                f"    z_resolution_nm={z_resolution_nm},",
+                f"    x_resolution_nm={x_resolution_nm},",
+                ")",
+            ]
+        else:  # blaze
+            anti_blaze = params.get("anti_blaze_angle_deg")
+            lines += [
+                "grating = grax.BlazedGrating(",
+                f"    period_lpermm={int(round(params['period_lpermm']))},",
+                f"    blaze_angle_deg={params['blaze_angle_deg']},",
+                f"    anti_blaze_angle_deg={anti_blaze},",
+                f"    substrate_material={params['substrate_material']!r},",
+                f"    layer_material={params['layer_material']!r},",
+                f"    layer_thickness_nm={params['layer_thickness_nm']},",
+                f"    z_resolution_nm={z_resolution_nm},",
+                f"    x_resolution_nm={x_resolution_nm},",
+                ")",
+            ]
+
+        roughness_line = (
+            f"    roughness_sigma_nm={params['roughness_sigma_nm']},"
+            if params.get("roughness_sigma_nm") is not None
+            else ""
+        )
+        lines += [
+            "",
+            "result = grax.run_simulation(",
+            "    grating=grating,",
+            f"    energy_ev={energy_ev},",
+            f"    grazing_angle_deg={grazing_angle_deg:.6f},",
+            f"    diffraction_order={order},",
+            f"    fourier_orders={fourier_orders},",
+            '    polarization="p",',
+        ]
+        if roughness_line:
+            lines.append(f"    {roughness_line.strip()}")
+        lines += [
+            ")",
+            f'print(f"{name} efficiency: {{result.selected_efficiency:.6f}}")',
+            "",
+        ]
+
+    out_path.write_text("\n".join(lines), encoding="utf-8")
+    return out_path
+
+
 def aggregate_graxpy_results(sim_path: str | Path) -> Path:
     """Aggregate all per-simulation graxpy CSV files into one summary CSV.
 
