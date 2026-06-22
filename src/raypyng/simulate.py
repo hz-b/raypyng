@@ -376,7 +376,18 @@ class Simulate:
                                   the standard installation paths.
     """
 
-    def __init__(self, rml=None, hide=False, ray_path=None, engine="ray-ui", **kwargs) -> None:
+    def __init__(
+        self,
+        rml=None,
+        hide=False,
+        ray_path=None,
+        engine="ray-ui",
+        graxpy_efficiency=False,
+        graxpy_fourier_orders=15,
+        graxpy_x_resolution_nm=0.1,
+        graxpy_z_resolution_nm=0.1,
+        **kwargs,
+    ) -> None:
         """Initialize the class with a rml file
 
         Args:
@@ -390,6 +401,16 @@ class Simulate:
                                       the standard installation paths.
             engine (str, optional): simulation engine to use. ``"ray-ui"`` (default)
                                     or ``"rayx"`` (requires ``pip install rayx``).
+            graxpy_efficiency (bool, optional): compute grating diffraction efficiency
+                                                using graxpy after each simulation.
+                                                Requires ``pip install raypyng[graxpy]``.
+                                                Defaults to False.
+            graxpy_fourier_orders (int, optional): number of Fourier orders for the
+                                                   graxpy RCWA solve. Defaults to 15.
+            graxpy_x_resolution_nm (float, optional): horizontal profile discretisation
+                                                       resolution in nm. Defaults to 0.1.
+            graxpy_z_resolution_nm (float, optional): vertical profile discretisation
+                                                      resolution in nm. Defaults to 0.1.
 
         Raises:
             Exception: If the rml file is not defined an exception is raised
@@ -455,6 +476,10 @@ class Simulate:
             "RawRaysIncoming",  # possible exports when RAY-UI analysis is not active
             "RawRaysOutgoing",
         ]
+        self.graxpy_efficiency = graxpy_efficiency
+        self.graxpy_fourier_orders = graxpy_fourier_orders
+        self.graxpy_x_resolution_nm = graxpy_x_resolution_nm
+        self.graxpy_z_resolution_nm = graxpy_z_resolution_nm
 
     @property
     def possible_exports(self):
@@ -947,7 +972,10 @@ class Simulate:
 
             # Determine the maximum width for each column
             column_widths = [
-                max(len(str(simulation_number)), max(len(h), max(len(str(r)) for r in row)))
+                max(
+                    len(str(simulation_number)),
+                    max(len(h), max(len(str(r)) for r in row)),
+                )
                 for h, r in zip(header, row, strict=False)
             ]
 
@@ -974,7 +1002,8 @@ class Simulate:
         for export_config in self._exports_list:
             if self.raypyng_analysis:
                 export_file = os.path.join(
-                    folder, f"{sim_index}_{export_config[0]}_analyzed_rays_{export_config[1]}.dat"
+                    folder,
+                    f"{sim_index}_{export_config[0]}_analyzed_rays_{export_config[1]}.dat",
                 )
             else:
                 export_file = os.path.join(
@@ -1177,6 +1206,14 @@ class Simulate:
         else:
             raise ValueError(f"Unknown engine '{self._engine}'. Choose 'ray-ui' or 'rayx'.")
 
+        if self.graxpy_efficiency:
+            try:
+                import grax  # noqa: F401
+            except ImportError:
+                raise ImportError(
+                    "graxpy is not installed. Install it with: pip install raypyng[graxpy]"
+                ) from None
+
         self._batch_number = 0
         self._workers = multiprocessing
         self.batch_size = int(self._workers) * 5
@@ -1209,6 +1246,11 @@ class Simulate:
                 self.logger.info("Create Pandas Recap Files")
                 self._create_results_dataframe()
             self._write_analysis_metadata_file()
+        if self.graxpy_efficiency:
+            from .graxpy_efficiency import aggregate_graxpy_results
+
+            out = aggregate_graxpy_results(self.sim_path)
+            self.logger.info("graxpy efficiency aggregated to %s", out)
         if remove_round_folders:
             self._remove_round_folders()
         self.logger.info("End of the Simulations")
@@ -1464,7 +1506,10 @@ class Simulate:
                     remaining_simulations -= 1
                     if batch_length == self.batch_size or remaining_simulations == 0:
                         self._wait_for_simulation_batch(
-                            simulations_durations, simulation_params_batch, executor, pbar
+                            simulations_durations,
+                            simulation_params_batch,
+                            executor,
+                            pbar,
                         )
                         self.logger.info(f"Waiting For batch, {self.batch_size} simulations to go")
                         batch_length = 0
@@ -1557,6 +1602,10 @@ class Simulate:
                 self.remove_rawrays,
                 self.undulator_table,
                 self.efficiency,
+                self.graxpy_efficiency,
+                self.graxpy_fourier_orders,
+                self.graxpy_x_resolution_nm,
+                self.graxpy_z_resolution_nm,
             ),
             exp_list,
         )
@@ -1660,7 +1709,8 @@ class Simulate:
         eta_seconds = avg_duration * remaining_simulations / self._workers
         eta_str = self._format_eta(eta_seconds)
         pbar.set_postfix_str(
-            f"ETA: {eta_str}, Last: {last_duration:.2f}s, Avg: {avg_duration:.2f}s/it", refresh=True
+            f"ETA: {eta_str}, Last: {last_duration:.2f}s, Avg: {avg_duration:.2f}s/it",
+            refresh=True,
         )
         pbar.update(1)
 
@@ -1751,10 +1801,27 @@ def run_rml_func_rayx(parameters):
         remove_rawrays,
         undulator_table,
         efficiency,
+        graxpy_efficiency,
+        graxpy_fourier_orders,
+        graxpy_x_resolution_nm,
+        graxpy_z_resolution_nm,
     ), exports = parameters
     from .rayx_runner import RayXAPI, _rayui_update_rml
 
     _rayui_update_rml(rml_filename, ray_path=_ray_path, hide=_hide)
+    if graxpy_efficiency:
+        from .graxpy_efficiency import compute_grating_efficiency, write_efficiency_csv
+
+        try:
+            efficiencies = compute_grating_efficiency(
+                rml_filename,
+                fourier_orders=graxpy_fourier_orders,
+                x_resolution_nm=graxpy_x_resolution_nm,
+                z_resolution_nm=graxpy_z_resolution_nm,
+            )
+            write_efficiency_csv(rml_filename, efficiencies)
+        except Exception as e:
+            print(f"WARNING! graxpy efficiency failed for {rml_filename}: {e}")
     api = RayXAPI()
     pp = PostProcess()
     try:
@@ -1796,6 +1863,10 @@ def run_rml_func(parameters):
         remove_rawrays,
         undulator_table,
         efficiency,
+        graxpy_efficiency,
+        graxpy_fourier_orders,
+        graxpy_x_resolution_nm,
+        graxpy_z_resolution_nm,
     ), exports = parameters
     runner = RayUIRunner(ray_path=ray_path, hide=hide)
     api = RayUIAPI(runner)
@@ -1805,6 +1876,22 @@ def run_rml_func(parameters):
         api.load(rml_filename)
         api.trace(analyze=analyze)
         api.save(rml_filename)
+        if graxpy_efficiency:
+            from .graxpy_efficiency import (
+                compute_grating_efficiency,
+                write_efficiency_csv,
+            )
+
+            try:
+                efficiencies = compute_grating_efficiency(
+                    rml_filename,
+                    fourier_orders=graxpy_fourier_orders,
+                    x_resolution_nm=graxpy_x_resolution_nm,
+                    z_resolution_nm=graxpy_z_resolution_nm,
+                )
+                write_efficiency_csv(rml_filename, efficiencies)
+            except Exception as e:
+                print(f"WARNING! graxpy efficiency failed for {rml_filename}: {e}")
         for export_params in exports:
             api.export(*export_params)
         if raypyng_analysis:
