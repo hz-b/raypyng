@@ -1752,8 +1752,9 @@ def run_rml_func_rayx(parameters):
         undulator_table,
         efficiency,
     ), exports = parameters
-    from .rayx_runner import RayXAPI
+    from .rayx_runner import RayXAPI, _rayui_update_rml
 
+    _rayui_update_rml(rml_filename, ray_path=_ray_path, hide=_hide)
     api = RayXAPI()
     pp = PostProcess()
     try:
