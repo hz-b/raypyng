@@ -226,7 +226,7 @@ def compute_grating_efficiency(
                 grating=grating,
                 energy_ev=float(energy_ev),
                 grazing_angle_deg=float(alpha_deg),
-                diffraction_order=params["diffraction_order"],
+                diffraction_order=-params["diffraction_order"],
                 fourier_orders=fourier_orders,
                 polarization="p",
             )
@@ -234,10 +234,11 @@ def compute_grating_efficiency(
                 run_kwargs["roughness_sigma_nm"] = params["roughness_sigma_nm"]
 
             result = grax.run_simulation(**run_kwargs)
+            graxpy_order = -params["diffraction_order"]
             results[name] = {
                 "energy_ev": float(energy_ev),
                 "grazing_angle_deg": float(alpha_deg),
-                "diffraction_order": params["diffraction_order"],
+                "diffraction_order": graxpy_order,
                 "efficiency_p": float(result.selected_efficiency),
             }
             logger.info(
@@ -246,7 +247,7 @@ def compute_grating_efficiency(
                 result.selected_efficiency,
                 energy_ev,
                 alpha_deg,
-                params["diffraction_order"],
+                graxpy_order,
             )
         except Exception as exc:
             logger.warning("graxpy simulation failed for grating %s: %s", name, exc)
