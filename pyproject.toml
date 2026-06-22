@@ -44,6 +44,12 @@ docs = [
   "myst-parser>=2.0",
 ]
 
+[tool.pytest.ini_options]
+markers = [
+  "functional: requires two RAY-UI installations (--stable-ray-path and --dev-ray-path)",
+  "slow: multi-energy functional tests; included when --slow is passed to test_versions.sh",
+]
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 
