@@ -1,7 +1,10 @@
+import os
+
 import numpy as np
 from raypyng import Simulate
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+
     def make_slopes_params(param_dict):
         total_steps = 1 + sum(len(v) for v in param_dict.values())
         scan_dict = {k: [0] * total_steps for k in param_dict}
@@ -12,14 +15,15 @@ if __name__ == '__main__':
                 cursor += 1
         return scan_dict
 
-    sim = Simulate('rml/dipole_beamline.rml', hide=True)
+    this_file_dir = os.path.dirname(os.path.realpath(__file__))
+    sim = Simulate(os.path.join(this_file_dir, "rml/dipole_beamline.rml"), hide=True)
 
     rml = sim.rml
     beamline = sim.rml.beamline
 
     energy = np.array([500, 1000])
     rounds = 1
-    nrays  = 1e4
+    nrays = 1e4
 
     slopes = {
         beamline.M1.slopeErrorMer: np.arange(0.3, 1.1, 0.1),
@@ -32,18 +36,21 @@ if __name__ == '__main__':
 
     params = [
         {beamline.PG.cFactor: [2, 5]},
-        {beamline.Dipole.photonEnergy: energy, beamline.Dipole.energySpread: energy / 1000},
+        {
+            beamline.Dipole.photonEnergy: energy,
+            beamline.Dipole.energySpread: energy / 1000,
+        },
         {beamline.Dipole.numberRays: nrays},
     ]
     params.append(slopes_dict)
 
     sim.params = params
-    sim.simulation_name = 'SlopeErrors'
+    sim.simulation_name = "SlopeErrors"
     sim.repeat = rounds
     sim.analyze = False
     sim.raypyng_analysis = True
 
-    sim.exports = [{beamline.DetectorAtFocus: ['RawRaysOutgoing']}]
+    sim.exports = [{beamline.DetectorAtFocus: ["RawRaysOutgoing"]}]
 
     sim.run(
         multiprocessing="auto",
