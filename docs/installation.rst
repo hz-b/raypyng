@@ -91,3 +91,41 @@ automatically on macOS, and trying to install it is unnecessary.
   This is harmless: it is just macOS noticing that the headless RAY-UI instances
   are being started and stopped rapidly. The simulations are not affected and
   complete normally — you can safely **ignore and dismiss these dialogs**.
+
+
+Optional: rayx engine (experimental)
+=====================================
+
+.. warning::
+
+   **The rayx integration is work in progress and not yet complete.**
+   Results may differ from RAY-UI, particularly for beamlines containing
+   diffraction gratings.  Use it for exploratory purposes only and always
+   cross-check against a RAY-UI simulation.
+
+raypyng can optionally use `rayx <https://github.com/hz-b/rayx>`_, a GPU-based
+ray-tracing engine, as an alternative simulation backend.  The rayx engine and
+the grating-efficiency library `graxpy <https://pypi.org/project/graxpy/>`_ are
+both installed with:
+
+.. code-block:: bash
+
+   pip install "raypyng[rayx]"
+
+rayx itself must also be installed separately following its own installation
+instructions.  Once rayx is available, you can switch the engine by passing
+``engine="rayx"`` to :class:`~raypyng.Simulate`:
+
+.. code-block:: python
+
+   sim = Simulate('beamline.rml', hide=True, engine='rayx')
+
+Known limitations at this stage:
+
+* Per-element photon flux calculated with the rayx engine may differ
+  significantly from RAY-UI for beamlines with a plane grating monochromator,
+  because the two engines model grating energy selectivity differently.
+* Grating diffraction efficiency is applied via graxpy (RCWA) as a
+  post-processing step, weighted by each ray's electric-field amplitude squared.
+* The ``graxpy_efficiency`` parameter must be set to ``True`` on
+  :class:`~raypyng.Simulate` to enable the efficiency correction.
