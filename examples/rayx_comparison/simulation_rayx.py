@@ -11,7 +11,7 @@ from params import rml_file, energy, SlitSize, cff, nrays, repeat
 
 this_dir = os.path.dirname(os.path.realpath(__file__))
 
-sim = Simulate(rml_file, engine="rayx")
+sim = Simulate(rml_file, engine="rayx", graxpy_efficiency=True)
 
 rml = sim.rml
 beamline = sim.rml.beamline
