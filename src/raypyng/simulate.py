@@ -11,7 +11,6 @@ import time
 import traceback
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
-import numpy as np
 import pandas as pd
 import psutil
 from tqdm import tqdm
@@ -892,6 +891,7 @@ class Simulate:
             recap_txt_path = os.path.join(self.sim_path, "looper.txt")
             if os.path.exists(recap_txt_path):
                 os.remove(recap_txt_path)
+            self._recap_header_written = False
 
         for round_number in range(self.repeat):
             sim_number = 0
@@ -948,9 +948,8 @@ class Simulate:
         recap_csv_path = os.path.join(self.sim_path, "looper.csv")
         recap_txt_path = os.path.join(self.sim_path, "looper.txt")
 
-        # Check if the files exist to determine if headers need to be written
-        csv_file_exists = os.path.exists(recap_csv_path)
-        txt_file_exists = os.path.exists(recap_txt_path)
+        # Issue A: use a flag instead of 2x os.path.exists per simulation
+        needs_header = not getattr(self, "_recap_header_written", False)
 
         # Prepare data for CSV and TXT files
         header = ["Simulation Number"] + [
@@ -961,17 +960,15 @@ class Simulate:
         # Update CSV file
         with open(recap_csv_path, "a", newline="") as csvfile:
             writer = csv.writer(csvfile)
-            if not csv_file_exists:
+            if needs_header:
                 writer.writerow(header)
             writer.writerow(row)
 
         # Prepare and update TXT file with nice formatting
         with open(recap_txt_path, "a") as txtfile:
-            if not txt_file_exists:
-                # Write header with nice formatting
+            if needs_header:
                 txtfile.write(" ".join(header) + "\n")
 
-            # Determine the maximum width for each column
             column_widths = [
                 max(
                     len(str(simulation_number)),
@@ -979,14 +976,12 @@ class Simulate:
                 )
                 for h, r in zip(header, row, strict=False)
             ]
-
-            # Format row with aligned columns
             formatted_row = " ".join(
                 str(r).ljust(w) for r, w in zip(row, column_widths, strict=False)
             )
-
-            # Write the formatted row to the TXT file
             txtfile.write(formatted_row + "\n")
+
+        self._recap_header_written = True
 
     def _is_simulation_missing(self, sim_index, repeat):
         """
@@ -1362,6 +1357,9 @@ class Simulate:
             res_combined = pd.concat([looper, res], axis=1)
             res_combined = res_combined.loc[:, ~res_combined.columns.str.contains("^Unnamed")]
             res_combined.to_csv(os.path.join(self.sim_path, f"{export}_{in_out}.csv"))
+            # Issue E: cache columns so _write_analysis_metadata_file avoids a re-read
+            if not hasattr(self, "_last_result_columns"):
+                self._last_result_columns = list(res_combined.columns)
 
         if missing_files:
             formatted = "\n".join(f"- {path}" for path in missing_files)
@@ -1410,11 +1408,15 @@ class Simulate:
 
     def _write_analysis_metadata_file(self):
         sample_columns = None
-        for export, in_out in self._iter_unique_export_pairs():
-            output_path = os.path.join(self.sim_path, f"{export}_{in_out}.csv")
-            if os.path.exists(output_path):
-                sample_columns = list(pd.read_csv(output_path, nrows=0).columns)
-                break
+        # Issue E: use columns already captured in _create_results_dataframe when available
+        if hasattr(self, "_last_result_columns"):
+            sample_columns = self._last_result_columns
+        else:
+            for export, in_out in self._iter_unique_export_pairs():
+                output_path = os.path.join(self.sim_path, f"{export}_{in_out}.csv")
+                if os.path.exists(output_path):
+                    sample_columns = list(pd.read_csv(output_path, nrows=0).columns)
+                    break
 
         if sample_columns is None:
             return
@@ -1483,6 +1485,7 @@ class Simulate:
             pbar (tqdm): Progress bar object for tracking simulation progress.
         """
         simulations_durations = []  # Track durations of all simulations for average calculation
+        self._simulations_duration_total = 0.0  # Issue F: running sum, avoids O(N) sum() per tick
         executor = None
         rerun_missing = False
         rerun_pbar = None
@@ -1645,9 +1648,9 @@ class Simulate:
             for future in as_completed(futures, timeout=self._simulation_timeout):
                 sim_duration, rml_filename = future.result()
                 simulations_durations.append(sim_duration)
-                self._simulation_timeout = (
-                    np.mean(simulations_durations) * self.batch_size / self._workers * 1.2
-                )
+                self._simulations_duration_total += sim_duration
+                avg = self._simulations_duration_total / len(simulations_durations)
+                self._simulation_timeout = avg * self.batch_size / self._workers * 1.2
                 self._update_progress_bar(simulations_durations, pbar)
                 completed_sim += 1
                 remaining_simulations -= 1
@@ -1710,7 +1713,9 @@ class Simulate:
             simulations_durations (list): List of durations for completed simulations.
             pbar (tqdm): Progress bar object for tracking simulation progress.
         """
-        avg_duration = sum(simulations_durations) / len(simulations_durations)
+        avg_duration = getattr(self, "_simulations_duration_total", 0.0) / max(
+            1, len(simulations_durations)
+        )
         last_duration = simulations_durations[-1]
         remaining_simulations = pbar.total - pbar.n
         eta_seconds = avg_duration * remaining_simulations / self._workers
