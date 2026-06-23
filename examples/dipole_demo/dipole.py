@@ -22,4 +22,4 @@ dipole_flux = dip.calculate_spectrum(energy_eV)
 # print the Dipole(s) representation
 print(dip)
 
-dip.plot_spectrum(save_path='plot_dipole.png')
+dip.plot_spectrum(show=False, save_path='plot_dipole.png')

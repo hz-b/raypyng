@@ -1,8 +1,11 @@
+import os
+
 import numpy as np
 
 from raypyng.wave_helper import WaveHelper
 
-WH = WaveHelper('WAVE', 3, 'U49')
+this_file_dir = os.path.dirname(os.path.realpath(__file__))
+WH = WaveHelper(os.path.join(this_file_dir, '..', 'WAVE'), 3, 'U49')
 
 WH.report_available_energies(verbose=True)
 

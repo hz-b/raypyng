@@ -13,7 +13,7 @@ from raypyng import build_tables, plot_beamline_views, save_tables
 
 if __name__ == "__main__":
     this_dir = Path(os.path.dirname(os.path.realpath(__file__)))
-    rml_path = this_dir / "rml" / "dipole_beamline.rml"
+    rml_path = this_dir.parent / "rml" / "dipole_beamline.rml"
 
     # ── build tables ──────────────────────────────────────────────────────────
     # mirror_name_pattern selects elements whose name starts with M + digits.
