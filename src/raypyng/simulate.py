@@ -2,6 +2,7 @@ import csv
 import itertools
 import json
 import logging
+import multiprocessing
 import os
 import re
 import shutil
@@ -1473,13 +1474,13 @@ class Simulate:
             )
 
     def _execute_simulations(
-        self, multiprocessing, force, total_simulations, pbar, update_reacap_files=True
+        self, num_workers, force, total_simulations, pbar, update_reacap_files=True
     ):
         """
         Executes the simulations in batches with multiprocessing support.
 
         Args:
-            multiprocessing (int): Number of processes for parallel execution.
+            num_workers (int): Number of processes for parallel execution.
             force (bool): Force re-execution of simulations.
             total_simulations (int): Total number of simulations to be executed.
             pbar (tqdm): Progress bar object for tracking simulation progress.
@@ -1491,7 +1492,12 @@ class Simulate:
         rerun_pbar = None
 
         try:
-            executor = ProcessPoolExecutor(max_workers=multiprocessing)
+            # On macOS the default start method is "spawn", which leaves worker
+            # processes that fail to reap on shutdown(wait=False) and busy-spin at
+            # 100% CPU; the interpreter then hangs forever in the multiprocessing
+            # atexit join(). Force "fork" on Darwin so workers reap cleanly.
+            mp_context = multiprocessing.get_context("fork") if sys.platform == "darwin" else None
+            executor = ProcessPoolExecutor(max_workers=num_workers, mp_context=mp_context)
             simulation_params_batch = []
             batch_length = 0
             remaining_simulations = total_simulations
@@ -1540,6 +1546,20 @@ class Simulate:
             if executor is not None:
                 shutdown_wait = not rerun_missing and not self._executor_has_unfinished_futures
                 force_cancel = rerun_missing or self._executor_has_unfinished_futures
+                if force_cancel:
+                    # cancel_futures only drops *queued* tasks; a worker already
+                    # running a task keeps going and can busy-loop at 100% CPU.
+                    # That worker keeps the executor's non-daemon manager thread
+                    # alive, so the interpreter hangs at exit in threading._shutdown().
+                    # Forcibly terminate this executor's own worker processes so the
+                    # pool tears down and the process can exit. Safe here: any
+                    # genuinely-missing simulations are re-run below.
+                    for proc in list(getattr(executor, "_processes", {}).values()):
+                        try:
+                            if proc.is_alive():
+                                proc.terminate()
+                        except Exception:  # noqa: BLE001 - best-effort teardown
+                            pass
                 executor.shutdown(wait=shutdown_wait, cancel_futures=force_cancel)
                 self.logger.info(
                     "Executor shutdown completed%s.",
