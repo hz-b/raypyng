@@ -1494,10 +1494,11 @@ class Simulate:
             remaining_simulations = total_simulations
             for round_number in range(self.repeat):
                 self.logger.info(f"Start round {round_number}")
+                missing_in_round = set(self._missing_simulations_for_round(round_number))
                 for sim_number, params in enumerate(self.sp.simulation_parameters_generator()):
                     if round_number == 0 and update_reacap_files is True:
                         self._update_simulation_recap_files(params, sim_number)
-                    if self._is_simulation_missing(sim_number, round_number) or force:
+                    if sim_number in missing_in_round or force:
                         self._prepare_and_submit_simulation(
                             params,
                             sim_number,
