@@ -1,7 +1,6 @@
 # python virtual environment
 .venv/
 .token
-
 # python specific
 __pycache__/
 
@@ -22,8 +21,10 @@ src/raypyng.egg-info/requires.txt
 src/raypyng.egg-info/SOURCES.txt
 src/raypyng.egg-info/top_level.txt
 
-# Sphinx build output
+# Sphinx build output and docs venvs
 docs/_build/
+docs/images/
+venv_docs/
 
 #ignore vscode stuff
 .vscode/configurationCache.log
@@ -31,6 +32,6 @@ docs/_build/
 .vscode/targets.log
 
 # ignore output of examples/tests
-examples/rml/new_elisa.rml
+examples/rml/new_dipole_beamline.rml
 examples/test_exportDetectorAtFocus-RawRaysOutgoing.csv
 examples/test_exportDipole-RawRaysOutgoing.csv

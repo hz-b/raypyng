@@ -7,6 +7,7 @@ import os
 import select
 import signal
 import subprocess
+import sys
 import time
 
 import psutil
@@ -73,7 +74,8 @@ class RayUIRunner:
         self._options = "-b" if background else ""
         self._process = None
         self._verbose = False
-        if hide:
+        if hide and config.opsys != "Darwin":
+            # xvfb-run is Linux-only; on macOS the app runs headlessly via -b alone
             self._hide = ["xvfb-run", "--auto-servernum", "--server-num=3000"]
         else:
             self._hide = []
@@ -129,21 +131,25 @@ class RayUIRunner:
 
         if self.isrunning:
             pid = self._process.pid
+            # macOS GUI apps need more time to shut down; SIGKILL triggers crash dialogs.
+            # On macOS we only send SIGTERM and skip the SIGKILL escalation.
+            sigterm_timeout = 30 if sys.platform == "darwin" else 5
             try:
                 os.killpg(pid, signal.SIGTERM)
-                self._process.wait(timeout=5)
+                self._process.wait(timeout=sigterm_timeout)
             except (ProcessLookupError, subprocess.TimeoutExpired):
-                try:
-                    process = psutil.Process(pid)
-                    for proc in process.children(recursive=True):
-                        proc.kill()
-                    process.kill()
-                except psutil.NoSuchProcess:
-                    pass
-                try:
-                    os.killpg(pid, signal.SIGKILL)
-                except ProcessLookupError:
-                    pass
+                if sys.platform != "darwin":
+                    try:
+                        process = psutil.Process(pid)
+                        for proc in process.children(recursive=True):
+                            proc.kill()
+                        process.kill()
+                    except psutil.NoSuchProcess:
+                        pass
+                    try:
+                        os.killpg(pid, signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
 
         self._close_pipes()
         self._process = None

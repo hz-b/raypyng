@@ -6,6 +6,7 @@ import os
 import re
 import shutil
 import signal
+import sys
 import time
 import traceback
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -375,7 +376,18 @@ class Simulate:
                                   the standard installation paths.
     """
 
-    def __init__(self, rml=None, hide=False, ray_path=None, **kwargs) -> None:
+    def __init__(
+        self,
+        rml=None,
+        hide=False,
+        ray_path=None,
+        engine="ray-ui",
+        graxpy_efficiency=False,
+        graxpy_fourier_orders=15,
+        graxpy_x_resolution_nm=0.1,
+        graxpy_z_resolution_nm=0.1,
+        **kwargs,
+    ) -> None:
         """Initialize the class with a rml file
 
         Args:
@@ -387,6 +399,18 @@ class Simulate:
             ray_path (str, optional): the path to the RAY-UI installation folder.
                                       If None, the program will look for RAY-UI in
                                       the standard installation paths.
+            engine (str, optional): simulation engine to use. ``"ray-ui"`` (default)
+                                    or ``"rayx"`` (requires ``pip install rayx``).
+            graxpy_efficiency (bool, optional): compute grating diffraction efficiency
+                                                using graxpy after each simulation.
+                                                Requires ``pip install raypyng[graxpy]``.
+                                                Defaults to False.
+            graxpy_fourier_orders (int, optional): number of Fourier orders for the
+                                                   graxpy RCWA solve. Defaults to 15.
+            graxpy_x_resolution_nm (float, optional): horizontal profile discretisation
+                                                       resolution in nm. Defaults to 0.1.
+            graxpy_z_resolution_nm (float, optional): vertical profile discretisation
+                                                      resolution in nm. Defaults to 0.1.
 
         Raises:
             Exception: If the rml file is not defined an exception is raised
@@ -405,6 +429,7 @@ class Simulate:
         self.path = None  # Path for simulation execution
         self.prefix = "RAYPy_Simulation"  # Simulation prefix
         self._hide = hide  # Hide GUI leftovers
+        self._engine = engine  # Simulation engine ("ray-ui" or "rayx")
         self.analyze = True  # Enable RAY-UI analysis
         self._repeat = 1  # Number of simulation repeats
         self.raypyng_analysis = False  # Enable RAYPyNG analysis
@@ -437,6 +462,7 @@ class Simulate:
             "FootprintOutgoingRays",
             "FootprintPlotSnapshot",
             "FootprintWastedRays",
+            "Intensity2D",
             "IntensityPlotSnapshot",
             "IntensityX",
             "IntensityYZ",
@@ -451,6 +477,10 @@ class Simulate:
             "RawRaysIncoming",  # possible exports when RAY-UI analysis is not active
             "RawRaysOutgoing",
         ]
+        self.graxpy_efficiency = graxpy_efficiency
+        self.graxpy_fourier_orders = graxpy_fourier_orders
+        self.graxpy_x_resolution_nm = graxpy_x_resolution_nm
+        self.graxpy_z_resolution_nm = graxpy_z_resolution_nm
 
     @property
     def possible_exports(self):
@@ -682,9 +712,9 @@ class Simulate:
 
             copied_exports.append(
                 {
-                    object_element: list(export_files)
-                    if isinstance(export_files, list)
-                    else export_files
+                    object_element: (
+                        list(export_files) if isinstance(export_files, list) else export_files
+                    )
                     for object_element, export_files in export_dict.items()
                 }
             )
@@ -897,7 +927,7 @@ class Simulate:
         """
         round_folder = "round_" + str(round_n)
         rml_path = os.path.join(
-            self._sim_folder, round_folder, f"{sim_number}_{self.simulation_name}.rml"
+            self.sim_path, round_folder, f"{sim_number}_{self.simulation_name}.rml"
         )
 
         for param, value in param_set.items():
@@ -943,7 +973,10 @@ class Simulate:
 
             # Determine the maximum width for each column
             column_widths = [
-                max(len(str(simulation_number)), max(len(h), max(len(str(r)) for r in row)))
+                max(
+                    len(str(simulation_number)),
+                    max(len(h), max(len(str(r)) for r in row)),
+                )
                 for h, r in zip(header, row, strict=False)
             ]
 
@@ -970,7 +1003,8 @@ class Simulate:
         for export_config in self._exports_list:
             if self.raypyng_analysis:
                 export_file = os.path.join(
-                    folder, f"{sim_index}_{export_config[0]}_analyzed_rays_{export_config[1]}.dat"
+                    folder,
+                    f"{sim_index}_{export_config[0]}_analyzed_rays_{export_config[1]}.dat",
                 )
             else:
                 export_file = os.path.join(
@@ -993,7 +1027,8 @@ class Simulate:
             ]
         else:
             expected_suffixes = [
-                f"_{export_config[0]}-{export_config[1]}.csv" for export_config in self._exports_list
+                f"_{export_config[0]}-{export_config[1]}.csv"
+                for export_config in self._exports_list
             ]
 
         found_per_export = {suffix: set() for suffix in expected_suffixes}
@@ -1017,7 +1052,8 @@ class Simulate:
         completed_ids = expected_ids.copy()
         for suffix, found_ids in found_per_export.items():
             self.logger.info(
-                f"Round {round_number}: found {len(found_ids)}/{len(expected_ids)} files for {suffix}"
+                f"Round {round_number}: found {len(found_ids)}/{len(expected_ids)} "
+                f"files for {suffix}"
             )
             completed_ids &= found_ids
 
@@ -1148,6 +1184,11 @@ class Simulate:
         """
         multiprocessing = self._resolve_multiprocessing_workers(multiprocessing)
 
+        if self.graxpy_efficiency and self._engine == "ray-ui":
+            raise ValueError(
+                "graxpy_efficiency is not supported with the 'ray-ui' engine: "
+                "RAY-UI already computes grating efficiency internally."
+            )
         if remove_rawrays and not self.raypyng_analysis:
             raise Exception(
                 "Setting remove_rawrays to True is allowed only raypyng_analysis is set to True"
@@ -1157,9 +1198,27 @@ class Simulate:
         self._setup_simulation_environment(recipe)
         self._validate_run_configuration()
 
-        # test that we car run RAY-UI
-        runner = RayUIRunner(ray_path=self.ray_path, hide=True)
-        runner.kill()
+        if self._engine == "ray-ui":
+            runner = RayUIRunner(ray_path=self.ray_path, hide=True)
+            runner.kill()
+        elif self._engine == "rayx":
+            try:
+                import rayx  # noqa: F401
+            except ImportError:
+                raise ImportError(
+                    "rayx is not installed or not available on this platform. "
+                    "Install it with: pip install raypyng[rayx]"
+                ) from None
+        else:
+            raise ValueError(f"Unknown engine '{self._engine}'. Choose 'ray-ui' or 'rayx'.")
+
+        if self.graxpy_efficiency:
+            try:
+                import grax  # noqa: F401
+            except ImportError:
+                raise ImportError(
+                    "graxpy is not installed. Install it with: pip install raypyng[graxpy]"
+                ) from None
 
         self._batch_number = 0
         self._workers = multiprocessing
@@ -1193,6 +1252,11 @@ class Simulate:
                 self.logger.info("Create Pandas Recap Files")
                 self._create_results_dataframe()
             self._write_analysis_metadata_file()
+        if self.graxpy_efficiency:
+            from .graxpy_efficiency import aggregate_graxpy_results
+
+            out = aggregate_graxpy_results(self.sim_path)
+            self.logger.info("graxpy efficiency aggregated to %s", out)
         if remove_round_folders:
             self._remove_round_folders()
         self.logger.info("End of the Simulations")
@@ -1200,23 +1264,62 @@ class Simulate:
             self.cleanup_child_processes()
             os._exit(0)
 
+    @staticmethod
+    def _is_rayui_or_xvfb_process(proc):
+        """Return True only for leftover RAY-UI / Xvfb processes.
+
+        The multiprocessing resource_tracker and the ProcessPoolExecutor worker
+        processes (``spawn_main``) must never be terminated here: killing the
+        resource_tracker corrupts its bookkeeping and triggers
+        'resource_tracker: process died unexpectedly' warnings plus KeyErrors.
+        The executor reaps its own workers via shutdown(); we only mop up the
+        RAY-UI/Xvfb subprocesses those workers may have left behind.
+        """
+        rayui_markers = ("ray-ui", "rayui")
+        try:
+            name = (proc.name() or "").lower()
+            cmdline = " ".join(proc.cmdline()).lower()
+        except (psutil.NoSuchProcess, psutil.AccessDenied):
+            return False
+
+        # Never touch Python multiprocessing machinery.
+        if "resource_tracker" in cmdline or "spawn_main" in cmdline:
+            return False
+
+        if "xvfb" in name or "xvfb" in cmdline:
+            return True
+        return any(marker in name or marker in cmdline for marker in rayui_markers)
+
     def cleanup_child_processes(self):
-        """Clean up all child processes initiated by this process
-        and any specific Xvfb processes."""
+        """Clean up leftover RAY-UI and Xvfb processes.
+
+        Only RAY-UI/Xvfb processes are targeted; the multiprocessing
+        resource_tracker and the executor's worker processes are left alone.
+        """
         current_process = psutil.Process()
         children = current_process.children(recursive=True)
         announced_cleanup = False
 
-        # First, terminate general child processes
+        # Terminate only leftover RAY-UI / Xvfb child processes
         for child in children:
+            if not self._is_rayui_or_xvfb_process(child):
+                continue
             try:
                 if not announced_cleanup:
-                    print("Terminating child processes...")
+                    print("Terminating leftover RAY-UI processes...")
                     announced_cleanup = True
                 child.terminate()
-                child.wait(timeout=3)  # Give it some time to gracefully shut down
+                child.wait(timeout=3)
             except psutil.NoSuchProcess:
                 continue
+            except psutil.TimeoutExpired:
+                # On macOS SIGKILL on a GUI app triggers the crash reporter dialog;
+                # leave it to be reaped rather than force-killing.
+                if sys.platform != "darwin":
+                    try:
+                        child.kill()
+                    except psutil.NoSuchProcess:
+                        pass
 
         # Now target specific Xvfb processes with display numbers higher than 3000
         for proc in psutil.process_iter(["pid", "name", "cmdline"]):
@@ -1391,10 +1494,11 @@ class Simulate:
             remaining_simulations = total_simulations
             for round_number in range(self.repeat):
                 self.logger.info(f"Start round {round_number}")
+                missing_in_round = set(self._missing_simulations_for_round(round_number))
                 for sim_number, params in enumerate(self.sp.simulation_parameters_generator()):
                     if round_number == 0 and update_reacap_files is True:
                         self._update_simulation_recap_files(params, sim_number)
-                    if self._is_simulation_missing(sim_number, round_number) or force:
+                    if sim_number in missing_in_round or force:
                         self._prepare_and_submit_simulation(
                             params,
                             sim_number,
@@ -1409,7 +1513,10 @@ class Simulate:
                     remaining_simulations -= 1
                     if batch_length == self.batch_size or remaining_simulations == 0:
                         self._wait_for_simulation_batch(
-                            simulations_durations, simulation_params_batch, executor, pbar
+                            simulations_durations,
+                            simulation_params_batch,
+                            executor,
+                            pbar,
                         )
                         self.logger.info(f"Waiting For batch, {self.batch_size} simulations to go")
                         batch_length = 0
@@ -1459,7 +1566,9 @@ class Simulate:
                 f"Round {round_number}: final check found {len(round_missing)} missing simulations"
             )
             for sim_number in round_missing:
-                self.logger.info(f"This simulation is missing: round {round_number}, number {sim_number}")
+                self.logger.info(
+                    f"This simulation is missing: round {round_number}, number {sim_number}"
+                )
                 missing_sim.append({"round": round_number, "sim_number": sim_number})
 
         if len(missing_sim) >= 1 and self.simulations_checked is False:
@@ -1500,6 +1609,10 @@ class Simulate:
                 self.remove_rawrays,
                 self.undulator_table,
                 self.efficiency,
+                self.graxpy_efficiency,
+                self.graxpy_fourier_orders,
+                self.graxpy_x_resolution_nm,
+                self.graxpy_z_resolution_nm,
             ),
             exp_list,
         )
@@ -1518,9 +1631,9 @@ class Simulate:
             executor (ProcessPoolExecutor): Executor for multiprocessing.
             pbar (tqdm): Progress bar object for tracking simulation progress.
         """
+        func = run_rml_func_rayx if self._engine == "rayx" else run_rml_func
         futures = {
-            executor.submit(run_rml_func, sim_params): sim_params
-            for sim_params in simulation_params_batch
+            executor.submit(func, sim_params): sim_params for sim_params in simulation_params_batch
         }
         completed_sim = 0
         remaining_simulations = self.batch_size
@@ -1603,7 +1716,8 @@ class Simulate:
         eta_seconds = avg_duration * remaining_simulations / self._workers
         eta_str = self._format_eta(eta_seconds)
         pbar.set_postfix_str(
-            f"ETA: {eta_str}, Last: {last_duration:.2f}s, Avg: {avg_duration:.2f}s/it", refresh=True
+            f"ETA: {eta_str}, Last: {last_duration:.2f}s, Avg: {avg_duration:.2f}s/it",
+            refresh=True,
         )
         pbar.update(1)
 
@@ -1682,6 +1796,90 @@ class Simulate:
                 oe.alignmentError.cdata = on_off
 
 
+def run_rml_func_rayx(parameters):
+    """Executes a simulation using the RAYX engine for a given RML file."""
+    st = time.time()
+    (
+        rml_filename,
+        _hide,
+        _analyze,
+        raypyng_analysis,
+        _ray_path,
+        remove_rawrays,
+        undulator_table,
+        efficiency,
+        graxpy_efficiency,
+        graxpy_fourier_orders,
+        graxpy_x_resolution_nm,
+        graxpy_z_resolution_nm,
+    ), exports = parameters
+    from .rayx_runner import RayXAPI, _rayui_update_rml
+
+    _rayui_update_rml(rml_filename, ray_path=_ray_path, hide=_hide)
+    graxpy_eff_df = None
+    downstream_elements: set[str] = set()
+    if graxpy_efficiency:
+        from .graxpy_efficiency import (
+            compute_grating_efficiency,
+            elements_after_first_grating,
+            read_grating_params,
+            write_efficiency_csv,
+            write_grating_snippet,
+        )
+
+        try:
+            grating_params_list = read_grating_params(rml_filename)
+            write_grating_snippet(
+                rml_filename,
+                grating_params_list,
+                fourier_orders=graxpy_fourier_orders,
+                x_resolution_nm=graxpy_x_resolution_nm,
+                z_resolution_nm=graxpy_z_resolution_nm,
+            )
+            efficiencies = compute_grating_efficiency(
+                rml_filename,
+                fourier_orders=graxpy_fourier_orders,
+                x_resolution_nm=graxpy_x_resolution_nm,
+                z_resolution_nm=graxpy_z_resolution_nm,
+            )
+            write_efficiency_csv(rml_filename, efficiencies)
+            if efficiencies:
+                combined = 1.0
+                energy_ev = next(iter(efficiencies.values()))["energy_ev"]
+                for r in efficiencies.values():
+                    combined *= r["efficiency_p"]
+                graxpy_eff_df = pd.DataFrame({"Energy[eV]": [energy_ev], "Efficiency": [combined]})
+                downstream_elements = elements_after_first_grating(rml_filename)
+        except Exception as e:
+            print(f"WARNING! graxpy efficiency failed for {rml_filename}: {e}")
+    api = RayXAPI()
+    pp = PostProcess()
+    try:
+        api.load(rml_filename)
+        api.trace()
+        for export_params in exports:
+            api.export(*export_params)
+        if raypyng_analysis:
+            for export_params in exports:
+                element_name = export_params[0]
+                eff = (
+                    graxpy_eff_df
+                    if graxpy_eff_df is not None and element_name in downstream_elements
+                    else efficiency
+                )
+                pp.postprocess_RawRays(
+                    *export_params,
+                    rml_filename,
+                    suffix=export_params[1],
+                    remove_rawrays=remove_rawrays,
+                    undulator_table=undulator_table,
+                    efficiency=eff,
+                )
+    except Exception as e:
+        print(f"WARNING! Got exception while processing {rml_filename}, the error was: {e}")
+    return time.time() - st, rml_filename
+
+
 def run_rml_func(parameters):
     """
     Executes a simulation for a given RML file and handles exporting of results.
@@ -1701,6 +1899,10 @@ def run_rml_func(parameters):
         remove_rawrays,
         undulator_table,
         efficiency,
+        graxpy_efficiency,
+        graxpy_fourier_orders,
+        graxpy_x_resolution_nm,
+        graxpy_z_resolution_nm,
     ), exports = parameters
     runner = RayUIRunner(ray_path=ray_path, hide=hide)
     api = RayUIAPI(runner)
@@ -1710,17 +1912,61 @@ def run_rml_func(parameters):
         api.load(rml_filename)
         api.trace(analyze=analyze)
         api.save(rml_filename)
+        graxpy_eff_df = None
+        downstream_elements: set[str] = set()
+        if graxpy_efficiency:
+            from .graxpy_efficiency import (
+                compute_grating_efficiency,
+                elements_after_first_grating,
+                read_grating_params,
+                write_efficiency_csv,
+                write_grating_snippet,
+            )
+
+            try:
+                grating_params_list = read_grating_params(rml_filename)
+                write_grating_snippet(
+                    rml_filename,
+                    grating_params_list,
+                    fourier_orders=graxpy_fourier_orders,
+                    x_resolution_nm=graxpy_x_resolution_nm,
+                    z_resolution_nm=graxpy_z_resolution_nm,
+                )
+                efficiencies = compute_grating_efficiency(
+                    rml_filename,
+                    fourier_orders=graxpy_fourier_orders,
+                    x_resolution_nm=graxpy_x_resolution_nm,
+                    z_resolution_nm=graxpy_z_resolution_nm,
+                )
+                write_efficiency_csv(rml_filename, efficiencies)
+                if efficiencies:
+                    combined = 1.0
+                    energy_ev = next(iter(efficiencies.values()))["energy_ev"]
+                    for r in efficiencies.values():
+                        combined *= r["efficiency_p"]
+                    graxpy_eff_df = pd.DataFrame(
+                        {"Energy[eV]": [energy_ev], "Efficiency": [combined]}
+                    )
+                    downstream_elements = elements_after_first_grating(rml_filename)
+            except Exception as e:
+                print(f"WARNING! graxpy efficiency failed for {rml_filename}: {e}")
         for export_params in exports:
             api.export(*export_params)
         if raypyng_analysis:
             for export_params in exports:
+                element_name = export_params[0]
+                eff = (
+                    graxpy_eff_df
+                    if graxpy_eff_df is not None and element_name in downstream_elements
+                    else efficiency
+                )
                 pp.postprocess_RawRays(
                     *export_params,
                     rml_filename,
                     suffix=export_params[1],
                     remove_rawrays=remove_rawrays,
                     undulator_table=undulator_table,
-                    efficiency=efficiency,
+                    efficiency=eff,
                 )
     except Exception as e:
         print(f"WARNING! Got exception while processing {rml_filename}, the error was: {e}")

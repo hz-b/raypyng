@@ -1,7 +1,31 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.4.1] - 18-May-2026
+## [1.4.3] - 23-June-2026
+
+### Added
+- **rayx engine support (experimental)**: `Simulate` now accepts `engine="rayx"` to use the rayx GPU ray-tracer as a drop-in alternative to RAY-UI. Install with `pip install raypyng[rayx]`.
+- **graxpy grating efficiency**: optional RCWA-based diffraction efficiency via `graxpy_efficiency=True` on `Simulate`. Applied automatically to elements at and after the first grating. Install with `pip install raypyng[graxpy]`.
+- `Intensity2D` added to the list of recognised RAY-UI export types.
+- Version regression testing infrastructure: `tools/test_versions.sh`, `tests/functional/`, `tests/conftest.py` — run stable vs development RAY-UI comparisons with a single command.
+- Unit tests for `PostProcess` helper methods and export validation (no RAY-UI required).
+- `tools/bootstrap.sh` to create a `.venv` with uv + Python 3.12 and install dev dependencies.
+
+### Changed
+- `_execute_simulations` pre-check is now **2.2× faster**: replaced per-simulation `os.path.exists` calls (O(N × exports)) with a single `os.scandir` per round via `_missing_simulations_for_round`.
+- Beamwaist tracing vectorised and parallelised across elements — significantly faster for multi-element beamlines.
+- macOS support hardened: `xvfb-run` skipped on Darwin, RAY-UI binary path corrected (`Ray-UI.app/Contents/MacOS/Ray-UI`), SIGKILL escalation avoided (prevents crash-reporter dialogs), longer SIGTERM timeout (30 s).
+- `cleanup_child_processes` now targets only RAY-UI/Xvfb processes, leaving Python's `resource_tracker` and executor workers untouched.
+- Documentation: copy-pasteable examples, parameter guide, FAQ, and runtime tables added to the tutorial; simulations on Windows noted as unsupported.
+- Example scripts: fixed path handling, added `__main__` guards, removed stale references.
+
+### Fixed
+- `_write_rml`: used bare folder name (`_sim_folder`) instead of full path (`sim_path`), causing RML files to be written to the wrong location.
+- macOS multiprocessing spawn error fixed by using `fork` context on Darwin.
+- Beamwaist `log(0)` warning silenced; example guard hardened.
+- Example scripts with broken paths or missing `__main__` guards corrected.
+
+## [1.4.1/2] - 18-May-2026
 
 ### Added
 - Add regression test for mixed export-pair handling in raypyng analysis (`tests/test_raypyng_analysis_export_mismatch.py`).

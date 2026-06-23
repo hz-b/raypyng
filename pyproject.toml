@@ -1,6 +1,6 @@
 [project]
 name = "raypyng"
-version = "1.4.2"
+version = "1.4.3"
 
 authors = [
   { name = "Simone Vadilonga, Ruslan Ovsyannikov, Sebastian Sachse", email = "simone.vadilonga@helmholtz-berlin.de" },
@@ -23,6 +23,31 @@ dependencies = [
   "tqdm>=4.66.1",
   "pandas>=2.0.3",
   "srxraylib>=1.0.61"
+]
+
+[project.optional-dependencies]
+rayx = [
+  "rayx>=0.4.5",
+  "graxpy>=0.4.4",
+]
+dev = [
+  "pytest>=8.0",
+  "pytest-cov>=5.0",
+  "pre-commit>=3.0",
+  "black>=24.3.0",
+  "ruff>=0.3.5",
+]
+docs = [
+  "sphinx>=7.0",
+  "sphinx-rtd-theme>=1.0.0",
+  "sphinx-autodoc-typehints>=1.0",
+  "myst-parser>=2.0",
+]
+
+[tool.pytest.ini_options]
+markers = [
+  "functional: requires two RAY-UI installations (--stable-ray-path and --dev-ray-path)",
+  "slow: multi-energy functional tests; included when --slow is passed to test_versions.sh",
 ]
 
 [tool.setuptools]

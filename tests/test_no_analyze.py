@@ -20,11 +20,11 @@ class TestNoAnalyze(unittest.TestCase):
             shutil.rmtree(dirpath)
 
         this_file_dir = os.path.dirname(os.path.realpath(__file__))
-        rml_file = os.path.join(this_file_dir, "rml/elisa.rml")
+        rml_file = os.path.join(this_file_dir, "rml/dipole.rml")
 
         sim = Simulate(rml_file, hide=True)
 
-        elisa = sim.rml.beamline
+        beamline = sim.rml.beamline
 
         # define the values of the parameters to scan
         energy = np.arange(200, 7201, 1000)
@@ -35,12 +35,12 @@ class TestNoAnalyze(unittest.TestCase):
         # define a list of dictionaries with the parameters to scan
         params = [
             # set two parameters: "alpha" and "beta" in a dependent way.
-            {elisa.Dipole.photonEnergy: energy},
+            {beamline.Dipole.photonEnergy: energy},
             # set a range of  values
-            {elisa.ExitSlit.totalHeight: SlitSize},
+            {beamline.ExitSlit.totalHeight: SlitSize},
             # set values
-            {elisa.PG.cFactor: cff},
-            {elisa.Dipole.numberRays: nrays},
+            {beamline.PG.cFactor: cff},
+            {beamline.Dipole.numberRays: nrays},
         ]
 
         # and then plug them into the Simulation class
@@ -57,8 +57,8 @@ class TestNoAnalyze(unittest.TestCase):
 
         ## This must be a list of dictionaries
         sim.exports = [
-            {elisa.Dipole: "RawRaysOutgoing"},
-            {elisa.DetectorAtFocus: ["RawRaysOutgoing"]},
+            {beamline.Dipole: "RawRaysOutgoing"},
+            {beamline.DetectorAtFocus: ["RawRaysOutgoing"]},
         ]
 
         # uncomment to run the simulations
@@ -112,14 +112,14 @@ class TestNoAnalyze(unittest.TestCase):
             f = find_files_in_folder(path, suffix=".rml")
             self.assertEqual(8, len(f))
 
-    def test_round_folders_rml(self):
+    def test_round_folders_dat(self):
         dirpath = "RAYPy_Simulation_test_NoAnalyze"
         for i in range(2):
             path = os.path.join(dirpath, "round_" + str(i))
             f = find_files_in_folder(path, suffix=".dat")
             self.assertEqual(16, len(f))
 
-    def test_input_Dipole_file(self):
+    def test_combined_Dipole_file(self):
         dirpath = "RAYPy_Simulation_test_NoAnalyze"
         file = "Dipole.dat"
         path = os.path.join(dirpath, file)
