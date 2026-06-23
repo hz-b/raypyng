@@ -107,6 +107,22 @@ ParamElement
    :members:
    :inherited-members:
 
+Beamline Inspection
+====================
+
+These functions build summary tables and a layout plot from any ``.rml`` file
+without running a simulation.  They are useful for quickly checking element
+positions and mirror angles after loading a new beamline design.
+
+.. autofunction:: raypyng.inspect.build_tables
+
+.. autofunction:: raypyng.inspect.save_tables
+
+.. autofunction:: raypyng.inspect.plot_beamline_views
+
+.. autofunction:: raypyng.inspect.world_position
+
+
 Dipole
 ==================
 Based on  `srxraylib <https://srxraylib.readthedocs.io/en/latest/>`_

@@ -178,14 +178,12 @@ class PostProcess:
                     return float(rays[col].sum())
         return rays.shape[0]
 
-    def extract_nrays_from_source(self, rml_filename):
-        """Extract photon flux from rml file, find source automatically
+    def _extract_source_properties(self, rml_filename):
+        """Parse the RML file once and return (flux, nrays, energy, bandwidth).
 
-        Args:
-            rml_filename (str): the rml file to use to extract the photon flux
-
-        Returns:
-            str: the photon flux
+        Replaces three separate RMLFile parses that were previously issued by
+        extract_nrays_from_source, extract_energy_from_source, and
+        extract_bw_from_source inside postprocess_RawRays.
         """
         s = RMLFile(rml_filename)
         for oe in s.beamline.children():
@@ -195,64 +193,36 @@ class PostProcess:
         nrays = float(source.numberRays.cdata)
         try:
             flux = float(source.photonFlux.cdata)
-        except ValueError:
+        except (ValueError, AttributeError):
             flux = np.nan
-        except AttributeError:
-            flux = np.nan
+        energy = float(source.photonEnergy.cdata)
+        if source.energySpreadType.comment in ("whiteband", "white band"):
+            bandwidth = float(source.energySpread.cdata)
+            if hasattr(source, "energySpreadUnit"):
+                if source.energySpreadUnit.comment == "%":
+                    bandwidth = energy * bandwidth / 100
+                else:
+                    bandwidth = np.nan
+            else:
+                bandwidth = energy * bandwidth / 100
+        else:
+            bandwidth = np.nan
+        return flux, nrays, energy, bandwidth
 
+    def extract_nrays_from_source(self, rml_filename):
+        """Extract photon flux and number of rays from rml file."""
+        flux, nrays, _energy, _bw = self._extract_source_properties(rml_filename)
         return flux, nrays
 
     def extract_bw_from_source(self, rml_filename):
-        """Extract photon energy from rml file, find source automatically
-
-        Args:
-            rml_filename (str): the rml file to use to extract the photon flux
-
-        Returns:
-            str: the photon energy
-        """
-        s = RMLFile(rml_filename)
-        for oe in s.beamline.children():
-            if hasattr(oe, "numberRays"):
-                source = oe
-                break
-        if (
-            source.energySpreadType.comment != "whiteband"
-            and source.energySpreadType.comment != "white band"
-        ):
-            return np.nan
-
-        bandwidth = float(source.energySpread.cdata)
-        # most of the sources have the energySpreadUnit
-        if hasattr(source, "energySpreadUnit"):
-            if source.energySpreadUnit.comment == "%":
-                energy = float(source.photonEnergy.cdata)
-                bandwidth = energy * bandwidth / 100
-            else:
-                return np.nan
-        # but not the undulatorFile, so in that case we skip the control
-        else:
-            energy = float(source.photonEnergy.cdata)
-            bandwidth = energy * bandwidth / 100
+        """Extract source bandwidth from rml file."""
+        _flux, _nrays, _energy, bandwidth = self._extract_source_properties(rml_filename)
         return bandwidth
 
     def extract_energy_from_source(self, rml_filename):
-        """Extract photon energy from rml file, find source automatically
-
-        Args:
-            rml_filename (str): the rml file to use to extract the photon flux
-
-        Returns:
-            str: the photon energy
-        """
-        s = RMLFile(rml_filename)
-        for oe in s.beamline.children():
-            if hasattr(oe, "numberRays"):
-                source = oe
-                break
-        energy = source.photonEnergy.cdata
-
-        return float(energy)
+        """Extract photon energy from rml file."""
+        _flux, _nrays, energy, _bw = self._extract_source_properties(rml_filename)
+        return energy
 
     def postprocess_RawRays(
         self,
@@ -302,7 +272,9 @@ class PostProcess:
         else:
             if suffix[0] != "_":
                 suffix = "_" + suffix
-        source_photon_flux, source_n_rays = self.extract_nrays_from_source(rml_filename)
+        source_photon_flux, source_n_rays, energy, bw_source = self._extract_source_properties(
+            rml_filename
+        )
         # deal with the case that the source has no photon flux
         try:
             source_photon_flux = float(source_photon_flux)
@@ -318,9 +290,7 @@ class PostProcess:
         ray_properties = RayProperties(undulator_table=undulator_table)
         # account for the case that no rays survived
         try:
-            energy = self.extract_energy_from_source(rml_filename)
             ray_properties.df.loc[0, "PhotonEnergy"] = energy
-            bw_source = self.extract_bw_from_source(rml_filename)
             if rays.shape[0] == 0:  # if no rays survived
                 # source photon flux
                 ray_properties.df.loc[0, "SourcePhotonFlux"] = source_photon_flux
