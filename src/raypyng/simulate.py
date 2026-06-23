@@ -462,6 +462,7 @@ class Simulate:
             "FootprintOutgoingRays",
             "FootprintPlotSnapshot",
             "FootprintWastedRays",
+            "Intensity2D",
             "IntensityPlotSnapshot",
             "IntensityX",
             "IntensityYZ",
@@ -926,7 +927,7 @@ class Simulate:
         """
         round_folder = "round_" + str(round_n)
         rml_path = os.path.join(
-            self._sim_folder, round_folder, f"{sim_number}_{self.simulation_name}.rml"
+            self.sim_path, round_folder, f"{sim_number}_{self.simulation_name}.rml"
         )
 
         for param, value in param_set.items():
