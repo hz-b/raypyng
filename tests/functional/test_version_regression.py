@@ -48,6 +48,7 @@ def _run_sim(rml_path: Path, ray_path: str, sim_name: str, out_dir: Path, energi
     sim.params = [{beamline.Dipole.photonEnergy: energies}]
     sim.exports = [{beamline.DetectorAtFocus: ["RawRaysOutgoing"]}]
     sim.simulation_name = sim_name
+    out_dir.mkdir(parents=True, exist_ok=True)
     sim.path = str(out_dir)
     sim.analyze = False
     sim.raypyng_analysis = True
