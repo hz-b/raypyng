@@ -527,43 +527,50 @@ class PostProcess:
                     dir_path_round,
                     object_name + "_analyzed_rays_" + export_type + self.format_saved_files,
                 )
+                # Issue I: collect frames per round, then concat once (avoids O(N²) copies)
+                round_frames = []
                 for f in files:
                     sim_index = self._extract_sim_index(f)
                     if sim_index is None or sim_index >= expected_simulations:
                         continue
                     tmp = pd.read_csv(f)
                     tmp["_sim_index"] = sim_index
-                    if round == 0 and analyzed_rays is None:
-                        analyzed_rays = tmp
-                        analyzed_rays.set_index("_sim_index", inplace=True)
-                    elif round == 0:
-                        tmp.set_index("_sim_index", inplace=True)
-                        analyzed_rays = pd.concat([analyzed_rays, tmp], axis=0)
-                    else:
-                        tmp.set_index("_sim_index", inplace=True)
-                        if sim_index not in analyzed_rays.index:
-                            analyzed_rays = pd.concat([analyzed_rays, tmp], axis=0)
-                        else:
-                            for n in analyzed_rays.columns:
-                                if isinstance(tmp.iloc[0][n], (int, float)):
-                                    analyzed_rays.loc[sim_index, n] += float(tmp.iloc[0][n])
+                    tmp.set_index("_sim_index", inplace=True)
+                    round_frames.append(tmp)
                     os.remove(f)
+
+                if not round_frames:
+                    continue
+
+                round_df = pd.concat(round_frames, axis=0)
+
+                if round == 0:
+                    analyzed_rays = round_df
+                else:
+                    if analyzed_rays is None:
+                        analyzed_rays = round_df
+                    else:
+                        common_idx = analyzed_rays.index.intersection(round_df.index)
+                        new_idx = round_df.index.difference(analyzed_rays.index)
+                        numeric_cols = analyzed_rays.select_dtypes(include="number").columns
+                        if len(common_idx):
+                            analyzed_rays.loc[common_idx, numeric_cols] += round_df.loc[
+                                common_idx, numeric_cols
+                            ].to_numpy()
+                        if len(new_idx):
+                            analyzed_rays = pd.concat(
+                                [analyzed_rays, round_df.loc[new_idx]], axis=0
+                            )
 
             if analyzed_rays is None:
                 missing_pairs.append((object_name, export_type))
                 continue
 
-            def divide_numeric_rows(row):
-                # Check if all elements in the row are of a numeric type
-                if row.apply(lambda x: isinstance(x, (int, float))).all():
-                    return row / repeat
-                else:
-                    return row
+            # Issue H: divide numeric columns by repeat — vectorised, no row-wise apply
+            numeric_cols = analyzed_rays.select_dtypes(include="number").columns
+            analyzed_rays[numeric_cols] /= repeat
 
-            analyzed_rays = analyzed_rays.apply(divide_numeric_rows, axis=1)
             analyzed_rays = analyzed_rays.sort_index().reset_index(drop=True)
-            # Apply the function across the DataFrame
-            # save the file
             fn = os.path.join(dir_path, object_name + "_" + export_type + ".csv")
             analyzed_rays.to_csv(f"{fn}")
 
