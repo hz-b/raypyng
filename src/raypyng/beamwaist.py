@@ -5,6 +5,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 from .recipes import BeamWaist
 from .rml import ObjectElement
@@ -71,7 +72,7 @@ def _trace_element_block(index, csv_path, z_max, step_z, rot, lim, step, factor)
     Returns:
         tuple(int, np.ndarray, np.ndarray): ``(index, block_x, block_y)``.
     """
-    rays = np.loadtxt(csv_path, skiprows=2)
+    rays = pd.read_csv(csv_path, sep=r"\s+", skiprows=2, header=None).to_numpy()
     max_n_rays = int(rays.shape[0] / factor) if factor is not False else rays.shape[0]
     if max_n_rays < 100:
         raise ValueError(
@@ -110,6 +111,8 @@ class PlotBeamwaist:
         self.previous_results = False
         self.count_el = 0
         self.count_fig = 0
+        self._xh_blocks: list = []  # Issue L: accumulate blocks, concat once in save_results
+        self._yh_blocks: list = []
 
     def simulate_beamline(
         self, energy: float, /, source: ObjectElement = None, nrays: int = None, force: bool = False
@@ -247,10 +250,17 @@ class PlotBeamwaist:
         print("Load results...")
         self.xh = np.loadtxt(os.path.join(self.directory, "xh.txt"))
         self.yh = np.loadtxt(os.path.join(self.directory, "yh.txt"))
+        self._xh_blocks = []
+        self._yh_blocks = []
         stop = time.time()
         print("time:", np.round(stop - start1, 2), "s")
 
     def save_results(self):
+        if self._xh_blocks:
+            self.xh = np.concatenate(self._xh_blocks, axis=1)
+            self.yh = np.concatenate(self._yh_blocks, axis=1)
+            self._xh_blocks = []
+            self._yh_blocks = []
         np.savetxt(os.path.join(self.directory, "xh.txt"), self.xh)
         np.savetxt(os.path.join(self.directory, "yh.txt"), self.yh)
 
@@ -261,10 +271,12 @@ class PlotBeamwaist:
         if self.previous_results is False:
             print("Tracing " + name)
 
-            rays = np.loadtxt(
+            rays = pd.read_csv(
                 os.path.join(self.directory, "round_0", "0_" + name + "-RawRaysOutgoing.csv"),
+                sep=r"\s+",
                 skiprows=2,
-            )
+                header=None,
+            ).to_numpy()
             if self.factor is not False:
                 max_n_rays = int(rays.shape[0] / self.factor)
             else:
@@ -274,17 +286,15 @@ class PlotBeamwaist:
             rays = rays[0:max_n_rays]
 
             if self.count_el == 0:
-                self.xh, self.yh = self.trace(z, rays, rot)
-                # print("DEBUG:: self.xh.shape, self.yh.shape:",self.xh.shape, self.yh.shape)
+                bx, by = self.trace(z, rays, rot)
             else:
-                txh, tyh = self.trace(z, rays, rot, name)
-            if rot is True:
-                txh = np.rot90(txh)
-                tyh = np.rot90(tyh)
-            if self.count_el != 0:
-                # print("DEBUG:: txh.shape, tyh.shape:",txh.shape, tyh.shape)
-                self.xh = np.concatenate((self.xh, txh), axis=1)
-                self.yh = np.concatenate((self.yh, tyh), axis=1)
+                bx, by = self.trace(z, rays, rot, name)
+                if rot is True:
+                    bx = np.rot90(bx)
+                    by = np.rot90(by)
+            # Issue L: defer np.concatenate — collect blocks, merge once in save_results
+            self._xh_blocks.append(bx)
+            self._yh_blocks.append(by)
 
             stop = time.time()
             print("time:", np.round(stop - start1, 2), "s")

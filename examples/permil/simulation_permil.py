@@ -4,9 +4,10 @@ import os
 
 if __name__ == '__main__':
     this_file_dir = os.path.dirname(os.path.realpath(__file__))
-    rml_file = os.path.join(this_file_dir, 'rml/dipole_beamline.rml')
+    rml_file = os.path.join(this_file_dir, '..', 'rml', 'dipole_beamline.rml')
 
     sim = Simulate(rml_file, hide=True)
+    sim.path = this_file_dir  # write output inside this example's own folder
 
     rml = sim.rml
     beamline = sim.rml.beamline
@@ -16,7 +17,7 @@ if __name__ == '__main__':
     SlitSize = np.array([0.1])
     cff      = np.array([2.25])
     grating  = np.array([400, 1200])
-    nrays    = 50000
+    nrays    = 1e5
 
     params = [
         {beamline.Dipole.photonEnergy: energy},

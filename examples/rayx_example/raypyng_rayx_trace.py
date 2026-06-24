@@ -27,4 +27,4 @@ if __name__ == "__main__":
         {beamline.DetectorAtFocus: ["RawRaysOutgoing"]},
     ]
 
-    sim.run(multiprocessing=1, force=True, remove_rawrays=True)
+    sim.run(multiprocessing="auto", force=True, remove_rawrays=True)

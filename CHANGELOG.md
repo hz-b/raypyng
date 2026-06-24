@@ -1,6 +1,24 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.4.5] - 24-June-2026
+
+### Changed
+- Post-processing performance optimisations: vectorised concat/averaging, parallel element processing, mtime-based freshness checks, and adaptive idle timeouts reduce wall-clock time for large parameter sweeps.
+
+### Fixed
+- Missing `xvfb-run` detected early with a clear error rather than a cryptic failure at runtime.
+- Worker exceptions are now propagated back to the main process instead of being silently swallowed.
+
+## [1.4.4] - 23-June-2026
+
+### Changed
+- Examples reorganised into one self-contained folder per example, each with a `simulation_<name>.py` and a paired `eval_<name>.py` that plots photon energy vs bandwidth and flux (ph/s when source flux is known, otherwise percentage). Simulation output now lands inside each example's own folder.
+- `examples/run_all_examples.sh` reworked: runs everything by default, with `--simulation`, `--eval` and `--demo` flags (composable) plus `--verbose`; no timeout.
+
+### Fixed
+- `ProcessPoolExecutor` no longer hangs at interpreter exit on macOS: workers are forced onto the `fork` start method, and running workers are terminated when futures are cancelled (previously a busy-looping worker kept the process alive after "End of the Simulations").
+
 ## [1.4.3] - 23-June-2026
 
 ### Added

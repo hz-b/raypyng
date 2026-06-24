@@ -2,7 +2,7 @@ from raypyng.rml import RMLFile
 import os
 
 this_file_dir = os.path.dirname(os.path.realpath(__file__))
-rml_file = os.path.join(this_file_dir, "rml/dipole_beamline.rml")
+rml_file = os.path.join(this_file_dir, "..", "rml", "dipole_beamline.rml")
 
 rml = RMLFile(rml_file)
 
@@ -27,4 +27,4 @@ rml.beamline.Dipole.photonEnergy.cdata = str(2000)
 print("New Dipole photon energy: ", rml.beamline.Dipole.photonEnergy.cdata)
 
 # Save the rml file with a new name
-rml.write(os.path.join(this_file_dir, "rml/new_dipole_beamline.rml"))
+rml.write(os.path.join(this_file_dir, "new_dipole_beamline.rml"))

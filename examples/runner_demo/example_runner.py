@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
     # load an rml file
     print("Loading rml file")
-    a.load(os.path.join(this_file_dir, "rml/dipole_beamline.rml"))
+    a.load(os.path.join(this_file_dir, "..", "rml", "dipole_beamline.rml"))
 
     print("Trace...")
     a.trace(analyze=True)

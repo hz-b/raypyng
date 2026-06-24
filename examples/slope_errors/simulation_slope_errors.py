@@ -16,7 +16,8 @@ if __name__ == "__main__":
         return scan_dict
 
     this_file_dir = os.path.dirname(os.path.realpath(__file__))
-    sim = Simulate(os.path.join(this_file_dir, "rml/dipole_beamline.rml"), hide=True)
+    sim = Simulate(os.path.join(this_file_dir, "..", "rml", "dipole_beamline.rml"), hide=True)
+    sim.path = this_file_dir  # write output inside this example's own folder
 
     rml = sim.rml
     beamline = sim.rml.beamline
@@ -54,7 +55,7 @@ if __name__ == "__main__":
 
     sim.run(
         multiprocessing="auto",
-        force=False,
+        force=True,
         remove_round_folders=False,
         remove_rawrays=False,
     )

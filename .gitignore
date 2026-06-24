@@ -35,3 +35,10 @@ venv_docs/
 examples/rml/new_dipole_beamline.rml
 examples/test_exportDetectorAtFocus-RawRaysOutgoing.csv
 examples/test_exportDipole-RawRaysOutgoing.csv
+
+# generated outputs from the per-example folders (eval plots, demo artefacts)
+examples/*/*.png
+examples/*/eval_*.png
+examples/**/inspect_output/
+examples/rml_demo/new_dipole_beamline.rml
+examples/runner_demo/test_export*.csv

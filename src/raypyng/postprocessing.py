@@ -120,7 +120,7 @@ class PostProcess:
         """Calculate the fwhm of the rays.
 
         If less than 100 rays are passed check what is the standard deviation of the array.
-        Else, make histogram with 30 bins and check when the array falls at less than half max
+        Else, make a histogram and locate the half-maximum crossings with np.where.
 
         Args:
             rays (np:array): the energy of the x-rays
@@ -128,30 +128,19 @@ class PostProcess:
         Returns:
             float: fwhm
         """
-        # if I have less than 100 rays calculate the standard deviation
-        if rays.shape[0] < 100:
+        n = rays.shape[0]
+        if n < 100:
             return 2 * np.sqrt(2 * np.log(2)) * np.std(rays)
-        # else actually look for the fwhm
-        # iterate over the number of bins to amke sure we get
-        # a result that makes sense, check if fwhm is negative
-        for bins in [30, 300, 3000, 30000, 300000]:
-            # make an histogram, get back a tuple of values and bins
-            gh = np.histogram(rays, bins=bins)
-            y = gh[0]
-            x_bins = gh[1]
 
-            # take the average of each pari of bins to get the middle
-            x = (x_bins[1:] + x_bins[:-1]) / 2
-
-            # Find the maximum y value
-            max_y = np.amax(y)
-
-            # check where y becomes higher that max_y/2
-            xs = [x for x in range(y.shape[0]) if y[x] > max_y / 2.0]
-            fwhm = x[np.amax(xs) - 1] - x[np.amin(xs) - 1]
-            if fwhm > 0:
-                break
-        # if fwhm still negative fall back to use np.std
+        # Issue K: single histogram with auto bin count; np.where replaces Python list comp
+        bins = max(30, int(np.sqrt(n)))
+        y, x_bins = np.histogram(rays, bins=bins)
+        x = (x_bins[1:] + x_bins[:-1]) / 2
+        above_half = np.where(y > np.amax(y) / 2.0)[0]
+        if above_half.size >= 2:
+            fwhm = float(x[above_half[-1]] - x[above_half[0]])
+        else:
+            fwhm = 0.0
         if fwhm <= 0:
             fwhm = 2 * np.sqrt(2 * np.log(2)) * np.std(rays)
         return fwhm
@@ -178,14 +167,12 @@ class PostProcess:
                     return float(rays[col].sum())
         return rays.shape[0]
 
-    def extract_nrays_from_source(self, rml_filename):
-        """Extract photon flux from rml file, find source automatically
+    def _extract_source_properties(self, rml_filename):
+        """Parse the RML file once and return (flux, nrays, energy, bandwidth).
 
-        Args:
-            rml_filename (str): the rml file to use to extract the photon flux
-
-        Returns:
-            str: the photon flux
+        Replaces three separate RMLFile parses that were previously issued by
+        extract_nrays_from_source, extract_energy_from_source, and
+        extract_bw_from_source inside postprocess_RawRays.
         """
         s = RMLFile(rml_filename)
         for oe in s.beamline.children():
@@ -195,64 +182,36 @@ class PostProcess:
         nrays = float(source.numberRays.cdata)
         try:
             flux = float(source.photonFlux.cdata)
-        except ValueError:
+        except (ValueError, AttributeError):
             flux = np.nan
-        except AttributeError:
-            flux = np.nan
+        energy = float(source.photonEnergy.cdata)
+        if source.energySpreadType.comment in ("whiteband", "white band"):
+            bandwidth = float(source.energySpread.cdata)
+            if hasattr(source, "energySpreadUnit"):
+                if source.energySpreadUnit.comment == "%":
+                    bandwidth = energy * bandwidth / 100
+                else:
+                    bandwidth = np.nan
+            else:
+                bandwidth = energy * bandwidth / 100
+        else:
+            bandwidth = np.nan
+        return flux, nrays, energy, bandwidth
 
+    def extract_nrays_from_source(self, rml_filename):
+        """Extract photon flux and number of rays from rml file."""
+        flux, nrays, _energy, _bw = self._extract_source_properties(rml_filename)
         return flux, nrays
 
     def extract_bw_from_source(self, rml_filename):
-        """Extract photon energy from rml file, find source automatically
-
-        Args:
-            rml_filename (str): the rml file to use to extract the photon flux
-
-        Returns:
-            str: the photon energy
-        """
-        s = RMLFile(rml_filename)
-        for oe in s.beamline.children():
-            if hasattr(oe, "numberRays"):
-                source = oe
-                break
-        if (
-            source.energySpreadType.comment != "whiteband"
-            and source.energySpreadType.comment != "white band"
-        ):
-            return np.nan
-
-        bandwidth = float(source.energySpread.cdata)
-        # most of the sources have the energySpreadUnit
-        if hasattr(source, "energySpreadUnit"):
-            if source.energySpreadUnit.comment == "%":
-                energy = float(source.photonEnergy.cdata)
-                bandwidth = energy * bandwidth / 100
-            else:
-                return np.nan
-        # but not the undulatorFile, so in that case we skip the control
-        else:
-            energy = float(source.photonEnergy.cdata)
-            bandwidth = energy * bandwidth / 100
+        """Extract source bandwidth from rml file."""
+        _flux, _nrays, _energy, bandwidth = self._extract_source_properties(rml_filename)
         return bandwidth
 
     def extract_energy_from_source(self, rml_filename):
-        """Extract photon energy from rml file, find source automatically
-
-        Args:
-            rml_filename (str): the rml file to use to extract the photon flux
-
-        Returns:
-            str: the photon energy
-        """
-        s = RMLFile(rml_filename)
-        for oe in s.beamline.children():
-            if hasattr(oe, "numberRays"):
-                source = oe
-                break
-        energy = source.photonEnergy.cdata
-
-        return float(energy)
+        """Extract photon energy from rml file."""
+        _flux, _nrays, energy, _bw = self._extract_source_properties(rml_filename)
+        return energy
 
     def postprocess_RawRays(
         self,
@@ -302,7 +261,9 @@ class PostProcess:
         else:
             if suffix[0] != "_":
                 suffix = "_" + suffix
-        source_photon_flux, source_n_rays = self.extract_nrays_from_source(rml_filename)
+        source_photon_flux, source_n_rays, energy, bw_source = self._extract_source_properties(
+            rml_filename
+        )
         # deal with the case that the source has no photon flux
         try:
             source_photon_flux = float(source_photon_flux)
@@ -318,9 +279,7 @@ class PostProcess:
         ray_properties = RayProperties(undulator_table=undulator_table)
         # account for the case that no rays survived
         try:
-            energy = self.extract_energy_from_source(rml_filename)
             ray_properties.df.loc[0, "PhotonEnergy"] = energy
-            bw_source = self.extract_bw_from_source(rml_filename)
             if rays.shape[0] == 0:  # if no rays survived
                 # source photon flux
                 ray_properties.df.loc[0, "SourcePhotonFlux"] = source_photon_flux
@@ -548,52 +507,69 @@ class PostProcess:
                 if self._extract_sim_index(path) is not None
             }
         )
+        # Issue J: scan each round directory once upfront instead of P×R times
+        round_entries: dict[int, dict[str, str]] = {}
+        for rnd in range(repeat):
+            dir_path_round = os.path.join(dir_path, "round_" + str(rnd))
+            try:
+                round_entries[rnd] = {e.name: e.path for e in os.scandir(dir_path_round)}
+            except FileNotFoundError:
+                round_entries[rnd] = {}
+
         missing_pairs = []
         for object_name, export_type in unique_export_pairs:
             analyzed_rays = None
+            suffix = object_name + "_analyzed_rays_" + export_type + self.format_saved_files
             for round in range(repeat):
-                dir_path_round = os.path.join(dir_path, "round_" + str(round))
-                files = self._list_files(
-                    dir_path_round,
-                    object_name + "_analyzed_rays_" + export_type + self.format_saved_files,
+                entries = round_entries[round]
+                files = natsorted(
+                    [path for name, path in entries.items() if suffix in name],
+                    alg=ns.IGNORECASE,
                 )
+                # Issue I: collect frames per round, then concat once (avoids O(N²) copies)
+                round_frames = []
                 for f in files:
                     sim_index = self._extract_sim_index(f)
                     if sim_index is None or sim_index >= expected_simulations:
                         continue
                     tmp = pd.read_csv(f)
                     tmp["_sim_index"] = sim_index
-                    if round == 0 and analyzed_rays is None:
-                        analyzed_rays = tmp
-                        analyzed_rays.set_index("_sim_index", inplace=True)
-                    elif round == 0:
-                        tmp.set_index("_sim_index", inplace=True)
-                        analyzed_rays = pd.concat([analyzed_rays, tmp], axis=0)
-                    else:
-                        tmp.set_index("_sim_index", inplace=True)
-                        if sim_index not in analyzed_rays.index:
-                            analyzed_rays = pd.concat([analyzed_rays, tmp], axis=0)
-                        else:
-                            for n in analyzed_rays.columns:
-                                if isinstance(tmp.iloc[0][n], (int, float)):
-                                    analyzed_rays.loc[sim_index, n] += float(tmp.iloc[0][n])
+                    tmp.set_index("_sim_index", inplace=True)
+                    round_frames.append(tmp)
                     os.remove(f)
+
+                if not round_frames:
+                    continue
+
+                round_df = pd.concat(round_frames, axis=0)
+
+                if round == 0:
+                    analyzed_rays = round_df
+                else:
+                    if analyzed_rays is None:
+                        analyzed_rays = round_df
+                    else:
+                        common_idx = analyzed_rays.index.intersection(round_df.index)
+                        new_idx = round_df.index.difference(analyzed_rays.index)
+                        numeric_cols = analyzed_rays.select_dtypes(include="number").columns
+                        if len(common_idx):
+                            analyzed_rays.loc[common_idx, numeric_cols] += round_df.loc[
+                                common_idx, numeric_cols
+                            ].to_numpy()
+                        if len(new_idx):
+                            analyzed_rays = pd.concat(
+                                [analyzed_rays, round_df.loc[new_idx]], axis=0
+                            )
 
             if analyzed_rays is None:
                 missing_pairs.append((object_name, export_type))
                 continue
 
-            def divide_numeric_rows(row):
-                # Check if all elements in the row are of a numeric type
-                if row.apply(lambda x: isinstance(x, (int, float))).all():
-                    return row / repeat
-                else:
-                    return row
+            # Issue H: divide numeric columns by repeat — vectorised, no row-wise apply
+            numeric_cols = analyzed_rays.select_dtypes(include="number").columns
+            analyzed_rays[numeric_cols] /= repeat
 
-            analyzed_rays = analyzed_rays.apply(divide_numeric_rows, axis=1)
             analyzed_rays = analyzed_rays.sort_index().reset_index(drop=True)
-            # Apply the function across the DataFrame
-            # save the file
             fn = os.path.join(dir_path, object_name + "_" + export_type + ".csv")
             analyzed_rays.to_csv(f"{fn}")
 
