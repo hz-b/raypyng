@@ -1013,47 +1013,7 @@ class Simulate:
 
     def _missing_simulations_for_round(self, round_number):
         """Return missing simulation indices for a round using a single directory scan."""
-        round_folder = os.path.join(self.sim_path, "round_" + str(round_number))
-        expected_ids = set(range(self.sp._calc_number_sim()))
-
-        if self.raypyng_analysis:
-            expected_suffixes = [
-                f"_{export_config[0]}_analyzed_rays_{export_config[1]}.dat"
-                for export_config in self._exports_list
-            ]
-        else:
-            expected_suffixes = [
-                f"_{export_config[0]}-{export_config[1]}.csv"
-                for export_config in self._exports_list
-            ]
-
-        found_per_export = {suffix: set() for suffix in expected_suffixes}
-        self.logger.info(f"Scanning round {round_number} outputs in {round_folder}")
-
-        with os.scandir(round_folder) as entries:
-            for entry in entries:
-                if not entry.is_file():
-                    continue
-                filename = entry.name
-                for suffix in expected_suffixes:
-                    if not filename.endswith(suffix):
-                        continue
-                    sim_index = filename[: -len(suffix)].split("_", 1)[0]
-                    if sim_index.isdigit():
-                        sim_index = int(sim_index)
-                        if sim_index in expected_ids:
-                            found_per_export[suffix].add(sim_index)
-                    break
-
-        completed_ids = expected_ids.copy()
-        for suffix, found_ids in found_per_export.items():
-            self.logger.info(
-                f"Round {round_number}: found {len(found_ids)}/{len(expected_ids)} "
-                f"files for {suffix}"
-            )
-            completed_ids &= found_ids
-
-        return sorted(expected_ids - completed_ids)
+        return self._scan_round_outputs(round_number)["missing_ids"]
 
     def _make_exports_list(self, sim_number, round_n):
         exports_list = []
@@ -1185,6 +1145,12 @@ class Simulate:
             f"{formatted}. The simulation/export step did not finish cleanly."
         )
 
+    def _status_message(self, message):
+        print(message)
+        logger = getattr(self, "logger", None)
+        if logger is not None:
+            logger.info(message)
+
     def run(
         self,
         recipe=None,
@@ -1264,12 +1230,44 @@ class Simulate:
         print(self._format_worker_resolution_message(self._worker_resolution))
         self._init_logging()
         total_simulations = self.sp._calc_number_sim() * self.repeat
-        self.simulations_checked = False
         self._executor_has_unfinished_futures = False
 
         pbar = self._initialize_progress_bar(total_simulations, description="Simulations Completed")
         try:
             self._execute_simulations(multiprocessing, force, total_simulations, pbar)
+            verification = self._collect_missing_simulations(description="Checking Simulations")
+            if verification["missing_count"] > 0:
+                self._status_message(
+                    "Final check found "
+                    f"{verification['missing_count']} missing simulations; "
+                    f"retrying {verification['missing_count']} now."
+                )
+                retry_pbar = self._initialize_progress_bar(
+                    verification["missing_count"], description="Retrying Missing Simulations"
+                )
+                try:
+                    self._execute_simulations(
+                        multiprocessing,
+                        False,
+                        verification["missing_count"],
+                        retry_pbar,
+                        update_reacap_files=False,
+                        selected_simulations_by_round=verification["missing_by_round"],
+                    )
+                finally:
+                    retry_pbar.close()
+
+                verification = self._collect_missing_simulations(description="Checking Simulations")
+                self._status_message(
+                    "Retry completed; "
+                    f"{verification['missing_count']} missing simulations remain."
+                )
+                if verification["missing_count"] > 0:
+                    raise RuntimeError(
+                        self._format_missing_simulations_error(verification["missing_simulations"])
+                    )
+            else:
+                self._status_message("Final check found 0 missing simulations.")
             self.logger.info("Simulation completed successfully.")
         except KeyboardInterrupt:
             self.logger.error("Simulation Interrupted.", exc_info=True)
@@ -1516,7 +1514,13 @@ class Simulate:
             )
 
     def _execute_simulations(
-        self, num_workers, force, total_simulations, pbar, update_reacap_files=True
+        self,
+        num_workers,
+        force,
+        total_simulations,
+        pbar,
+        update_reacap_files=True,
+        selected_simulations_by_round=None,
     ):
         """
         Executes the simulations in batches with multiprocessing support.
@@ -1530,8 +1534,7 @@ class Simulate:
         simulations_durations = []  # Track durations of all simulations for average calculation
         self._simulations_duration_total = 0.0  # Issue F: running sum, avoids O(N) sum() per tick
         executor = None
-        rerun_missing = False
-        rerun_pbar = None
+        self._executor_has_unfinished_futures = False
 
         try:
             # On macOS the default start method is "spawn", which leaves worker
@@ -1545,8 +1548,15 @@ class Simulate:
             remaining_simulations = total_simulations
             for round_number in range(self.repeat):
                 self.logger.info(f"Start round {round_number}")
-                missing_in_round = set(self._missing_simulations_for_round(round_number))
+                if selected_simulations_by_round is None:
+                    missing_in_round = set(self._missing_simulations_for_round(round_number))
+                else:
+                    missing_in_round = set(selected_simulations_by_round.get(round_number, []))
+                    if not missing_in_round:
+                        continue
                 for sim_number, params in enumerate(self.sp.simulation_parameters_generator()):
+                    if selected_simulations_by_round is not None and sim_number not in missing_in_round:
+                        continue
                     if round_number == 0 and update_reacap_files is True:
                         self._update_simulation_recap_files(params, sim_number)
                     if sim_number in missing_in_round or force:
@@ -1576,9 +1586,6 @@ class Simulate:
                             f"Remaning Simulations {remaining_simulations}, \
                                 stop the simulations loop"
                         )
-                        rerun_missing, rerun_pbar = self._final_check_on_simulations_and_shutdown(
-                            pbar
-                        )
                         break
         except Exception as e:
             traceback.print_exc()
@@ -1586,8 +1593,8 @@ class Simulate:
             raise
         finally:
             if executor is not None:
-                shutdown_wait = not rerun_missing and not self._executor_has_unfinished_futures
-                force_cancel = rerun_missing or self._executor_has_unfinished_futures
+                shutdown_wait = not self._executor_has_unfinished_futures
+                force_cancel = self._executor_has_unfinished_futures
                 if force_cancel:
                     # cancel_futures only drops *queued* tasks; a worker already
                     # running a task keeps going and can busy-loop at 100% CPU.
@@ -1609,14 +1616,6 @@ class Simulate:
                 )
                 if force_cancel:
                     self.cleanup_child_processes()
-        if rerun_missing:
-            self._execute_simulations(
-                self._workers,
-                False,
-                total_simulations,
-                rerun_pbar,
-                update_reacap_files=False,
-            )
 
     def _mark_unfinished_futures(self, futures):
         unfinished_futures = [future for future in futures if not future.done()]
@@ -1628,38 +1627,91 @@ class Simulate:
             for future in unfinished_futures:
                 future.cancel()
 
-    def _final_check_on_simulations_and_shutdown(self, old_pbar):
+    def _expected_output_suffixes(self):
+        if self.raypyng_analysis:
+            return [
+                f"_{export_config[0]}_analyzed_rays_{export_config[1]}.dat"
+                for export_config in self._exports_list
+            ]
+        return [f"_{export_config[0]}-{export_config[1]}.csv" for export_config in self._exports_list]
 
-        # check that all simulatins are completed:
+    def _scan_round_outputs(self, round_number):
+        round_folder = os.path.join(self.sim_path, "round_" + str(round_number))
+        expected_ids = set(range(self.sp._calc_number_sim()))
+        expected_suffixes = self._expected_output_suffixes()
+        found_per_export = {suffix: set() for suffix in expected_suffixes}
+        self.logger.info(f"Scanning round {round_number} outputs in {round_folder}")
+
+        with os.scandir(round_folder) as entries:
+            for entry in entries:
+                if not entry.is_file():
+                    continue
+                filename = entry.name
+                for suffix in expected_suffixes:
+                    if not filename.endswith(suffix):
+                        continue
+                    sim_index = filename[: -len(suffix)].split("_", 1)[0]
+                    if sim_index.isdigit():
+                        sim_index = int(sim_index)
+                        if sim_index in expected_ids:
+                            found_per_export[suffix].add(sim_index)
+                    break
+
+        completed_ids = expected_ids.copy()
+        missing_by_export_suffix = {}
+        for suffix, found_ids in found_per_export.items():
+            self.logger.info(
+                f"Round {round_number}: found {len(found_ids)}/{len(expected_ids)} "
+                f"files for {suffix}"
+            )
+            completed_ids &= found_ids
+            missing_by_export_suffix[suffix] = sorted(expected_ids - found_ids)
+
+        return {
+            "round": round_number,
+            "expected_count": len(expected_ids),
+            "missing_ids": sorted(expected_ids - completed_ids),
+            "missing_by_export_suffix": missing_by_export_suffix,
+        }
+
+    def _collect_missing_simulations(self, description="Checking Simulations"):
         self.logger.info(
             "Checking that all simulations are completed before stopping the ProcessPoolExecutor"
         )
-        missing_sim = []
-        for round_number in range(self.repeat):
-            round_missing = self._missing_simulations_for_round(round_number)
-            self.logger.info(
-                f"Round {round_number}: final check found {len(round_missing)} missing simulations"
-            )
-            for sim_number in round_missing:
+        progress_bar = self._initialize_progress_bar(self.repeat, description=description)
+        missing_simulations = []
+        missing_by_round = {}
+        missing_by_export_suffix = {}
+
+        try:
+            for round_number in range(self.repeat):
+                round_result = self._scan_round_outputs(round_number)
+                round_missing = round_result["missing_ids"]
+                missing_by_round[round_number] = round_missing
                 self.logger.info(
-                    f"This simulation is missing: round {round_number}, number {sim_number}"
+                    f"Round {round_number}: final check found {len(round_missing)} missing simulations"
                 )
-                missing_sim.append({"round": round_number, "sim_number": sim_number})
+                for suffix, missing_ids in round_result["missing_by_export_suffix"].items():
+                    missing_by_export_suffix[(round_number, suffix)] = missing_ids
+                for sim_number in round_missing:
+                    self.logger.info(
+                        f"This simulation is missing: round {round_number}, number {sim_number}"
+                    )
+                    missing_simulations.append({"round": round_number, "sim_number": sim_number})
+                progress_bar.set_postfix_str(
+                    f"Missing so far: {len(missing_simulations)}",
+                    refresh=True,
+                )
+                progress_bar.update(1)
+        finally:
+            progress_bar.close()
 
-        if len(missing_sim) >= 1 and self.simulations_checked is False:
-            self.logger.info("Finish missing simulations")
-            total_simulations = self.sp._calc_number_sim() * self.repeat
-            old_pbar.close()
-            pbar = self._initialize_progress_bar(
-                total_simulations, description="Checking Simulations"
-            )
-            self.simulations_checked = True
-            return True, pbar
-
-        if missing_sim:
-            raise RuntimeError(self._format_missing_simulations_error(missing_sim))
-
-        return False, old_pbar
+        return {
+            "missing_count": len(missing_simulations),
+            "missing_simulations": missing_simulations,
+            "missing_by_round": missing_by_round,
+            "missing_by_export_suffix": missing_by_export_suffix,
+        }
 
     def _prepare_and_submit_simulation(
         self, params, sim_number, round_number, simulation_params_batch, executor, force
