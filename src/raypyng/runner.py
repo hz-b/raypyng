@@ -5,6 +5,7 @@
 import atexit
 import os
 import select
+import shutil
 import signal
 import subprocess
 import sys
@@ -76,7 +77,14 @@ class RayUIRunner:
         self._verbose = False
         if hide and config.opsys != "Darwin":
             # xvfb-run is Linux-only; on macOS the app runs headlessly via -b alone
-            self._hide = ["xvfb-run", "--auto-servernum", "--server-num=3000"]
+            xvfb = shutil.which("xvfb-run")
+            if xvfb is None:
+                raise RayPyRunnerError(
+                    "hide=True requires xvfb-run on Linux, but it was not found in PATH.\n"
+                    "Install it with:  sudo apt-get install xvfb\n"
+                    "Then retry, or pass hide=False to run with a visible window."
+                )
+            self._hide = [xvfb, "--auto-servernum", "--server-num=3000"]
         else:
             self._hide = []
 

@@ -1991,7 +1991,8 @@ def run_rml_func_rayx(parameters):
                     efficiency=eff,
                 )
     except Exception as e:
-        print(f"WARNING! Got exception while processing {rml_filename}, the error was: {e}")
+        print(f"ERROR! Got exception while processing {rml_filename}: {e}", flush=True)
+        raise
     return time.time() - st, rml_filename
 
 
@@ -2084,15 +2085,14 @@ def run_rml_func(parameters):
                     efficiency=eff,
                 )
     except Exception as e:
-        print(f"WARNING! Got exception while processing {rml_filename}, the error was: {e}")
+        print(f"ERROR! Got exception while processing {rml_filename}: {e}", flush=True)
+        raise
     finally:
         # Ensure resources are cleaned up properly
         try:
             api.quit()
-        except Exception as e:
-            print(
-                f"WARNING! Got exception while quitting API for {rml_filename}, the error was: {e}"
-            )
+        except Exception:
+            pass
         runner.kill()
     et = time.time()
     simulation_duration = et - st
