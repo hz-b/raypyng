@@ -70,6 +70,7 @@ PASSED=0
 FAILED=0
 PASSED_LIST=""
 FAILED_LIST=""
+TIMING_LIST=""
 
 echo -e "${BLUE}========== RUNNING EXAMPLES ==========${NC}"
 echo -e "${BLUE}Started at:   $(date)${NC}"
@@ -81,29 +82,44 @@ echo ""
 # run_script <path> <kind>
 run_script() {
     local script="$1" kind="$2"
-    local name
+    local name elapsed
     name="$(basename "$(dirname "$script")")/$(basename "$script")"
+
+    local t_start t_end
+    t_start=$(date +%s)
 
     if [[ "$VERBOSE" == true ]]; then
         echo -e "${BLUE}--- [$kind] $name ---${NC}"
         if python "$script"; then
-            echo -e "${GREEN}✓ $name PASSED${NC}"; echo ""
-            PASSED=$((PASSED + 1)); PASSED_LIST="$PASSED_LIST\n  ✓ [$kind] $name"
+            t_end=$(date +%s); elapsed=$((t_end - t_start))
+            echo -e "${GREEN}✓ $name PASSED (${elapsed}s)${NC}"; echo ""
+            PASSED=$((PASSED + 1))
+            PASSED_LIST="$PASSED_LIST\n  ✓ [$kind] $name"
+            TIMING_LIST="$TIMING_LIST\n  ${elapsed}s  [$kind] $name"
         else
-            echo -e "${RED}✗ $name FAILED (exit $?)${NC}"; echo ""
-            FAILED=$((FAILED + 1)); FAILED_LIST="$FAILED_LIST\n  ✗ [$kind] $name"
+            t_end=$(date +%s); elapsed=$((t_end - t_start))
+            echo -e "${RED}✗ $name FAILED (exit $?, ${elapsed}s)${NC}"; echo ""
+            FAILED=$((FAILED + 1))
+            FAILED_LIST="$FAILED_LIST\n  ✗ [$kind] $name"
+            TIMING_LIST="$TIMING_LIST\n  ${elapsed}s  [$kind] $name  FAILED"
         fi
     else
         echo -n "[$kind] $name ... "
         if python "$script" > /tmp/example_output.log 2>&1; then
-            echo -e "${GREEN}PASSED${NC}"
-            PASSED=$((PASSED + 1)); PASSED_LIST="$PASSED_LIST\n  ✓ [$kind] $name"
+            t_end=$(date +%s); elapsed=$((t_end - t_start))
+            echo -e "${GREEN}PASSED (${elapsed}s)${NC}"
+            PASSED=$((PASSED + 1))
+            PASSED_LIST="$PASSED_LIST\n  ✓ [$kind] $name"
+            TIMING_LIST="$TIMING_LIST\n  ${elapsed}s  [$kind] $name"
         else
-            echo -e "${RED}FAILED (exit $?)${NC}"
+            t_end=$(date +%s); elapsed=$((t_end - t_start))
+            echo -e "${RED}FAILED (exit $?, ${elapsed}s)${NC}"
             echo -e "${RED}--- last 10 lines ---${NC}"
             tail -10 /tmp/example_output.log | sed 's/^/  /'
             echo ""
-            FAILED=$((FAILED + 1)); FAILED_LIST="$FAILED_LIST\n  ✗ [$kind] $name"
+            FAILED=$((FAILED + 1))
+            FAILED_LIST="$FAILED_LIST\n  ✗ [$kind] $name"
+            TIMING_LIST="$TIMING_LIST\n  ${elapsed}s  [$kind] $name  FAILED"
         fi
     fi
 }
@@ -154,6 +170,8 @@ echo -e "${GREEN}Passed: $PASSED${NC}"
 echo -e "${RED}Failed: $FAILED${NC}"
 if [[ $PASSED -gt 0 ]]; then echo -e "${GREEN}Passed:${NC}$(echo -e "$PASSED_LIST")"; fi
 if [[ $FAILED -gt 0 ]]; then echo -e "${RED}Failed:${NC}$(echo -e "$FAILED_LIST")"; fi
+echo ""
+echo -e "${BLUE}Timing:${NC}$(echo -e "$TIMING_LIST")"
 echo ""
 echo -e "${BLUE}Completed at: $(date)${NC}"
 
