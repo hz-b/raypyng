@@ -17,7 +17,7 @@ if __name__ == '__main__':
     SlitSize = np.array([0.1])
     cff      = np.array([2.25])
     grating  = np.array([400, 1200])
-    nrays    = 50000
+    nrays    = 1e5
 
     params = [
         {beamline.Dipole.photonEnergy: energy},

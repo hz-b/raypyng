@@ -10,7 +10,7 @@ import signal
 import sys
 import time
 import traceback
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
 
 import pandas as pd
 import psutil
@@ -436,8 +436,8 @@ class Simulate:
         self.ray_path = ray_path  # RAY-UI installation path
         self.overwrite_rml = True  # Overwrite RML files
         self._sim_folder = None  # Simulation folder name
-        self.batch_size = 50  # 1e6
-        self._simulation_timeout = 60
+        self.batch_size = 50
+        self._simulation_timeout = 20.0  # max idle secs; updated live in _wait_for_simulation_batch
         self._batch_number = None
 
         self._simulation_name = None  # Custom simulation name
@@ -984,6 +984,27 @@ class Simulate:
 
         self._recap_header_written = True
 
+    def _sim_output_is_fresh(self, sim_index, repeat, since):
+        """True only if all output files exist AND have mtime >= since (wall-clock seconds)."""
+        round_folder = "round_" + str(repeat)
+        folder = os.path.join(self.sim_path, round_folder)
+        for export_config in self._exports_list:
+            if self.raypyng_analysis:
+                path = os.path.join(
+                    folder,
+                    f"{sim_index}_{export_config[0]}_analyzed_rays_{export_config[1]}.dat",
+                )
+            else:
+                path = os.path.join(
+                    folder, f"{sim_index}_{export_config[0]}-{export_config[1]}.csv"
+                )
+            try:
+                if not os.path.exists(path) or os.path.getmtime(path) < since:
+                    return False
+            except OSError:
+                return False
+        return True
+
     def _is_simulation_missing(self, sim_index, repeat):
         """
         Checks if a simulation is missing based on the existence of its export files.
@@ -1474,7 +1495,13 @@ class Simulate:
             )
 
     def _execute_simulations(
-        self, num_workers, force, total_simulations, pbar, update_reacap_files=True
+        self,
+        num_workers,
+        force,
+        total_simulations,
+        pbar,
+        update_reacap_files=True,
+        update_pbar_for_present=True,
     ):
         """
         Executes the simulations in batches with multiprocessing support.
@@ -1484,6 +1511,9 @@ class Simulate:
             force (bool): Force re-execution of simulations.
             total_simulations (int): Total number of simulations to be executed.
             pbar (tqdm): Progress bar object for tracking simulation progress.
+            update_reacap_files (bool): Whether to update recap CSV/TXT files.
+            update_pbar_for_present (bool): Whether to tick pbar for already-complete sims.
+                Set False during retry so the retry bar only counts retried simulations.
         """
         simulations_durations = []  # Track durations of all simulations for average calculation
         self._simulations_duration_total = 0.0  # Issue F: running sum, avoids O(N) sum() per tick
@@ -1516,8 +1546,8 @@ class Simulate:
                             executor,
                             force,
                         )
-                    else:
-                        pbar.update(1)  # If not missing or forced, update progress bar directly
+                    elif update_pbar_for_present:
+                        pbar.update(1)
                     batch_length += 1
                     remaining_simulations -= 1
                     if batch_length == self.batch_size or remaining_simulations == 0:
@@ -1531,8 +1561,8 @@ class Simulate:
                         batch_length = 0
                     if remaining_simulations == 0:
                         self.logger.info(
-                            f"Remaning Simulations {remaining_simulations}, \
-                                stop the simulations loop"
+                            f"Remaining simulations {remaining_simulations}, "
+                            "stopping the simulations loop"
                         )
                         rerun_missing, rerun_pbar = self._final_check_on_simulations_and_shutdown(
                             pbar
@@ -1574,11 +1604,10 @@ class Simulate:
                 total_simulations,
                 rerun_pbar,
                 update_reacap_files=False,
+                update_pbar_for_present=False,
             )
 
     def _final_check_on_simulations_and_shutdown(self, old_pbar):
-
-        # check that all simulatins are completed:
         self.logger.info(
             "Checking that all simulations are completed before stopping the ProcessPoolExecutor"
         )
@@ -1589,20 +1618,32 @@ class Simulate:
                 f"Round {round_number}: final check found {len(round_missing)} missing simulations"
             )
             for sim_number in round_missing:
-                self.logger.info(
-                    f"This simulation is missing: round {round_number}, number {sim_number}"
-                )
+                self.logger.info(f"Missing simulation: round {round_number}, number {sim_number}")
                 missing_sim.append({"round": round_number, "sim_number": sim_number})
 
-        if len(missing_sim) >= 1 and self.simulations_checked is False:
-            self.logger.info("Finish missing simulations")
-            total_simulations = self.sp._calc_number_sim() * self.repeat
+        missing_count = len(missing_sim)
+
+        if missing_count >= 1 and self.simulations_checked is False:
+            print(
+                f"\nFinal check: {missing_count} missing simulation(s). Retrying now...",
+                flush=True,
+            )
+            self.logger.info(f"Retrying {missing_count} missing simulation(s)")
             old_pbar.close()
             pbar = self._initialize_progress_bar(
-                total_simulations, description="Checking Simulations"
+                missing_count, description="Retrying Missing Simulations"
             )
             self.simulations_checked = True
             return True, pbar
+
+        if missing_count >= 1:
+            print(
+                f"\nWarning: {missing_count} simulation(s) still missing after retry.",
+                flush=True,
+            )
+            self.logger.warning(f"{missing_count} simulation(s) still missing after retry")
+        elif self.simulations_checked:
+            print("\nRetry complete. All simulations finished successfully.", flush=True)
 
         return False, old_pbar
 
@@ -1659,62 +1700,111 @@ class Simulate:
             executor.submit(func, sim_params): sim_params for sim_params in simulation_params_batch
         }
         completed_sim = 0
-        remaining_simulations = self.batch_size
+        remaining_simulations = len(futures)
         self.logger.info(
-            f"Waiting for batch number: {self._batch_number}, timeout: {self._simulation_timeout}s"
+            f"Waiting for batch number: {self._batch_number}, "
+            f"initial max-idle: {self._simulation_timeout}s"
         )
         self._batch_number += 1
-        try:
-            for future in as_completed(futures, timeout=self._simulation_timeout):
-                sim_duration, rml_filename = future.result()
-                simulations_durations.append(sim_duration)
-                self._simulations_duration_total += sim_duration
-                avg = self._simulations_duration_total / len(simulations_durations)
-                self._simulation_timeout = avg * self.batch_size / self._workers * 1.2
-                self._update_progress_bar(simulations_durations, pbar)
-                completed_sim += 1
-                remaining_simulations -= 1
-                self.logger.info(
-                    f"Completed: {completed_sim}, \
-                        remaining: {remaining_simulations}, {rml_filename}"
+
+        # Adaptive idle-based timeout: poll every 5 s and recompute the allowed idle
+        # window from real timing data after each future completes.
+        batch_clock_start = time.time()  # wall-clock anchor for freshness checks
+        pending = set(futures)
+        last_completion = time.monotonic()
+        max_idle_secs = self._simulation_timeout  # 300 s seed; replaced once first sim reports in
+        timed_out_futures = []
+
+        while pending:
+            done, pending = wait(pending, timeout=5.0, return_when=FIRST_COMPLETED)
+            for future in done:
+                try:
+                    sim_duration, rml_filename = future.result()
+                    simulations_durations.append(sim_duration)
+                    self._simulations_duration_total += sim_duration
+                    avg = self._simulations_duration_total / len(simulations_durations)
+                    max_idle_secs = max(60.0, avg * 3.0)
+                    self._simulation_timeout = max_idle_secs
+                    self._update_progress_bar(simulations_durations, pbar)
+                    completed_sim += 1
+                    remaining_simulations -= 1
+                    last_completion = time.monotonic()
+                    self.logger.info(
+                        f"Completed: {completed_sim}, remaining: {remaining_simulations}, "
+                        f"{rml_filename}"
+                    )
+                except Exception as e:
+                    self.logger.warning(f"Future raised exception: {e}")
+                    remaining_simulations -= 1
+                    last_completion = time.monotonic()
+                    self._update_progress_bar(simulations_durations, pbar)
+
+            if pending and (time.monotonic() - last_completion) >= max_idle_secs:
+                idle = time.monotonic() - last_completion
+                self.logger.warning(
+                    f"Batch stalled: {len(pending)} futures idle for {idle:.0f}s "
+                    f"(limit {max_idle_secs:.0f}s)"
                 )
-        except Exception as e:
-            self.logger.info(f"Exception during simulation: {e}")
-            unfinished_futures = [future for future in futures if not future.done()]
-            if unfinished_futures:
-                self._executor_has_unfinished_futures = True
-                self.logger.info(
-                    f"Marking executor as having {len(unfinished_futures)} unfinished futures"
-                )
-                for future in unfinished_futures:
-                    future.cancel()
+                timed_out_futures = list(pending)
+                pending = set()
+                break
+
+        if timed_out_futures:
+            self._executor_has_unfinished_futures = True
+            self.logger.info(
+                f"Marking executor as having {len(timed_out_futures)} unfinished futures"
+            )
+            for future in timed_out_futures:
+                future.cancel()
+            missing_sims = []
             try:
-                wait_time = self._simulation_timeout / 4
                 for sim in simulation_params_batch:
                     _, exp_list = sim
                     exp = exp_list[0]
                     round_n = int(re.findall(r"(?<=round_)\d+", exp[-2])[0])
                     sim_n = int(re.findall(r"\d+", exp[-1])[0])
                     sim_file = sim[0][0]
-                    while self._is_simulation_missing(sim_n, round_n) and wait_time > 0:
-                        time.sleep(5)
-                        wait_time -= 5
-                        self.logger.info(f"Waiting for file {sim_file}, wait_time {wait_time}")
+                    if self._is_simulation_missing(sim_n, round_n):
+                        missing_sims.append((sim_n, round_n, sim_file))
             except Exception as e:
-                self.logger.info(f"Exception checking simulations: {e}")
-            if wait_time >= 0:
-                self.logger.info(
-                    f"Found all simulations of the batch,\
-                        futures missed {remaining_simulations} simulations"
+                self.logger.info(f"Exception building missing-sim list: {e}")
+
+            n_missing = len(missing_sims)
+            if missing_sims:
+                idle_threshold = max(10.0, max_idle_secs / 4)
+                print(
+                    f"\nBatch stalled — {n_missing} sim(s) still running, "
+                    f"waiting (idle limit {idle_threshold:.0f}s)...",
+                    flush=True,
                 )
-            else:
-                self.logger.info(
-                    f"Found most simulations of the batch,\
-                        futures missed at least {remaining_simulations} simulations"
-                )
+                last_progress = time.monotonic()
+                while missing_sims:
+                    time.sleep(2)
+                    still_missing = []
+                    for sim_n, round_n, sim_file in missing_sims:
+                        if self._sim_output_is_fresh(sim_n, round_n, batch_clock_start):
+                            last_progress = time.monotonic()
+                            elapsed = time.time() - batch_clock_start
+                            max_idle_secs = max(60.0, elapsed * 3.0)
+                            self._simulation_timeout = max_idle_secs
+                            self.logger.info(
+                                f"Sim {sim_n} appeared after {elapsed:.1f}s; "
+                                f"updating max_idle to {max_idle_secs:.0f}s"
+                            )
+                        else:
+                            still_missing.append((sim_n, round_n, sim_file))
+                    missing_sims = still_missing
+                    if missing_sims and (time.monotonic() - last_progress) >= idle_threshold:
+                        self.logger.warning(
+                            f"Giving up: {len(missing_sims)} sims idle for "
+                            f"{time.monotonic() - last_progress:.0f}s"
+                        )
+                        break
+                found = n_missing - len(missing_sims)
+                self.logger.info(f"Post-timeout: {found}/{n_missing} sims appeared")
 
             if len(simulations_durations) == 0:
-                simulations_durations.append(self._simulation_timeout)
+                simulations_durations.append(max_idle_secs)
             self.logger.info("Updating progress bar")
             for _i in range(remaining_simulations):
                 try:
@@ -1901,7 +1991,8 @@ def run_rml_func_rayx(parameters):
                     efficiency=eff,
                 )
     except Exception as e:
-        print(f"WARNING! Got exception while processing {rml_filename}, the error was: {e}")
+        print(f"ERROR! Got exception while processing {rml_filename}: {e}", flush=True)
+        raise
     return time.time() - st, rml_filename
 
 
@@ -1994,15 +2085,14 @@ def run_rml_func(parameters):
                     efficiency=eff,
                 )
     except Exception as e:
-        print(f"WARNING! Got exception while processing {rml_filename}, the error was: {e}")
+        print(f"ERROR! Got exception while processing {rml_filename}: {e}", flush=True)
+        raise
     finally:
         # Ensure resources are cleaned up properly
         try:
             api.quit()
-        except Exception as e:
-            print(
-                f"WARNING! Got exception while quitting API for {rml_filename}, the error was: {e}"
-            )
+        except Exception:
+            pass
         runner.kill()
     et = time.time()
     simulation_duration = et - st
