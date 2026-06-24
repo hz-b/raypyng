@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.5.0] - 24-June-2026
+## [1.4.5] - 24-June-2026
 
 ### Changed
 - Post-processing performance optimisations: vectorised concat/averaging, parallel element processing, mtime-based freshness checks, and adaptive idle timeouts reduce wall-clock time for large parameter sweeps.
