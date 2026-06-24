@@ -10,6 +10,7 @@
 #   ./run_all_examples.sh --simulation    # only simulation_*.py
 #   ./run_all_examples.sh --eval          # only eval_*.py (needs existing output)
 #   ./run_all_examples.sh --demo          # only the standalone demo scripts
+#   ./run_all_examples.sh --timeout 20    # fail a script if it runs longer than 20s
 #   ./run_all_examples.sh --simulation --eval   # any combination composes
 #   ./run_all_examples.sh -v|--verbose    # stream script output to the terminal
 #
@@ -26,6 +27,7 @@ VERBOSE=false
 RUN_SIM=false
 RUN_EVAL=false
 RUN_DEMO=false
+TIMEOUT_SECONDS=""
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -33,6 +35,18 @@ while [[ $# -gt 0 ]]; do
         --simulation|--simulations|--sim) RUN_SIM=true; shift ;;
         --eval|--evals) RUN_EVAL=true; shift ;;
         --demo|--demos|--other|--misc) RUN_DEMO=true; shift ;;
+        --timeout)
+            if [[ $# -lt 2 ]]; then
+                echo "--timeout requires a value in seconds"
+                exit 1
+            fi
+            if ! [[ $2 =~ ^[1-9][0-9]*$ ]]; then
+                echo "Invalid timeout: $2"
+                echo "Timeout must be a positive integer number of seconds"
+                exit 1
+            fi
+            TIMEOUT_SECONDS="$2"
+            shift 2 ;;
         -h|--help)
             echo "Usage: $0 [OPTIONS]"
             echo ""
@@ -41,6 +55,7 @@ while [[ $# -gt 0 ]]; do
             echo "  --simulation     Run only simulation_*.py scripts"
             echo "  --eval           Run only eval_*.py scripts (assumes output exists)"
             echo "  --demo           Run only standalone demo scripts (not sim/eval)"
+            echo "  --timeout SEC    Fail a script if it runs longer than SEC seconds"
             echo "  --simulation --eval --demo   Any combination composes"
             echo "  -v, --verbose    Stream script output to the terminal"
             echo "  -h, --help       Show this help message"
@@ -48,6 +63,11 @@ while [[ $# -gt 0 ]]; do
         *) echo "Unknown option: $1"; echo "Use -h for help"; exit 1 ;;
     esac
 done
+
+if [[ -n "$TIMEOUT_SECONDS" ]] && ! command -v timeout >/dev/null 2>&1; then
+    echo "'timeout' command not found, but --timeout was requested"
+    exit 1
+fi
 
 # Default: run all three categories.
 if [[ "$RUN_SIM" == false && "$RUN_EVAL" == false && "$RUN_DEMO" == false ]]; then
@@ -72,31 +92,57 @@ echo -e "${BLUE}========== RUNNING EXAMPLES ==========${NC}"
 echo -e "${BLUE}Started at:   $(date)${NC}"
 echo -e "${BLUE}Examples dir: $EXAMPLES_DIR${NC}"
 echo -e "${BLUE}Simulations: $RUN_SIM   Evals: $RUN_EVAL   Demos: $RUN_DEMO   Verbose: $VERBOSE${NC}"
-echo -e "${BLUE}No timeout - examples run to completion${NC}"
+if [[ -n "$TIMEOUT_SECONDS" ]]; then
+    echo -e "${BLUE}Timeout: ${TIMEOUT_SECONDS}s per script${NC}"
+else
+    echo -e "${BLUE}No timeout - examples run to completion${NC}"
+fi
 echo ""
+
+# run_python <script>
+run_python() {
+    local script="$1"
+
+    if [[ -n "$TIMEOUT_SECONDS" ]]; then
+        timeout "$TIMEOUT_SECONDS" python "$script"
+    else
+        python "$script"
+    fi
+}
 
 # run_script <path> <kind>
 run_script() {
     local script="$1" kind="$2"
     local name
+    local exit_code
     name="$(basename "$(dirname "$script")")/$(basename "$script")"
 
     if [[ "$VERBOSE" == true ]]; then
         echo -e "${BLUE}--- [$kind] $name ---${NC}"
-        if python "$script"; then
+        if run_python "$script"; then
             echo -e "${GREEN}✓ $name PASSED${NC}"; echo ""
             PASSED=$((PASSED + 1)); PASSED_LIST="$PASSED_LIST\n  ✓ [$kind] $name"
         else
-            echo -e "${RED}✗ $name FAILED (exit $?)${NC}"; echo ""
+            exit_code=$?
+            if [[ $exit_code -eq 124 && -n "$TIMEOUT_SECONDS" ]]; then
+                echo -e "${RED}✗ $name TIMED OUT after ${TIMEOUT_SECONDS}s${NC}"; echo ""
+            else
+                echo -e "${RED}✗ $name FAILED (exit $exit_code)${NC}"; echo ""
+            fi
             FAILED=$((FAILED + 1)); FAILED_LIST="$FAILED_LIST\n  ✗ [$kind] $name"
         fi
     else
         echo -n "[$kind] $name ... "
-        if python "$script" > /tmp/example_output.log 2>&1; then
+        if run_python "$script" > /tmp/example_output.log 2>&1; then
             echo -e "${GREEN}PASSED${NC}"
             PASSED=$((PASSED + 1)); PASSED_LIST="$PASSED_LIST\n  ✓ [$kind] $name"
         else
-            echo -e "${RED}FAILED (exit $?)${NC}"
+            exit_code=$?
+            if [[ $exit_code -eq 124 && -n "$TIMEOUT_SECONDS" ]]; then
+                echo -e "${RED}TIMED OUT after ${TIMEOUT_SECONDS}s${NC}"
+            else
+                echo -e "${RED}FAILED (exit $exit_code)${NC}"
+            fi
             echo -e "${RED}--- last 10 lines ---${NC}"
             tail -10 /tmp/example_output.log | sed 's/^/  /'
             echo ""
