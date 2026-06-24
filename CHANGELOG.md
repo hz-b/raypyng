@@ -1,6 +1,15 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 24-June-2026
+
+### Changed
+- Post-processing performance optimisations: vectorised concat/averaging, parallel element processing, mtime-based freshness checks, and adaptive idle timeouts reduce wall-clock time for large parameter sweeps.
+
+### Fixed
+- Missing `xvfb-run` detected early with a clear error rather than a cryptic failure at runtime.
+- Worker exceptions are now propagated back to the main process instead of being silently swallowed.
+
 ## [1.4.4] - 23-June-2026
 
 ### Changed
