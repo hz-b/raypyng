@@ -437,9 +437,7 @@ class Simulate:
         self.overwrite_rml = True  # Overwrite RML files
         self._sim_folder = None  # Simulation folder name
         self.batch_size = 50
-        self._simulation_timeout = (
-            300.0  # max idle secs; updated live in _wait_for_simulation_batch
-        )
+        self._simulation_timeout = 20.0  # max idle secs; updated live in _wait_for_simulation_batch
         self._batch_number = None
 
         self._simulation_name = None  # Custom simulation name
@@ -985,6 +983,27 @@ class Simulate:
             txtfile.write(formatted_row + "\n")
 
         self._recap_header_written = True
+
+    def _sim_output_is_fresh(self, sim_index, repeat, since):
+        """True only if all output files exist AND have mtime >= since (wall-clock seconds)."""
+        round_folder = "round_" + str(repeat)
+        folder = os.path.join(self.sim_path, round_folder)
+        for export_config in self._exports_list:
+            if self.raypyng_analysis:
+                path = os.path.join(
+                    folder,
+                    f"{sim_index}_{export_config[0]}_analyzed_rays_{export_config[1]}.dat",
+                )
+            else:
+                path = os.path.join(
+                    folder, f"{sim_index}_{export_config[0]}-{export_config[1]}.csv"
+                )
+            try:
+                if not os.path.exists(path) or os.path.getmtime(path) < since:
+                    return False
+            except OSError:
+                return False
+        return True
 
     def _is_simulation_missing(self, sim_index, repeat):
         """
@@ -1690,6 +1709,7 @@ class Simulate:
 
         # Adaptive idle-based timeout: poll every 5 s and recompute the allowed idle
         # window from real timing data after each future completes.
+        batch_clock_start = time.time()  # wall-clock anchor for freshness checks
         pending = set(futures)
         last_completion = time.monotonic()
         max_idle_secs = self._simulation_timeout  # 300 s seed; replaced once first sim reports in
@@ -1736,7 +1756,7 @@ class Simulate:
             )
             for future in timed_out_futures:
                 future.cancel()
-            wait_time = max_idle_secs / 4
+            missing_sims = []
             try:
                 for sim in simulation_params_batch:
                     _, exp_list = sim
@@ -1745,27 +1765,43 @@ class Simulate:
                     sim_n = int(re.findall(r"\d+", exp[-1])[0])
                     sim_file = sim[0][0]
                     if self._is_simulation_missing(sim_n, round_n):
-                        print(
-                            f"\nBatch stalled — waiting for simulation {sim_n} "
-                            f"(up to {int(wait_time)}s)...",
-                            flush=True,
-                        )
-                    while self._is_simulation_missing(sim_n, round_n) and wait_time > 0:
-                        time.sleep(5)
-                        wait_time -= 5
-                        self.logger.info(f"Waiting for file {sim_file}, wait_time {wait_time}")
+                        missing_sims.append((sim_n, round_n, sim_file))
             except Exception as e:
-                self.logger.info(f"Exception checking simulations: {e}")
-            if wait_time > 0:
-                self.logger.info(
-                    f"Found all simulations of the batch, "
-                    f"futures missed {remaining_simulations} simulations"
+                self.logger.info(f"Exception building missing-sim list: {e}")
+
+            n_missing = len(missing_sims)
+            if missing_sims:
+                idle_threshold = max(10.0, max_idle_secs / 4)
+                print(
+                    f"\nBatch stalled — {n_missing} sim(s) still running, "
+                    f"waiting (idle limit {idle_threshold:.0f}s)...",
+                    flush=True,
                 )
-            else:
-                self.logger.info(
-                    f"Found most simulations of the batch, "
-                    f"futures missed at least {remaining_simulations} simulations"
-                )
+                last_progress = time.monotonic()
+                while missing_sims:
+                    time.sleep(2)
+                    still_missing = []
+                    for sim_n, round_n, sim_file in missing_sims:
+                        if self._sim_output_is_fresh(sim_n, round_n, batch_clock_start):
+                            last_progress = time.monotonic()
+                            elapsed = time.time() - batch_clock_start
+                            max_idle_secs = max(60.0, elapsed * 3.0)
+                            self._simulation_timeout = max_idle_secs
+                            self.logger.info(
+                                f"Sim {sim_n} appeared after {elapsed:.1f}s; "
+                                f"updating max_idle to {max_idle_secs:.0f}s"
+                            )
+                        else:
+                            still_missing.append((sim_n, round_n, sim_file))
+                    missing_sims = still_missing
+                    if missing_sims and (time.monotonic() - last_progress) >= idle_threshold:
+                        self.logger.warning(
+                            f"Giving up: {len(missing_sims)} sims idle for "
+                            f"{time.monotonic() - last_progress:.0f}s"
+                        )
+                        break
+                found = n_missing - len(missing_sims)
+                self.logger.info(f"Post-timeout: {found}/{n_missing} sims appeared")
 
             if len(simulations_durations) == 0:
                 simulations_durations.append(max_idle_secs)

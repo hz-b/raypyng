@@ -26,6 +26,7 @@ VERBOSE=false
 RUN_SIM=false
 RUN_EVAL=false
 RUN_DEMO=false
+RUN_RAYUI_ANALYSIS=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -33,6 +34,7 @@ while [[ $# -gt 0 ]]; do
         --simulation|--simulations|--sim) RUN_SIM=true; shift ;;
         --eval|--evals) RUN_EVAL=true; shift ;;
         --demo|--demos|--other|--misc) RUN_DEMO=true; shift ;;
+        --rayui_analysis|--rayui-analysis) RUN_RAYUI_ANALYSIS=true; shift ;;
         -h|--help)
             echo "Usage: $0 [OPTIONS]"
             echo ""
@@ -42,6 +44,7 @@ while [[ $# -gt 0 ]]; do
             echo "  --eval           Run only eval_*.py scripts (assumes output exists)"
             echo "  --demo           Run only standalone demo scripts (not sim/eval)"
             echo "  --simulation --eval --demo   Any combination composes"
+            echo "  --rayui_analysis Also run simulation_analysis_by_RAY-UI.py (skipped by default)"
             echo "  -v, --verbose    Stream script output to the terminal"
             echo "  -h, --help       Show this help message"
             exit 0 ;;
@@ -71,7 +74,7 @@ FAILED_LIST=""
 echo -e "${BLUE}========== RUNNING EXAMPLES ==========${NC}"
 echo -e "${BLUE}Started at:   $(date)${NC}"
 echo -e "${BLUE}Examples dir: $EXAMPLES_DIR${NC}"
-echo -e "${BLUE}Simulations: $RUN_SIM   Evals: $RUN_EVAL   Demos: $RUN_DEMO   Verbose: $VERBOSE${NC}"
+echo -e "${BLUE}Simulations: $RUN_SIM   Evals: $RUN_EVAL   Demos: $RUN_DEMO   RAY-UI analysis: $RUN_RAYUI_ANALYSIS   Verbose: $VERBOSE${NC}"
 echo -e "${BLUE}No timeout - examples run to completion${NC}"
 echo ""
 
@@ -120,7 +123,11 @@ for folder in $FOLDERS; do
     # 1) simulations
     if [[ "$RUN_SIM" == true ]]; then
         for s in "$folder"/simulation_*.py; do
-            [[ -e "$s" ]] && run_script "$s" sim
+            [[ -e "$s" ]] || continue
+            if [[ "$(basename "$s")" == "simulation_analysis_by_RAY-UI.py" && "$RUN_RAYUI_ANALYSIS" == false ]]; then
+                continue
+            fi
+            run_script "$s" sim
         done
     fi
     # 2) evals (after their simulation, so they read fresh output)
