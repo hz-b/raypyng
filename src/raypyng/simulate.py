@@ -10,7 +10,7 @@ import signal
 import sys
 import time
 import traceback
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, TimeoutError as FuturesTimeoutError, as_completed
 
 import pandas as pd
 import psutil
@@ -1121,30 +1121,69 @@ class Simulate:
             format="%(asctime)s - %(levelname)s - %(message)s",
         )
         self.logger = logging.getLogger(__name__)
-        self.logger.info(f"Simulation started, using {self._workers} workers")
+        self.logger.info(self._format_worker_resolution_message(self._worker_resolution))
 
-    def _resolve_multiprocessing_workers(self, multiprocessing):
-        if isinstance(multiprocessing, str):
-            mode = multiprocessing.lower()
+    def _resolve_multiprocessing_workers(self, multiprocessing_value):
+        cpu_count = os.cpu_count() or 1
+        available_ram_gb = max(1, int(psutil.virtual_memory().available / (1024**3)))
+
+        worker_info = {
+            "requested": multiprocessing_value,
+            "cpu_count": cpu_count,
+            "available_ram_gb": available_ram_gb,
+        }
+
+        if isinstance(multiprocessing_value, str):
+            mode = multiprocessing_value.lower()
+            worker_info["requested"] = mode
             if mode not in {"auto", "max"}:
                 raise ValueError(
                     "The 'multiprocessing' argument must be an integer greater than 0, "
                     "or one of: 'auto', 'max'."
                 )
 
-            cpu_count = os.cpu_count() or 1
-            available_ram_gb = max(1, int(psutil.virtual_memory().available / (1024**3)))
-
             if mode == "auto":
-                return max(1, min(cpu_count, available_ram_gb - 2))
-            return max(1, min(cpu_count, available_ram_gb))
+                worker_info["workers"] = max(1, min(cpu_count, available_ram_gb - 2))
+            else:
+                worker_info["workers"] = max(1, min(cpu_count, available_ram_gb))
+            return worker_info
 
-        if not isinstance(multiprocessing, int) or multiprocessing < 1:
+        if not isinstance(multiprocessing_value, int) or multiprocessing_value < 1:
             raise ValueError(
                 "The 'multiprocessing' argument must be an integer greater than 0, "
                 "or one of: 'auto', 'max'."
             )
-        return multiprocessing
+        worker_info["workers"] = multiprocessing_value
+        return worker_info
+
+    @staticmethod
+    def _format_worker_resolution_message(worker_info):
+        requested = worker_info["requested"]
+        workers = worker_info["workers"]
+        cpu_count = worker_info["cpu_count"]
+        available_ram_gb = worker_info["available_ram_gb"]
+
+        if requested in {"auto", "max"}:
+            return (
+                "Simulation started with multiprocessing=%s -> %s worker(s) "
+                "(cpu_count=%s, available_ram_gb=%s)"
+                % (requested, workers, cpu_count, available_ram_gb)
+            )
+        return (
+            "Simulation started with multiprocessing=%s -> %s worker(s) "
+            "(cpu_count=%s, available_ram_gb=%s)"
+            % (requested, workers, cpu_count, available_ram_gb)
+        )
+
+    @staticmethod
+    def _format_missing_simulations_error(missing_simulations):
+        formatted = ", ".join(
+            f"round {item['round']} sim {item['sim_number']}" for item in missing_simulations
+        )
+        return (
+            "Required simulation outputs are still missing after the retry pass: "
+            f"{formatted}. The simulation/export step did not finish cleanly."
+        )
 
     def run(
         self,
@@ -1178,7 +1217,8 @@ class Simulate:
             remove_round_folders (bool, optional): remove the round folders after the simulations
                                                     are done.
         """
-        multiprocessing = self._resolve_multiprocessing_workers(multiprocessing)
+        worker_info = self._resolve_multiprocessing_workers(multiprocessing)
+        multiprocessing = worker_info["workers"]
 
         if self.graxpy_efficiency and self._engine == "ray-ui":
             raise ValueError(
@@ -1218,8 +1258,10 @@ class Simulate:
 
         self._batch_number = 0
         self._workers = multiprocessing
+        self._worker_resolution = worker_info
         self.batch_size = int(self._workers) * 5
         self._prepare_simulation_environment(overwrite_rml)
+        print(self._format_worker_resolution_message(self._worker_resolution))
         self._init_logging()
         total_simulations = self.sp._calc_number_sim() * self.repeat
         self.simulations_checked = False
@@ -1576,6 +1618,16 @@ class Simulate:
                 update_reacap_files=False,
             )
 
+    def _mark_unfinished_futures(self, futures):
+        unfinished_futures = [future for future in futures if not future.done()]
+        if unfinished_futures:
+            self._executor_has_unfinished_futures = True
+            self.logger.info(
+                f"Marking executor as having {len(unfinished_futures)} unfinished futures"
+            )
+            for future in unfinished_futures:
+                future.cancel()
+
     def _final_check_on_simulations_and_shutdown(self, old_pbar):
 
         # check that all simulatins are completed:
@@ -1603,6 +1655,9 @@ class Simulate:
             )
             self.simulations_checked = True
             return True, pbar
+
+        if missing_sim:
+            raise RuntimeError(self._format_missing_simulations_error(missing_sim))
 
         return False, old_pbar
 
@@ -1666,7 +1721,12 @@ class Simulate:
         self._batch_number += 1
         try:
             for future in as_completed(futures, timeout=self._simulation_timeout):
-                sim_duration, rml_filename = future.result()
+                try:
+                    sim_duration, rml_filename = future.result()
+                except Exception:
+                    self.logger.exception("A simulation worker failed.")
+                    self._mark_unfinished_futures(futures)
+                    raise
                 simulations_durations.append(sim_duration)
                 self._simulations_duration_total += sim_duration
                 avg = self._simulations_duration_total / len(simulations_durations)
@@ -1678,16 +1738,9 @@ class Simulate:
                     f"Completed: {completed_sim}, \
                         remaining: {remaining_simulations}, {rml_filename}"
                 )
-        except Exception as e:
+        except FuturesTimeoutError as e:
             self.logger.info(f"Exception during simulation: {e}")
-            unfinished_futures = [future for future in futures if not future.done()]
-            if unfinished_futures:
-                self._executor_has_unfinished_futures = True
-                self.logger.info(
-                    f"Marking executor as having {len(unfinished_futures)} unfinished futures"
-                )
-                for future in unfinished_futures:
-                    future.cancel()
+            self._mark_unfinished_futures(futures)
             try:
                 wait_time = self._simulation_timeout / 4
                 for sim in simulation_params_batch:
@@ -1879,29 +1932,26 @@ def run_rml_func_rayx(parameters):
             print(f"WARNING! graxpy efficiency failed for {rml_filename}: {e}")
     api = RayXAPI()
     pp = PostProcess()
-    try:
-        api.load(rml_filename)
-        api.trace()
+    api.load(rml_filename)
+    api.trace()
+    for export_params in exports:
+        api.export(*export_params)
+    if raypyng_analysis:
         for export_params in exports:
-            api.export(*export_params)
-        if raypyng_analysis:
-            for export_params in exports:
-                element_name = export_params[0]
-                eff = (
-                    graxpy_eff_df
-                    if graxpy_eff_df is not None and element_name in downstream_elements
-                    else efficiency
-                )
-                pp.postprocess_RawRays(
-                    *export_params,
-                    rml_filename,
-                    suffix=export_params[1],
-                    remove_rawrays=remove_rawrays,
-                    undulator_table=undulator_table,
-                    efficiency=eff,
-                )
-    except Exception as e:
-        print(f"WARNING! Got exception while processing {rml_filename}, the error was: {e}")
+            element_name = export_params[0]
+            eff = (
+                graxpy_eff_df
+                if graxpy_eff_df is not None and element_name in downstream_elements
+                else efficiency
+            )
+            pp.postprocess_RawRays(
+                *export_params,
+                rml_filename,
+                suffix=export_params[1],
+                remove_rawrays=remove_rawrays,
+                undulator_table=undulator_table,
+                efficiency=eff,
+            )
     return time.time() - st, rml_filename
 
 
@@ -1993,8 +2043,6 @@ def run_rml_func(parameters):
                     undulator_table=undulator_table,
                     efficiency=eff,
                 )
-    except Exception as e:
-        print(f"WARNING! Got exception while processing {rml_filename}, the error was: {e}")
     finally:
         # Ensure resources are cleaned up properly
         try:

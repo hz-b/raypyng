@@ -166,16 +166,72 @@ class PlotBeamwaist:
 
     def _resolve_trace_workers(self, processes, n_tasks):
         """Resolve the number of worker processes for the tracing stage."""
-        if n_tasks <= 1:
-            return 1
-        if processes == 1:
-            return 1
         cpu_count = os.cpu_count() or 1
+        worker_info = {
+            "requested": processes,
+            "cpu_count": cpu_count,
+            "tasks": n_tasks,
+        }
+        if n_tasks <= 1:
+            worker_info["workers"] = 1
+            return worker_info
+        if processes == 1:
+            worker_info["workers"] = 1
+            return worker_info
         if processes in ("auto", "max"):
-            return max(1, min(cpu_count, n_tasks))
+            worker_info["workers"] = max(1, min(cpu_count, n_tasks))
+            return worker_info
         if isinstance(processes, int) and processes >= 1:
-            return min(processes, n_tasks)
+            worker_info["workers"] = min(processes, n_tasks)
+            return worker_info
         raise ValueError("processes must be a positive int, 'auto' or 'max'.")
+
+    @staticmethod
+    def _format_trace_worker_message(worker_info):
+        return (
+            "Beamwaist tracing with processes=%s -> %s worker(s) "
+            "(cpu_count=%s, tasks=%s)"
+            % (
+                worker_info["requested"],
+                worker_info["workers"],
+                worker_info["cpu_count"],
+                worker_info["tasks"],
+            )
+        )
+
+    @staticmethod
+    def _format_missing_exports_message(missing_paths):
+        formatted = "\n".join(f"- {path}" for path in missing_paths)
+        return (
+            "Missing RawRaysOutgoing export file(s) required for beamwaist tracing:\n"
+            f"{formatted}\n"
+            "The simulation/export step did not finish cleanly."
+        )
+
+    def _build_trace_tasks(self):
+        tasks = []
+        missing_paths = []
+        for ind in range(len(self.element_names_list) - 1):
+            name = self.element_names_list[ind]
+            csv_path = os.path.join(self.directory, "round_0", "0_" + name + "-RawRaysOutgoing.csv")
+            if not os.path.exists(csv_path):
+                missing_paths.append(csv_path)
+            tasks.append(
+                (
+                    ind,
+                    csv_path,
+                    self.distance_list[ind + 1],
+                    self.step_z,
+                    self.rotation_list[ind],
+                    self.lim,
+                    self.step,
+                    self.factor,
+                )
+            )
+
+        if missing_paths:
+            raise FileNotFoundError(self._format_missing_exports_message(missing_paths))
+        return tasks
 
     def trace_beamwaist(
         self, save_results: bool = True, element_names_list: list = None, processes="auto"
@@ -195,25 +251,10 @@ class PlotBeamwaist:
         if element_names_list is not None:
             self.element_names_list = element_names_list
 
-        # one task per element, excluding the last (no drift beyond it)
-        tasks = []
-        for ind in range(len(self.element_names_list) - 1):
-            name = self.element_names_list[ind]
-            csv_path = os.path.join(self.directory, "round_0", "0_" + name + "-RawRaysOutgoing.csv")
-            tasks.append(
-                (
-                    ind,
-                    csv_path,
-                    self.distance_list[ind + 1],
-                    self.step_z,
-                    self.rotation_list[ind],
-                    self.lim,
-                    self.step,
-                    self.factor,
-                )
-            )
-
-        workers = self._resolve_trace_workers(processes, len(tasks))
+        tasks = self._build_trace_tasks()
+        worker_info = self._resolve_trace_workers(processes, len(tasks))
+        workers = worker_info["workers"]
+        print(self._format_trace_worker_message(worker_info))
         start = time.time()
         blocks = {}
         if workers == 1:

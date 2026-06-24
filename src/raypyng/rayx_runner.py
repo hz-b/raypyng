@@ -12,7 +12,7 @@ def _require_rayx():
     except ImportError:
         raise ImportError(
             "rayx is not installed or not available on this platform. "
-            "Install it with: pip install rayx[rayx]"
+            "Install it with: pip install raypyng[rayx]"
         ) from None
 
 

@@ -13,10 +13,10 @@ if __name__ == '__main__':
     beamline = sim.rml.beamline
 
     # define the values of the parameters to scan
-    energy   = np.arange(200, 7201, 15)
+    energy   = np.arange(200, 7201, 500)
     SlitSize = np.array([0.1])
     cff      = np.array([2.25, 3])
-    nrays    = 5e3
+    nrays    = 5e4
 
     params = [
         {beamline.Dipole.photonEnergy: energy},

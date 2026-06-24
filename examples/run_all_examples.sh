@@ -28,6 +28,7 @@ RUN_SIM=false
 RUN_EVAL=false
 RUN_DEMO=false
 TIMEOUT_SECONDS=""
+RAYX_OPTIONAL_AVAILABLE=""
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -85,8 +86,10 @@ source "$PROJECT_ROOT/.venv/bin/activate"
 
 PASSED=0
 FAILED=0
+SKIPPED=0
 PASSED_LIST=""
 FAILED_LIST=""
+SKIPPED_LIST=""
 
 echo -e "${BLUE}========== RUNNING EXAMPLES ==========${NC}"
 echo -e "${BLUE}Started at:   $(date)${NC}"
@@ -110,12 +113,67 @@ run_python() {
     fi
 }
 
+check_rayx_optional_support() {
+    if [[ -n "$RAYX_OPTIONAL_AVAILABLE" ]]; then
+        [[ "$RAYX_OPTIONAL_AVAILABLE" == true ]]
+        return
+    fi
+
+    if python -c "import rayx; import grax" >/dev/null 2>&1; then
+        RAYX_OPTIONAL_AVAILABLE=true
+    else
+        RAYX_OPTIONAL_AVAILABLE=false
+    fi
+
+    [[ "$RAYX_OPTIONAL_AVAILABLE" == true ]]
+}
+
+script_requires_rayx() {
+    local script="$1"
+
+    if [[ "$script" == *"/rayx_comparison/plot_comparison.py" ]]; then
+        return 0
+    fi
+
+    if grep -Eq '^[[:space:]]*import[[:space:]]+rayx([[:space:]]|$)|^[[:space:]]*from[[:space:]]+rayx([.:[:space:]]|$)' "$script"; then
+        return 0
+    fi
+
+    if grep -Eq 'engine[[:space:]]*=[[:space:]]*["'\'']rayx["'\'']' "$script"; then
+        return 0
+    fi
+
+    return 1
+}
+
+skip_script() {
+    local script="$1" kind="$2" reason="$3"
+    local name
+    name="$(basename "$(dirname "$script")")/$(basename "$script")"
+
+    if [[ "$VERBOSE" == true ]]; then
+        echo -e "${BLUE}--- [$kind] $name ---${NC}"
+        echo -e "${BLUE}↷ $name SKIPPED (${reason})${NC}"
+        echo ""
+    else
+        echo -e "[$kind] $name ... ${BLUE}SKIPPED${NC} (${reason})"
+    fi
+
+    SKIPPED=$((SKIPPED + 1))
+    SKIPPED_LIST="$SKIPPED_LIST\n  ↷ [$kind] $name (${reason})"
+}
+
 # run_script <path> <kind>
 run_script() {
     local script="$1" kind="$2"
     local name
     local exit_code
     name="$(basename "$(dirname "$script")")/$(basename "$script")"
+
+    if script_requires_rayx "$script" && ! check_rayx_optional_support; then
+        skip_script "$script" "$kind" "requires optional rayx support (install raypyng[rayx])"
+        return
+    fi
 
     if [[ "$VERBOSE" == true ]]; then
         echo -e "${BLUE}--- [$kind] $name ---${NC}"
@@ -191,8 +249,10 @@ echo ""
 echo -e "${BLUE}========== SUMMARY ==========${NC}"
 echo -e "${GREEN}Passed: $PASSED${NC}"
 echo -e "${RED}Failed: $FAILED${NC}"
+echo -e "${BLUE}Skipped: $SKIPPED${NC}"
 if [[ $PASSED -gt 0 ]]; then echo -e "${GREEN}Passed:${NC}$(echo -e "$PASSED_LIST")"; fi
 if [[ $FAILED -gt 0 ]]; then echo -e "${RED}Failed:${NC}$(echo -e "$FAILED_LIST")"; fi
+if [[ $SKIPPED -gt 0 ]]; then echo -e "${BLUE}Skipped:${NC}$(echo -e "$SKIPPED_LIST")"; fi
 echo ""
 echo -e "${BLUE}Completed at: $(date)${NC}"
 
