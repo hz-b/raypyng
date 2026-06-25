@@ -1,6 +1,20 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.4.6] - 25-June-2026
+
+### Added
+- Beamline inspect export can now write a styled `.xlsx` workbook in addition to CSV, with bold headers/first column, borders, alternating row fills, frozen header row, and auto-sized columns.
+
+### Changed
+- Simplified the inspect feature to export a single beamline-elements table instead of separate mirror and beamline tables.
+- Inspect exports now include units in the output headers for geometry, slope-error, coating-thickness, roughness, and position columns.
+- Added `openpyxl` as a package dependency to support the new XLSX export.
+- Updated the inspect demo and example beamline files to use the new single-table CSV/XLSX export flow.
+
+### Fixed
+- Coating, top-layer, and geometry fields in inspect exports are now read from the current inspect example RML with the intended enabled/disabled handling.
+
 ## [1.4.5] - 24-June-2026
 
 ### Changed
@@ -221,5 +235,4 @@ All notable changes to this project will be documented in this file.
  
 ### Fixed
 - issue [#29](https://github.com/hz-b/raypyng/issues/29), Simulate.params used to throw an error when attempting list step-wise operation.
-
 
