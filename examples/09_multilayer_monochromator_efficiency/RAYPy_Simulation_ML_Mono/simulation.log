@@ -1,0 +1,732 @@
+2026-06-24 10:37:26,480 - INFO - Simulation started, using 11 workers
+2026-06-24 10:37:26,483 - INFO - Start round 0
+2026-06-24 10:37:26,483 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0
+2026-06-24 10:37:26,484 - INFO - Round 0: found 0/58 files for _DetectorAtFocus_analyzed_rays_RawRaysOutgoing.dat
+2026-06-24 10:37:26,487 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/0_ML_Mono.rml
+2026-06-24 10:37:26,490 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/1_ML_Mono.rml
+2026-06-24 10:37:26,493 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/2_ML_Mono.rml
+2026-06-24 10:37:26,495 - INFO - Prepared sim number: 3: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/3_ML_Mono.rml
+2026-06-24 10:37:26,498 - INFO - Prepared sim number: 4: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/4_ML_Mono.rml
+2026-06-24 10:37:26,501 - INFO - Prepared sim number: 5: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/5_ML_Mono.rml
+2026-06-24 10:37:26,504 - INFO - Prepared sim number: 6: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/6_ML_Mono.rml
+2026-06-24 10:37:26,508 - INFO - Prepared sim number: 7: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/7_ML_Mono.rml
+2026-06-24 10:37:26,511 - INFO - Prepared sim number: 8: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/8_ML_Mono.rml
+2026-06-24 10:37:26,515 - INFO - Prepared sim number: 9: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/9_ML_Mono.rml
+2026-06-24 10:37:26,520 - INFO - Prepared sim number: 10: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/10_ML_Mono.rml
+2026-06-24 10:37:26,524 - INFO - Prepared sim number: 11: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/11_ML_Mono.rml
+2026-06-24 10:37:26,528 - INFO - Prepared sim number: 12: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/12_ML_Mono.rml
+2026-06-24 10:37:26,530 - INFO - Prepared sim number: 13: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/13_ML_Mono.rml
+2026-06-24 10:37:26,533 - INFO - Prepared sim number: 14: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/14_ML_Mono.rml
+2026-06-24 10:37:26,536 - INFO - Prepared sim number: 15: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/15_ML_Mono.rml
+2026-06-24 10:37:26,539 - INFO - Prepared sim number: 16: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/16_ML_Mono.rml
+2026-06-24 10:37:26,543 - INFO - Prepared sim number: 17: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/17_ML_Mono.rml
+2026-06-24 10:37:26,546 - INFO - Prepared sim number: 18: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/18_ML_Mono.rml
+2026-06-24 10:37:26,549 - INFO - Prepared sim number: 19: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/19_ML_Mono.rml
+2026-06-24 10:37:26,552 - INFO - Prepared sim number: 20: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/20_ML_Mono.rml
+2026-06-24 10:37:26,556 - INFO - Prepared sim number: 21: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/21_ML_Mono.rml
+2026-06-24 10:37:26,559 - INFO - Prepared sim number: 22: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/22_ML_Mono.rml
+2026-06-24 10:37:26,563 - INFO - Prepared sim number: 23: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/23_ML_Mono.rml
+2026-06-24 10:37:26,567 - INFO - Prepared sim number: 24: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/24_ML_Mono.rml
+2026-06-24 10:37:26,571 - INFO - Prepared sim number: 25: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/25_ML_Mono.rml
+2026-06-24 10:37:26,575 - INFO - Prepared sim number: 26: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/26_ML_Mono.rml
+2026-06-24 10:37:26,579 - INFO - Prepared sim number: 27: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/27_ML_Mono.rml
+2026-06-24 10:37:26,583 - INFO - Prepared sim number: 28: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/28_ML_Mono.rml
+2026-06-24 10:37:26,585 - INFO - Prepared sim number: 29: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/29_ML_Mono.rml
+2026-06-24 10:37:26,588 - INFO - Prepared sim number: 30: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/30_ML_Mono.rml
+2026-06-24 10:37:26,591 - INFO - Prepared sim number: 31: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/31_ML_Mono.rml
+2026-06-24 10:37:26,595 - INFO - Prepared sim number: 32: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/32_ML_Mono.rml
+2026-06-24 10:37:26,598 - INFO - Prepared sim number: 33: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/33_ML_Mono.rml
+2026-06-24 10:37:26,601 - INFO - Prepared sim number: 34: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/34_ML_Mono.rml
+2026-06-24 10:37:26,605 - INFO - Prepared sim number: 35: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/35_ML_Mono.rml
+2026-06-24 10:37:26,610 - INFO - Prepared sim number: 36: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/36_ML_Mono.rml
+2026-06-24 10:37:26,613 - INFO - Prepared sim number: 37: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/37_ML_Mono.rml
+2026-06-24 10:37:26,617 - INFO - Prepared sim number: 38: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/38_ML_Mono.rml
+2026-06-24 10:37:26,622 - INFO - Prepared sim number: 39: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/39_ML_Mono.rml
+2026-06-24 10:37:26,628 - INFO - Prepared sim number: 40: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/40_ML_Mono.rml
+2026-06-24 10:37:26,633 - INFO - Prepared sim number: 41: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/41_ML_Mono.rml
+2026-06-24 10:37:26,638 - INFO - Prepared sim number: 42: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/42_ML_Mono.rml
+2026-06-24 10:37:26,642 - INFO - Prepared sim number: 43: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/43_ML_Mono.rml
+2026-06-24 10:37:26,647 - INFO - Prepared sim number: 44: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/44_ML_Mono.rml
+2026-06-24 10:37:26,651 - INFO - Prepared sim number: 45: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/45_ML_Mono.rml
+2026-06-24 10:37:26,655 - INFO - Prepared sim number: 46: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/46_ML_Mono.rml
+2026-06-24 10:37:26,660 - INFO - Prepared sim number: 47: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/47_ML_Mono.rml
+2026-06-24 10:37:26,664 - INFO - Prepared sim number: 48: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/48_ML_Mono.rml
+2026-06-24 10:37:26,668 - INFO - Prepared sim number: 49: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/49_ML_Mono.rml
+2026-06-24 10:37:26,672 - INFO - Prepared sim number: 50: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/50_ML_Mono.rml
+2026-06-24 10:37:26,677 - INFO - Prepared sim number: 51: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/51_ML_Mono.rml
+2026-06-24 10:37:26,680 - INFO - Prepared sim number: 52: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/52_ML_Mono.rml
+2026-06-24 10:37:26,682 - INFO - Prepared sim number: 53: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/53_ML_Mono.rml
+2026-06-24 10:37:26,685 - INFO - Prepared sim number: 54: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/54_ML_Mono.rml
+2026-06-24 10:37:26,802 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-24 10:37:34,671 - INFO - Completed: 1, remaining: 54, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/10_ML_Mono.rml
+2026-06-24 10:37:35,918 - INFO - Completed: 2, remaining: 53, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/1_ML_Mono.rml
+2026-06-24 10:37:36,027 - INFO - Completed: 3, remaining: 52, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/3_ML_Mono.rml
+2026-06-24 10:37:36,172 - INFO - Completed: 4, remaining: 51, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/6_ML_Mono.rml
+2026-06-24 10:37:36,240 - INFO - Completed: 5, remaining: 50, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/9_ML_Mono.rml
+2026-06-24 10:37:36,403 - INFO - Completed: 6, remaining: 49, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/7_ML_Mono.rml
+2026-06-24 10:37:36,514 - INFO - Completed: 7, remaining: 48, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/5_ML_Mono.rml
+2026-06-24 10:37:36,818 - INFO - Completed: 8, remaining: 47, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/4_ML_Mono.rml
+2026-06-24 10:37:37,129 - INFO - Completed: 9, remaining: 46, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/2_ML_Mono.rml
+2026-06-24 10:37:40,298 - INFO - Completed: 10, remaining: 45, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/8_ML_Mono.rml
+2026-06-24 10:37:40,437 - INFO - Completed: 11, remaining: 44, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/0_ML_Mono.rml
+2026-06-24 10:37:49,863 - INFO - Completed: 12, remaining: 43, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/13_ML_Mono.rml
+2026-06-24 10:37:50,068 - INFO - Completed: 13, remaining: 42, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/18_ML_Mono.rml
+2026-06-24 10:37:50,205 - INFO - Completed: 14, remaining: 41, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/11_ML_Mono.rml
+2026-06-24 10:37:50,295 - INFO - Completed: 15, remaining: 40, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/16_ML_Mono.rml
+2026-06-24 10:37:50,695 - INFO - Completed: 16, remaining: 39, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/20_ML_Mono.rml
+2026-06-24 10:37:51,649 - INFO - Completed: 17, remaining: 38, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/17_ML_Mono.rml
+2026-06-24 10:37:52,070 - INFO - Completed: 18, remaining: 37, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/15_ML_Mono.rml
+2026-06-24 10:37:52,165 - INFO - Completed: 19, remaining: 36, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/12_ML_Mono.rml
+2026-06-24 10:37:52,396 - INFO - Completed: 20, remaining: 35, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/14_ML_Mono.rml
+2026-06-24 10:37:52,874 - INFO - Completed: 21, remaining: 34, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/19_ML_Mono.rml
+2026-06-24 10:37:54,048 - INFO - Completed: 22, remaining: 33, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/21_ML_Mono.rml
+2026-06-24 10:38:01,495 - INFO - Completed: 23, remaining: 32, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/29_ML_Mono.rml
+2026-06-24 10:38:02,435 - INFO - Completed: 24, remaining: 31, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/23_ML_Mono.rml
+2026-06-24 10:38:03,662 - INFO - Completed: 25, remaining: 30, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/28_ML_Mono.rml
+2026-06-24 10:38:04,219 - INFO - Completed: 26, remaining: 29, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/22_ML_Mono.rml
+2026-06-24 10:38:04,455 - INFO - Completed: 27, remaining: 28, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/26_ML_Mono.rml
+2026-06-24 10:38:04,575 - INFO - Completed: 28, remaining: 27, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/24_ML_Mono.rml
+2026-06-24 10:38:05,789 - INFO - Completed: 29, remaining: 26, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/27_ML_Mono.rml
+2026-06-24 10:38:05,948 - INFO - Completed: 30, remaining: 25, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/31_ML_Mono.rml
+2026-06-24 10:38:06,527 - INFO - Completed: 31, remaining: 24, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/30_ML_Mono.rml
+2026-06-24 10:38:06,619 - INFO - Completed: 32, remaining: 23, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/25_ML_Mono.rml
+2026-06-24 10:38:07,598 - INFO - Completed: 33, remaining: 22, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/32_ML_Mono.rml
+2026-06-24 10:38:12,612 - INFO - Completed: 34, remaining: 21, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/35_ML_Mono.rml
+2026-06-24 10:38:15,154 - INFO - Completed: 35, remaining: 20, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/33_ML_Mono.rml
+2026-06-24 10:38:15,914 - INFO - Completed: 36, remaining: 19, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/34_ML_Mono.rml
+2026-06-24 10:38:18,747 - INFO - Completed: 37, remaining: 18, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/36_ML_Mono.rml
+2026-06-24 10:38:20,087 - INFO - Completed: 38, remaining: 17, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/37_ML_Mono.rml
+2026-06-24 10:38:20,245 - INFO - Completed: 39, remaining: 16, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/39_ML_Mono.rml
+2026-06-24 10:38:20,525 - INFO - Completed: 40, remaining: 15, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/38_ML_Mono.rml
+2026-06-24 10:38:21,136 - INFO - Completed: 41, remaining: 14, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/43_ML_Mono.rml
+2026-06-24 10:38:21,421 - INFO - Completed: 42, remaining: 13, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/41_ML_Mono.rml
+2026-06-24 10:38:21,589 - INFO - Completed: 43, remaining: 12, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/40_ML_Mono.rml
+2026-06-24 10:38:23,089 - INFO - Completed: 44, remaining: 11, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/42_ML_Mono.rml
+2026-06-24 15:18:36,875 - INFO - Simulation started, using 9 workers
+2026-06-24 15:18:36,900 - INFO - Start round 0
+2026-06-24 15:18:36,900 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0
+2026-06-24 15:18:36,901 - INFO - Round 0: found 44/58 files for _DetectorAtFocus_analyzed_rays_RawRaysOutgoing.dat
+2026-06-24 15:18:36,922 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/0_ML_Mono.rml
+2026-06-24 15:18:36,938 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/1_ML_Mono.rml
+2026-06-24 15:18:36,957 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/2_ML_Mono.rml
+2026-06-24 15:18:36,972 - INFO - Prepared sim number: 3: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/3_ML_Mono.rml
+2026-06-24 15:18:36,991 - INFO - Prepared sim number: 4: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/4_ML_Mono.rml
+2026-06-24 15:18:37,009 - INFO - Prepared sim number: 5: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/5_ML_Mono.rml
+2026-06-24 15:18:37,025 - INFO - Prepared sim number: 6: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/6_ML_Mono.rml
+2026-06-24 15:18:37,043 - INFO - Prepared sim number: 7: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/7_ML_Mono.rml
+2026-06-24 15:18:37,058 - INFO - Prepared sim number: 8: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/8_ML_Mono.rml
+2026-06-24 15:18:37,074 - INFO - Prepared sim number: 9: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/9_ML_Mono.rml
+2026-06-24 15:18:37,092 - INFO - Prepared sim number: 10: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/10_ML_Mono.rml
+2026-06-24 15:18:37,110 - INFO - Prepared sim number: 11: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/11_ML_Mono.rml
+2026-06-24 15:18:37,128 - INFO - Prepared sim number: 12: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/12_ML_Mono.rml
+2026-06-24 15:18:37,134 - INFO - Prepared sim number: 13: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/13_ML_Mono.rml
+2026-06-24 15:18:37,149 - INFO - Prepared sim number: 14: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/14_ML_Mono.rml
+2026-06-24 15:18:37,160 - INFO - Prepared sim number: 15: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/15_ML_Mono.rml
+2026-06-24 15:18:37,174 - INFO - Prepared sim number: 16: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/16_ML_Mono.rml
+2026-06-24 15:18:37,191 - INFO - Prepared sim number: 17: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/17_ML_Mono.rml
+2026-06-24 15:18:37,203 - INFO - Prepared sim number: 18: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/18_ML_Mono.rml
+2026-06-24 15:18:37,215 - INFO - Prepared sim number: 19: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/19_ML_Mono.rml
+2026-06-24 15:18:37,230 - INFO - Prepared sim number: 20: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/20_ML_Mono.rml
+2026-06-24 15:18:37,239 - INFO - Prepared sim number: 21: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/21_ML_Mono.rml
+2026-06-24 15:18:37,251 - INFO - Prepared sim number: 22: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/22_ML_Mono.rml
+2026-06-24 15:18:37,264 - INFO - Prepared sim number: 23: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/23_ML_Mono.rml
+2026-06-24 15:18:37,275 - INFO - Prepared sim number: 24: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/24_ML_Mono.rml
+2026-06-24 15:18:37,287 - INFO - Prepared sim number: 25: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/25_ML_Mono.rml
+2026-06-24 15:18:37,299 - INFO - Prepared sim number: 26: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/26_ML_Mono.rml
+2026-06-24 15:18:37,309 - INFO - Prepared sim number: 27: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/27_ML_Mono.rml
+2026-06-24 15:18:37,323 - INFO - Prepared sim number: 28: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/28_ML_Mono.rml
+2026-06-24 15:18:37,336 - INFO - Prepared sim number: 29: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/29_ML_Mono.rml
+2026-06-24 15:18:37,350 - INFO - Prepared sim number: 30: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/30_ML_Mono.rml
+2026-06-24 15:18:37,359 - INFO - Prepared sim number: 31: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/31_ML_Mono.rml
+2026-06-24 15:18:37,377 - INFO - Prepared sim number: 32: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/32_ML_Mono.rml
+2026-06-24 15:18:37,398 - INFO - Prepared sim number: 33: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/33_ML_Mono.rml
+2026-06-24 15:18:37,410 - INFO - Prepared sim number: 34: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/34_ML_Mono.rml
+2026-06-24 15:18:37,418 - INFO - Prepared sim number: 35: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/35_ML_Mono.rml
+2026-06-24 15:18:37,437 - INFO - Prepared sim number: 36: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/36_ML_Mono.rml
+2026-06-24 15:18:37,448 - INFO - Prepared sim number: 37: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/37_ML_Mono.rml
+2026-06-24 15:18:37,461 - INFO - Prepared sim number: 38: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/38_ML_Mono.rml
+2026-06-24 15:18:37,474 - INFO - Prepared sim number: 39: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/39_ML_Mono.rml
+2026-06-24 15:18:37,495 - INFO - Prepared sim number: 40: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/40_ML_Mono.rml
+2026-06-24 15:18:37,509 - INFO - Prepared sim number: 41: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/41_ML_Mono.rml
+2026-06-24 15:18:37,522 - INFO - Prepared sim number: 42: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/42_ML_Mono.rml
+2026-06-24 15:18:37,535 - INFO - Prepared sim number: 43: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/43_ML_Mono.rml
+2026-06-24 15:18:37,548 - INFO - Prepared sim number: 44: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/44_ML_Mono.rml
+2026-06-24 15:18:37,767 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-24 15:18:39,863 - ERROR - Simulation Interrupted.
+Traceback (most recent call last):
+  File "/home/simone/projects/raypyng/raypyng/src/raypyng/simulate.py", line 1570, in _execute_simulations
+    self._wait_for_simulation_batch(
+  File "/home/simone/projects/raypyng/raypyng/src/raypyng/simulate.py", line 1735, in _wait_for_simulation_batch
+    done, pending = wait(pending, timeout=5.0, return_when=FIRST_COMPLETED)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/simone/.local/share/uv/python/cpython-3.12.12-linux-x86_64-gnu/lib/python3.12/concurrent/futures/_base.py", line 305, in wait
+    waiter.event.wait(timeout)
+  File "/home/simone/.local/share/uv/python/cpython-3.12.12-linux-x86_64-gnu/lib/python3.12/threading.py", line 655, in wait
+    signaled = self._cond.wait(timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/simone/.local/share/uv/python/cpython-3.12.12-linux-x86_64-gnu/lib/python3.12/threading.py", line 359, in wait
+    gotit = waiter.acquire(True, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/simone/projects/raypyng/raypyng/src/raypyng/simulate.py", line 1267, in run
+    self._execute_simulations(multiprocessing, force, total_simulations, pbar)
+  File "/home/simone/projects/raypyng/raypyng/src/raypyng/simulate.py", line 1609, in _execute_simulations
+    executor.shutdown(wait=shutdown_wait, cancel_futures=force_cancel)
+  File "/home/simone/.local/share/uv/python/cpython-3.12.12-linux-x86_64-gnu/lib/python3.12/concurrent/futures/process.py", line 865, in shutdown
+    self._executor_manager_thread.join()
+  File "/home/simone/.local/share/uv/python/cpython-3.12.12-linux-x86_64-gnu/lib/python3.12/threading.py", line 1149, in join
+    self._wait_for_tstate_lock()
+  File "/home/simone/.local/share/uv/python/cpython-3.12.12-linux-x86_64-gnu/lib/python3.12/threading.py", line 1169, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+2026-06-25 12:28:19,457 - INFO - Simulation started, using 12 workers
+2026-06-25 12:28:19,458 - INFO - Rough ETA seed from numberRays (scanned): first round 04min:50s, total 24s
+2026-06-25 12:28:19,462 - INFO - Start round 0
+2026-06-25 12:28:19,462 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0
+2026-06-25 12:28:19,463 - INFO - Round 0: found 44/58 files for _DetectorAtFocus_analyzed_rays_RawRaysOutgoing.dat
+2026-06-25 12:28:19,468 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/0_ML_Mono.rml
+2026-06-25 12:28:19,472 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/1_ML_Mono.rml
+2026-06-25 12:28:19,475 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/2_ML_Mono.rml
+2026-06-25 12:28:19,479 - INFO - Prepared sim number: 3: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/3_ML_Mono.rml
+2026-06-25 12:28:19,484 - INFO - Prepared sim number: 4: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/4_ML_Mono.rml
+2026-06-25 12:28:19,487 - INFO - Prepared sim number: 5: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/5_ML_Mono.rml
+2026-06-25 12:28:19,491 - INFO - Prepared sim number: 6: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/6_ML_Mono.rml
+2026-06-25 12:28:19,494 - INFO - Prepared sim number: 7: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/7_ML_Mono.rml
+2026-06-25 12:28:19,498 - INFO - Prepared sim number: 8: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/8_ML_Mono.rml
+2026-06-25 12:28:19,501 - INFO - Prepared sim number: 9: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/9_ML_Mono.rml
+2026-06-25 12:28:19,505 - INFO - Prepared sim number: 10: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/10_ML_Mono.rml
+2026-06-25 12:28:19,508 - INFO - Prepared sim number: 11: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/11_ML_Mono.rml
+2026-06-25 12:28:19,511 - INFO - Prepared sim number: 12: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/12_ML_Mono.rml
+2026-06-25 12:28:19,513 - INFO - Prepared sim number: 13: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/13_ML_Mono.rml
+2026-06-25 12:28:19,515 - INFO - Prepared sim number: 14: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/14_ML_Mono.rml
+2026-06-25 12:28:19,517 - INFO - Prepared sim number: 15: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/15_ML_Mono.rml
+2026-06-25 12:28:19,519 - INFO - Prepared sim number: 16: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/16_ML_Mono.rml
+2026-06-25 12:28:19,521 - INFO - Prepared sim number: 17: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/17_ML_Mono.rml
+2026-06-25 12:28:19,523 - INFO - Prepared sim number: 18: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/18_ML_Mono.rml
+2026-06-25 12:28:19,525 - INFO - Prepared sim number: 19: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/19_ML_Mono.rml
+2026-06-25 12:28:19,527 - INFO - Prepared sim number: 20: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/20_ML_Mono.rml
+2026-06-25 12:28:19,530 - INFO - Prepared sim number: 21: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/21_ML_Mono.rml
+2026-06-25 12:28:19,532 - INFO - Prepared sim number: 22: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/22_ML_Mono.rml
+2026-06-25 12:28:19,535 - INFO - Prepared sim number: 23: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/23_ML_Mono.rml
+2026-06-25 12:28:19,538 - INFO - Prepared sim number: 24: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/24_ML_Mono.rml
+2026-06-25 12:28:19,540 - INFO - Prepared sim number: 25: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/25_ML_Mono.rml
+2026-06-25 12:28:19,543 - INFO - Prepared sim number: 26: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/26_ML_Mono.rml
+2026-06-25 12:28:19,545 - INFO - Prepared sim number: 27: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/27_ML_Mono.rml
+2026-06-25 12:28:19,548 - INFO - Prepared sim number: 28: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/28_ML_Mono.rml
+2026-06-25 12:28:19,551 - INFO - Prepared sim number: 29: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/29_ML_Mono.rml
+2026-06-25 12:28:19,553 - INFO - Prepared sim number: 30: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/30_ML_Mono.rml
+2026-06-25 12:28:19,555 - INFO - Prepared sim number: 31: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/31_ML_Mono.rml
+2026-06-25 12:28:19,557 - INFO - Prepared sim number: 32: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/32_ML_Mono.rml
+2026-06-25 12:28:19,559 - INFO - Prepared sim number: 33: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/33_ML_Mono.rml
+2026-06-25 12:28:19,562 - INFO - Prepared sim number: 34: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/34_ML_Mono.rml
+2026-06-25 12:28:19,565 - INFO - Prepared sim number: 35: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/35_ML_Mono.rml
+2026-06-25 12:28:19,569 - INFO - Prepared sim number: 36: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/36_ML_Mono.rml
+2026-06-25 12:28:19,572 - INFO - Prepared sim number: 37: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/37_ML_Mono.rml
+2026-06-25 12:28:19,576 - INFO - Prepared sim number: 38: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/38_ML_Mono.rml
+2026-06-25 12:28:19,579 - INFO - Prepared sim number: 39: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/39_ML_Mono.rml
+2026-06-25 12:28:19,582 - INFO - Prepared sim number: 40: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/40_ML_Mono.rml
+2026-06-25 12:28:19,585 - INFO - Prepared sim number: 41: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/41_ML_Mono.rml
+2026-06-25 12:28:19,588 - INFO - Prepared sim number: 42: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/42_ML_Mono.rml
+2026-06-25 12:28:19,591 - INFO - Prepared sim number: 43: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/43_ML_Mono.rml
+2026-06-25 12:28:19,594 - INFO - Prepared sim number: 44: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/44_ML_Mono.rml
+2026-06-25 12:28:19,597 - INFO - Prepared sim number: 45: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/45_ML_Mono.rml
+2026-06-25 12:28:19,599 - INFO - Prepared sim number: 46: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/46_ML_Mono.rml
+2026-06-25 12:28:19,602 - INFO - Prepared sim number: 47: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/47_ML_Mono.rml
+2026-06-25 12:28:19,605 - INFO - Prepared sim number: 48: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/48_ML_Mono.rml
+2026-06-25 12:28:19,609 - INFO - Prepared sim number: 49: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/49_ML_Mono.rml
+2026-06-25 12:28:19,611 - INFO - Prepared sim number: 50: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/50_ML_Mono.rml
+2026-06-25 12:28:19,614 - INFO - Prepared sim number: 51: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/51_ML_Mono.rml
+2026-06-25 12:28:19,617 - INFO - Prepared sim number: 52: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/52_ML_Mono.rml
+2026-06-25 12:28:19,620 - INFO - Prepared sim number: 53: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/53_ML_Mono.rml
+2026-06-25 12:28:19,623 - INFO - Prepared sim number: 54: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/54_ML_Mono.rml
+2026-06-25 12:28:19,625 - INFO - Prepared sim number: 55: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/55_ML_Mono.rml
+2026-06-25 12:28:19,627 - INFO - Prepared sim number: 56: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/56_ML_Mono.rml
+2026-06-25 12:28:19,629 - INFO - Prepared sim number: 57: /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/57_ML_Mono.rml
+2026-06-25 12:28:19,726 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 12:28:28,098 - INFO - Completed: 1, remaining: 57, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/9_ML_Mono.rml
+2026-06-25 12:28:28,150 - INFO - Completed: 2, remaining: 56, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/6_ML_Mono.rml
+2026-06-25 12:28:29,065 - INFO - Completed: 3, remaining: 55, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/5_ML_Mono.rml
+2026-06-25 12:28:30,080 - INFO - Completed: 4, remaining: 54, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/7_ML_Mono.rml
+2026-06-25 12:28:30,239 - INFO - Completed: 5, remaining: 53, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/3_ML_Mono.rml
+2026-06-25 12:28:30,876 - INFO - Completed: 6, remaining: 52, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/0_ML_Mono.rml
+2026-06-25 12:28:30,908 - INFO - Completed: 7, remaining: 51, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/11_ML_Mono.rml
+2026-06-25 12:28:31,029 - INFO - Completed: 8, remaining: 50, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/10_ML_Mono.rml
+2026-06-25 12:28:31,110 - INFO - Completed: 9, remaining: 49, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/8_ML_Mono.rml
+2026-06-25 12:28:31,166 - INFO - Completed: 10, remaining: 48, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/4_ML_Mono.rml
+2026-06-25 12:28:32,081 - INFO - Completed: 11, remaining: 47, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/2_ML_Mono.rml
+2026-06-25 12:28:35,457 - INFO - Completed: 12, remaining: 46, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/1_ML_Mono.rml
+2026-06-25 12:28:40,217 - INFO - Completed: 13, remaining: 45, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/14_ML_Mono.rml
+2026-06-25 12:28:40,621 - INFO - Completed: 14, remaining: 44, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/15_ML_Mono.rml
+2026-06-25 12:28:40,689 - INFO - Completed: 15, remaining: 43, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/16_ML_Mono.rml
+2026-06-25 12:28:41,013 - INFO - Completed: 16, remaining: 42, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/20_ML_Mono.rml
+2026-06-25 12:28:41,104 - INFO - Completed: 17, remaining: 41, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/12_ML_Mono.rml
+2026-06-25 12:28:41,244 - INFO - Completed: 18, remaining: 40, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/19_ML_Mono.rml
+2026-06-25 12:28:41,671 - INFO - Completed: 19, remaining: 39, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/13_ML_Mono.rml
+2026-06-25 12:28:41,977 - INFO - Completed: 20, remaining: 38, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/18_ML_Mono.rml
+2026-06-25 12:28:44,109 - INFO - Completed: 21, remaining: 37, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/22_ML_Mono.rml
+2026-06-25 12:28:44,182 - INFO - Completed: 22, remaining: 36, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/21_ML_Mono.rml
+2026-06-25 12:28:44,329 - INFO - Completed: 23, remaining: 35, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/17_ML_Mono.rml
+2026-06-25 12:28:44,364 - INFO - Completed: 24, remaining: 34, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/23_ML_Mono.rml
+2026-06-25 12:28:49,005 - INFO - Completed: 25, remaining: 33, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/26_ML_Mono.rml
+2026-06-25 12:28:52,251 - INFO - Completed: 26, remaining: 32, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/28_ML_Mono.rml
+2026-06-25 12:28:52,528 - INFO - Completed: 27, remaining: 31, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/31_ML_Mono.rml
+2026-06-25 12:28:52,600 - INFO - Completed: 28, remaining: 30, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/30_ML_Mono.rml
+2026-06-25 12:28:52,772 - INFO - Completed: 29, remaining: 29, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/25_ML_Mono.rml
+2026-06-25 12:28:52,821 - INFO - Completed: 30, remaining: 28, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/29_ML_Mono.rml
+2026-06-25 12:28:52,893 - INFO - Completed: 31, remaining: 27, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/27_ML_Mono.rml
+2026-06-25 12:28:53,516 - INFO - Completed: 32, remaining: 26, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/24_ML_Mono.rml
+2026-06-25 12:28:54,490 - INFO - Completed: 33, remaining: 25, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/34_ML_Mono.rml
+2026-06-25 12:28:55,340 - INFO - Completed: 34, remaining: 24, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/32_ML_Mono.rml
+2026-06-25 12:28:55,504 - INFO - Completed: 35, remaining: 23, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/35_ML_Mono.rml
+2026-06-25 12:28:56,222 - INFO - Completed: 36, remaining: 22, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/33_ML_Mono.rml
+2026-06-25 12:29:00,926 - INFO - Completed: 37, remaining: 21, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/41_ML_Mono.rml
+2026-06-25 12:29:01,946 - INFO - Completed: 38, remaining: 20, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/42_ML_Mono.rml
+2026-06-25 12:29:02,326 - INFO - Completed: 39, remaining: 19, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/43_ML_Mono.rml
+2026-06-25 12:29:02,759 - INFO - Completed: 40, remaining: 18, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/36_ML_Mono.rml
+2026-06-25 12:29:03,546 - INFO - Completed: 41, remaining: 17, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/37_ML_Mono.rml
+2026-06-25 12:29:04,485 - INFO - Completed: 42, remaining: 16, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/39_ML_Mono.rml
+2026-06-25 12:29:04,804 - INFO - Completed: 43, remaining: 15, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/40_ML_Mono.rml
+2026-06-25 12:29:05,039 - INFO - Completed: 44, remaining: 14, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/44_ML_Mono.rml
+2026-06-25 12:29:05,210 - INFO - Completed: 45, remaining: 13, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/38_ML_Mono.rml
+2026-06-25 12:29:06,888 - INFO - Completed: 46, remaining: 12, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/46_ML_Mono.rml
+2026-06-25 12:29:07,025 - INFO - Completed: 47, remaining: 11, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/45_ML_Mono.rml
+2026-06-25 12:29:08,792 - INFO - Completed: 48, remaining: 10, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/47_ML_Mono.rml
+2026-06-25 12:29:10,559 - INFO - Completed: 49, remaining: 9, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/50_ML_Mono.rml
+2026-06-25 12:29:11,644 - INFO - Completed: 50, remaining: 8, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/48_ML_Mono.rml
+2026-06-25 12:29:12,862 - INFO - Completed: 51, remaining: 7, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/53_ML_Mono.rml
+2026-06-25 12:29:13,441 - INFO - Completed: 52, remaining: 6, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/49_ML_Mono.rml
+2026-06-25 12:29:13,736 - INFO - Completed: 53, remaining: 5, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/52_ML_Mono.rml
+2026-06-25 12:29:13,995 - INFO - Completed: 54, remaining: 4, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/51_ML_Mono.rml
+2026-06-25 12:29:14,305 - INFO - Completed: 55, remaining: 3, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/54_ML_Mono.rml
+2026-06-25 12:29:14,859 - INFO - Completed: 56, remaining: 2, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/56_ML_Mono.rml
+2026-06-25 12:29:15,088 - INFO - Completed: 57, remaining: 1, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/55_ML_Mono.rml
+2026-06-25 12:29:15,765 - INFO - Completed: 58, remaining: 0, /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/57_ML_Mono.rml
+2026-06-25 12:29:15,765 - INFO - Batch Completed
+2026-06-25 12:29:15,765 - INFO - Waiting For batch, 60 simulations to go
+2026-06-25 12:29:15,765 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 12:29:15,765 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 12:29:15,765 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0
+2026-06-25 12:29:15,766 - INFO - Round 0: found 58/58 files for _DetectorAtFocus_analyzed_rays_RawRaysOutgoing.dat
+2026-06-25 12:29:15,766 - INFO - Round 0: final check found 0 missing simulations
+2026-06-25 12:29:15,784 - INFO - Executor shutdown completed.
+2026-06-25 12:29:15,785 - INFO - Simulation completed successfully.
+2026-06-25 12:29:15,785 - INFO - Starting cleanup
+2026-06-25 12:29:15,947 - INFO - Done with the cleanup
+2026-06-25 12:29:15,948 - INFO - Create Pandas Recap Files
+2026-06-25 12:29:15,955 - INFO - End of the Simulations
+2026-06-25 12:31:36,082 - INFO - Simulation started, using 12 workers
+2026-06-25 12:31:36,082 - INFO - Rough ETA seed from numberRays (scanned): first round 04min:50s, total 24s
+2026-06-25 12:31:36,084 - INFO - Start round 0
+2026-06-25 12:31:36,084 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0
+2026-06-25 12:31:36,084 - INFO - Round 0: found 0/58 files for _DetectorAtFocus_analyzed_rays_RawRaysOutgoing.dat
+2026-06-25 12:31:36,087 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/0_ML_Mono.rml
+2026-06-25 12:31:36,089 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/1_ML_Mono.rml
+2026-06-25 12:31:36,090 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/2_ML_Mono.rml
+2026-06-25 12:31:36,092 - INFO - Prepared sim number: 3: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/3_ML_Mono.rml
+2026-06-25 12:31:36,094 - INFO - Prepared sim number: 4: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/4_ML_Mono.rml
+2026-06-25 12:31:36,096 - INFO - Prepared sim number: 5: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/5_ML_Mono.rml
+2026-06-25 12:31:36,098 - INFO - Prepared sim number: 6: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/6_ML_Mono.rml
+2026-06-25 12:31:36,099 - INFO - Prepared sim number: 7: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/7_ML_Mono.rml
+2026-06-25 12:31:36,101 - INFO - Prepared sim number: 8: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/8_ML_Mono.rml
+2026-06-25 12:31:36,103 - INFO - Prepared sim number: 9: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/9_ML_Mono.rml
+2026-06-25 12:31:36,105 - INFO - Prepared sim number: 10: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/10_ML_Mono.rml
+2026-06-25 12:31:36,107 - INFO - Prepared sim number: 11: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/11_ML_Mono.rml
+2026-06-25 12:31:36,108 - INFO - Prepared sim number: 12: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/12_ML_Mono.rml
+2026-06-25 12:31:36,110 - INFO - Prepared sim number: 13: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/13_ML_Mono.rml
+2026-06-25 12:31:36,112 - INFO - Prepared sim number: 14: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/14_ML_Mono.rml
+2026-06-25 12:31:36,114 - INFO - Prepared sim number: 15: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/15_ML_Mono.rml
+2026-06-25 12:31:36,115 - INFO - Prepared sim number: 16: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/16_ML_Mono.rml
+2026-06-25 12:31:36,117 - INFO - Prepared sim number: 17: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/17_ML_Mono.rml
+2026-06-25 12:31:36,119 - INFO - Prepared sim number: 18: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/18_ML_Mono.rml
+2026-06-25 12:31:36,121 - INFO - Prepared sim number: 19: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/19_ML_Mono.rml
+2026-06-25 12:31:36,122 - INFO - Prepared sim number: 20: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/20_ML_Mono.rml
+2026-06-25 12:31:36,124 - INFO - Prepared sim number: 21: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/21_ML_Mono.rml
+2026-06-25 12:31:36,126 - INFO - Prepared sim number: 22: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/22_ML_Mono.rml
+2026-06-25 12:31:36,128 - INFO - Prepared sim number: 23: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/23_ML_Mono.rml
+2026-06-25 12:31:36,130 - INFO - Prepared sim number: 24: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/24_ML_Mono.rml
+2026-06-25 12:31:36,131 - INFO - Prepared sim number: 25: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/25_ML_Mono.rml
+2026-06-25 12:31:36,133 - INFO - Prepared sim number: 26: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/26_ML_Mono.rml
+2026-06-25 12:31:36,135 - INFO - Prepared sim number: 27: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/27_ML_Mono.rml
+2026-06-25 12:31:36,137 - INFO - Prepared sim number: 28: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/28_ML_Mono.rml
+2026-06-25 12:31:36,139 - INFO - Prepared sim number: 29: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/29_ML_Mono.rml
+2026-06-25 12:31:36,141 - INFO - Prepared sim number: 30: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/30_ML_Mono.rml
+2026-06-25 12:31:36,143 - INFO - Prepared sim number: 31: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/31_ML_Mono.rml
+2026-06-25 12:31:36,144 - INFO - Prepared sim number: 32: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/32_ML_Mono.rml
+2026-06-25 12:31:36,146 - INFO - Prepared sim number: 33: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/33_ML_Mono.rml
+2026-06-25 12:31:36,148 - INFO - Prepared sim number: 34: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/34_ML_Mono.rml
+2026-06-25 12:31:36,150 - INFO - Prepared sim number: 35: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/35_ML_Mono.rml
+2026-06-25 12:31:36,152 - INFO - Prepared sim number: 36: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/36_ML_Mono.rml
+2026-06-25 12:31:36,153 - INFO - Prepared sim number: 37: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/37_ML_Mono.rml
+2026-06-25 12:31:36,155 - INFO - Prepared sim number: 38: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/38_ML_Mono.rml
+2026-06-25 12:31:36,157 - INFO - Prepared sim number: 39: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/39_ML_Mono.rml
+2026-06-25 12:31:36,160 - INFO - Prepared sim number: 40: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/40_ML_Mono.rml
+2026-06-25 12:31:36,163 - INFO - Prepared sim number: 41: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/41_ML_Mono.rml
+2026-06-25 12:31:36,165 - INFO - Prepared sim number: 42: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/42_ML_Mono.rml
+2026-06-25 12:31:36,167 - INFO - Prepared sim number: 43: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/43_ML_Mono.rml
+2026-06-25 12:31:36,169 - INFO - Prepared sim number: 44: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/44_ML_Mono.rml
+2026-06-25 12:31:36,172 - INFO - Prepared sim number: 45: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/45_ML_Mono.rml
+2026-06-25 12:31:36,174 - INFO - Prepared sim number: 46: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/46_ML_Mono.rml
+2026-06-25 12:31:36,176 - INFO - Prepared sim number: 47: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/47_ML_Mono.rml
+2026-06-25 12:31:36,178 - INFO - Prepared sim number: 48: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/48_ML_Mono.rml
+2026-06-25 12:31:36,180 - INFO - Prepared sim number: 49: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/49_ML_Mono.rml
+2026-06-25 12:31:36,182 - INFO - Prepared sim number: 50: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/50_ML_Mono.rml
+2026-06-25 12:31:36,184 - INFO - Prepared sim number: 51: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/51_ML_Mono.rml
+2026-06-25 12:31:36,186 - INFO - Prepared sim number: 52: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/52_ML_Mono.rml
+2026-06-25 12:31:36,188 - INFO - Prepared sim number: 53: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/53_ML_Mono.rml
+2026-06-25 12:31:36,190 - INFO - Prepared sim number: 54: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/54_ML_Mono.rml
+2026-06-25 12:31:36,192 - INFO - Prepared sim number: 55: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/55_ML_Mono.rml
+2026-06-25 12:31:36,195 - INFO - Prepared sim number: 56: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/56_ML_Mono.rml
+2026-06-25 12:31:36,197 - INFO - Prepared sim number: 57: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/57_ML_Mono.rml
+2026-06-25 12:31:36,271 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 12:31:41,548 - INFO - Completed: 1, remaining: 57, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/6_ML_Mono.rml
+2026-06-25 12:31:42,187 - INFO - Completed: 2, remaining: 56, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/5_ML_Mono.rml
+2026-06-25 12:31:42,522 - INFO - Completed: 3, remaining: 55, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/4_ML_Mono.rml
+2026-06-25 12:31:43,163 - INFO - Completed: 4, remaining: 54, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/0_ML_Mono.rml
+2026-06-25 12:31:43,268 - INFO - Completed: 5, remaining: 53, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/8_ML_Mono.rml
+2026-06-25 12:31:43,455 - INFO - Completed: 6, remaining: 52, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/9_ML_Mono.rml
+2026-06-25 12:31:43,703 - INFO - Completed: 7, remaining: 51, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/7_ML_Mono.rml
+2026-06-25 12:31:44,028 - INFO - Completed: 8, remaining: 50, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/1_ML_Mono.rml
+2026-06-25 12:31:45,365 - INFO - Completed: 9, remaining: 49, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/11_ML_Mono.rml
+2026-06-25 12:31:45,480 - INFO - Completed: 10, remaining: 48, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/2_ML_Mono.rml
+2026-06-25 12:31:45,695 - INFO - Completed: 11, remaining: 47, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/10_ML_Mono.rml
+2026-06-25 12:31:47,334 - INFO - Completed: 12, remaining: 46, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/3_ML_Mono.rml
+2026-06-25 12:31:48,732 - INFO - Completed: 13, remaining: 45, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/13_ML_Mono.rml
+2026-06-25 12:31:50,020 - INFO - Completed: 14, remaining: 44, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/12_ML_Mono.rml
+2026-06-25 12:31:50,721 - INFO - Completed: 15, remaining: 43, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/15_ML_Mono.rml
+2026-06-25 12:31:51,201 - INFO - Completed: 16, remaining: 42, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/19_ML_Mono.rml
+2026-06-25 12:31:51,456 - INFO - Completed: 17, remaining: 41, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/17_ML_Mono.rml
+2026-06-25 12:31:51,737 - INFO - Completed: 18, remaining: 40, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/14_ML_Mono.rml
+2026-06-25 12:31:52,145 - INFO - Completed: 19, remaining: 39, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/18_ML_Mono.rml
+2026-06-25 12:31:52,245 - INFO - Completed: 20, remaining: 38, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/16_ML_Mono.rml
+2026-06-25 12:31:52,737 - INFO - Completed: 21, remaining: 37, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/22_ML_Mono.rml
+2026-06-25 12:31:53,561 - INFO - Completed: 22, remaining: 36, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/20_ML_Mono.rml
+2026-06-25 12:31:54,198 - INFO - Completed: 23, remaining: 35, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/21_ML_Mono.rml
+2026-06-25 12:31:54,465 - INFO - Completed: 24, remaining: 34, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/23_ML_Mono.rml
+2026-06-25 12:31:55,555 - INFO - Completed: 25, remaining: 33, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/24_ML_Mono.rml
+2026-06-25 12:31:59,509 - INFO - Completed: 26, remaining: 32, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/25_ML_Mono.rml
+2026-06-25 12:32:00,289 - INFO - Completed: 27, remaining: 31, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/27_ML_Mono.rml
+2026-06-25 12:32:00,958 - INFO - Completed: 28, remaining: 30, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/26_ML_Mono.rml
+2026-06-25 12:32:01,701 - INFO - Completed: 29, remaining: 29, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/29_ML_Mono.rml
+2026-06-25 12:32:01,934 - INFO - Completed: 30, remaining: 28, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/32_ML_Mono.rml
+2026-06-25 12:32:02,128 - INFO - Completed: 31, remaining: 27, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/34_ML_Mono.rml
+2026-06-25 12:32:02,817 - INFO - Completed: 32, remaining: 26, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/28_ML_Mono.rml
+2026-06-25 12:32:02,846 - INFO - Completed: 33, remaining: 25, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/33_ML_Mono.rml
+2026-06-25 12:32:03,191 - INFO - Completed: 34, remaining: 24, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/31_ML_Mono.rml
+2026-06-25 12:32:03,232 - INFO - Completed: 35, remaining: 23, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/30_ML_Mono.rml
+2026-06-25 12:32:04,890 - INFO - Completed: 36, remaining: 22, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/35_ML_Mono.rml
+2026-06-25 12:32:07,657 - INFO - Completed: 37, remaining: 21, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/36_ML_Mono.rml
+2026-06-25 12:32:09,429 - INFO - Completed: 38, remaining: 20, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/39_ML_Mono.rml
+2026-06-25 12:32:11,314 - INFO - Completed: 39, remaining: 19, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/44_ML_Mono.rml
+2026-06-25 12:32:11,904 - INFO - Completed: 40, remaining: 18, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/37_ML_Mono.rml
+2026-06-25 12:32:12,229 - INFO - Completed: 41, remaining: 17, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/38_ML_Mono.rml
+2026-06-25 12:32:14,172 - INFO - Completed: 42, remaining: 16, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/42_ML_Mono.rml
+2026-06-25 12:32:14,331 - INFO - Completed: 43, remaining: 15, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/41_ML_Mono.rml
+2026-06-25 12:32:14,757 - INFO - Completed: 44, remaining: 14, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/40_ML_Mono.rml
+2026-06-25 12:32:15,204 - INFO - Completed: 45, remaining: 13, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/43_ML_Mono.rml
+2026-06-25 12:32:16,002 - INFO - Completed: 46, remaining: 12, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/45_ML_Mono.rml
+2026-06-25 12:32:17,151 - INFO - Completed: 47, remaining: 11, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/46_ML_Mono.rml
+2026-06-25 12:32:17,292 - INFO - Completed: 48, remaining: 10, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/47_ML_Mono.rml
+2026-06-25 12:32:19,238 - INFO - Completed: 49, remaining: 9, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/48_ML_Mono.rml
+2026-06-25 12:32:20,378 - INFO - Completed: 50, remaining: 8, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/49_ML_Mono.rml
+2026-06-25 12:32:21,039 - INFO - Completed: 51, remaining: 7, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/50_ML_Mono.rml
+2026-06-25 12:32:22,403 - INFO - Completed: 52, remaining: 6, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/52_ML_Mono.rml
+2026-06-25 12:32:23,258 - INFO - Completed: 53, remaining: 5, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/51_ML_Mono.rml
+2026-06-25 12:32:23,605 - INFO - Completed: 54, remaining: 4, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/54_ML_Mono.rml
+2026-06-25 12:32:24,370 - INFO - Completed: 55, remaining: 3, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/56_ML_Mono.rml
+2026-06-25 12:32:24,779 - INFO - Completed: 56, remaining: 2, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/53_ML_Mono.rml
+2026-06-25 12:32:24,974 - INFO - Completed: 57, remaining: 1, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/57_ML_Mono.rml
+2026-06-25 12:32:25,099 - INFO - Completed: 58, remaining: 0, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/55_ML_Mono.rml
+2026-06-25 12:32:25,099 - INFO - Batch Completed
+2026-06-25 12:32:25,100 - INFO - Waiting For batch, 60 simulations to go
+2026-06-25 12:32:25,100 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 12:32:25,100 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 12:32:25,100 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0
+2026-06-25 12:32:25,101 - INFO - Round 0: found 58/58 files for _DetectorAtFocus_analyzed_rays_RawRaysOutgoing.dat
+2026-06-25 12:32:25,101 - INFO - Round 0: final check found 0 missing simulations
+2026-06-25 12:32:25,130 - INFO - Executor shutdown completed.
+2026-06-25 12:32:25,131 - INFO - Simulation completed successfully.
+2026-06-25 12:32:25,132 - INFO - Starting cleanup
+2026-06-25 12:32:25,313 - INFO - Done with the cleanup
+2026-06-25 12:32:25,313 - INFO - Create Pandas Recap Files
+2026-06-25 12:32:25,324 - INFO - End of the Simulations
+2026-06-25 12:54:33,766 - INFO - Simulation started, using 10 workers
+2026-06-25 12:54:33,766 - INFO - Rough ETA seed from numberRays (scanned): first round 04min:50s, total 29s
+2026-06-25 12:54:33,769 - INFO - Start round 0
+2026-06-25 12:54:33,770 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0
+2026-06-25 12:54:33,770 - INFO - Round 0: found 0/58 files for _DetectorAtFocus_analyzed_rays_RawRaysOutgoing.dat
+2026-06-25 12:54:33,773 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/0_ML_Mono.rml
+2026-06-25 12:54:33,776 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/1_ML_Mono.rml
+2026-06-25 12:54:33,779 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/2_ML_Mono.rml
+2026-06-25 12:54:33,782 - INFO - Prepared sim number: 3: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/3_ML_Mono.rml
+2026-06-25 12:54:33,784 - INFO - Prepared sim number: 4: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/4_ML_Mono.rml
+2026-06-25 12:54:33,787 - INFO - Prepared sim number: 5: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/5_ML_Mono.rml
+2026-06-25 12:54:33,789 - INFO - Prepared sim number: 6: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/6_ML_Mono.rml
+2026-06-25 12:54:33,790 - INFO - Prepared sim number: 7: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/7_ML_Mono.rml
+2026-06-25 12:54:33,791 - INFO - Prepared sim number: 8: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/8_ML_Mono.rml
+2026-06-25 12:54:33,792 - INFO - Prepared sim number: 9: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/9_ML_Mono.rml
+2026-06-25 12:54:33,793 - INFO - Prepared sim number: 10: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/10_ML_Mono.rml
+2026-06-25 12:54:33,794 - INFO - Prepared sim number: 11: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/11_ML_Mono.rml
+2026-06-25 12:54:33,795 - INFO - Prepared sim number: 12: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/12_ML_Mono.rml
+2026-06-25 12:54:33,796 - INFO - Prepared sim number: 13: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/13_ML_Mono.rml
+2026-06-25 12:54:33,797 - INFO - Prepared sim number: 14: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/14_ML_Mono.rml
+2026-06-25 12:54:33,799 - INFO - Prepared sim number: 15: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/15_ML_Mono.rml
+2026-06-25 12:54:33,802 - INFO - Prepared sim number: 16: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/16_ML_Mono.rml
+2026-06-25 12:54:33,804 - INFO - Prepared sim number: 17: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/17_ML_Mono.rml
+2026-06-25 12:54:33,807 - INFO - Prepared sim number: 18: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/18_ML_Mono.rml
+2026-06-25 12:54:33,810 - INFO - Prepared sim number: 19: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/19_ML_Mono.rml
+2026-06-25 12:54:33,813 - INFO - Prepared sim number: 20: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/20_ML_Mono.rml
+2026-06-25 12:54:33,816 - INFO - Prepared sim number: 21: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/21_ML_Mono.rml
+2026-06-25 12:54:33,818 - INFO - Prepared sim number: 22: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/22_ML_Mono.rml
+2026-06-25 12:54:33,821 - INFO - Prepared sim number: 23: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/23_ML_Mono.rml
+2026-06-25 12:54:33,825 - INFO - Prepared sim number: 24: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/24_ML_Mono.rml
+2026-06-25 12:54:33,828 - INFO - Prepared sim number: 25: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/25_ML_Mono.rml
+2026-06-25 12:54:33,831 - INFO - Prepared sim number: 26: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/26_ML_Mono.rml
+2026-06-25 12:54:33,835 - INFO - Prepared sim number: 27: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/27_ML_Mono.rml
+2026-06-25 12:54:33,838 - INFO - Prepared sim number: 28: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/28_ML_Mono.rml
+2026-06-25 12:54:33,841 - INFO - Prepared sim number: 29: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/29_ML_Mono.rml
+2026-06-25 12:54:33,844 - INFO - Prepared sim number: 30: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/30_ML_Mono.rml
+2026-06-25 12:54:33,848 - INFO - Prepared sim number: 31: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/31_ML_Mono.rml
+2026-06-25 12:54:33,850 - INFO - Prepared sim number: 32: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/32_ML_Mono.rml
+2026-06-25 12:54:33,853 - INFO - Prepared sim number: 33: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/33_ML_Mono.rml
+2026-06-25 12:54:33,855 - INFO - Prepared sim number: 34: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/34_ML_Mono.rml
+2026-06-25 12:54:33,857 - INFO - Prepared sim number: 35: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/35_ML_Mono.rml
+2026-06-25 12:54:33,860 - INFO - Prepared sim number: 36: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/36_ML_Mono.rml
+2026-06-25 12:54:33,862 - INFO - Prepared sim number: 37: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/37_ML_Mono.rml
+2026-06-25 12:54:33,864 - INFO - Prepared sim number: 38: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/38_ML_Mono.rml
+2026-06-25 12:54:33,866 - INFO - Prepared sim number: 39: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/39_ML_Mono.rml
+2026-06-25 12:54:33,868 - INFO - Prepared sim number: 40: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/40_ML_Mono.rml
+2026-06-25 12:54:33,870 - INFO - Prepared sim number: 41: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/41_ML_Mono.rml
+2026-06-25 12:54:33,872 - INFO - Prepared sim number: 42: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/42_ML_Mono.rml
+2026-06-25 12:54:33,875 - INFO - Prepared sim number: 43: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/43_ML_Mono.rml
+2026-06-25 12:54:33,877 - INFO - Prepared sim number: 44: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/44_ML_Mono.rml
+2026-06-25 12:54:33,879 - INFO - Prepared sim number: 45: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/45_ML_Mono.rml
+2026-06-25 12:54:33,881 - INFO - Prepared sim number: 46: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/46_ML_Mono.rml
+2026-06-25 12:54:33,883 - INFO - Prepared sim number: 47: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/47_ML_Mono.rml
+2026-06-25 12:54:33,884 - INFO - Prepared sim number: 48: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/48_ML_Mono.rml
+2026-06-25 12:54:33,886 - INFO - Prepared sim number: 49: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/49_ML_Mono.rml
+2026-06-25 12:54:33,986 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 12:54:39,089 - INFO - Completed: 1, remaining: 49, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/5_ML_Mono.rml
+2026-06-25 12:54:39,825 - INFO - Completed: 2, remaining: 48, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/6_ML_Mono.rml
+2026-06-25 12:54:40,263 - INFO - Completed: 3, remaining: 47, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/9_ML_Mono.rml
+2026-06-25 12:54:40,439 - INFO - Completed: 4, remaining: 46, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/2_ML_Mono.rml
+2026-06-25 12:54:40,623 - INFO - Completed: 5, remaining: 45, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/1_ML_Mono.rml
+2026-06-25 12:54:40,738 - INFO - Completed: 6, remaining: 44, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/7_ML_Mono.rml
+2026-06-25 12:54:41,372 - INFO - Completed: 7, remaining: 43, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/4_ML_Mono.rml
+2026-06-25 12:54:41,536 - INFO - Completed: 8, remaining: 42, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/3_ML_Mono.rml
+2026-06-25 12:54:42,320 - INFO - Completed: 9, remaining: 41, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/0_ML_Mono.rml
+2026-06-25 12:54:42,886 - INFO - Completed: 10, remaining: 40, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/8_ML_Mono.rml
+2026-06-25 12:54:46,031 - INFO - Completed: 11, remaining: 39, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/10_ML_Mono.rml
+2026-06-25 12:54:46,709 - INFO - Completed: 12, remaining: 38, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/16_ML_Mono.rml
+2026-06-25 12:54:46,880 - INFO - Completed: 13, remaining: 37, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/15_ML_Mono.rml
+2026-06-25 12:54:47,045 - INFO - Completed: 14, remaining: 36, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/12_ML_Mono.rml
+2026-06-25 12:54:47,211 - INFO - Completed: 15, remaining: 35, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/11_ML_Mono.rml
+2026-06-25 12:54:47,478 - INFO - Completed: 16, remaining: 34, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/13_ML_Mono.rml
+2026-06-25 12:54:47,595 - INFO - Completed: 17, remaining: 33, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/14_ML_Mono.rml
+2026-06-25 12:54:49,111 - INFO - Completed: 18, remaining: 32, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/19_ML_Mono.rml
+2026-06-25 12:54:49,272 - INFO - Completed: 19, remaining: 31, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/17_ML_Mono.rml
+2026-06-25 12:54:49,339 - INFO - Completed: 20, remaining: 30, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/18_ML_Mono.rml
+2026-06-25 12:54:52,476 - INFO - Completed: 21, remaining: 29, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/20_ML_Mono.rml
+2026-06-25 12:54:53,258 - INFO - Completed: 22, remaining: 28, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/21_ML_Mono.rml
+2026-06-25 12:54:53,365 - INFO - Completed: 23, remaining: 27, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/23_ML_Mono.rml
+2026-06-25 12:54:53,659 - INFO - Completed: 24, remaining: 26, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/22_ML_Mono.rml
+2026-06-25 12:54:53,808 - INFO - Completed: 25, remaining: 25, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/26_ML_Mono.rml
+2026-06-25 12:54:53,868 - INFO - Completed: 26, remaining: 24, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/25_ML_Mono.rml
+2026-06-25 12:54:54,104 - INFO - Completed: 27, remaining: 23, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/24_ML_Mono.rml
+2026-06-25 12:54:54,140 - INFO - Completed: 28, remaining: 22, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/28_ML_Mono.rml
+2026-06-25 12:54:54,759 - INFO - Completed: 29, remaining: 21, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/29_ML_Mono.rml
+2026-06-25 12:54:55,642 - INFO - Completed: 30, remaining: 20, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/27_ML_Mono.rml
+2026-06-25 12:54:58,960 - INFO - Completed: 31, remaining: 19, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/30_ML_Mono.rml
+2026-06-25 12:54:59,056 - INFO - Completed: 32, remaining: 18, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/34_ML_Mono.rml
+2026-06-25 12:54:59,098 - INFO - Completed: 33, remaining: 17, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/31_ML_Mono.rml
+2026-06-25 12:54:59,526 - INFO - Completed: 34, remaining: 16, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/32_ML_Mono.rml
+2026-06-25 12:54:59,568 - INFO - Completed: 35, remaining: 15, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/33_ML_Mono.rml
+2026-06-25 12:54:59,845 - INFO - Completed: 36, remaining: 14, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/35_ML_Mono.rml
+2026-06-25 12:54:59,924 - INFO - Completed: 37, remaining: 13, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/36_ML_Mono.rml
+2026-06-25 12:55:00,021 - INFO - Completed: 38, remaining: 12, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/37_ML_Mono.rml
+2026-06-25 12:55:01,090 - INFO - Completed: 39, remaining: 11, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/38_ML_Mono.rml
+2026-06-25 12:55:01,876 - INFO - Completed: 40, remaining: 10, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/39_ML_Mono.rml
+2026-06-25 12:55:04,850 - INFO - Completed: 41, remaining: 9, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/44_ML_Mono.rml
+2026-06-25 12:55:05,559 - INFO - Completed: 42, remaining: 8, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/40_ML_Mono.rml
+2026-06-25 12:55:05,943 - INFO - Completed: 43, remaining: 7, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/42_ML_Mono.rml
+2026-06-25 12:55:06,205 - INFO - Completed: 44, remaining: 6, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/41_ML_Mono.rml
+2026-06-25 12:55:06,399 - INFO - Completed: 45, remaining: 5, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/43_ML_Mono.rml
+2026-06-25 12:55:06,439 - INFO - Completed: 46, remaining: 4, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/45_ML_Mono.rml
+2026-06-25 12:55:07,053 - INFO - Completed: 47, remaining: 3, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/46_ML_Mono.rml
+2026-06-25 12:55:07,252 - INFO - Completed: 48, remaining: 2, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/47_ML_Mono.rml
+2026-06-25 12:55:07,890 - INFO - Completed: 49, remaining: 1, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/49_ML_Mono.rml
+2026-06-25 12:55:07,957 - INFO - Completed: 50, remaining: 0, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/48_ML_Mono.rml
+2026-06-25 12:55:07,957 - INFO - Batch Completed
+2026-06-25 12:55:07,958 - INFO - Waiting For batch, 50 simulations to go
+2026-06-25 12:55:07,967 - INFO - Prepared sim number: 50: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/50_ML_Mono.rml
+2026-06-25 12:55:07,974 - INFO - Prepared sim number: 51: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/51_ML_Mono.rml
+2026-06-25 12:55:07,979 - INFO - Prepared sim number: 52: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/52_ML_Mono.rml
+2026-06-25 12:55:07,984 - INFO - Prepared sim number: 53: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/53_ML_Mono.rml
+2026-06-25 12:55:07,988 - INFO - Prepared sim number: 54: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/54_ML_Mono.rml
+2026-06-25 12:55:07,992 - INFO - Prepared sim number: 55: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/55_ML_Mono.rml
+2026-06-25 12:55:07,996 - INFO - Prepared sim number: 56: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/56_ML_Mono.rml
+2026-06-25 12:55:08,000 - INFO - Prepared sim number: 57: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/57_ML_Mono.rml
+2026-06-25 12:55:08,001 - INFO - Waiting for batch number: 1, initial max-idle: 60.0s
+2026-06-25 12:55:11,661 - INFO - Completed: 1, remaining: 7, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/53_ML_Mono.rml
+2026-06-25 12:55:11,875 - INFO - Completed: 2, remaining: 6, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/52_ML_Mono.rml
+2026-06-25 12:55:11,924 - INFO - Completed: 3, remaining: 5, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/55_ML_Mono.rml
+2026-06-25 12:55:11,965 - INFO - Completed: 4, remaining: 4, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/50_ML_Mono.rml
+2026-06-25 12:55:14,152 - INFO - Completed: 5, remaining: 3, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/54_ML_Mono.rml
+2026-06-25 12:55:14,797 - INFO - Completed: 6, remaining: 2, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/57_ML_Mono.rml
+2026-06-25 12:55:14,880 - INFO - Completed: 7, remaining: 1, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/51_ML_Mono.rml
+2026-06-25 12:55:15,082 - INFO - Completed: 8, remaining: 0, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/56_ML_Mono.rml
+2026-06-25 12:55:15,082 - INFO - Batch Completed
+2026-06-25 12:55:15,083 - INFO - Waiting For batch, 50 simulations to go
+2026-06-25 12:55:15,083 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 12:55:15,083 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 12:55:15,083 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0
+2026-06-25 12:55:15,083 - INFO - Round 0: found 58/58 files for _DetectorAtFocus_analyzed_rays_RawRaysOutgoing.dat
+2026-06-25 12:55:15,083 - INFO - Round 0: final check found 0 missing simulations
+2026-06-25 12:55:15,104 - INFO - Executor shutdown completed.
+2026-06-25 12:55:15,105 - INFO - Simulation completed successfully.
+2026-06-25 12:55:15,105 - INFO - Starting cleanup
+2026-06-25 12:55:15,252 - INFO - Done with the cleanup
+2026-06-25 12:55:15,252 - INFO - Create Pandas Recap Files
+2026-06-25 12:55:15,261 - INFO - End of the Simulations
+2026-06-25 12:57:58,344 - INFO - Simulation started, using 10 workers
+2026-06-25 12:57:58,344 - INFO - Rough ETA seed from numberRays (scanned): first round 04min:50s, total 29s
+2026-06-25 12:57:58,347 - INFO - Start round 0
+2026-06-25 12:57:58,347 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0
+2026-06-25 12:57:58,348 - INFO - Round 0: found 0/58 files for _DetectorAtFocus_analyzed_rays_RawRaysOutgoing.dat
+2026-06-25 12:57:58,351 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/0_ML_Mono.rml
+2026-06-25 12:57:58,353 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/1_ML_Mono.rml
+2026-06-25 12:57:58,356 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/2_ML_Mono.rml
+2026-06-25 12:57:58,359 - INFO - Prepared sim number: 3: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/3_ML_Mono.rml
+2026-06-25 12:57:58,362 - INFO - Prepared sim number: 4: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/4_ML_Mono.rml
+2026-06-25 12:57:58,364 - INFO - Prepared sim number: 5: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/5_ML_Mono.rml
+2026-06-25 12:57:58,366 - INFO - Prepared sim number: 6: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/6_ML_Mono.rml
+2026-06-25 12:57:58,368 - INFO - Prepared sim number: 7: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/7_ML_Mono.rml
+2026-06-25 12:57:58,370 - INFO - Prepared sim number: 8: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/8_ML_Mono.rml
+2026-06-25 12:57:58,372 - INFO - Prepared sim number: 9: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/9_ML_Mono.rml
+2026-06-25 12:57:58,374 - INFO - Prepared sim number: 10: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/10_ML_Mono.rml
+2026-06-25 12:57:58,376 - INFO - Prepared sim number: 11: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/11_ML_Mono.rml
+2026-06-25 12:57:58,378 - INFO - Prepared sim number: 12: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/12_ML_Mono.rml
+2026-06-25 12:57:58,380 - INFO - Prepared sim number: 13: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/13_ML_Mono.rml
+2026-06-25 12:57:58,382 - INFO - Prepared sim number: 14: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/14_ML_Mono.rml
+2026-06-25 12:57:58,383 - INFO - Prepared sim number: 15: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/15_ML_Mono.rml
+2026-06-25 12:57:58,385 - INFO - Prepared sim number: 16: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/16_ML_Mono.rml
+2026-06-25 12:57:58,389 - INFO - Prepared sim number: 17: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/17_ML_Mono.rml
+2026-06-25 12:57:58,391 - INFO - Prepared sim number: 18: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/18_ML_Mono.rml
+2026-06-25 12:57:58,393 - INFO - Prepared sim number: 19: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/19_ML_Mono.rml
+2026-06-25 12:57:58,395 - INFO - Prepared sim number: 20: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/20_ML_Mono.rml
+2026-06-25 12:57:58,397 - INFO - Prepared sim number: 21: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/21_ML_Mono.rml
+2026-06-25 12:57:58,399 - INFO - Prepared sim number: 22: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/22_ML_Mono.rml
+2026-06-25 12:57:58,401 - INFO - Prepared sim number: 23: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/23_ML_Mono.rml
+2026-06-25 12:57:58,403 - INFO - Prepared sim number: 24: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/24_ML_Mono.rml
+2026-06-25 12:57:58,405 - INFO - Prepared sim number: 25: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/25_ML_Mono.rml
+2026-06-25 12:57:58,407 - INFO - Prepared sim number: 26: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/26_ML_Mono.rml
+2026-06-25 12:57:58,409 - INFO - Prepared sim number: 27: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/27_ML_Mono.rml
+2026-06-25 12:57:58,411 - INFO - Prepared sim number: 28: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/28_ML_Mono.rml
+2026-06-25 12:57:58,413 - INFO - Prepared sim number: 29: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/29_ML_Mono.rml
+2026-06-25 12:57:58,415 - INFO - Prepared sim number: 30: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/30_ML_Mono.rml
+2026-06-25 12:57:58,417 - INFO - Prepared sim number: 31: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/31_ML_Mono.rml
+2026-06-25 12:57:58,419 - INFO - Prepared sim number: 32: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/32_ML_Mono.rml
+2026-06-25 12:57:58,421 - INFO - Prepared sim number: 33: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/33_ML_Mono.rml
+2026-06-25 12:57:58,424 - INFO - Prepared sim number: 34: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/34_ML_Mono.rml
+2026-06-25 12:57:58,426 - INFO - Prepared sim number: 35: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/35_ML_Mono.rml
+2026-06-25 12:57:58,429 - INFO - Prepared sim number: 36: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/36_ML_Mono.rml
+2026-06-25 12:57:58,431 - INFO - Prepared sim number: 37: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/37_ML_Mono.rml
+2026-06-25 12:57:58,433 - INFO - Prepared sim number: 38: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/38_ML_Mono.rml
+2026-06-25 12:57:58,436 - INFO - Prepared sim number: 39: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/39_ML_Mono.rml
+2026-06-25 12:57:58,438 - INFO - Prepared sim number: 40: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/40_ML_Mono.rml
+2026-06-25 12:57:58,441 - INFO - Prepared sim number: 41: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/41_ML_Mono.rml
+2026-06-25 12:57:58,443 - INFO - Prepared sim number: 42: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/42_ML_Mono.rml
+2026-06-25 12:57:58,446 - INFO - Prepared sim number: 43: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/43_ML_Mono.rml
+2026-06-25 12:57:58,449 - INFO - Prepared sim number: 44: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/44_ML_Mono.rml
+2026-06-25 12:57:58,452 - INFO - Prepared sim number: 45: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/45_ML_Mono.rml
+2026-06-25 12:57:58,454 - INFO - Prepared sim number: 46: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/46_ML_Mono.rml
+2026-06-25 12:57:58,456 - INFO - Prepared sim number: 47: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/47_ML_Mono.rml
+2026-06-25 12:57:58,459 - INFO - Prepared sim number: 48: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/48_ML_Mono.rml
+2026-06-25 12:57:58,461 - INFO - Prepared sim number: 49: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/49_ML_Mono.rml
+2026-06-25 12:57:58,543 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 12:58:03,446 - INFO - Completed: 1, remaining: 49, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/1_ML_Mono.rml
+2026-06-25 12:58:03,570 - INFO - Completed: 2, remaining: 48, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/8_ML_Mono.rml
+2026-06-25 12:58:05,210 - INFO - Completed: 3, remaining: 47, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/5_ML_Mono.rml
+2026-06-25 12:58:07,307 - INFO - Completed: 4, remaining: 46, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/9_ML_Mono.rml
+2026-06-25 12:58:08,140 - INFO - Completed: 5, remaining: 45, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/3_ML_Mono.rml
+2026-06-25 12:58:09,439 - INFO - Completed: 6, remaining: 44, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/0_ML_Mono.rml
+2026-06-25 12:58:10,872 - INFO - Completed: 7, remaining: 43, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/4_ML_Mono.rml
+2026-06-25 12:58:11,874 - INFO - Completed: 8, remaining: 42, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/2_ML_Mono.rml
+2026-06-25 12:58:12,067 - INFO - Completed: 9, remaining: 41, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/7_ML_Mono.rml
+2026-06-25 12:58:13,941 - INFO - Completed: 10, remaining: 40, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/6_ML_Mono.rml
+2026-06-25 12:58:14,523 - INFO - Completed: 11, remaining: 39, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/11_ML_Mono.rml
+2026-06-25 12:58:15,959 - INFO - Completed: 12, remaining: 38, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/10_ML_Mono.rml
+2026-06-25 12:58:17,476 - INFO - Completed: 13, remaining: 37, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/12_ML_Mono.rml
+2026-06-25 12:58:19,450 - INFO - Completed: 14, remaining: 36, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/13_ML_Mono.rml
+2026-06-25 12:58:19,985 - INFO - Completed: 15, remaining: 35, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/14_ML_Mono.rml
+2026-06-25 12:58:20,326 - INFO - Completed: 16, remaining: 34, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/15_ML_Mono.rml
+2026-06-25 12:58:21,754 - INFO - Completed: 17, remaining: 33, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/17_ML_Mono.rml
+2026-06-25 12:58:21,914 - INFO - Completed: 18, remaining: 32, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/16_ML_Mono.rml
+2026-06-25 12:58:24,658 - INFO - Completed: 19, remaining: 31, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/18_ML_Mono.rml
+2026-06-25 12:58:25,076 - INFO - Completed: 20, remaining: 30, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/19_ML_Mono.rml
+2026-06-25 12:58:27,127 - INFO - Completed: 21, remaining: 29, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/20_ML_Mono.rml
+2026-06-25 12:58:28,009 - INFO - Completed: 22, remaining: 28, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/22_ML_Mono.rml
+2026-06-25 12:58:28,729 - INFO - Completed: 23, remaining: 27, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/21_ML_Mono.rml
+2026-06-25 12:58:31,099 - INFO - Completed: 24, remaining: 26, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/25_ML_Mono.rml
+2026-06-25 12:58:31,546 - INFO - Completed: 25, remaining: 25, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/23_ML_Mono.rml
+2026-06-25 12:58:32,838 - INFO - Completed: 26, remaining: 24, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/24_ML_Mono.rml
+2026-06-25 12:58:33,102 - INFO - Completed: 27, remaining: 23, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/26_ML_Mono.rml
+2026-06-25 12:58:34,471 - INFO - Completed: 28, remaining: 22, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/27_ML_Mono.rml
+2026-06-25 12:58:36,190 - INFO - Completed: 29, remaining: 21, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/28_ML_Mono.rml
+2026-06-25 12:58:36,254 - INFO - Completed: 30, remaining: 20, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/29_ML_Mono.rml
+2026-06-25 12:58:38,601 - INFO - Completed: 31, remaining: 19, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/30_ML_Mono.rml
+2026-06-25 12:58:40,175 - INFO - Completed: 32, remaining: 18, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/31_ML_Mono.rml
+2026-06-25 12:58:40,778 - INFO - Completed: 33, remaining: 17, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/32_ML_Mono.rml
+2026-06-25 12:58:42,819 - INFO - Completed: 34, remaining: 16, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/34_ML_Mono.rml
+2026-06-25 12:58:43,401 - INFO - Completed: 35, remaining: 15, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/33_ML_Mono.rml
+2026-06-25 12:58:43,871 - INFO - Completed: 36, remaining: 14, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/35_ML_Mono.rml
+2026-06-25 12:58:43,979 - INFO - Completed: 37, remaining: 13, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/37_ML_Mono.rml
+2026-06-25 12:58:44,641 - INFO - Completed: 38, remaining: 12, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/36_ML_Mono.rml
+2026-06-25 12:58:46,165 - INFO - Completed: 39, remaining: 11, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/39_ML_Mono.rml
+2026-06-25 12:58:46,849 - INFO - Completed: 40, remaining: 10, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/38_ML_Mono.rml
+2026-06-25 12:58:46,935 - INFO - Completed: 41, remaining: 9, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/40_ML_Mono.rml
+2026-06-25 12:58:49,871 - INFO - Completed: 42, remaining: 8, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/41_ML_Mono.rml
+2026-06-25 12:58:50,828 - INFO - Completed: 43, remaining: 7, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/42_ML_Mono.rml
+2026-06-25 12:58:52,020 - INFO - Completed: 44, remaining: 6, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/43_ML_Mono.rml
+2026-06-25 12:58:52,808 - INFO - Completed: 45, remaining: 5, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/46_ML_Mono.rml
+2026-06-25 12:58:52,872 - INFO - Completed: 46, remaining: 4, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/44_ML_Mono.rml
+2026-06-25 12:58:52,912 - INFO - Completed: 47, remaining: 3, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/45_ML_Mono.rml
+2026-06-25 12:58:53,702 - INFO - Completed: 48, remaining: 2, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/48_ML_Mono.rml
+2026-06-25 12:58:53,780 - INFO - Completed: 49, remaining: 1, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/47_ML_Mono.rml
+2026-06-25 12:58:54,296 - INFO - Completed: 50, remaining: 0, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/49_ML_Mono.rml
+2026-06-25 12:58:54,297 - INFO - Batch Completed
+2026-06-25 12:58:54,297 - INFO - Waiting For batch, 50 simulations to go
+2026-06-25 12:58:54,303 - INFO - Prepared sim number: 50: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/50_ML_Mono.rml
+2026-06-25 12:58:54,307 - INFO - Prepared sim number: 51: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/51_ML_Mono.rml
+2026-06-25 12:58:54,312 - INFO - Prepared sim number: 52: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/52_ML_Mono.rml
+2026-06-25 12:58:54,317 - INFO - Prepared sim number: 53: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/53_ML_Mono.rml
+2026-06-25 12:58:54,322 - INFO - Prepared sim number: 54: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/54_ML_Mono.rml
+2026-06-25 12:58:54,326 - INFO - Prepared sim number: 55: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/55_ML_Mono.rml
+2026-06-25 12:58:54,330 - INFO - Prepared sim number: 56: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/56_ML_Mono.rml
+2026-06-25 12:58:54,335 - INFO - Prepared sim number: 57: /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/57_ML_Mono.rml
+2026-06-25 12:58:54,335 - INFO - Waiting for batch number: 1, initial max-idle: 60.0s
+2026-06-25 12:59:00,131 - INFO - Completed: 1, remaining: 7, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/57_ML_Mono.rml
+2026-06-25 12:59:01,119 - INFO - Completed: 2, remaining: 6, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/51_ML_Mono.rml
+2026-06-25 12:59:01,599 - INFO - Completed: 3, remaining: 5, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/54_ML_Mono.rml
+2026-06-25 12:59:01,627 - INFO - Completed: 4, remaining: 4, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/52_ML_Mono.rml
+2026-06-25 12:59:02,043 - INFO - Completed: 5, remaining: 3, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/53_ML_Mono.rml
+2026-06-25 12:59:02,067 - INFO - Completed: 6, remaining: 2, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/56_ML_Mono.rml
+2026-06-25 12:59:02,422 - INFO - Completed: 7, remaining: 1, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/50_ML_Mono.rml
+2026-06-25 12:59:02,702 - INFO - Completed: 8, remaining: 0, /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0/55_ML_Mono.rml
+2026-06-25 12:59:02,703 - INFO - Batch Completed
+2026-06-25 12:59:02,703 - INFO - Waiting For batch, 50 simulations to go
+2026-06-25 12:59:02,703 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 12:59:02,703 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 12:59:02,703 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/09_multilayer_monochromator_efficiency/RAYPy_Simulation_ML_Mono/round_0
+2026-06-25 12:59:02,704 - INFO - Round 0: found 58/58 files for _DetectorAtFocus_analyzed_rays_RawRaysOutgoing.dat
+2026-06-25 12:59:02,704 - INFO - Round 0: final check found 0 missing simulations
+2026-06-25 12:59:02,734 - INFO - Executor shutdown completed.
+2026-06-25 12:59:02,735 - INFO - Simulation completed successfully.
+2026-06-25 12:59:02,736 - INFO - Starting cleanup
+2026-06-25 12:59:03,019 - INFO - Done with the cleanup
+2026-06-25 12:59:03,019 - INFO - Create Pandas Recap Files
+2026-06-25 12:59:03,041 - INFO - End of the Simulations

@@ -108,6 +108,13 @@ class TestAnalyze(unittest.TestCase):
             f = find_files_in_folder(path, suffix=".rml")
             self.assertEqual(8, len(f))
 
+    def test_top_level_rayui_recap_files(self):
+        dirpath = "RAYPy_Simulation_test_Analyze"
+        dipole = pl.Path(os.path.join(dirpath, "Dipole_ScalarElementProperties.csv"))
+        detector = pl.Path(os.path.join(dirpath, "DetectorAtFocus_ScalarBeamProperties.csv"))
+        self.assertTrue(dipole.is_file())
+        self.assertTrue(detector.is_file())
+
 
 def find_files_in_folder(path_to_dir, suffix=".csv"):
     filenames = os.listdir(path_to_dir)

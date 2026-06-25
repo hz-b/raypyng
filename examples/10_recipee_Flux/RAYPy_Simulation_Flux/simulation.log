@@ -1,0 +1,100 @@
+2026-06-25 12:29:20,008 - INFO - Simulation started, using 12 workers
+2026-06-25 12:29:20,008 - INFO - Rough ETA seed from numberRays (fixed): first round 15s, total 1s
+2026-06-25 12:29:20,011 - INFO - Start round 0
+2026-06-25 12:29:20,011 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/recipee_Flux/RAYPy_Simulation_Flux/round_0
+2026-06-25 12:29:20,011 - INFO - Round 0: found 0/3 files for _Dipole-ScalarBeamProperties.csv
+2026-06-25 12:29:20,011 - INFO - Round 0: found 0/3 files for _DetectorAtFocus-ScalarBeamProperties.csv
+2026-06-25 12:29:20,014 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/recipee_Flux/RAYPy_Simulation_Flux/round_0/0_Flux.rml
+2026-06-25 12:29:20,016 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/recipee_Flux/RAYPy_Simulation_Flux/round_0/1_Flux.rml
+2026-06-25 12:29:20,018 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/recipee_Flux/RAYPy_Simulation_Flux/round_0/2_Flux.rml
+2026-06-25 12:29:20,095 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 12:29:31,149 - INFO - Completed: 1, remaining: 2, /home/simone/projects/raypyng/raypyng/examples/recipee_Flux/RAYPy_Simulation_Flux/round_0/1_Flux.rml
+2026-06-25 12:29:31,271 - INFO - Completed: 2, remaining: 1, /home/simone/projects/raypyng/raypyng/examples/recipee_Flux/RAYPy_Simulation_Flux/round_0/0_Flux.rml
+2026-06-25 12:29:34,901 - INFO - Completed: 3, remaining: 0, /home/simone/projects/raypyng/raypyng/examples/recipee_Flux/RAYPy_Simulation_Flux/round_0/2_Flux.rml
+2026-06-25 12:29:34,901 - INFO - Batch Completed
+2026-06-25 12:29:34,901 - INFO - Waiting For batch, 60 simulations to go
+2026-06-25 12:29:34,901 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 12:29:34,901 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 12:29:34,902 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/recipee_Flux/RAYPy_Simulation_Flux/round_0
+2026-06-25 12:29:34,902 - INFO - Round 0: found 3/3 files for _Dipole-ScalarBeamProperties.csv
+2026-06-25 12:29:34,902 - INFO - Round 0: found 3/3 files for _DetectorAtFocus-ScalarBeamProperties.csv
+2026-06-25 12:29:34,902 - INFO - Round 0: final check found 0 missing simulations
+2026-06-25 12:29:34,926 - INFO - Executor shutdown completed.
+2026-06-25 12:29:34,927 - INFO - Simulation completed successfully.
+2026-06-25 12:29:34,928 - INFO - Create RAY-UI recap files
+2026-06-25 12:29:35,090 - INFO - End of the Simulations
+2026-06-25 12:32:28,611 - INFO - Simulation started, using 12 workers
+2026-06-25 12:32:28,611 - INFO - Rough ETA seed from numberRays (fixed): first round 15s, total 1s
+2026-06-25 12:32:28,614 - INFO - Start round 0
+2026-06-25 12:32:28,614 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0
+2026-06-25 12:32:28,614 - INFO - Round 0: found 3/3 files for _Dipole-ScalarBeamProperties.csv
+2026-06-25 12:32:28,614 - INFO - Round 0: found 3/3 files for _DetectorAtFocus-ScalarBeamProperties.csv
+2026-06-25 12:32:28,616 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/0_Flux.rml
+2026-06-25 12:32:28,618 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/1_Flux.rml
+2026-06-25 12:32:28,620 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/2_Flux.rml
+2026-06-25 12:32:28,690 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 12:32:41,525 - INFO - Completed: 1, remaining: 2, /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/2_Flux.rml
+2026-06-25 12:32:43,486 - INFO - Completed: 2, remaining: 1, /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/0_Flux.rml
+2026-06-25 12:32:45,563 - INFO - Completed: 3, remaining: 0, /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/1_Flux.rml
+2026-06-25 12:32:45,564 - INFO - Batch Completed
+2026-06-25 12:32:45,564 - INFO - Waiting For batch, 60 simulations to go
+2026-06-25 12:32:45,564 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 12:32:45,564 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 12:32:45,564 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0
+2026-06-25 12:32:45,565 - INFO - Round 0: found 3/3 files for _Dipole-ScalarBeamProperties.csv
+2026-06-25 12:32:45,565 - INFO - Round 0: found 3/3 files for _DetectorAtFocus-ScalarBeamProperties.csv
+2026-06-25 12:32:45,565 - INFO - Round 0: final check found 0 missing simulations
+2026-06-25 12:32:45,586 - INFO - Executor shutdown completed.
+2026-06-25 12:32:45,587 - INFO - Simulation completed successfully.
+2026-06-25 12:32:45,588 - INFO - Create RAY-UI recap files
+2026-06-25 12:32:45,695 - INFO - End of the Simulations
+2026-06-25 12:55:17,816 - INFO - Simulation started, using 10 workers
+2026-06-25 12:55:17,816 - INFO - Rough ETA seed from numberRays (fixed): first round 15s, total 2s
+2026-06-25 12:55:17,820 - INFO - Start round 0
+2026-06-25 12:55:17,821 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0
+2026-06-25 12:55:17,821 - INFO - Round 0: found 3/3 files for _Dipole-ScalarBeamProperties.csv
+2026-06-25 12:55:17,821 - INFO - Round 0: found 3/3 files for _DetectorAtFocus-ScalarBeamProperties.csv
+2026-06-25 12:55:17,826 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/0_Flux.rml
+2026-06-25 12:55:17,830 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/1_Flux.rml
+2026-06-25 12:55:17,834 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/2_Flux.rml
+2026-06-25 12:55:17,907 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 12:55:28,858 - INFO - Completed: 1, remaining: 2, /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/2_Flux.rml
+2026-06-25 12:55:29,078 - INFO - Completed: 2, remaining: 1, /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/0_Flux.rml
+2026-06-25 12:55:31,266 - INFO - Completed: 3, remaining: 0, /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/1_Flux.rml
+2026-06-25 12:55:31,266 - INFO - Batch Completed
+2026-06-25 12:55:31,266 - INFO - Waiting For batch, 50 simulations to go
+2026-06-25 12:55:31,267 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 12:55:31,267 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 12:55:31,267 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0
+2026-06-25 12:55:31,267 - INFO - Round 0: found 3/3 files for _Dipole-ScalarBeamProperties.csv
+2026-06-25 12:55:31,267 - INFO - Round 0: found 3/3 files for _DetectorAtFocus-ScalarBeamProperties.csv
+2026-06-25 12:55:31,267 - INFO - Round 0: final check found 0 missing simulations
+2026-06-25 12:55:31,285 - INFO - Executor shutdown completed.
+2026-06-25 12:55:31,286 - INFO - Simulation completed successfully.
+2026-06-25 12:55:31,287 - INFO - Create RAY-UI recap files
+2026-06-25 12:55:31,378 - INFO - End of the Simulations
+2026-06-25 12:59:06,683 - INFO - Simulation started, using 10 workers
+2026-06-25 12:59:06,683 - INFO - Rough ETA seed from numberRays (fixed): first round 15s, total 2s
+2026-06-25 12:59:06,685 - INFO - Start round 0
+2026-06-25 12:59:06,686 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0
+2026-06-25 12:59:06,686 - INFO - Round 0: found 3/3 files for _Dipole-ScalarBeamProperties.csv
+2026-06-25 12:59:06,686 - INFO - Round 0: found 3/3 files for _DetectorAtFocus-ScalarBeamProperties.csv
+2026-06-25 12:59:06,689 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/0_Flux.rml
+2026-06-25 12:59:06,691 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/1_Flux.rml
+2026-06-25 12:59:06,694 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/2_Flux.rml
+2026-06-25 12:59:06,763 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 12:59:19,127 - INFO - Completed: 1, remaining: 2, /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/0_Flux.rml
+2026-06-25 12:59:19,238 - INFO - Completed: 2, remaining: 1, /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/2_Flux.rml
+2026-06-25 12:59:23,513 - INFO - Completed: 3, remaining: 0, /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0/1_Flux.rml
+2026-06-25 12:59:23,513 - INFO - Batch Completed
+2026-06-25 12:59:23,513 - INFO - Waiting For batch, 50 simulations to go
+2026-06-25 12:59:23,513 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 12:59:23,514 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 12:59:23,514 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/10_recipee_Flux/RAYPy_Simulation_Flux/round_0
+2026-06-25 12:59:23,514 - INFO - Round 0: found 3/3 files for _Dipole-ScalarBeamProperties.csv
+2026-06-25 12:59:23,514 - INFO - Round 0: found 3/3 files for _DetectorAtFocus-ScalarBeamProperties.csv
+2026-06-25 12:59:23,514 - INFO - Round 0: final check found 0 missing simulations
+2026-06-25 12:59:23,527 - INFO - Executor shutdown completed.
+2026-06-25 12:59:23,528 - INFO - Simulation completed successfully.
+2026-06-25 12:59:23,529 - INFO - Create RAY-UI recap files
+2026-06-25 12:59:23,645 - INFO - End of the Simulations
