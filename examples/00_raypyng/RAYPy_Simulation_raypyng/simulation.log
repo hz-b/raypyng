@@ -1,0 +1,244 @@
+2026-06-24 15:29:59,402 - INFO - Simulation started, using 10 workers
+2026-06-24 15:29:59,426 - INFO - Start round 0
+2026-06-24 15:29:59,435 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0
+2026-06-24 15:29:59,435 - INFO - Round 0: found 0/30 files for _Dipole_analyzed_rays_RawRaysOutgoing.dat
+2026-06-24 15:29:59,435 - INFO - Round 0: found 0/30 files for _DetectorAtFocus_analyzed_rays_RawRaysOutgoing.dat
+2026-06-24 15:29:59,464 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/0_raypyng.rml
+2026-06-24 15:29:59,496 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/1_raypyng.rml
+2026-06-24 15:29:59,523 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/2_raypyng.rml
+2026-06-24 15:29:59,547 - INFO - Prepared sim number: 3: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/3_raypyng.rml
+2026-06-24 15:29:59,569 - INFO - Prepared sim number: 4: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/4_raypyng.rml
+2026-06-24 15:29:59,590 - INFO - Prepared sim number: 5: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/5_raypyng.rml
+2026-06-24 15:29:59,605 - INFO - Prepared sim number: 6: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/6_raypyng.rml
+2026-06-24 15:29:59,629 - INFO - Prepared sim number: 7: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/7_raypyng.rml
+2026-06-24 15:29:59,649 - INFO - Prepared sim number: 8: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/8_raypyng.rml
+2026-06-24 15:29:59,669 - INFO - Prepared sim number: 9: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/9_raypyng.rml
+2026-06-24 15:29:59,690 - INFO - Prepared sim number: 10: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/10_raypyng.rml
+2026-06-24 15:29:59,712 - INFO - Prepared sim number: 11: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/11_raypyng.rml
+2026-06-24 15:29:59,730 - INFO - Prepared sim number: 12: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/12_raypyng.rml
+2026-06-24 15:29:59,754 - INFO - Prepared sim number: 13: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/13_raypyng.rml
+2026-06-24 15:29:59,778 - INFO - Prepared sim number: 14: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/14_raypyng.rml
+2026-06-24 15:29:59,802 - INFO - Prepared sim number: 15: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/15_raypyng.rml
+2026-06-24 15:29:59,822 - INFO - Prepared sim number: 16: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/16_raypyng.rml
+2026-06-24 15:29:59,842 - INFO - Prepared sim number: 17: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/17_raypyng.rml
+2026-06-24 15:29:59,865 - INFO - Prepared sim number: 18: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/18_raypyng.rml
+2026-06-24 15:29:59,891 - INFO - Prepared sim number: 19: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/19_raypyng.rml
+2026-06-24 15:29:59,909 - INFO - Prepared sim number: 20: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/20_raypyng.rml
+2026-06-24 15:29:59,933 - INFO - Prepared sim number: 21: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/21_raypyng.rml
+2026-06-24 15:29:59,956 - INFO - Prepared sim number: 22: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/22_raypyng.rml
+2026-06-24 15:29:59,981 - INFO - Prepared sim number: 23: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/23_raypyng.rml
+2026-06-24 15:29:59,998 - INFO - Prepared sim number: 24: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/24_raypyng.rml
+2026-06-24 15:30:00,023 - INFO - Prepared sim number: 25: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/25_raypyng.rml
+2026-06-24 15:30:00,052 - INFO - Prepared sim number: 26: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/26_raypyng.rml
+2026-06-24 15:30:00,071 - INFO - Prepared sim number: 27: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/27_raypyng.rml
+2026-06-24 15:30:00,080 - INFO - Prepared sim number: 28: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/28_raypyng.rml
+2026-06-24 15:30:00,089 - INFO - Prepared sim number: 29: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/29_raypyng.rml
+2026-06-24 15:30:00,440 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-24 15:30:20,452 - WARNING - Batch stalled: 30 futures idle for 20s (limit 20s)
+2026-06-24 15:30:20,452 - INFO - Marking executor as having 30 unfinished futures
+2026-06-24 15:30:30,494 - WARNING - Giving up: 30 sims idle for 10s
+2026-06-24 15:30:30,495 - INFO - Post-timeout: 0/30 sims appeared
+2026-06-24 15:30:30,495 - INFO - Updating progress bar
+2026-06-24 15:30:30,556 - INFO - Batch Completed
+2026-06-24 15:30:30,556 - INFO - Waiting For batch, 50 simulations to go
+2026-06-24 15:30:30,557 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-24 15:30:30,557 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-24 15:30:30,557 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0
+2026-06-24 15:30:30,561 - INFO - Round 0: found 0/30 files for _Dipole_analyzed_rays_RawRaysOutgoing.dat
+2026-06-24 15:30:30,562 - INFO - Round 0: found 0/30 files for _DetectorAtFocus_analyzed_rays_RawRaysOutgoing.dat
+2026-06-24 15:30:30,562 - INFO - Round 0: final check found 30 missing simulations
+2026-06-24 15:30:30,562 - INFO - Missing simulation: round 0, number 0
+2026-06-24 15:30:30,562 - INFO - Missing simulation: round 0, number 1
+2026-06-24 15:30:30,562 - INFO - Missing simulation: round 0, number 2
+2026-06-24 15:30:30,562 - INFO - Missing simulation: round 0, number 3
+2026-06-24 15:30:30,562 - INFO - Missing simulation: round 0, number 4
+2026-06-24 15:30:30,562 - INFO - Missing simulation: round 0, number 5
+2026-06-24 15:30:30,562 - INFO - Missing simulation: round 0, number 6
+2026-06-24 15:30:30,562 - INFO - Missing simulation: round 0, number 7
+2026-06-24 15:30:30,562 - INFO - Missing simulation: round 0, number 8
+2026-06-24 15:30:30,562 - INFO - Missing simulation: round 0, number 9
+2026-06-24 15:30:30,562 - INFO - Missing simulation: round 0, number 10
+2026-06-24 15:30:30,562 - INFO - Missing simulation: round 0, number 11
+2026-06-24 15:30:30,562 - INFO - Missing simulation: round 0, number 12
+2026-06-24 15:30:30,562 - INFO - Missing simulation: round 0, number 13
+2026-06-24 15:30:30,562 - INFO - Missing simulation: round 0, number 14
+2026-06-24 15:30:30,562 - INFO - Missing simulation: round 0, number 15
+2026-06-24 15:30:30,563 - INFO - Missing simulation: round 0, number 16
+2026-06-24 15:30:30,563 - INFO - Missing simulation: round 0, number 17
+2026-06-24 15:30:30,563 - INFO - Missing simulation: round 0, number 18
+2026-06-24 15:30:30,563 - INFO - Missing simulation: round 0, number 19
+2026-06-24 15:30:30,563 - INFO - Missing simulation: round 0, number 20
+2026-06-24 15:30:30,563 - INFO - Missing simulation: round 0, number 21
+2026-06-24 15:30:30,563 - INFO - Missing simulation: round 0, number 22
+2026-06-24 15:30:30,563 - INFO - Missing simulation: round 0, number 23
+2026-06-24 15:30:30,573 - INFO - Missing simulation: round 0, number 24
+2026-06-24 15:30:30,573 - INFO - Missing simulation: round 0, number 25
+2026-06-24 15:30:30,573 - INFO - Missing simulation: round 0, number 26
+2026-06-24 15:30:30,573 - INFO - Missing simulation: round 0, number 27
+2026-06-24 15:30:30,573 - INFO - Missing simulation: round 0, number 28
+2026-06-24 15:30:30,574 - INFO - Missing simulation: round 0, number 29
+2026-06-24 15:30:30,574 - INFO - Retrying 30 missing simulation(s)
+2026-06-24 15:30:30,612 - INFO - Executor shutdown completed without waiting.
+2026-06-24 15:30:32,092 - INFO - Start round 0
+2026-06-24 15:30:32,099 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0
+2026-06-24 15:30:32,109 - INFO - Round 0: found 0/30 files for _Dipole_analyzed_rays_RawRaysOutgoing.dat
+2026-06-24 15:30:32,110 - INFO - Round 0: found 0/30 files for _DetectorAtFocus_analyzed_rays_RawRaysOutgoing.dat
+2026-06-24 15:30:32,132 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/0_raypyng.rml
+2026-06-24 15:30:32,169 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/1_raypyng.rml
+2026-06-24 15:30:32,206 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/2_raypyng.rml
+2026-06-24 15:30:32,226 - INFO - Prepared sim number: 3: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/3_raypyng.rml
+2026-06-24 15:30:32,260 - INFO - Prepared sim number: 4: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/4_raypyng.rml
+2026-06-24 15:30:32,291 - INFO - Prepared sim number: 5: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/5_raypyng.rml
+2026-06-24 15:30:32,313 - INFO - Prepared sim number: 6: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/6_raypyng.rml
+2026-06-24 15:30:32,349 - INFO - Prepared sim number: 7: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/7_raypyng.rml
+2026-06-24 15:30:32,381 - INFO - Prepared sim number: 8: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/8_raypyng.rml
+2026-06-24 15:30:32,411 - INFO - Prepared sim number: 9: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/9_raypyng.rml
+2026-06-24 15:30:32,452 - INFO - Prepared sim number: 10: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/10_raypyng.rml
+2026-06-24 15:30:32,479 - INFO - Prepared sim number: 11: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/11_raypyng.rml
+2026-06-24 15:30:32,498 - INFO - Prepared sim number: 12: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/12_raypyng.rml
+2026-06-24 15:30:32,526 - INFO - Prepared sim number: 13: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/13_raypyng.rml
+2026-06-24 15:30:32,557 - INFO - Prepared sim number: 14: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/14_raypyng.rml
+2026-06-24 15:30:32,581 - INFO - Prepared sim number: 15: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/15_raypyng.rml
+2026-06-24 15:30:32,612 - INFO - Prepared sim number: 16: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/16_raypyng.rml
+2026-06-24 15:30:32,650 - INFO - Prepared sim number: 17: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/17_raypyng.rml
+2026-06-24 15:30:32,671 - INFO - Prepared sim number: 18: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/18_raypyng.rml
+2026-06-24 15:30:32,708 - INFO - Prepared sim number: 19: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/19_raypyng.rml
+2026-06-24 15:30:32,725 - INFO - Prepared sim number: 20: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/20_raypyng.rml
+2026-06-24 15:30:32,755 - INFO - Prepared sim number: 21: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/21_raypyng.rml
+2026-06-24 15:30:32,787 - INFO - Prepared sim number: 22: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/22_raypyng.rml
+2026-06-24 15:30:32,815 - INFO - Prepared sim number: 23: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/23_raypyng.rml
+2026-06-24 15:30:32,848 - INFO - Prepared sim number: 24: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/24_raypyng.rml
+2026-06-24 15:30:32,886 - INFO - Prepared sim number: 25: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/25_raypyng.rml
+2026-06-24 15:30:32,909 - INFO - Prepared sim number: 26: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/26_raypyng.rml
+2026-06-24 15:30:32,944 - INFO - Prepared sim number: 27: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/27_raypyng.rml
+2026-06-24 15:30:32,974 - INFO - Prepared sim number: 28: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/28_raypyng.rml
+2026-06-24 15:30:32,987 - INFO - Prepared sim number: 29: /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0/29_raypyng.rml
+2026-06-24 15:30:33,533 - INFO - Waiting for batch number: 1, initial max-idle: 20.0s
+2026-06-24 15:30:53,542 - WARNING - Batch stalled: 30 futures idle for 20s (limit 20s)
+2026-06-24 15:30:53,543 - INFO - Marking executor as having 30 unfinished futures
+2026-06-24 15:31:03,579 - WARNING - Giving up: 30 sims idle for 10s
+2026-06-24 15:31:03,580 - INFO - Post-timeout: 0/30 sims appeared
+2026-06-24 15:31:03,580 - INFO - Updating progress bar
+2026-06-24 15:31:03,628 - INFO - Batch Completed
+2026-06-24 15:31:03,632 - INFO - Waiting For batch, 50 simulations to go
+2026-06-24 15:31:03,632 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-24 15:31:03,633 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-24 15:31:03,633 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/raypyng/RAYPy_Simulation_raypyng/round_0
+2026-06-24 15:31:03,637 - INFO - Round 0: found 0/30 files for _Dipole_analyzed_rays_RawRaysOutgoing.dat
+2026-06-24 15:31:03,648 - INFO - Round 0: found 0/30 files for _DetectorAtFocus_analyzed_rays_RawRaysOutgoing.dat
+2026-06-24 15:31:03,648 - INFO - Round 0: final check found 30 missing simulations
+2026-06-24 15:31:03,648 - INFO - Missing simulation: round 0, number 0
+2026-06-24 15:31:03,648 - INFO - Missing simulation: round 0, number 1
+2026-06-24 15:31:03,648 - INFO - Missing simulation: round 0, number 2
+2026-06-24 15:31:03,648 - INFO - Missing simulation: round 0, number 3
+2026-06-24 15:31:03,648 - INFO - Missing simulation: round 0, number 4
+2026-06-24 15:31:03,648 - INFO - Missing simulation: round 0, number 5
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 6
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 7
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 8
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 9
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 10
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 11
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 12
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 13
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 14
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 15
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 16
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 17
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 18
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 19
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 20
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 21
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 22
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 23
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 24
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 25
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 26
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 27
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 28
+2026-06-24 15:31:03,649 - INFO - Missing simulation: round 0, number 29
+2026-06-24 15:31:03,650 - WARNING - 30 simulation(s) still missing after retry
+2026-06-24 15:31:03,656 - INFO - Executor shutdown completed without waiting.
+2026-06-24 15:31:05,469 - INFO - Simulation completed successfully.
+2026-06-24 15:31:05,470 - INFO - Starting cleanup
+2026-06-25 12:56:08,340 - INFO - Simulation started, using 10 workers
+2026-06-25 12:56:08,340 - INFO - Rough ETA seed from numberRays (scanned): first round 02min:30s, total 15s
+2026-06-25 12:56:08,343 - INFO - Start round 0
+2026-06-25 12:56:08,343 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0
+2026-06-25 12:56:08,343 - INFO - Round 0: found 0/30 files for _Dipole_analyzed_rays_RawRaysOutgoing.dat
+2026-06-25 12:56:08,343 - INFO - Round 0: found 0/30 files for _DetectorAtFocus_analyzed_rays_RawRaysOutgoing.dat
+2026-06-25 12:56:08,346 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/0_raypyng.rml
+2026-06-25 12:56:08,349 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/1_raypyng.rml
+2026-06-25 12:56:08,351 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/2_raypyng.rml
+2026-06-25 12:56:08,353 - INFO - Prepared sim number: 3: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/3_raypyng.rml
+2026-06-25 12:56:08,356 - INFO - Prepared sim number: 4: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/4_raypyng.rml
+2026-06-25 12:56:08,358 - INFO - Prepared sim number: 5: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/5_raypyng.rml
+2026-06-25 12:56:08,361 - INFO - Prepared sim number: 6: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/6_raypyng.rml
+2026-06-25 12:56:08,363 - INFO - Prepared sim number: 7: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/7_raypyng.rml
+2026-06-25 12:56:08,366 - INFO - Prepared sim number: 8: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/8_raypyng.rml
+2026-06-25 12:56:08,369 - INFO - Prepared sim number: 9: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/9_raypyng.rml
+2026-06-25 12:56:08,372 - INFO - Prepared sim number: 10: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/10_raypyng.rml
+2026-06-25 12:56:08,374 - INFO - Prepared sim number: 11: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/11_raypyng.rml
+2026-06-25 12:56:08,377 - INFO - Prepared sim number: 12: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/12_raypyng.rml
+2026-06-25 12:56:08,380 - INFO - Prepared sim number: 13: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/13_raypyng.rml
+2026-06-25 12:56:08,382 - INFO - Prepared sim number: 14: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/14_raypyng.rml
+2026-06-25 12:56:08,385 - INFO - Prepared sim number: 15: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/15_raypyng.rml
+2026-06-25 12:56:08,388 - INFO - Prepared sim number: 16: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/16_raypyng.rml
+2026-06-25 12:56:08,391 - INFO - Prepared sim number: 17: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/17_raypyng.rml
+2026-06-25 12:56:08,394 - INFO - Prepared sim number: 18: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/18_raypyng.rml
+2026-06-25 12:56:08,396 - INFO - Prepared sim number: 19: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/19_raypyng.rml
+2026-06-25 12:56:08,399 - INFO - Prepared sim number: 20: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/20_raypyng.rml
+2026-06-25 12:56:08,401 - INFO - Prepared sim number: 21: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/21_raypyng.rml
+2026-06-25 12:56:08,403 - INFO - Prepared sim number: 22: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/22_raypyng.rml
+2026-06-25 12:56:08,406 - INFO - Prepared sim number: 23: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/23_raypyng.rml
+2026-06-25 12:56:08,408 - INFO - Prepared sim number: 24: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/24_raypyng.rml
+2026-06-25 12:56:08,410 - INFO - Prepared sim number: 25: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/25_raypyng.rml
+2026-06-25 12:56:08,413 - INFO - Prepared sim number: 26: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/26_raypyng.rml
+2026-06-25 12:56:08,415 - INFO - Prepared sim number: 27: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/27_raypyng.rml
+2026-06-25 12:56:08,417 - INFO - Prepared sim number: 28: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/28_raypyng.rml
+2026-06-25 12:56:08,419 - INFO - Prepared sim number: 29: /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/29_raypyng.rml
+2026-06-25 12:56:08,492 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 12:56:14,053 - INFO - Completed: 1, remaining: 29, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/8_raypyng.rml
+2026-06-25 12:56:16,556 - INFO - Completed: 2, remaining: 28, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/1_raypyng.rml
+2026-06-25 12:56:17,719 - INFO - Completed: 3, remaining: 27, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/6_raypyng.rml
+2026-06-25 12:56:17,911 - INFO - Completed: 4, remaining: 26, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/7_raypyng.rml
+2026-06-25 12:56:22,874 - INFO - Completed: 5, remaining: 25, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/4_raypyng.rml
+2026-06-25 12:56:22,981 - INFO - Completed: 6, remaining: 24, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/9_raypyng.rml
+2026-06-25 12:56:23,560 - INFO - Completed: 7, remaining: 23, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/0_raypyng.rml
+2026-06-25 12:56:23,623 - INFO - Completed: 8, remaining: 22, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/3_raypyng.rml
+2026-06-25 12:56:23,758 - INFO - Completed: 9, remaining: 21, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/5_raypyng.rml
+2026-06-25 12:56:25,468 - INFO - Completed: 10, remaining: 20, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/2_raypyng.rml
+2026-06-25 12:56:27,393 - INFO - Completed: 11, remaining: 19, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/10_raypyng.rml
+2026-06-25 12:56:30,141 - INFO - Completed: 12, remaining: 18, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/12_raypyng.rml
+2026-06-25 12:56:30,638 - INFO - Completed: 13, remaining: 17, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/11_raypyng.rml
+2026-06-25 12:56:31,782 - INFO - Completed: 14, remaining: 16, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/13_raypyng.rml
+2026-06-25 12:56:34,351 - INFO - Completed: 15, remaining: 15, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/16_raypyng.rml
+2026-06-25 12:56:36,452 - INFO - Completed: 16, remaining: 14, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/18_raypyng.rml
+2026-06-25 12:56:37,309 - INFO - Completed: 17, remaining: 13, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/15_raypyng.rml
+2026-06-25 12:56:38,097 - INFO - Completed: 18, remaining: 12, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/14_raypyng.rml
+2026-06-25 12:56:38,377 - INFO - Completed: 19, remaining: 11, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/17_raypyng.rml
+2026-06-25 12:56:39,958 - INFO - Completed: 20, remaining: 10, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/19_raypyng.rml
+2026-06-25 12:56:42,144 - INFO - Completed: 21, remaining: 9, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/20_raypyng.rml
+2026-06-25 12:56:47,029 - INFO - Completed: 22, remaining: 8, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/21_raypyng.rml
+2026-06-25 12:56:47,774 - INFO - Completed: 23, remaining: 7, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/22_raypyng.rml
+2026-06-25 12:56:47,851 - INFO - Completed: 24, remaining: 6, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/23_raypyng.rml
+2026-06-25 12:56:47,927 - INFO - Completed: 25, remaining: 5, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/24_raypyng.rml
+2026-06-25 12:56:51,684 - INFO - Completed: 26, remaining: 4, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/27_raypyng.rml
+2026-06-25 12:56:52,197 - INFO - Completed: 27, remaining: 3, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/26_raypyng.rml
+2026-06-25 12:56:52,532 - INFO - Completed: 28, remaining: 2, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/28_raypyng.rml
+2026-06-25 12:56:52,989 - INFO - Completed: 29, remaining: 1, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/29_raypyng.rml
+2026-06-25 12:56:53,711 - INFO - Completed: 30, remaining: 0, /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0/25_raypyng.rml
+2026-06-25 12:56:53,711 - INFO - Batch Completed
+2026-06-25 12:56:53,711 - INFO - Waiting For batch, 50 simulations to go
+2026-06-25 12:56:53,712 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 12:56:53,712 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 12:56:53,712 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/00_raypyng/RAYPy_Simulation_raypyng/round_0
+2026-06-25 12:56:53,712 - INFO - Round 0: found 30/30 files for _Dipole_analyzed_rays_RawRaysOutgoing.dat
+2026-06-25 12:56:53,712 - INFO - Round 0: found 30/30 files for _DetectorAtFocus_analyzed_rays_RawRaysOutgoing.dat
+2026-06-25 12:56:53,712 - INFO - Round 0: final check found 0 missing simulations
+2026-06-25 12:56:53,754 - INFO - Executor shutdown completed.
+2026-06-25 12:56:53,755 - INFO - Simulation completed successfully.
+2026-06-25 12:56:53,756 - INFO - Starting cleanup
+2026-06-25 12:56:53,966 - INFO - Done with the cleanup
+2026-06-25 12:56:53,967 - INFO - Create Pandas Recap Files
+2026-06-25 12:56:53,978 - INFO - End of the Simulations

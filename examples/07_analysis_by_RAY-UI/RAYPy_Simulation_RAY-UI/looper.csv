@@ -1,0 +1,5 @@
+Simulation Number,Dipole.photonEnergy,ExitSlit.totalHeight,PG.cFactor,Dipole.numberRays
+0,100,0.02,2.25,200000.0
+1,600,0.02,2.25,200000.0
+2,1100,0.02,2.25,200000.0
+3,1600,0.02,2.25,200000.0

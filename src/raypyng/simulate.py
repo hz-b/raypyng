@@ -12,6 +12,7 @@ import time
 import traceback
 from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
 
+import numpy as np
 import pandas as pd
 import psutil
 from tqdm import tqdm
@@ -35,6 +36,16 @@ def _write_rawrays_csv(raw_array, element_name: str, csv_path: str) -> None:
     with open(csv_path, "w") as f:
         f.write("sep=\t\n")
         df.to_csv(f, sep="\t", index=False)
+
+
+_ETA_NRAYS_CALIBRATION_POINTS = (
+    (1.0e4, 2.6),
+    (5.0e4, 2.8),
+    (1.0e5, 3.9),
+    (5.0e5, 16.5),
+)
+_ETA_SAFETY_FACTOR = 4.0
+_ETA_MIN_SECONDS = 5.0
 
 
 class _ReadOnlyList(list):
@@ -1106,11 +1117,15 @@ class Simulate:
 
     def _format_eta(self, seconds):
         """Format seconds into days, hours, and minutes."""
+        if seconds < 60:
+            return f"{max(1, int(round(seconds)))}s"
         days, seconds = divmod(int(seconds), 86400)
         hours, seconds = divmod(int(seconds), 3600)
         minutes, seconds = divmod(int(seconds), 60)
         if days > 0:
             return f"{days} day(s), {int(hours):02d}h:{int(minutes):02d}min"
+        if hours == 0:
+            return f"{int(minutes):02d}min:{int(seconds):02d}s"
         else:
             return f"{int(hours):02d}h:{int(minutes):02d}min"
 
@@ -1131,6 +1146,15 @@ class Simulate:
             ["Rounds of Simulations", self._repeat],
             ["Total Number of Simulations", total_simulations],
         ]
+        if getattr(self, "_initial_eta_seed", None):
+            data.extend(
+                [
+                    [
+                        f"Rough Total ETA ({self._workers} workers)",
+                        self._format_eta(self._initial_eta_seed["total_seconds"]),
+                    ],
+                ]
+            )
 
         # Determine column widths by the longest item in each column
         col_widths = [max(len(str(item)) for item in col) for col in zip(*data, strict=False)]
@@ -1214,6 +1238,7 @@ class Simulate:
                                                     are done.
         """
         multiprocessing = self._resolve_multiprocessing_workers(multiprocessing)
+        run_start = time.monotonic()
 
         if self.graxpy_efficiency and self._engine == "ray-ui":
             raise ValueError(
@@ -1256,11 +1281,19 @@ class Simulate:
         self.batch_size = int(self._workers) * 5
         self._prepare_simulation_environment(overwrite_rml)
         self._init_logging()
+        if getattr(self, "_initial_eta_seed", None):
+            self.logger.info(
+                "Rough ETA seed from numberRays (%s): first round %s, total %s",
+                self._initial_eta_seed["basis"],
+                self._format_eta(self._initial_eta_seed["first_round_seconds"]),
+                self._format_eta(self._initial_eta_seed["total_seconds"]),
+            )
         total_simulations = self.sp._calc_number_sim() * self.repeat
         self.simulations_checked = False
         self._executor_has_unfinished_futures = False
 
         pbar = self._initialize_progress_bar(total_simulations, description="Simulations Completed")
+        self._seed_progress_bar_eta(pbar)
         try:
             self._execute_simulations(multiprocessing, force, total_simulations, pbar)
             self.logger.info("Simulation completed successfully.")
@@ -1283,6 +1316,9 @@ class Simulate:
                 self.logger.info("Create Pandas Recap Files")
                 self._create_results_dataframe()
             self._write_analysis_metadata_file()
+        elif self.analyze:
+            self.logger.info("Create RAY-UI recap files")
+            self._create_rayui_results_dataframe()
         if self.graxpy_efficiency:
             from .graxpy_efficiency import aggregate_graxpy_results
 
@@ -1290,6 +1326,10 @@ class Simulate:
             self.logger.info("graxpy efficiency aggregated to %s", out)
         if remove_round_folders:
             self._remove_round_folders()
+        total_elapsed = time.monotonic() - run_start
+        elapsed_str = self._format_eta(total_elapsed)
+        print(f"\nTotal runtime: {elapsed_str}", flush=True)
+        self.logger.info("Total runtime: %s", elapsed_str)
         self.logger.info("End of the Simulations")
         if force_exit:
             self.cleanup_child_processes()
@@ -1404,6 +1444,75 @@ class Simulate:
                 f"{formatted}"
             )
 
+    def _read_rayui_analysis_row(self, file_path):
+        """Read one tab-separated RAY-UI analysis export into a single-row DataFrame."""
+        res = pd.read_csv(file_path, sep="\t", skiprows=1)
+        res.columns = [col.replace("#", "").strip() for col in res.columns]
+        return res.loc[:, ~res.columns.str.contains("^Unnamed")]
+
+    def _aggregate_rayui_rows(self, rows):
+        """Average numeric columns across rounds and keep first non-null text values."""
+        concatenated = pd.concat(rows, ignore_index=True)
+        aggregated = {}
+
+        for column in concatenated.columns:
+            series = concatenated[column]
+            numeric = pd.to_numeric(series, errors="coerce")
+            non_null = series.dropna()
+
+            if not non_null.empty and numeric.notna().sum() == len(non_null):
+                aggregated[column] = numeric.mean()
+            else:
+                aggregated[column] = non_null.iloc[0] if not non_null.empty else np.nan
+
+        return pd.DataFrame([aggregated])
+
+    def _create_rayui_results_dataframe(self):
+        looper_path = os.path.join(self.sim_path, "looper.csv")
+        looper = pd.read_csv(looper_path)
+        missing_files = []
+
+        for export, export_type in self._iter_unique_export_pairs():
+            combined_rows = []
+
+            for sim_number in looper["Simulation Number"]:
+                round_rows = []
+                for round_n in range(self.repeat):
+                    rayui_path = os.path.join(
+                        self.sim_path,
+                        f"round_{round_n}",
+                        f"{sim_number}_{export}-{export_type}.csv",
+                    )
+                    if not os.path.exists(rayui_path):
+                        missing_files.append(rayui_path)
+                        round_rows = []
+                        break
+
+                    round_rows.append(self._read_rayui_analysis_row(rayui_path))
+
+                if not round_rows:
+                    continue
+
+                looper_row = looper.loc[looper["Simulation Number"] == sim_number].reset_index(
+                    drop=True
+                )
+                analysis_row = self._aggregate_rayui_rows(round_rows)
+                combined_rows.append(pd.concat([looper_row, analysis_row], axis=1))
+
+            if combined_rows:
+                combined = pd.concat(combined_rows, ignore_index=True)
+                combined = combined.loc[:, ~combined.columns.str.contains("^Unnamed")]
+                combined.to_csv(
+                    os.path.join(self.sim_path, f"{export}_{export_type}.csv"), index=False
+                )
+
+        if missing_files:
+            formatted = "\n".join(f"- {path}" for path in missing_files)
+            raise FileNotFoundError(
+                "Missing expected RAY-UI analysis output file(s) for configured sim.exports:\n"
+                f"{formatted}"
+            )
+
     def _unit_for_output_column(self, column_name):
         analysis_units = {
             "Simulation Number": "index",
@@ -1498,7 +1607,83 @@ class Simulate:
         self._initialize_simulation_directory()
         self._save_parameters_to_file(self.sim_path)
         self._remove_recap_files()
+        self._initial_eta_seed = self._build_initial_eta_seed()
         self._print_simulations_info()
+
+    def _find_source_with_number_rays(self):
+        for oe in self._rml.beamline.children():
+            if hasattr(oe, "numberRays"):
+                return oe
+        return None
+
+    def _estimate_seconds_from_number_rays(self, number_rays):
+        x = [point[0] for point in _ETA_NRAYS_CALIBRATION_POINTS]
+        y = [point[1] for point in _ETA_NRAYS_CALIBRATION_POINTS]
+        number_rays = float(number_rays)
+
+        if number_rays <= x[0]:
+            slope = (y[1] - y[0]) / (x[1] - x[0])
+            estimate = y[0] + (number_rays - x[0]) * slope
+        elif number_rays >= x[-1]:
+            slope = (y[-1] - y[-2]) / (x[-1] - x[-2])
+            estimate = y[-1] + (number_rays - x[-1]) * slope
+        else:
+            estimate = np.interp(number_rays, x, y)
+
+        estimate *= _ETA_SAFETY_FACTOR
+        return max(_ETA_MIN_SECONDS, float(estimate))
+
+    def _round_zero_number_rays(self):
+        if self._engine != "ray-ui" or self.sp is None:
+            return None
+
+        source = self._find_source_with_number_rays()
+        if source is None:
+            return None
+
+        try:
+            default_number_rays = float(source.numberRays.cdata)
+        except (TypeError, ValueError, AttributeError):
+            return None
+
+        source_path = source.numberRays.get_full_path()
+        values = []
+        scanned = False
+
+        for params in self.sp.simulation_parameters_generator():
+            ray_count = default_number_rays
+            for param, value in params.items():
+                if isinstance(param, ParamElement) and param.get_full_path() == source_path:
+                    ray_count = float(value)
+                    scanned = True
+                    break
+            values.append(ray_count)
+
+        return {"basis": "scanned" if scanned else "fixed", "values": values}
+
+    def _build_initial_eta_seed(self):
+        round_zero_number_rays = self._round_zero_number_rays()
+        if not round_zero_number_rays or not round_zero_number_rays["values"]:
+            return None
+
+        first_round_seconds = sum(
+            self._estimate_seconds_from_number_rays(number_rays)
+            for number_rays in round_zero_number_rays["values"]
+        )
+        total_seconds = first_round_seconds * self.repeat / max(1, self._workers)
+
+        return {
+            "basis": round_zero_number_rays["basis"],
+            "first_round_seconds": first_round_seconds,
+            "total_seconds": total_seconds,
+        }
+
+    def _seed_progress_bar_eta(self, pbar):
+        if not getattr(self, "_initial_eta_seed", None):
+            return
+
+        eta_str = self._format_eta(self._initial_eta_seed["total_seconds"])
+        pbar.set_postfix_str(f"ETA~: {eta_str}", refresh=True)
 
     def _validate_run_configuration(self):
         if self.sp is None or len(self.sp.params) == 0:
@@ -1756,8 +1941,8 @@ class Simulate:
             if pending and (time.monotonic() - last_completion) >= max_idle_secs:
                 idle = time.monotonic() - last_completion
                 self.logger.warning(
-                    f"Batch stalled: {len(pending)} futures idle for {idle:.0f}s "
-                    f"(limit {max_idle_secs:.0f}s)"
+                    f"No batch completion reported for {idle:.0f}s; "
+                    f"{len(pending)} future(s) still pending (threshold {max_idle_secs:.0f}s)"
                 )
                 timed_out_futures = list(pending)
                 pending = set()
@@ -1787,8 +1972,8 @@ class Simulate:
             if missing_sims:
                 idle_threshold = max(10.0, max_idle_secs / 4)
                 print(
-                    f"\nBatch stalled — {n_missing} sim(s) still running, "
-                    f"waiting (idle limit {idle_threshold:.0f}s)...",
+                    f"\nStill waiting for {n_missing} sim(s) to finish. "
+                    "This can be normal for longer runs; checking the output files...",
                     flush=True,
                 )
                 last_progress = time.monotonic()

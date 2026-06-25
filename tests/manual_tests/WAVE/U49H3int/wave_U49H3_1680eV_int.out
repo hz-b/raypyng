@@ -1,0 +1,1326 @@
+
+                                                   16:30:44 29.01.16
+
+
+           *********************************************
+           *          PROGRAM WAVE                     *
+           *                                           *
+           *          VERSION 3.03/01 13.11.2015       *
+           *                                           *
+           *          Michael Scheer                   *
+           *              BESSY                        *
+           *********************************************
+
+      USER COMMENT:
+
+      U49 Peter Baumgaertel                                            
+
+      CURRENT NUMBER:         393
+
+
+      USER NAMELIST:
+
+
+
+      MODE FLAGS:
+
+      IUNDULATOR,IWIGGLER:            1           0
+
+
+
+      CONTROL FLAGS:
+
+
+      IUNAME,IUSTEP,IUOUT:            0           0           0
+      IOPTIC,IGENFUN:                 0           0
+      IMAGSPLN:                   -9999
+      IEMIT,IEMIAHW:                  0           0
+      IWLSOPT,IBEAMPOL:               0           0
+      IENELOSS, IEFIELD:             -1           0
+      IPOWER,ISPEC:                   0           1
+      IVELOFIELD,ISPECMODE:           0           3
+         IWFILL0,IRFILL0:                      0           0
+         ISPECINT,IPIN:                        0           1
+         IUSEM,ISTOKES:                        0           1
+         IBRILL:                               1
+         IPINCIRC,IRPHI:                       0           0
+         IFOLD,ISIGUSR:                        0           1
+         IF1DIM,IPOLA:                         0           0
+         IWFILSP0,IWFILSPF:                    0           0
+         IRFILSP0,IRFILSTO:                    0           0
+         IWFILSTO,IWFLSTOF:                    0           0
+         ISPECANA,ISPECANAF:                   0           0
+         IAMPLI,IAMPSKIP:                      0           0
+         IWFILFL0,IWFILFLF:                    0           0
+         IWFILS,IWFILSF:                       0           0
+         IWFILSE,IWFILSEF:                     0           0
+         IWFILB,IWFILBF:                       0           0
+         IWFILBE,IWFILBEF:                     0           0
+         IWFILINT,IPINALL:                     0           0
+         IRFILOB,IFILTER:                      0           0
+         IWFILRAY,IDESYNC:                     1           0
+         IPHASE,IPHASEANA:                     0           0
+         IDOSE,IEFOLD:                         0           0
+         ISPECDIP,IBL0CUT:                     0           0
+         IEFFI,IFILMUL:                        0           0
+         IBUNCH:                               0
+      IWFILF:                         0
+
+
+      MAGNETIC FIELD FLAGS:
+
+
+
+      ICHARGE,IBMASK,JBMASK:          -1           0           0
+      IBSUPER,IBERROR:                 1           0
+      ICUTFIBO:                        1
+
+      IPERIODG,IBSYM:                 0           0
+      IBSYMY,IBSYMZ:                  0           0
+      KBEXTERN,KBFELD:                0           0
+      KHALBA,KHALBASY:                0           0
+      KUCROSS,IRFILP:                 0           0
+      KMAGSEQ,IMGSQF:                 0           0
+             KMAGCOR:                 1
+      IRFILF,IRBTAB:                  0           0
+      IRBTABZY,KELLIP:                0           1
+      KBPOLYH,KBPOLY3D:               0           0
+      KBREC,KELLANA:                  0           0
+      KBPOLYMAG,KBGENESIS:            0           0
+      KBAMWLS:                        0
+
+
+
+      HISTOGRAM FLAGS:
+
+      IHBOOK,IHINDEX:                 1           0
+
+
+      OTHER OPTIONS:
+
+
+      IWBTAB,IWFILT0:                 0           0
+      IWSECTMAGS:                     0
+      IJUST,ISNORDER:                 0           0
+      IWBMAP,IWBPOLY3D:               0           0
+      IWBPOLY2DH,IWBPHARM:            0           0
+
+
+      SR BELLIP, Parameters of elliptical undulator:
+      horizontal and vertical peak field [T]:   0.00000000       4.10455577E-02
+      number of periods, period and device length [m]:
+         84.0000000       4.94000018E-02   4.14960003    
+      shift parameter [periods], B_h/B_v:       0.00000000       0.00000000    
+      B0_eff [T], deflection parameter K:   4.10455577E-02  0.189327627    
+      1. harmonical [nm] and [eV]:   2.21403909       560.000000    
+      critical energy [eV]:   80.9414520    
+
+      longitudinal position of device center [m]:   0.0000000000000000     
+
+      scaling factor for taper:   0.0000000000000000     
+
+  
+      Subroutine photon (quantum fluctuations):
+  
+       number of sampling bins (NBING1)        1000
+       max. photon energy normalized to characteristic energy (EECMAXG1):
+          5.0000000000000000     
+  
+
+      Number of tracking steps per meter (MYINUM):         5000
+
+      Start and end of the trajectory [m](XSTART,XSTOP):
+        -2.07480001       2.07480001    
+
+      BMOVECUT:   1.00000001E-07
+
+      Initial energy [GeV] and gamma:    1.72200000       3369.8702546331497     
+      Final energy [GeV] and gamma:      1.72200000       3369.8702546331497     
+      Relative change:                   0.00000000    
+      number of photons, RMS (keV) and rel. RMS of quantum fluctuation:
+                 0   0.00000000       0.00000000    
+
+
+      B-rho [Tm], current [A]:   -5.74397326      0.100000001    
+
+      Offset for vert. and hori. magnetic field (BYGOFF, BZGOFF):
+          0.00000000       0.00000000    
+      Global scaling factor for mag. field (B0SCGLOB,A0SCGLOB):
+          1.00000000       1.00000000    
+
+      Long. shift [m] of device (X(e-) -> X(e-)+XSHIFT):    0.00000000    
+      Vert. shift [m] of device (Y(e-) -> Y(e-)+VSHIFT):    0.00000000    
+      Hori. shift [m] of device (Z(e-) -> Z(e-)+HSHIFT):    0.00000000    
+      Rotation angle [degree] of device:                    0.00000000    
+      Y(e-) -> Y(e-)*sin(XROTD) + Y(e-)*cos(XROTD)
+      Z(e-) -> Z(e-)*cos(XROTD) - Y(e-)*sin(XROTD)
+
+
+      Magnetic field [T] at starting point:
+         0.00000000       0.00000000       0.00000000    
+
+      Vector potential [T-m] at starting point:
+         0.00000000       0.00000000       0.00000000    
+
+
+      Magnetic field [T] at stopping point:
+         0.00000000       0.00000000       0.00000000    
+
+      Vector potential [T-m] at stopping point:
+         0.00000000       0.00000000       0.00000000    
+
+      Extrema of magnetic field [T] and the trajectory [m]:
+
+      BXmax,BXmin:    0.00000000       0.00000000    
+      BYmax,BYmin:    4.10422496E-02  -4.10455577E-02
+      BZmax,BZmin:    0.00000000       0.00000000    
+
+      Xmax,Xmin:    2.07480001      -2.07480001    
+      Ymax,Ymin:    0.00000000       0.00000000    
+      Zmax,Zmin:    4.41817036E-07  -4.41671915E-07
+
+
+      Extrema of magnetic field [T] and the trajectory [m] between
+      XIANF and XIEND
+
+      BXmaxAE,BXminAE:    0.00000000       0.00000000    
+      BYmaxAE,BYminAE:    4.10422496E-02  -4.10455577E-02
+      BZmaxAE,BZminAE:    0.00000000       0.00000000    
+
+      XmaxAE,XminAE:    2.07479978      -2.07480001    
+      YmaxAE,YminAE:    0.00000000       0.00000000    
+      ZmaxAE,ZminAE:    4.41817036E-07  -4.41671915E-07
+
+
+      Start values (coordinates [m] and slopes) of trajectory:
+
+      X0:   -2.0747999999999998     
+      Y0:    0.0000000000000000     
+      Z0:    0.0000000000000000     
+
+      ZP0:   0.0000000000000000     
+      YP0:   0.0000000000000000     
+
+      VX0:   299792444.80029100     
+      VY0:   0.0000000000000000     
+      VZ0:   0.0000000000000000     
+
+      Values for X=0 (coordinates [m] and slopes) of trajectory:
+
+      YCEN:    0.0000000000000000     
+      ZCEN:    4.4176136571255231E-007
+
+      YPCEN:   0.0000000000000000     
+      ZPCEN:   7.2308055719552268E-014
+
+      End values (coordinates [m] and slopes) of trajectory:
+
+      XF0:    2.0747999999999998     
+      YF0:    0.0000000000000000     
+      ZF0:    1.0569397730578295E-010
+
+
+      ZPF0:   -1.5946687912472900E-013
+      YPF0:    0.0000000000000000     
+
+      VXF0:    299792444.80029207     
+      VYF0:    0.0000000000000000     
+      VZF0:   -4.7806965557475164E-005
+
+
+      Values for X=XIANF (coordinates [m] and slopes) of trajectory:
+
+      XIANF:   -1.0000000000000000E+030
+      YIANF:   -9999.0000000000000     
+      ZIANF:   -9999.0000000000000     
+
+      YPIANF:  -9999.0000000000000     
+      ZPIANF:  -9999.0000000000000     
+
+
+
+      Values for X=XIEND (coordinates [m] and slopes) of trajectory:
+
+      XIEND:    1.0000000000000000E+030
+      YIEND:   -9999.0000000000000     
+      ZIEND:   -9999.0000000000000     
+
+      YPIEND:  -9999.0000000000000     
+      ZPIEND:  -9999.0000000000000     
+
+
+      ZF0/(XSTOP-XSTART):    2.5470883291349277E-011
+      YF0/(XSTOP-XSTART):    0.0000000000000000     
+
+      YF0-Y0:   0.0000000000000000     
+      ZF0-Z0:   1.0569397730578295E-010
+
+      YPF0-YP0:   0.0000000000000000     
+      ZPF0-ZP0:  -1.5946687912472900E-013
+
+      Straight line fit of z(x):
+      offset:  -1.9173418654871431E-009
+      slope:   2.4865824709927057E-011
+
+      Straight line fit of vz(x)/vx(x):
+      offset:   2.3507559030232603E-016
+      slope:   1.3740609492599170E-009
+
+      Straight line fit of y(x):
+      offset:   0.0000000000000000     
+      slope:   0.0000000000000000     
+
+      Straight line fit of vy(x)/vx(x):
+      offset:   0.0000000000000000     
+      slope:   0.0000000000000000     
+
+      1. magnetic integral [T-m]:    0.00000000       9.17213788E-13   0.00000000    
+      2. mag. integral [T-m**2]:    0.00000000       3.90240493E-16   0.00000000    
+
+      Integrated By**2 [T**2-m]:                      3.47468746E-03
+      Energy irradiated by the device per e- [MeV]:   1.30377821E-05
+      Rel. energy loss:                               7.57130181E-09
+      Power irradiated by the device [kWATT]:         1.30377826E-03
+
+      Length of trajectory (BINT0) [m]:
+         4.1496000032479436     
+      Integrated (YP**2+ZP**2)/2 of trajectory (WTRA2I) [m]:
+         3.2473696405754478E-009
+      corresponding phase advance [nm and eV]:
+         185.95213672299747        6.6676401007618260     
+      dE/E and corresponding dL = 2 * dE/E * L [nm]:
+         1.00000005E-03   6.49473909E-03
+      Circumference of the ring [m]:                 240.000000    
+      Rel. change of total circumference (from BINT0):         
+         1.35331009E-11
+      Rel. change of total circumference (from WTRA2I):
+         1.35307069E-11
+
+      Max. and min. deflection angle [rad]:    5.61828456E-05  -5.61828565E-05
+
+
+      SPECTRUM
+      ===========
+
+      Start and end of points [m] of integration for spectrum
+      calculations (XIANF,XIEND):  -1.00000002E+30   1.00000002E+30
+
+
+      SR WFILL0:
+
+      Parameters:
+      WGWINFC:   2646.6899088765672     
+      WBL0CUT:   0.0000000000000000     
+      WBL0HYS:   1.0000000000000000     
+
+      Pinhole of collimators:
+      (X,Y,Z), width, height:
+
+        1.0000E+01  0.0000E+00  0.0000E+00  1.0000E+03  1.0000E+03
+        1.0000E+01  0.0000E+00  0.0000E+00  1.0000E+03  1.0000E+03
+
+      Number of sources:           1
+      Begin and end of sources (x,y,z):
+
+                 1  -2.07480001       0.00000000       0.00000000    
+                 1   2.07480001       0.00000000       1.05693974E-10
+
+      Horiz., vert. slopes and mag. field
+      at begin and end of sources:
+
+                 1   0.00000000       0.00000000       0.00000000    
+                 1  -1.59466881E-13   0.00000000       4.30502856E-12
+
+
+      SR COHEREN:
+      Minimum and maximum number of phases  between
+      photons and electrons:
+         250.168304       252.762939    
+
+
+       selected observation point:
+
+          10.0000000       0.00000000       0.00000000    
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+       *** SUBROUTINE BLENDE:
+       LINES INDICATED BY * SHOW A RAW ESTIMATE OF ERRORS DUE TO
+       SPLINE FAILURE IF REL. ERROR .GT. 1E-5 (FIRST NUMBER IS SOURCE)
+
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+
+ *** WARNING IN BLENDE ***
+ SPLINE INTEGRATION FAILED, RESULTS NOT RELIABLE
+
+
+
+      Source number, mean mag. field (sign from By), abs. mean and rel. rms
+      for sources, and critical photon energy [eV] or wavelength [nm]
+      (with respect to abs. mean):
+
+           1   2.25955187E-13   2.60213818E-02  0.486472696       51.3139191    
+
+      Photon energy cut-off (SPECCUT):   0.00000000    
+
+      Max. field and photon energy cuts for source points:
+
+           1   4.10455801E-02   0.00000000    
+
+      Data-file written for program RAY
+      File: wave_ray.dat                                                                                                                    
+      (Device center is assumed at (0,0,0)
+      Photon energy:   1668.02002    
+
+
+      Results of spectrum calculations
+      ================================
+
+
+      Reflectivity coefficients (complex):
+
+       (  1.0000000000000000     ,  0.0000000000000000     )
+       (  1.0000000000000000     ,  0.0000000000000000     )
+       (  1.0000000000000000     ,  0.0000000000000000     )
+
+
+
+      Buffer size for integration (NDWSOU):       20849
+
+      Provided number of integration steps for each source
+      (controlled by NLPOI)
+      (not necessarily used)
+
+       20747
+
+      Bandwidth:   1.00000005E-03
+
+
+      Pinhole position (x,y,z) [m]:
+         10.0000000       0.00000000       0.00000000    
+
+      Numbers defining inner vert. and hori. edges (MMEDGEY,MMEDGEZ):            0           0
+      Numbers defining outerer vert. and hori. edges (MEDGEY,MEDGEZ):            1           1
+      Total number of vert. and hori. points:                    73          73
+      Number of vert. and horiz. points inside pinhole:          71          71
+
+      Vertical and horizontal grid size [m]:        2.85714286E-05   2.85714286E-05
+      Vertical and horizontal size [m x m]:         2.00000009E-03   2.00000009E-03
+      Total vert. and horiz. size [m x m]:          2.05714279E-03   2.05714279E-03
+
+      Photon energy or wavelength and flux through pinhole:
+      (for all sources and sum)
+
+      1668.02002       1.80752282E+10   1.80752282E+10
+      1668.23621       1.81074063E+10   1.81074063E+10
+      1668.45251       1.81352530E+10   1.81352530E+10
+      1668.66870       1.81586186E+10   1.81586186E+10
+      1668.88501       1.81775032E+10   1.81775032E+10
+      1669.10120       1.81920727E+10   1.81920727E+10
+      1669.31750       1.82026547E+10   1.82026547E+10
+      1669.53369       1.82097388E+10   1.82097388E+10
+      1669.75000       1.82139597E+10   1.82139597E+10
+      1669.96631       1.82160855E+10   1.82160855E+10
+      1670.18250       1.82169907E+10   1.82169907E+10
+      1670.39880       1.82176338E+10   1.82176338E+10
+      1670.61499       1.82190141E+10   1.82190141E+10
+      1670.83130       1.82221435E+10   1.82221435E+10
+      1671.04749       1.82280008E+10   1.82280008E+10
+      1671.26379       1.82374892E+10   1.82374892E+10
+      1671.47998       1.82513951E+10   1.82513951E+10
+      1671.69629       1.82703432E+10   1.82703432E+10
+      1671.91248       1.82947553E+10   1.82947553E+10
+      1672.12878       1.83248138E+10   1.83248138E+10
+      1672.34497       1.83604244E+10   1.83604244E+10
+      1672.56128       1.84012001E+10   1.84012001E+10
+      1672.77747       1.84464220E+10   1.84464220E+10
+      1672.99377       1.84950477E+10   1.84950477E+10
+      1673.20996       1.85456845E+10   1.85456845E+10
+      1673.42627       1.85966141E+10   1.85966141E+10
+      1673.64246       1.86457907E+10   1.86457907E+10
+      1673.85876       1.86908713E+10   1.86908713E+10
+      1674.07495       1.87292488E+10   1.87292488E+10
+      1674.29126       1.87580846E+10   1.87580846E+10
+      1674.50745       1.87743642E+10   1.87743642E+10
+      1674.72375       1.87749478E+10   1.87749478E+10
+      1674.93994       1.87566326E+10   1.87566326E+10
+      1675.15625       1.87162173E+10   1.87162173E+10
+      1675.37256       1.86505667E+10   1.86505667E+10
+      1675.58875       1.85566822E+10   1.85566822E+10
+      1675.80505       1.84317768E+10   1.84317768E+10
+      1676.02124       1.82733292E+10   1.82733292E+10
+      1676.23755       1.80791562E+10   1.80791562E+10
+      1676.45374       1.78474680E+10   1.78474680E+10
+      1676.67004       1.75769129E+10   1.75769129E+10
+      1676.88623       1.72666307E+10   1.72666307E+10
+      1677.10254       1.69162783E+10   1.69162783E+10
+      1677.31873       1.65260554E+10   1.65260554E+10
+      1677.53503       1.60967168E+10   1.60967168E+10
+      1677.75122       1.56295772E+10   1.56295772E+10
+      1677.96753       1.51264983E+10   1.51264983E+10
+      1678.18372       1.45898660E+10   1.45898660E+10
+      1678.40002       1.40225659E+10   1.40225659E+10
+      1678.61621       1.34279342E+10   1.34279342E+10
+      1678.83252       1.28097116E+10   1.28097116E+10
+      1679.04871       1.21719808E+10   1.21719808E+10
+      1679.26501       1.15191040E+10   1.15191040E+10
+      1679.48120       1.08556483E+10   1.08556483E+10
+      1679.69751       1.01863107E+10   1.01863107E+10
+      1679.91370       9.51584563E+09   9.51584563E+09
+      1680.13000       8.84898099E+09   8.84898099E+09
+      1680.34619       8.19034470E+09   8.19034470E+09
+      1680.56250       7.54439219E+09   7.54439219E+09
+      1680.77881       6.91533414E+09   6.91533414E+09
+      1680.99500       6.30707558E+09   6.30707558E+09
+      1681.21130       5.72315955E+09   5.72315955E+09
+      1681.42749       5.16671795E+09   5.16671795E+09
+      1681.64380       4.64043264E+09   4.64043264E+09
+      1681.85999       4.14650726E+09   4.14650726E+09
+      1682.07629       3.68664755E+09   3.68664755E+09
+      1682.29248       3.26205210E+09   3.26205210E+09
+      1682.50879       2.87341389E+09   2.87341389E+09
+      1682.72498       2.52093107E+09   2.52093107E+09
+      1682.94128       2.20432768E+09   2.20432768E+09
+      1683.15747       1.92288166E+09   1.92288166E+09
+      1683.37378       1.67546227E+09   1.67546227E+09
+      1683.58997       1.46057165E+09   1.46057165E+09
+      1683.80627       1.27639386E+09   1.27639386E+09
+      1684.02246       1.12084608E+09   1.12084608E+09
+      1684.23877       991633856.       991633856.    
+      1684.45496       886306880.       886306880.    
+      1684.67126       802314624.       802314624.    
+      1684.88745       737060928.       737060928.    
+      1685.10376       687956096.       687956096.    
+      1685.31995       652465088.       652465088.    
+
+      Estimated maximum:
+
+         1674.62231       1.87770266E+10
+
+
+      Flux density for selected point:
+
+               1668.02002       4.71892620E+15   4.71892620E+15
+               1668.23621       5.91592553E+15   5.91592553E+15
+               1668.45251       7.17571729E+15   7.17571729E+15
+               1668.66870       8.45794058E+15   8.45794058E+15
+               1668.88501       9.71931342E+15   9.71931342E+15
+               1669.10120       1.09151161E+16   1.09151161E+16
+               1669.31750       1.20008140E+16   1.20008140E+16
+               1669.53369       1.29337657E+16   1.29337657E+16
+               1669.75000       1.36749547E+16   1.36749547E+16
+               1669.96631       1.41907115E+16   1.41907115E+16
+               1670.18250       1.44543388E+16   1.44543388E+16
+               1670.39880       1.44476032E+16   1.44476032E+16
+               1670.61499       1.41620351E+16   1.41620351E+16
+               1670.83130       1.35999785E+16   1.35999785E+16
+               1671.04749       1.27753480E+16   1.27753480E+16
+               1671.26379       1.17140745E+16   1.17140745E+16
+               1671.47998       1.04541748E+16   1.04541748E+16
+               1671.69629       9.04547171E+15   9.04547171E+15
+               1671.91248       7.54892310E+15   7.54892310E+15
+               1672.12878       6.03557581E+15   6.03557581E+15
+               1672.34497       4.58517340E+15   4.58517340E+15
+               1672.56128       3.28442699E+15   3.28442699E+15
+               1672.77747       2.22499398E+15   2.22499398E+15
+               1672.99377       1.50121898E+15   1.50121898E+15
+               1673.20996       1.20768561E+15   1.20768561E+15
+               1673.42627       1.43664643E+15   1.43664643E+15
+               1673.64246       2.27539985E+15   2.27539985E+15
+               1673.85876       3.80368585E+15   3.80368585E+15
+               1674.07495       6.09117362E+15   6.09117362E+15
+               1674.29126       9.19511266E+15   9.19511266E+15
+               1674.50745       1.31582239E+16   1.31582239E+16
+               1674.72375       1.80068780E+16   1.80068780E+16
+               1674.93994       2.37496401E+16   2.37496401E+16
+               1675.15625       3.03762142E+16   3.03762142E+16
+               1675.37256       3.78568253E+16   3.78568253E+16
+               1675.58875       4.61420663E+16   4.61420663E+16
+               1675.80505       5.51632414E+16   5.51632414E+16
+               1676.02124       6.48331799E+16   6.48331799E+16
+               1676.23755       7.50475183E+16   7.50475183E+16
+               1676.45374       8.56864100E+16   8.56864100E+16
+               1676.67004       9.66166981E+16   9.66166981E+16
+               1676.88623       1.07694389E+17   1.07694389E+17
+               1677.10254       1.18767442E+17   1.18767442E+17
+               1677.31873       1.29678789E+17   1.29678789E+17
+               1677.53503       1.40269534E+17   1.40269534E+17
+               1677.75122       1.50382215E+17   1.50382215E+17
+               1677.96753       1.59864043E+17   1.59864043E+17
+               1678.18372       1.68570148E+17   1.68570148E+17
+               1678.40002       1.76366493E+17   1.76366493E+17
+               1678.61621       1.83132818E+17   1.83132818E+17
+               1678.83252       1.88764981E+17   1.88764981E+17
+               1679.04871       1.93177184E+17   1.93177184E+17
+               1679.26501       1.96303645E+17   1.96303645E+17
+               1679.48120       1.98099869E+17   1.98099869E+17
+               1679.69751       1.98543488E+17   1.98543488E+17
+               1679.91370       1.97634483E+17   1.97634483E+17
+               1680.13000       1.95395019E+17   1.95395019E+17
+               1680.34619       1.91868748E+17   1.91868748E+17
+               1680.56250       1.87119699E+17   1.87119699E+17
+               1680.77881       1.81230612E+17   1.81230612E+17
+               1680.99500       1.74301094E+17   1.74301094E+17
+               1681.21130       1.66445256E+17   1.66445256E+17
+               1681.42749       1.57789161E+17   1.57789161E+17
+               1681.64380       1.48468069E+17   1.48468069E+17
+               1681.85999       1.38623583E+17   1.38623583E+17
+               1682.07629       1.28400633E+17   1.28400633E+17
+               1682.29248       1.17944587E+17   1.17944587E+17
+               1682.50879       1.07398372E+17   1.07398372E+17
+               1682.72498       9.68997794E+16   9.68997794E+16
+               1682.94128       8.65789472E+16   8.65789472E+16
+               1683.15747       7.65561514E+16   7.65561514E+16
+               1683.37378       6.69398442E+16   6.69398442E+16
+               1683.58997       5.78250774E+16   5.78250774E+16
+               1683.80627       4.92922917E+16   4.92922917E+16
+               1684.02246       4.14064611E+16   4.14064611E+16
+               1684.23877       3.42166515E+16   3.42166515E+16
+               1684.45496       2.77559491E+16   2.77559491E+16
+               1684.67126       2.20417593E+16   2.20417593E+16
+               1684.88745       1.70764474E+16   1.70764474E+16
+               1685.10376       1.28482894E+16   1.28482894E+16
+               1685.31995       9.33269657E+15   9.33269657E+15
+
+      Estimated maximum:
+
+         1679.66028       1.98563502E+17
+
+
+      Power through pinhole [W]:
+      (for all sources and sum)
+      0.400900483      0.400900483    
+
+
+      Power density at selected point [W/m**2]:
+
+                139023.125       139023.125    
+
+
+
+
+      Photon energy or wavelength and normalized components S0, S1/S0,
+      S2/S0, S3/S0 of STOKES vector and polarization for pinhole:
+
+       1.6680E+03  1.8075E+10  9.9908E-01  3.0553E-09  9.6609E-21  9.9908E-01
+       1.6682E+03  1.8107E+10  9.9910E-01  1.2401E-09  6.4292E-21  9.9910E-01
+       1.6685E+03  1.8135E+10  9.9912E-01  1.6960E-09 -7.3822E-20  9.9912E-01
+       1.6687E+03  1.8159E+10  9.9913E-01 -2.7264E-10 -3.2055E-21  9.9913E-01
+       1.6689E+03  1.8178E+10  9.9915E-01  9.5684E-09 -3.2022E-20  9.9915E-01
+       1.6691E+03  1.8192E+10  9.9917E-01 -3.5843E-09 -9.9188E-20  9.9917E-01
+       1.6693E+03  1.8203E+10  9.9919E-01  6.5282E-09 -2.8780E-20  9.9919E-01
+       1.6695E+03  1.8210E+10  9.9920E-01  3.3734E-09 -1.2786E-20  9.9920E-01
+       1.6698E+03  1.8214E+10  9.9922E-01 -5.6186E-09 -5.7524E-20  9.9922E-01
+       1.6700E+03  1.8216E+10  9.9923E-01 -9.1629E-09 -6.0713E-20  9.9923E-01
+       1.6702E+03  1.8217E+10  9.9925E-01 -5.9050E-09 -9.9052E-20  9.9925E-01
+       1.6704E+03  1.8218E+10  9.9927E-01  7.4978E-09 -1.2781E-20  9.9927E-01
+       1.6706E+03  1.8219E+10  9.9928E-01 -1.1099E-08  2.8754E-20  9.9928E-01
+       1.6708E+03  1.8222E+10  9.9930E-01  9.7991E-09 -1.5972E-20  9.9930E-01
+       1.6710E+03  1.8228E+10  9.9931E-01  1.1173E-09  1.2773E-20  9.9931E-01
+       1.6713E+03  1.8237E+10  9.9933E-01  4.1993E-09 -8.2983E-20  9.9933E-01
+       1.6715E+03  1.8251E+10  9.9934E-01 -8.9665E-09  2.5514E-20  9.9934E-01
+       1.6717E+03  1.8270E+10  9.9936E-01 -7.7528E-09  3.1859E-21  9.9936E-01
+       1.6719E+03  1.8295E+10  9.9937E-01  2.6372E-09 -3.1817E-20  9.9937E-01
+       1.6721E+03  1.8325E+10  9.9939E-01  1.1272E-08  7.3058E-20  9.9939E-01
+       1.6723E+03  1.8360E+10  9.9940E-01  5.6124E-09  3.1703E-20  9.9940E-01
+       1.6726E+03  1.8401E+10  9.9941E-01  8.7637E-11 -1.5816E-20  9.9941E-01
+       1.6728E+03  1.8446E+10  9.9943E-01  6.5434E-09  1.8933E-20  9.9943E-01
+       1.6730E+03  1.8495E+10  9.9944E-01 -7.0234E-09 -2.8325E-20  9.9944E-01
+       1.6732E+03  1.8546E+10  9.9945E-01 -7.3722E-09 -3.1386E-21  9.9945E-01
+       1.6734E+03  1.8597E+10  9.9946E-01 -3.1067E-09  1.2520E-20  9.9946E-01
+       1.6736E+03  1.8646E+10  9.9948E-01  3.9690E-09  4.3705E-20  9.9948E-01
+       1.6739E+03  1.8691E+10  9.9949E-01 -1.8300E-08 -1.2145E-19  9.9949E-01
+       1.6741E+03  1.8729E+10  9.9950E-01 -7.3512E-09 -9.3235E-21  9.9950E-01
+       1.6743E+03  1.8758E+10  9.9950E-01  1.1532E-08 -6.2061E-20  9.9950E-01
+       1.6745E+03  1.8774E+10  9.9951E-01  2.1640E-09 -1.8292E-19  9.9951E-01
+       1.6747E+03  1.8775E+10  9.9952E-01 -8.9276E-09  4.9605E-20  9.9952E-01
+       1.6749E+03  1.8757E+10  9.9953E-01 -1.9392E-08 -1.8620E-20  9.9953E-01
+       1.6752E+03  1.8716E+10  9.9953E-01  5.6274E-09 -3.7320E-20  9.9953E-01
+       1.6754E+03  1.8651E+10  9.9954E-01  1.3392E-08 -9.3629E-21  9.9954E-01
+       1.6756E+03  1.8557E+10  9.9954E-01 -2.0654E-09  4.0778E-20  9.9954E-01
+       1.6758E+03  1.8432E+10  9.9955E-01  6.6016E-09 -2.8422E-20  9.9955E-01
+       1.6760E+03  1.8273E+10  9.9955E-01 -6.5849E-09  1.5927E-20  9.9955E-01
+       1.6762E+03  1.8079E+10  9.9955E-01  9.2552E-09  5.7953E-20  9.9955E-01
+       1.6765E+03  1.7847E+10  9.9955E-01  2.7468E-09 -8.4796E-20  9.9955E-01
+       1.6767E+03  1.7577E+10  9.9955E-01  4.3346E-09  4.9674E-20  9.9955E-01
+       1.6769E+03  1.7267E+10  9.9955E-01  3.2100E-09 -3.3711E-21  9.9955E-01
+       1.6771E+03  1.6916E+10  9.9955E-01  7.0367E-09 -2.0646E-20  9.9955E-01
+       1.6773E+03  1.6526E+10  9.9955E-01 -3.2779E-09  1.0567E-20  9.9955E-01
+       1.6775E+03  1.6097E+10  9.9954E-01  2.1865E-09 -5.7858E-20  9.9954E-01
+       1.6778E+03  1.5630E+10  9.9953E-01  4.9316E-09 -3.3518E-20  9.9953E-01
+       1.6780E+03  1.5126E+10  9.9952E-01 -7.8031E-10 -4.6177E-20  9.9952E-01
+       1.6782E+03  1.4590E+10  9.9951E-01  3.1726E-09 -5.1865E-20  9.9951E-01
+       1.6784E+03  1.4023E+10  9.9950E-01 -4.9434E-09  2.4906E-20  9.9950E-01
+       1.6786E+03  1.3428E+10  9.9948E-01 -7.4932E-09 -5.2018E-20  9.9948E-01
+       1.6788E+03  1.2810E+10  9.9946E-01 -7.6610E-09  9.9969E-20  9.9946E-01
+       1.6790E+03  1.2172E+10  9.9944E-01  5.6928E-09 -3.8257E-20  9.9944E-01
+       1.6793E+03  1.1519E+10  9.9941E-01  5.1474E-10  1.9707E-19  9.9941E-01
+       1.6795E+03  1.0856E+10  9.9938E-01  1.3624E-08 -5.3620E-20  9.9938E-01
+       1.6797E+03  1.0186E+10  9.9935E-01 -4.9861E-09  1.7143E-19  9.9935E-01
+       1.6799E+03  9.5158E+09  9.9930E-01  4.3993E-09  6.1169E-21  9.9930E-01
+       1.6801E+03  8.8490E+09  9.9925E-01  5.4555E-09  3.2889E-19  9.9925E-01
+       1.6803E+03  8.1903E+09  9.9920E-01  4.4219E-09  9.2389E-20  9.9920E-01
+       1.6806E+03  7.5444E+09  9.9913E-01  3.2434E-09  3.8577E-20  9.9913E-01
+       1.6808E+03  6.9153E+09  9.9906E-01  1.4967E-10  6.7337E-20  9.9906E-01
+       1.6810E+03  6.3071E+09  9.9897E-01  2.7762E-09  2.2149E-19  9.9897E-01
+       1.6812E+03  5.7232E+09  9.9886E-01 -7.1035E-09 -2.2375E-19  9.9886E-01
+       1.6814E+03  5.1667E+09  9.9874E-01 -1.6460E-09 -5.6329E-20  9.9874E-01
+       1.6816E+03  4.6404E+09  9.9860E-01 -4.3894E-09  2.5087E-20  9.9860E-01
+       1.6819E+03  4.1465E+09  9.9844E-01  3.9160E-09  4.9132E-19  9.9844E-01
+       1.6821E+03  3.6866E+09  9.9825E-01 -2.4662E-09  2.8420E-19  9.9825E-01
+       1.6823E+03  3.2621E+09  9.9802E-01  6.1028E-09 -5.3532E-20  9.9802E-01
+       1.6825E+03  2.8734E+09  9.9776E-01 -1.8078E-08  6.2798E-19  9.9776E-01
+       1.6827E+03  2.5209E+09  9.9746E-01  2.1487E-08 -2.3090E-20  9.9746E-01
+       1.6829E+03  2.2043E+09  9.9710E-01  9.8465E-10  5.2812E-20  9.9710E-01
+       1.6832E+03  1.9229E+09  9.9669E-01  2.0029E-08 -1.4227E-18  9.9669E-01
+       1.6834E+03  1.6755E+09  9.9621E-01  1.1141E-08 -5.2112E-19  9.9621E-01
+       1.6836E+03  1.4606E+09  9.9567E-01 -5.5041E-10  7.9705E-20  9.9567E-01
+       1.6838E+03  1.2764E+09  9.9507E-01 -2.3192E-09  0.0000E+00  9.9507E-01
+       1.6840E+03  1.1208E+09  9.9441E-01  2.3483E-10 -5.7125E-19  9.9441E-01
+       1.6842E+03  9.9163E+08  9.9371E-01  8.9515E-09  9.3918E-19  9.9371E-01
+       1.6845E+03  8.8631E+08  9.9300E-01 -5.8505E-09 -1.0508E-18  9.9300E-01
+       1.6847E+03  8.0231E+08  9.9230E-01  3.9877E-09  5.0785E-19  9.9230E-01
+       1.6849E+03  7.3706E+08  9.9165E-01  3.8827E-09 -3.9486E-19  9.9165E-01
+       1.6851E+03  6.8796E+08  9.9109E-01 -2.4889E-09 -2.7921E-18  9.9109E-01
+       1.6853E+03  6.5247E+08  9.9064E-01 -3.5485E-09  0.0000E+00  9.9064E-01
+
+
+      Photon energy [eV] or wavelength [nm] for selected point
+      of pinhole, S0, S1/S0, S2/S0, S3/S0, P of
+      STOKES vector per unit area [m**2]:
+
+
+           Observation point (x,y,z) [m]:
+              10.0000000       0.00000000       0.00000000    
+
+       1.6680E+03  4.7189E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6682E+03  5.9159E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6685E+03  7.1757E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6687E+03  8.4579E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6689E+03  9.7193E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6691E+03  1.0915E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6693E+03  1.2001E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6695E+03  1.2934E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6698E+03  1.3675E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6700E+03  1.4191E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6702E+03  1.4454E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6704E+03  1.4448E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6706E+03  1.4162E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6708E+03  1.3600E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6710E+03  1.2775E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6713E+03  1.1714E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6715E+03  1.0454E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6717E+03  9.0455E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6719E+03  7.5489E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6721E+03  6.0356E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6723E+03  4.5852E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6726E+03  3.2844E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6728E+03  2.2250E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6730E+03  1.5012E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6732E+03  1.2077E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6734E+03  1.4366E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6736E+03  2.2754E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6739E+03  3.8037E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6741E+03  6.0912E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6743E+03  9.1951E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6745E+03  1.3158E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6747E+03  1.8007E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6749E+03  2.3750E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6752E+03  3.0376E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6754E+03  3.7857E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6756E+03  4.6142E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6758E+03  5.5163E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6760E+03  6.4833E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6762E+03  7.5048E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6765E+03  8.5686E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6767E+03  9.6617E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6769E+03  1.0769E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6771E+03  1.1877E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6773E+03  1.2968E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6775E+03  1.4027E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6778E+03  1.5038E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6780E+03  1.5986E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6782E+03  1.6857E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6784E+03  1.7637E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6786E+03  1.8313E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6788E+03  1.8876E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6790E+03  1.9318E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6793E+03  1.9630E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6795E+03  1.9810E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6797E+03  1.9854E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6799E+03  1.9763E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6801E+03  1.9540E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6803E+03  1.9187E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6806E+03  1.8712E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6808E+03  1.8123E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6810E+03  1.7430E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6812E+03  1.6645E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6814E+03  1.5779E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6816E+03  1.4847E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6819E+03  1.3862E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6821E+03  1.2840E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6823E+03  1.1794E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6825E+03  1.0740E+17  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6827E+03  9.6900E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6829E+03  8.6579E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6832E+03  7.6556E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6834E+03  6.6940E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6836E+03  5.7825E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6838E+03  4.9292E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6840E+03  4.1406E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6842E+03  3.4217E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6845E+03  2.7756E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6847E+03  2.2042E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6849E+03  1.7076E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6851E+03  1.2848E+16  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+       1.6853E+03  9.3327E+15  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+
+       Total absolut maxima found for Stokes-V. (z,y,Eph,fluxdens.)
+
+        0.0000E+00  0.0000E+00  1.6797E+03  1.9854E+17
+        0.0000E+00  0.0000E+00  1.6797E+03  1.9854E+17
+        1.7143E-04  1.7143E-04  1.6685E+03  6.8455E+15
+       -2.0000E-04 -1.7143E-04  1.6685E+03  1.2103E+15
+
+
+       Estimated maxima of s0, s1, s2 ,s3 for selected point:
+          1679.66028       1.98563519E+17
+          1679.66028       1.98563485E+17
+          0.00000000       0.00000000    
+          0.00000000       0.00000000    
+
+
+       Estimated maximum of s3*s3/s0 for selected point:
+          0.00000000       0.00000000    
+
+
+       Estimated maxima of fluxes s0, s1, s2 ,s3:
+          1674.62231       1.87770266E+10
+          1674.62402       1.87679601E+10
+          1674.92517       364.786743    
+          1674.50220       3.43567175E-09
+
+
+       Estimated maxima of fluxes s3*s3/s0:
+          1685.10254       5.36339827E-27
+
+
+
+      Brilliance calculations:
+      (only meaningful for undulators)
+
+      sigr=sqrt(2*lambda*L)/2/pi*sigrc and 
+      sigrp=sqrt(lambda/2/L)*sigrpc
+
+       sigrc,sigrpc:   1.0000000000000000        1.0000000000000000     
+
+      make sure that the device length agrees to the length
+      of the trajectory
+      (for rec-fields rangrec and rangpm are substracted by program)
+
+      Observation point:
+
+         10.0000000       0.00000000       0.00000000    
+
+      considered device length [m]:   4.14960003    
+
+
+      Brilliance [photons/sec/BW/mm**2/mrad**2]
+
+          1668.0        0.48063E+15    0.48063E+15     0.0000         0.0000    
+          1668.2        0.60263E+15    0.60263E+15     0.0000         0.0000    
+          1668.5        0.73105E+15    0.73105E+15     0.0000         0.0000    
+          1668.7        0.86180E+15    0.86180E+15     0.0000         0.0000    
+          1668.9        0.99045E+15    0.99045E+15     0.0000         0.0000    
+          1669.1        0.11125E+16    0.11125E+16     0.0000         0.0000    
+          1669.3        0.12233E+16    0.12233E+16     0.0000         0.0000    
+          1669.5        0.13185E+16    0.13185E+16     0.0000         0.0000    
+          1669.8        0.13943E+16    0.13943E+16     0.0000         0.0000    
+          1670.0        0.14470E+16    0.14470E+16     0.0000         0.0000    
+          1670.2        0.14741E+16    0.14741E+16     0.0000         0.0000    
+          1670.4        0.14736E+16    0.14736E+16     0.0000         0.0000    
+          1670.6        0.14447E+16    0.14447E+16     0.0000         0.0000    
+          1670.8        0.13875E+16    0.13875E+16     0.0000         0.0000    
+          1671.0        0.13036E+16    0.13036E+16     0.0000         0.0000    
+          1671.3        0.11954E+16    0.11954E+16     0.0000         0.0000    
+          1671.5        0.10670E+16    0.10670E+16     0.0000         0.0000    
+          1671.7        0.92333E+15    0.92333E+15     0.0000         0.0000    
+          1671.9        0.77067E+15    0.77067E+15     0.0000         0.0000    
+          1672.1        0.61625E+15    0.61625E+15     0.0000         0.0000    
+          1672.3        0.46822E+15    0.46822E+15     0.0000         0.0000    
+          1672.6        0.33544E+15    0.33544E+15     0.0000         0.0000    
+          1672.8        0.22727E+15    0.22727E+15     0.0000         0.0000    
+          1673.0        0.15336E+15    0.15336E+15     0.0000         0.0000    
+          1673.2        0.12339E+15    0.12339E+15     0.0000         0.0000    
+          1673.4        0.14680E+15    0.14680E+15     0.0000         0.0000    
+          1673.6        0.23254E+15    0.23254E+15     0.0000         0.0000    
+          1673.9        0.38877E+15    0.38877E+15     0.0000         0.0000    
+          1674.1        0.62265E+15    0.62265E+15     0.0000         0.0000    
+          1674.3        0.94007E+15    0.94007E+15     0.0000         0.0000    
+          1674.5        0.13454E+16    0.13454E+16     0.0000         0.0000    
+          1674.7        0.18414E+16    0.18414E+16     0.0000         0.0000    
+          1674.9        0.24290E+16    0.24290E+16     0.0000         0.0000    
+          1675.2        0.31071E+16    0.31071E+16     0.0000         0.0000    
+          1675.4        0.38728E+16    0.38728E+16     0.0000         0.0000    
+          1675.6        0.47210E+16    0.47210E+16     0.0000         0.0000    
+          1675.8        0.56447E+16    0.56447E+16     0.0000         0.0000    
+          1676.0        0.66351E+16    0.66351E+16     0.0000         0.0000    
+          1676.2        0.76814E+16    0.76814E+16     0.0000         0.0000    
+          1676.5        0.87715E+16    0.87715E+16     0.0000         0.0000    
+          1676.7        0.98917E+16    0.98917E+16     0.0000         0.0000    
+          1676.9        0.11027E+17    0.11027E+17     0.0000         0.0000    
+          1677.1        0.12163E+17    0.12163E+17     0.0000         0.0000    
+          1677.3        0.13282E+17    0.13282E+17     0.0000         0.0000    
+          1677.5        0.14368E+17    0.14368E+17     0.0000         0.0000    
+          1677.8        0.15406E+17    0.15406E+17     0.0000         0.0000    
+          1678.0        0.16380E+17    0.16380E+17     0.0000         0.0000    
+          1678.2        0.17274E+17    0.17274E+17     0.0000         0.0000    
+          1678.4        0.18075E+17    0.18075E+17     0.0000         0.0000    
+          1678.6        0.18771E+17    0.18771E+17     0.0000         0.0000    
+          1678.8        0.19351E+17    0.19351E+17     0.0000         0.0000    
+          1679.0        0.19806E+17    0.19806E+17     0.0000         0.0000    
+          1679.3        0.20129E+17    0.20129E+17     0.0000         0.0000    
+          1679.5        0.20316E+17    0.20316E+17     0.0000         0.0000    
+          1679.7        0.20364E+17    0.20364E+17     0.0000         0.0000    
+          1679.9        0.20273E+17    0.20273E+17     0.0000         0.0000    
+          1680.1        0.20046E+17    0.20046E+17     0.0000         0.0000    
+          1680.3        0.19687E+17    0.19687E+17     0.0000         0.0000    
+          1680.6        0.19202E+17    0.19202E+17     0.0000         0.0000    
+          1680.8        0.18600E+17    0.18600E+17     0.0000         0.0000    
+          1681.0        0.17891E+17    0.17891E+17     0.0000         0.0000    
+          1681.2        0.17087E+17    0.17087E+17     0.0000         0.0000    
+          1681.4        0.16200E+17    0.16200E+17     0.0000         0.0000    
+          1681.6        0.15245E+17    0.15245E+17     0.0000         0.0000    
+          1681.9        0.14236E+17    0.14236E+17     0.0000         0.0000    
+          1682.1        0.13188E+17    0.13188E+17     0.0000         0.0000    
+          1682.3        0.12116E+17    0.12116E+17     0.0000         0.0000    
+          1682.5        0.11034E+17    0.11034E+17     0.0000         0.0000    
+          1682.7        0.99565E+16    0.99565E+16     0.0000         0.0000    
+          1682.9        0.88972E+16    0.88972E+16     0.0000         0.0000    
+          1683.2        0.78682E+16    0.78682E+16     0.0000         0.0000    
+          1683.4        0.68807E+16    0.68807E+16     0.0000         0.0000    
+          1683.6        0.59446E+16    0.59446E+16     0.0000         0.0000    
+          1683.8        0.50681E+16    0.50681E+16     0.0000         0.0000    
+          1684.0        0.42578E+16    0.42578E+16     0.0000         0.0000    
+          1684.2        0.35189E+16    0.35189E+16     0.0000         0.0000    
+          1684.5        0.28549E+16    0.28549E+16     0.0000         0.0000    
+          1684.7        0.22674E+16    0.22674E+16     0.0000         0.0000    
+          1684.9        0.17569E+16    0.17569E+16     0.0000         0.0000    
+          1685.1        0.13220E+16    0.13220E+16     0.0000         0.0000    
+          1685.3        0.96042E+15    0.96042E+15     0.0000         0.0000    
+
+
+      estimated brilliance maxima, flux and flux-density of S0, S1, S2, S3:
+
+          1679.7        0.20365E+17    0.11097E+11    0.19856E+14
+          1679.7        0.20365E+17    0.11097E+11    0.19856E+14
+          0.0000         0.0000         0.0000         0.0000    
+          0.0000         0.0000         0.0000         0.0000    
+
+      estimated brilliance maximum of S3*S3/S0:
+
+          0.0000         0.0000    
+
+      ---> flag IFOLD is not set, emittance effects are estimated
+      from horizontal beam size [mm] and divergence [mrad]: 
+         2.16000000E-04   2.47999997E-05
+      vertical beam size [mm] and divergence [mrad]: 
+         1.87000005E-05   4.29000011E-06
+
+
+      Brilliance [photons/sec/BW/mm**2/mrad**2] with emittance
+
+          1668.0        0.50112E+13    0.50112E+13     0.0000         0.0000    
+          1668.2        0.62821E+13    0.62821E+13     0.0000         0.0000    
+          1668.5        0.76195E+13    0.76195E+13     0.0000         0.0000    
+          1668.7        0.89806E+13    0.89806E+13     0.0000         0.0000    
+          1668.9        0.10319E+14    0.10319E+14     0.0000         0.0000    
+          1669.1        0.11588E+14    0.11588E+14     0.0000         0.0000    
+          1669.3        0.12741E+14    0.12741E+14     0.0000         0.0000    
+          1669.5        0.13730E+14    0.13730E+14     0.0000         0.0000    
+          1669.8        0.14517E+14    0.14517E+14     0.0000         0.0000    
+          1670.0        0.15063E+14    0.15063E+14     0.0000         0.0000    
+          1670.2        0.15342E+14    0.15342E+14     0.0000         0.0000    
+          1670.4        0.15335E+14    0.15335E+14     0.0000         0.0000    
+          1670.6        0.15031E+14    0.15031E+14     0.0000         0.0000    
+          1670.8        0.14433E+14    0.14433E+14     0.0000         0.0000    
+          1671.0        0.13558E+14    0.13558E+14     0.0000         0.0000    
+          1671.3        0.12431E+14    0.12431E+14     0.0000         0.0000    
+          1671.5        0.11093E+14    0.11093E+14     0.0000         0.0000    
+          1671.7        0.95980E+13    0.95980E+13     0.0000         0.0000    
+          1671.9        0.80097E+13    0.80097E+13     0.0000         0.0000    
+          1672.1        0.64037E+13    0.64037E+13     0.0000         0.0000    
+          1672.3        0.48646E+13    0.48646E+13     0.0000         0.0000    
+          1672.6        0.34844E+13    0.34844E+13     0.0000         0.0000    
+          1672.8        0.23604E+13    0.23604E+13     0.0000         0.0000    
+          1673.0        0.15925E+13    0.15925E+13     0.0000         0.0000    
+          1673.2        0.12810E+13    0.12810E+13     0.0000         0.0000    
+          1673.4        0.15238E+13    0.15238E+13     0.0000         0.0000    
+          1673.6        0.24134E+13    0.24134E+13     0.0000         0.0000    
+          1673.9        0.40341E+13    0.40341E+13     0.0000         0.0000    
+          1674.1        0.64599E+13    0.64599E+13     0.0000         0.0000    
+          1674.3        0.97513E+13    0.97513E+13     0.0000         0.0000    
+          1674.5        0.13953E+14    0.13953E+14     0.0000         0.0000    
+          1674.7        0.19094E+14    0.19094E+14     0.0000         0.0000    
+          1674.9        0.25183E+14    0.25183E+14     0.0000         0.0000    
+          1675.2        0.32207E+14    0.32207E+14     0.0000         0.0000    
+          1675.4        0.40137E+14    0.40137E+14     0.0000         0.0000    
+          1675.6        0.48919E+14    0.48919E+14     0.0000         0.0000    
+          1675.8        0.58480E+14    0.58480E+14     0.0000         0.0000    
+          1676.0        0.68729E+14    0.68729E+14     0.0000         0.0000    
+          1676.2        0.79553E+14    0.79553E+14     0.0000         0.0000    
+          1676.5        0.90826E+14    0.90826E+14     0.0000         0.0000    
+          1676.7        0.10241E+15    0.10241E+15     0.0000         0.0000    
+          1676.9        0.11414E+15    0.11414E+15     0.0000         0.0000    
+          1677.1        0.12587E+15    0.12587E+15     0.0000         0.0000    
+          1677.3        0.13743E+15    0.13743E+15     0.0000         0.0000    
+          1677.5        0.14865E+15    0.14865E+15     0.0000         0.0000    
+          1677.8        0.15936E+15    0.15936E+15     0.0000         0.0000    
+          1678.0        0.16940E+15    0.16940E+15     0.0000         0.0000    
+          1678.2        0.17861E+15    0.17861E+15     0.0000         0.0000    
+          1678.4        0.18687E+15    0.18687E+15     0.0000         0.0000    
+          1678.6        0.19403E+15    0.19403E+15     0.0000         0.0000    
+          1678.8        0.19998E+15    0.19998E+15     0.0000         0.0000    
+          1679.0        0.20465E+15    0.20465E+15     0.0000         0.0000    
+          1679.3        0.20795E+15    0.20795E+15     0.0000         0.0000    
+          1679.5        0.20984E+15    0.20984E+15     0.0000         0.0000    
+          1679.7        0.21030E+15    0.21030E+15     0.0000         0.0000    
+          1679.9        0.20933E+15    0.20933E+15     0.0000         0.0000    
+          1680.1        0.20695E+15    0.20695E+15     0.0000         0.0000    
+          1680.3        0.20320E+15    0.20320E+15     0.0000         0.0000    
+          1680.6        0.19817E+15    0.19817E+15     0.0000         0.0000    
+          1680.8        0.19192E+15    0.19192E+15     0.0000         0.0000    
+          1681.0        0.18457E+15    0.18457E+15     0.0000         0.0000    
+          1681.2        0.17625E+15    0.17625E+15     0.0000         0.0000    
+          1681.4        0.16707E+15    0.16707E+15     0.0000         0.0000    
+          1681.6        0.15720E+15    0.15720E+15     0.0000         0.0000    
+          1681.9        0.14677E+15    0.14677E+15     0.0000         0.0000    
+          1682.1        0.13594E+15    0.13594E+15     0.0000         0.0000    
+          1682.3        0.12486E+15    0.12486E+15     0.0000         0.0000    
+          1682.5        0.11369E+15    0.11369E+15     0.0000         0.0000    
+          1682.7        0.10257E+15    0.10257E+15     0.0000         0.0000    
+          1682.9        0.91642E+14    0.91642E+14     0.0000         0.0000    
+          1683.2        0.81029E+14    0.81029E+14     0.0000         0.0000    
+          1683.4        0.70848E+14    0.70848E+14     0.0000         0.0000    
+          1683.6        0.61198E+14    0.61198E+14     0.0000         0.0000    
+          1683.8        0.52165E+14    0.52165E+14     0.0000         0.0000    
+          1684.0        0.43818E+14    0.43818E+14     0.0000         0.0000    
+          1684.2        0.36207E+14    0.36207E+14     0.0000         0.0000    
+          1684.5        0.29369E+14    0.29369E+14     0.0000         0.0000    
+          1684.7        0.23322E+14    0.23322E+14     0.0000         0.0000    
+          1684.9        0.18067E+14    0.18067E+14     0.0000         0.0000    
+          1685.1        0.13593E+14    0.13593E+14     0.0000         0.0000    
+          1685.3        0.98733E+13    0.98733E+13     0.0000         0.0000    
+
+
+      estimated brilliance maxima, flux and flux-density of S0, S1, S2, S3
+      with emittance:
+
+          1679.7        0.21033E+15    0.11097E+11    0.64245E+13
+          1679.7        0.21033E+15    0.11097E+11    0.64245E+13
+          0.0000         0.0000         0.0000         0.0000    
+          0.0000         0.0000         0.0000         0.0000    
+
+      estimated brilliance maximum of S3*S3/S0 with emittance:
+
+          0.0000         0.0000    
+
+      corresponding sigmas of source size [mm]
+      and divergence [mrad] without and with emittance
+      (including corr. factors sigrc,sigrpc):
+
+      L/mm, lambda/mm:    4149.60010       7.38162328E-07
+      without emit.:    1.24570206E-02   9.43100173E-03
+         with emit.:    6.97239041E-02   1.65801719E-02
+         (sigrf**2 = sigrxf*sigryf)
+
+
+      LAST CHECK:
+
+           BMAXGL:   4.1045557899700061E-002
+
+           XBMAXGL:  -2.0501000010936172     
+           YBMAXGL:   0.0000000000000000     
+           ZBMAXGL:  -4.4174337261543967E-007
+
+
+      CURRENT NUMBER:         393
+
+
+                     --- Program WAVE completed ---
+
+
+
+                                                   16:34:38 29.01.16
+

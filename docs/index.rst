@@ -63,10 +63,9 @@ how to read the output.
 
    installation
    tutorial
+   examples/index
    how_to
    troubleshooting
    API
    
-
-
 

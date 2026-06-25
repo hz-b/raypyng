@@ -1,0 +1,110 @@
+2026-06-25 11:23:56,832 - INFO - Simulation started, using 12 workers
+2026-06-25 11:23:56,835 - INFO - Start round 0
+2026-06-25 11:23:56,835 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0
+2026-06-25 11:23:56,835 - INFO - Round 0: found 0/4 files for _ExitSlit-ScalarBeamProperties.csv
+2026-06-25 11:23:56,837 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0/0_RAY-UI.rml
+2026-06-25 11:23:56,840 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0/1_RAY-UI.rml
+2026-06-25 11:23:56,843 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0/2_RAY-UI.rml
+2026-06-25 11:23:56,845 - INFO - Prepared sim number: 3: /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0/3_RAY-UI.rml
+2026-06-25 11:23:56,947 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 11:24:16,949 - WARNING - Batch stalled: 4 futures idle for 20s (limit 20s)
+2026-06-25 11:24:16,949 - INFO - Marking executor as having 4 unfinished futures
+2026-06-25 11:24:26,955 - WARNING - Giving up: 4 sims idle for 10s
+2026-06-25 11:24:26,955 - INFO - Post-timeout: 0/4 sims appeared
+2026-06-25 11:24:26,955 - INFO - Updating progress bar
+2026-06-25 11:24:26,964 - INFO - Batch Completed
+2026-06-25 11:24:26,964 - INFO - Waiting For batch, 60 simulations to go
+2026-06-25 11:24:26,964 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 11:24:26,964 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 11:24:26,964 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0
+2026-06-25 11:24:26,965 - INFO - Round 0: found 0/4 files for _ExitSlit-ScalarBeamProperties.csv
+2026-06-25 11:24:26,965 - INFO - Round 0: final check found 4 missing simulations
+2026-06-25 11:24:26,965 - INFO - Missing simulation: round 0, number 0
+2026-06-25 11:24:26,965 - INFO - Missing simulation: round 0, number 1
+2026-06-25 11:24:26,965 - INFO - Missing simulation: round 0, number 2
+2026-06-25 11:24:26,965 - INFO - Missing simulation: round 0, number 3
+2026-06-25 11:24:26,965 - INFO - Retrying 4 missing simulation(s)
+2026-06-25 11:24:26,972 - INFO - Executor shutdown completed without waiting.
+2026-06-25 11:24:27,311 - INFO - Start round 0
+2026-06-25 11:24:27,311 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0
+2026-06-25 11:24:27,312 - INFO - Round 0: found 0/4 files for _ExitSlit-ScalarBeamProperties.csv
+2026-06-25 11:24:27,316 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0/0_RAY-UI.rml
+2026-06-25 11:24:27,320 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0/1_RAY-UI.rml
+2026-06-25 11:24:27,324 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0/2_RAY-UI.rml
+2026-06-25 11:24:27,329 - INFO - Prepared sim number: 3: /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0/3_RAY-UI.rml
+2026-06-25 11:24:27,491 - INFO - Waiting for batch number: 1, initial max-idle: 20.0s
+2026-06-25 11:24:47,503 - WARNING - Batch stalled: 4 futures idle for 20s (limit 20s)
+2026-06-25 11:24:47,504 - INFO - Marking executor as having 4 unfinished futures
+2026-06-25 11:24:57,523 - WARNING - Giving up: 4 sims idle for 10s
+2026-06-25 11:24:57,523 - INFO - Post-timeout: 0/4 sims appeared
+2026-06-25 11:24:57,523 - INFO - Updating progress bar
+2026-06-25 11:24:57,524 - INFO - Batch Completed
+2026-06-25 11:24:57,525 - INFO - Waiting For batch, 60 simulations to go
+2026-06-25 11:24:57,525 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 11:24:57,525 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 11:24:57,525 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0
+2026-06-25 11:24:57,525 - INFO - Round 0: found 0/4 files for _ExitSlit-ScalarBeamProperties.csv
+2026-06-25 11:24:57,527 - INFO - Round 0: final check found 4 missing simulations
+2026-06-25 11:24:57,527 - INFO - Missing simulation: round 0, number 0
+2026-06-25 11:24:57,527 - INFO - Missing simulation: round 0, number 1
+2026-06-25 11:24:57,527 - INFO - Missing simulation: round 0, number 2
+2026-06-25 11:24:57,528 - INFO - Missing simulation: round 0, number 3
+2026-06-25 11:24:57,528 - WARNING - 4 simulation(s) still missing after retry
+2026-06-25 11:24:57,531 - INFO - Executor shutdown completed without waiting.
+2026-06-25 11:24:57,779 - INFO - Simulation completed successfully.
+2026-06-25 11:24:57,779 - INFO - Create RAY-UI recap files
+2026-06-25 11:26:24,942 - INFO - Simulation started, using 12 workers
+2026-06-25 11:26:24,947 - INFO - Start round 0
+2026-06-25 11:26:24,947 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0
+2026-06-25 11:26:24,948 - INFO - Round 0: found 0/4 files for _ExitSlit-ScalarBeamProperties.csv
+2026-06-25 11:26:24,953 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0/0_RAY-UI.rml
+2026-06-25 11:26:24,958 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0/1_RAY-UI.rml
+2026-06-25 11:26:24,963 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0/2_RAY-UI.rml
+2026-06-25 11:26:24,967 - INFO - Prepared sim number: 3: /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0/3_RAY-UI.rml
+2026-06-25 11:26:25,073 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 11:26:45,077 - WARNING - Batch stalled: 4 futures idle for 20s (limit 20s)
+2026-06-25 11:26:45,078 - INFO - Marking executor as having 4 unfinished futures
+2026-06-25 11:26:55,083 - WARNING - Giving up: 4 sims idle for 10s
+2026-06-25 11:26:55,084 - INFO - Post-timeout: 0/4 sims appeared
+2026-06-25 11:26:55,084 - INFO - Updating progress bar
+2026-06-25 11:26:55,086 - INFO - Batch Completed
+2026-06-25 11:26:55,088 - INFO - Waiting For batch, 60 simulations to go
+2026-06-25 11:26:55,089 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 11:26:55,089 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 11:26:55,089 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0
+2026-06-25 11:26:55,089 - INFO - Round 0: found 0/4 files for _ExitSlit-ScalarBeamProperties.csv
+2026-06-25 11:26:55,089 - INFO - Round 0: final check found 4 missing simulations
+2026-06-25 11:26:55,093 - INFO - Missing simulation: round 0, number 0
+2026-06-25 11:26:55,093 - INFO - Missing simulation: round 0, number 1
+2026-06-25 11:26:55,094 - INFO - Missing simulation: round 0, number 2
+2026-06-25 11:26:55,094 - INFO - Missing simulation: round 0, number 3
+2026-06-25 11:26:55,094 - INFO - Retrying 4 missing simulation(s)
+2026-06-25 11:26:55,100 - INFO - Executor shutdown completed without waiting.
+2026-06-25 11:26:55,368 - INFO - Start round 0
+2026-06-25 11:26:55,368 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0
+2026-06-25 11:26:55,368 - INFO - Round 0: found 0/4 files for _ExitSlit-ScalarBeamProperties.csv
+2026-06-25 11:26:55,372 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0/0_RAY-UI.rml
+2026-06-25 11:26:55,375 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0/1_RAY-UI.rml
+2026-06-25 11:26:55,377 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0/2_RAY-UI.rml
+2026-06-25 11:26:55,379 - INFO - Prepared sim number: 3: /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0/3_RAY-UI.rml
+2026-06-25 11:26:55,486 - INFO - Waiting for batch number: 1, initial max-idle: 20.0s
+2026-06-25 11:27:15,492 - WARNING - Batch stalled: 4 futures idle for 20s (limit 20s)
+2026-06-25 11:27:15,493 - INFO - Marking executor as having 4 unfinished futures
+2026-06-25 11:27:25,500 - WARNING - Giving up: 4 sims idle for 10s
+2026-06-25 11:27:25,501 - INFO - Post-timeout: 0/4 sims appeared
+2026-06-25 11:27:25,501 - INFO - Updating progress bar
+2026-06-25 11:27:25,502 - INFO - Batch Completed
+2026-06-25 11:27:25,502 - INFO - Waiting For batch, 60 simulations to go
+2026-06-25 11:27:25,502 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 11:27:25,502 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 11:27:25,502 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/analysis_by_RAY-UI/RAYPy_Simulation_RAY-UI/round_0
+2026-06-25 11:27:25,502 - INFO - Round 0: found 0/4 files for _ExitSlit-ScalarBeamProperties.csv
+2026-06-25 11:27:25,502 - INFO - Round 0: final check found 4 missing simulations
+2026-06-25 11:27:25,502 - INFO - Missing simulation: round 0, number 0
+2026-06-25 11:27:25,502 - INFO - Missing simulation: round 0, number 1
+2026-06-25 11:27:25,502 - INFO - Missing simulation: round 0, number 2
+2026-06-25 11:27:25,502 - INFO - Missing simulation: round 0, number 3
+2026-06-25 11:27:25,502 - WARNING - 4 simulation(s) still missing after retry
+2026-06-25 11:27:25,503 - INFO - Executor shutdown completed without waiting.
+2026-06-25 11:27:25,766 - INFO - Simulation completed successfully.
+2026-06-25 11:27:25,767 - INFO - Create RAY-UI recap files

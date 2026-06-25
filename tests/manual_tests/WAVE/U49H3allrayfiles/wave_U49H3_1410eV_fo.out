@@ -1,0 +1,535 @@
+
+                                                   14:54:37 29.01.16
+
+
+           *********************************************
+           *          PROGRAM WAVE                     *
+           *                                           *
+           *          VERSION 3.03/01 13.11.2015       *
+           *                                           *
+           *          Michael Scheer                   *
+           *              BESSY                        *
+           *********************************************
+
+      USER COMMENT:
+
+      U49 Peter Baumgaertel                                            
+
+      CURRENT NUMBER:         358
+
+
+      USER NAMELIST:
+
+
+
+      MODE FLAGS:
+
+      IUNDULATOR,IWIGGLER:            1           0
+
+
+
+      CONTROL FLAGS:
+
+
+      IUNAME,IUSTEP,IUOUT:            0           0           0
+      IOPTIC,IGENFUN:                 0           0
+      IMAGSPLN:                   -9999
+      IEMIT,IEMIAHW:                  0           0
+      IWLSOPT,IBEAMPOL:               0           0
+      IENELOSS, IEFIELD:             -1           0
+      IPOWER,ISPEC:                   0           1
+      IVELOFIELD,ISPECMODE:           0           3
+         IWFILL0,IRFILL0:                      0           0
+         ISPECINT,IPIN:                        0           1
+         IUSEM,ISTOKES:                        0           1
+         IBRILL:                               1
+         IPINCIRC,IRPHI:                       0           0
+         IFOLD,ISIGUSR:                        0           1
+         IF1DIM,IPOLA:                         0           0
+         IWFILSP0,IWFILSPF:                    0           0
+         IRFILSP0,IRFILSTO:                    0           0
+         IWFILSTO,IWFLSTOF:                    0           0
+         ISPECANA,ISPECANAF:                   0           0
+         IAMPLI,IAMPSKIP:                      0           0
+         IWFILFL0,IWFILFLF:                    0           0
+         IWFILS,IWFILSF:                       0           0
+         IWFILSE,IWFILSEF:                     0           0
+         IWFILB,IWFILBF:                       0           0
+         IWFILBE,IWFILBEF:                     0           0
+         IWFILINT,IPINALL:                     0           0
+         IRFILOB,IFILTER:                      0           0
+         IWFILRAY,IDESYNC:                     1           0
+         IPHASE,IPHASEANA:                     0           0
+         IDOSE,IEFOLD:                         0           0
+         ISPECDIP,IBL0CUT:                     0           0
+         IEFFI,IFILMUL:                        0           0
+         IBUNCH:                               0
+      IWFILF:                         0
+
+
+      MAGNETIC FIELD FLAGS:
+
+
+
+      ICHARGE,IBMASK,JBMASK:          -1           0           0
+      IBSUPER,IBERROR:                 1           0
+      ICUTFIBO:                        1
+
+      IPERIODG,IBSYM:                 0           0
+      IBSYMY,IBSYMZ:                  0           0
+      KBEXTERN,KBFELD:                0           0
+      KHALBA,KHALBASY:                0           0
+      KUCROSS,IRFILP:                 0           0
+      KMAGSEQ,IMGSQF:                 0           0
+             KMAGCOR:                 1
+      IRFILF,IRBTAB:                  0           0
+      IRBTABZY,KELLIP:                0           1
+      KBPOLYH,KBPOLY3D:               0           0
+      KBREC,KELLANA:                  0           0
+      KBPOLYMAG,KBGENESIS:            0           0
+      KBAMWLS:                        0
+
+
+
+      HISTOGRAM FLAGS:
+
+      IHBOOK,IHINDEX:                 1           0
+
+
+      OTHER OPTIONS:
+
+
+      IWBTAB,IWFILT0:                 0           0
+      IWSECTMAGS:                     0
+      IJUST,ISNORDER:                 0           0
+      IWBMAP,IWBPOLY3D:               0           0
+      IWBPOLY2DH,IWBPHARM:            0           0
+
+
+      SR BELLIP, Parameters of elliptical undulator:
+      horizontal and vertical peak field [T]:   0.00000000      0.141448289    
+      number of periods, period and device length [m]:
+         84.0000000       4.94000018E-02   4.14960003    
+      shift parameter [periods], B_h/B_v:       0.00000000       0.00000000    
+      B0_eff [T], deflection parameter K:  0.141448289      0.652447402    
+      1. harmonical [nm] and [eV]:   2.63800406       470.000000    
+      critical energy [eV]:   278.934692    
+
+      longitudinal position of device center [m]:   0.0000000000000000     
+
+      scaling factor for taper:   0.0000000000000000     
+
+  
+      Subroutine photon (quantum fluctuations):
+  
+       number of sampling bins (NBING1)        1000
+       max. photon energy normalized to characteristic energy (EECMAXG1):
+          5.0000000000000000     
+  
+
+      Number of tracking steps per meter (MYINUM):         5000
+
+      Start and end of the trajectory [m](XSTART,XSTOP):
+        -2.07480001       2.07480001    
+
+      BMOVECUT:   1.00000001E-07
+
+      Initial energy [GeV] and gamma:    1.72200000       3369.8702546331497     
+      Final energy [GeV] and gamma:      1.72199988       3369.8700295130834     
+      Relative change:                  -6.68037785E-08
+      number of photons, RMS (keV) and rel. RMS of quantum fluctuation:
+                 3   6.75572827E-02   3.92318711E-08
+
+
+      B-rho [Tm], current [A]:   -5.74397326      0.100000001    
+
+      Offset for vert. and hori. magnetic field (BYGOFF, BZGOFF):
+          0.00000000       0.00000000    
+      Global scaling factor for mag. field (B0SCGLOB,A0SCGLOB):
+          1.00000000       1.00000000    
+
+      Long. shift [m] of device (X(e-) -> X(e-)+XSHIFT):    0.00000000    
+      Vert. shift [m] of device (Y(e-) -> Y(e-)+VSHIFT):    0.00000000    
+      Hori. shift [m] of device (Z(e-) -> Z(e-)+HSHIFT):    0.00000000    
+      Rotation angle [degree] of device:                    0.00000000    
+      Y(e-) -> Y(e-)*sin(XROTD) + Y(e-)*cos(XROTD)
+      Z(e-) -> Z(e-)*cos(XROTD) - Y(e-)*sin(XROTD)
+
+
+      Magnetic field [T] at starting point:
+         0.00000000       0.00000000       0.00000000    
+
+      Vector potential [T-m] at starting point:
+         0.00000000       0.00000000       0.00000000    
+
+
+      Magnetic field [T] at stopping point:
+         0.00000000       0.00000000       0.00000000    
+
+      Vector potential [T-m] at stopping point:
+         0.00000000       0.00000000       0.00000000    
+
+      Extrema of magnetic field [T] and the trajectory [m]:
+
+      BXmax,BXmin:    0.00000000       0.00000000    
+      BYmax,BYmin:   0.141436860     -0.141448289    
+      BZmax,BZmin:    0.00000000       0.00000000    
+
+      Xmax,Xmin:    2.07480001      -2.07480001    
+      Ymax,Ymin:    0.00000000       0.00000000    
+      Zmax,Zmin:    1.52224982E-06  -1.52206132E-06
+
+
+      Extrema of magnetic field [T] and the trajectory [m] between
+      XIANF and XIEND
+
+      BXmaxAE,BXminAE:    0.00000000       0.00000000    
+      BYmaxAE,BYminAE:   0.141436860     -0.141448289    
+      BZmaxAE,BZminAE:    0.00000000       0.00000000    
+
+      XmaxAE,XminAE:    2.07480001      -2.07480001    
+      YmaxAE,YminAE:    0.00000000       0.00000000    
+      ZmaxAE,ZminAE:    1.52224982E-06  -1.52206132E-06
+
+
+      Start values (coordinates [m] and slopes) of trajectory:
+
+      X0:   -2.0747999999999998     
+      Y0:    0.0000000000000000     
+      Z0:    0.0000000000000000     
+
+      ZP0:   0.0000000000000000     
+      YP0:   0.0000000000000000     
+
+      VX0:   299792444.80029100     
+      VY0:   0.0000000000000000     
+      VZ0:   0.0000000000000000     
+
+      Values for X=0 (coordinates [m] and slopes) of trajectory:
+
+      YCEN:    0.0000000000000000     
+      ZCEN:    1.5222141379499446E-006
+
+      YPCEN:   0.0000000000000000     
+      ZPCEN:   7.6467219228114621E-014
+
+      End values (coordinates [m] and slopes) of trajectory:
+
+      XF0:    2.0747999999999998     
+      YF0:    0.0000000000000000     
+      ZF0:    6.3944218541119358E-011
+
+
+      ZPF0:    7.7784576416289882E-012
+      YPF0:    0.0000000000000000     
+
+      VXF0:    299792448.36895072     
+      VYF0:    0.0000000000000000     
+      VZF0:    2.3319228609181286E-003
+
+
+      Values for X=XIANF (coordinates [m] and slopes) of trajectory:
+
+      XIANF:   -1.0000000000000000E+030
+      YIANF:   -9999.0000000000000     
+      ZIANF:   -9999.0000000000000     
+
+      YPIANF:  -9999.0000000000000     
+      ZPIANF:  -9999.0000000000000     
+
+
+
+      Values for X=XIEND (coordinates [m] and slopes) of trajectory:
+
+      XIEND:    1.0000000000000000E+030
+      YIEND:   -9999.0000000000000     
+      ZIEND:   -9999.0000000000000     
+
+      YPIEND:  -9999.0000000000000     
+      ZPIEND:  -9999.0000000000000     
+
+
+      ZF0/(XSTOP-XSTART):    1.5409730706843880E-011
+      YF0/(XSTOP-XSTART):    0.0000000000000000     
+
+      YF0-Y0:   0.0000000000000000     
+      ZF0-Z0:   6.3944218541119358E-011
+
+      YPF0-YP0:   0.0000000000000000     
+      ZPF0-ZP0:   7.7784576416289882E-012
+
+      Straight line fit of z(x):
+      offset:  -6.7654663780856284E-009
+      slope:   1.4593822508327296E-011
+
+      Straight line fit of vz(x)/vx(x):
+      offset:   8.8724965239634312E-013
+      slope:   4.7363591126466491E-009
+
+      Straight line fit of y(x):
+      offset:   0.0000000000000000     
+      slope:   0.0000000000000000     
+
+      Straight line fit of vy(x)/vx(x):
+      offset:   0.0000000000000000     
+      slope:   0.0000000000000000     
+
+      1. magnetic integral [T-m]:    0.00000000       7.64895471E-13   0.00000000    
+      2. mag. integral [T-m**2]:    0.00000000      -3.02682616E-14   0.00000000    
+
+      Integrated By**2 [T**2-m]:                      4.12647165E-02
+      Energy irradiated by the device per e- [MeV]:   1.54834153E-04
+      Rel. energy loss:                               8.99153036E-08
+      Power irradiated by the device [kWATT]:         1.54834157E-02
+
+      Length of trajectory (BINT0) [m]:
+         4.1496000385648868     
+      Integrated (YP**2+ZP**2)/2 of trajectory (WTRA2I) [m]:
+         3.8565136662469099E-008
+      corresponding phase advance [nm and eV]:
+         221.26992815563113        5.6033909983671233     
+      dE/E and corresponding dL = 2 * dE/E * L [nm]:
+         1.00000005E-03   7.71302730E-02
+      Circumference of the ring [m]:                 240.000000    
+      Rel. change of total circumference (from BINT0):         
+         1.60687033E-10
+      Rel. change of total circumference (from WTRA2I):
+         1.60688074E-10
+
+      Max. and min. deflection angle [rad]:    1.93613349E-04  -1.93613349E-04
+
+
+      SPECTRUM
+      ===========
+
+      Start and end of points [m] of integration for spectrum
+      calculations (XIANF,XIEND):  -1.00000002E+30   1.00000002E+30
+
+
+      SR WFILL0:
+
+      Parameters:
+      WGWINFC:   2646.6899088765672     
+      WBL0CUT:   0.0000000000000000     
+      WBL0HYS:   1.0000000000000000     
+
+      Pinhole of collimators:
+      (X,Y,Z), width, height:
+
+        1.0000E+01  0.0000E+00  0.0000E+00  1.0000E+03  1.0000E+03
+        1.0000E+01  0.0000E+00  0.0000E+00  1.0000E+03  1.0000E+03
+
+      Number of sources:           1
+      Begin and end of sources (x,y,z):
+
+                 1  -2.07480001       0.00000000       0.00000000    
+                 1   2.07480001       0.00000000       6.39442180E-11
+
+      Horiz., vert. slopes and mag. field
+      at begin and end of sources:
+
+                 1   0.00000000       0.00000000       0.00000000    
+                 1   7.77845757E-12   0.00000000       8.95089558E-13
+
+
+      SR COHEREN:
+      Minimum and maximum number of phases  between
+      photons and electrons:
+         51.7826309       51.7826309    
+
+
+       selected observation point:
+
+          10.0000000       0.00000000       0.00000000    
+
+
+      Source number, mean mag. field (sign from By), abs. mean and rel. rms
+      for sources, and critical photon energy [eV] or wavelength [nm]
+      (with respect to abs. mean):
+
+           1  -2.41901985E-13   8.96730423E-02  0.486472666       176.834396    
+
+      Photon energy cut-off (SPECCUT):   0.00000000    
+
+      Max. field and photon energy cuts for source points:
+
+           1  0.141448349       0.00000000    
+
+      Data-file written for program RAY
+      File: wave_ray.dat                                                                                                                    
+      (Device center is assumed at (0,0,0)
+      Photon energy:   1405.67578    
+
+
+      Results of spectrum calculations
+      ================================
+
+
+      Reflectivity coefficients (complex):
+
+       (  1.0000000000000000     ,  0.0000000000000000     )
+       (  1.0000000000000000     ,  0.0000000000000000     )
+       (  1.0000000000000000     ,  0.0000000000000000     )
+
+
+
+      Buffer size for integration (NDWSOU):       20849
+
+      Provided number of integration steps for each source
+      (controlled by NLPOI)
+      (not necessarily used)
+
+       20747
+
+      Bandwidth:   1.00000005E-03
+
+
+      Pinhole position (x,y,z) [m]:
+         10.0000000       0.00000000       0.00000000    
+
+      Numbers defining inner vert. and hori. edges (MMEDGEY,MMEDGEZ):            0           0
+      Numbers defining outerer vert. and hori. edges (MEDGEY,MEDGEZ):            1           1
+      Total number of vert. and hori. points:                   153         153
+      Number of vert. and horiz. points inside pinhole:         151         151
+
+      Vertical and horizontal grid size [m]:        1.33333333E-05   1.33333333E-05
+      Vertical and horizontal size [m x m]:         2.00000009E-03   2.00000009E-03
+      Total vert. and horiz. size [m x m]:          2.02666665E-03   2.02666665E-03
+
+      Photon energy or wavelength and flux through pinhole:
+      (for all sources and sum)
+
+      1405.67578       1.60777812E+13   1.60777812E+13
+
+      Flux density for selected point:
+
+               1405.67578       1.23391571E+19   1.23391571E+19
+
+      Power through pinhole [W]:
+      (for all sources and sum)
+       3.52192187       3.52192187    
+
+
+      Power density at selected point [W/m**2]:
+
+                1041179.88       1041179.88    
+
+
+
+
+      Photon energy or wavelength and normalized components S0, S1/S0,
+      S2/S0, S3/S0 of STOKES vector and polarization for pinhole:
+
+       1.4057E+03  1.6078E+13  9.9961E-01 -1.1935E-09 -3.3365E-20  9.9961E-01
+
+
+      Photon energy [eV] or wavelength [nm] for selected point
+      of pinhole, S0, S1/S0, S2/S0, S3/S0, P of
+      STOKES vector per unit area [m**2]:
+
+
+           Observation point (x,y,z) [m]:
+              10.0000000       0.00000000       0.00000000    
+
+       1.4057E+03  1.2339E+19  1.0000E+00  0.0000E+00  0.0000E+00  1.0000E+00
+
+       Total absolut maxima found for Stokes-V. (z,y,Eph,fluxdens.)
+
+       -1.7333E-04  0.0000E+00  1.4057E+03  1.3773E+20
+       -1.7333E-04  0.0000E+00  1.4057E+03  1.3773E+20
+        1.3333E-04  1.3333E-04  1.4057E+03  3.0920E+18
+       -1.6000E-04 -1.4667E-04  1.4057E+03  5.7240E+17
+ *** WARNING: CALL TO UTIL_MAX_PARABEL FAILED FOR S           1
+ *** CHECK VALUES CAREFULLY
+ *** WARNING: CALL TO UTIL_MAX_PARABEL FAILED FOR S           2
+ *** CHECK VALUES CAREFULLY
+
+
+
+      Brilliance calculations:
+      (only meaningful for undulators)
+
+      sigr=sqrt(2*lambda*L)/2/pi*sigrc and 
+      sigrp=sqrt(lambda/2/L)*sigrpc
+
+       sigrc,sigrpc:   1.0000000000000000        1.0000000000000000     
+
+      make sure that the device length agrees to the length
+      of the trajectory
+      (for rec-fields rangrec and rangpm are substracted by program)
+
+      Observation point:
+
+         10.0000000       0.00000000       0.00000000    
+
+      considered device length [m]:   4.14960003    
+
+
+      Brilliance [photons/sec/BW/mm**2/mrad**2]
+
+          1405.7        0.10591E+19    0.10591E+19     0.0000         0.0000    
+
+
+      estimated brilliance maxima, flux and flux-density of S0, S1, S2, S3:
+
+          1405.7        0.10591E+19    0.82398E+12    0.12339E+16
+          1405.7        0.10591E+19    0.82398E+12    0.12339E+16
+          0.0000         0.0000         0.0000         0.0000    
+          0.0000         0.0000         0.0000         0.0000    
+
+      estimated brilliance maximum of S3*S3/S0:
+
+          0.0000         0.0000    
+
+      ---> flag IFOLD is not set, emittance effects are estimated
+      from horizontal beam size [mm] and divergence [mrad]: 
+         2.16000000E-04   2.47999997E-05
+      vertical beam size [mm] and divergence [mrad]: 
+         1.87000005E-05   4.29000011E-06
+
+
+      Brilliance [photons/sec/BW/mm**2/mrad**2] with emittance
+
+          1405.7        0.13901E+17    0.13901E+17     0.0000         0.0000    
+
+
+      estimated brilliance maxima, flux and flux-density of S0, S1, S2, S3
+      with emittance:
+
+          1405.7        0.13901E+17    0.82398E+12    0.43729E+15
+          1405.7        0.13901E+17    0.82398E+12    0.43729E+15
+          0.0000         0.0000         0.0000         0.0000    
+          0.0000         0.0000         0.0000         0.0000    
+
+      estimated brilliance maximum of S3*S3/S0 with emittance:
+
+          0.0000         0.0000    
+
+      corresponding sigmas of source size [mm]
+      and divergence [mrad] without and with emittance
+      (including corr. factors sigrc,sigrpc):
+
+      L/mm, lambda/mm:    4149.60010       8.82039728E-07
+      without emit.:    1.36170276E-02   1.03092240E-02
+         with emit.:    7.07569346E-02   1.73174869E-02
+         (sigrf**2 = sigrxf*sigryf)
+
+
+      LAST CHECK:
+
+           BMAXGL:  0.14144828389943598     
+
+           XBMAXGL:  -2.0501000011598580     
+           YBMAXGL:   0.0000000000000000     
+           ZBMAXGL:  -1.5223076169124772E-006
+
+
+      CURRENT NUMBER:         358
+
+
+                     --- Program WAVE completed ---
+
+
+
+                                                   14:57:01 29.01.16
+

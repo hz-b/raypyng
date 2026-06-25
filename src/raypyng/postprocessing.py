@@ -425,15 +425,24 @@ class PostProcess:
         energy_column = f"Energy{harmonic}[eV]"
         photons_column = f"Photons{harmonic}"
 
-        # Ensure the energy values are sorted, which is a requirement for np.interp
-        if not undulator_table[energy_column].is_monotonic_increasing:
-            undulator_table = undulator_table.sort_values(by=energy_column)
+        harmonic_table = undulator_table[[energy_column, photons_column]].dropna()
+        if not harmonic_table[energy_column].is_monotonic_increasing:
+            harmonic_table = harmonic_table.sort_values(by=energy_column)
 
-        # Use numpy to interpolate the photon flux at the given energy
+        harmonic_energies = harmonic_table[energy_column].to_numpy(dtype=float)
+        harmonic_photons = harmonic_table[photons_column].to_numpy(dtype=float)
+
+        if harmonic_energies.size == 0:
+            return np.nan
+
+        energy_value = float(energy)
+        if energy_value < harmonic_energies[0] or energy_value > harmonic_energies[-1]:
+            return np.nan
+
         source_photon_flux = np.interp(
-            x=energy,
-            xp=undulator_table[energy_column].to_numpy(),  # Convert to numpy array for np.interp
-            fp=undulator_table[photons_column].to_numpy(),  # Convert to numpy array for np.interp
+            x=energy_value,
+            xp=harmonic_energies,
+            fp=harmonic_photons,
         )
 
         # Calculate the flux based on the percentage

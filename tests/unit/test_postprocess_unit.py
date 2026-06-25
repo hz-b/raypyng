@@ -92,6 +92,52 @@ def test_calculate_percentage_efficiency_extrapolation_low(pp):
     assert result == pytest.approx(expected, rel=1e-6)
 
 
+def test_calculate_flux_undulator_table_interpolates_in_range(pp):
+    undulator_table = pd.DataFrame(
+        {
+            "Energy1[eV]": [400.0, 600.0],
+            "Photons1": [1000.0, 3000.0],
+        }
+    )
+    result = pp._calculate_flux_undulator_table(500.0, 50.0, undulator_table, 1)
+    assert result == pytest.approx(1000.0, rel=1e-6)
+
+
+def test_calculate_flux_undulator_table_below_range_is_nan(pp):
+    undulator_table = pd.DataFrame(
+        {
+            "Energy1[eV]": [400.0, 600.0],
+            "Photons1": [1000.0, 3000.0],
+        }
+    )
+    result = pp._calculate_flux_undulator_table(200.0, 50.0, undulator_table, 1)
+    assert np.isnan(result)
+
+
+def test_calculate_flux_undulator_table_above_range_is_nan(pp):
+    undulator_table = pd.DataFrame(
+        {
+            "Energy1[eV]": [400.0, 600.0],
+            "Photons1": [1000.0, 3000.0],
+        }
+    )
+    result = pp._calculate_flux_undulator_table(800.0, 50.0, undulator_table, 1)
+    assert np.isnan(result)
+
+
+def test_calculate_flux_undulator_table_uses_matching_harmonic_only(pp):
+    undulator_table = pd.DataFrame(
+        {
+            "Energy1[eV]": [400.0, 600.0],
+            "Photons1": [1000.0, 3000.0],
+            "Energy3[eV]": [1200.0, 1400.0],
+            "Photons3": [200.0, 400.0],
+        }
+    )
+    result = pp._calculate_flux_undulator_table(500.0, 100.0, undulator_table, 3)
+    assert np.isnan(result)
+
+
 # ── _extract_fwhm ─────────────────────────────────────────────────────────────
 
 
