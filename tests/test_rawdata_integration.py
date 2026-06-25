@@ -76,47 +76,65 @@ def dipole_rml():
 
 
 def _run_simulation(dipole_rml, remove_rawrays: bool, tmp_path):
-    """Helper: run a single simulation and return the sim folder path."""
+    """Helper: run a single small simulation and return the sim folder path."""
     from raypyng import Simulate
-    from raypyng.rml import RMLFile
 
-    sim = Simulate(rml=dipole_rml, folder=str(tmp_path))
-    sim.ray_path = DEV_RAY_PATH
-    sim.hide = True
+    sim = Simulate(rml=dipole_rml, hide=True, ray_path=DEV_RAY_PATH)
+    sim.path = str(tmp_path)
+    sim.simulation_name = "rawrays"
     sim.raypyng_analysis = True
-    sim.remove_rawrays = remove_rawrays
 
-    rml = RMLFile(dipole_rml)
-    exports = sim.exports
-    # Accept whatever exports are defined in the dipole.rml
-    sim.run(multiprocessing=False)
+    beamline = sim.rml.beamline
+    # Minimal single-point scan; small ray count keeps the trace fast.
+    sim.params = [
+        {beamline.Dipole.photonEnergy: [700]},
+        {beamline.Dipole.numberRays: 1000},
+    ]
+    sim.exports = [
+        {beamline.Dipole: ["RawRaysOutgoing"]},
+        {beamline.DetectorAtFocus: ["RawRaysOutgoing"]},
+    ]
+    sim.run(multiprocessing=1, force=True, remove_rawrays=remove_rawrays)
     return str(tmp_path)
 
 
+# Per-simulation raw-ray dumps from the stream path use a dash before the item id
+# ('<n>_<Element>-RawRaysOutgoing.csv') and live under round_*/. The consolidated
+# raypyng-analysis output uses an underscore ('<Element>_RawRaysOutgoing.csv') and
+# lives in the simulation root; only the former is governed by remove_rawrays.
+def _stream_rawrays_csvs(sim_path):
+    return glob.glob(os.path.join(sim_path, "**", "*-RawRays*.csv"), recursive=True)
+
+
+def _consolidated_analysis_csvs(sim_path):
+    return glob.glob(os.path.join(sim_path, "**", "*_RawRays*.csv"), recursive=True)
+
+
 def test_remove_rawrays_true_no_csv(dipole_rml, tmp_path):
-    """remove_rawrays=True: rawrays CSV files are never written to disk."""
+    """remove_rawrays=True: the per-sim raw-ray stream CSVs are never written."""
     sim_path = _run_simulation(dipole_rml, remove_rawrays=True, tmp_path=tmp_path)
-    csv_files = glob.glob(os.path.join(sim_path, "**", "*RawRays*.csv"), recursive=True)
-    assert csv_files == [], f"Found unexpected rawrays CSV files: {csv_files}"
+    stream_csvs = _stream_rawrays_csvs(sim_path)
+    assert stream_csvs == [], f"Found unexpected raw-ray stream CSVs: {stream_csvs}"
 
 
-def test_remove_rawrays_true_dat_files_exist(dipole_rml, tmp_path):
-    """remove_rawrays=True: .dat analysis files are written for rawrays elements."""
+def test_remove_rawrays_true_analysis_output_exists(dipole_rml, tmp_path):
+    """remove_rawrays=True: postprocessing still produces the consolidated analysis CSV."""
     sim_path = _run_simulation(dipole_rml, remove_rawrays=True, tmp_path=tmp_path)
-    dat_files = glob.glob(os.path.join(sim_path, "**", "*analyzed_rays*.dat"), recursive=True)
-    assert len(dat_files) > 0, "No .dat files found — postprocessing may have failed"
+    analysis_csvs = _consolidated_analysis_csvs(sim_path)
+    assert len(analysis_csvs) > 0, "No consolidated analysis CSV — postprocessing may have failed"
 
 
 def test_remove_rawrays_false_csv_preserved(dipole_rml, tmp_path):
-    """remove_rawrays=False: Python writes the CSV in the expected format."""
+    """remove_rawrays=False: the stream path writes per-sim CSVs in the expected format."""
     sim_path = _run_simulation(dipole_rml, remove_rawrays=False, tmp_path=tmp_path)
-    csv_files = glob.glob(os.path.join(sim_path, "**", "*RawRays*.csv"), recursive=True)
-    assert len(csv_files) > 0, "Expected CSV files when remove_rawrays=False"
+    stream_csvs = _stream_rawrays_csvs(sim_path)
+    assert len(stream_csvs) > 0, "Expected raw-ray stream CSVs when remove_rawrays=False"
 
-    # Verify format: first line is sep=\t, second line is tab-separated header
-    for csv_file in csv_files:
+    # Verify format: first line is sep=\t, second line is the tab-separated header.
+    for csv_file in stream_csvs:
         with open(csv_file) as f:
-            first_line = f.readline().strip()
+            # Keep the trailing tab — .strip() would remove the "\t" we're checking for.
+            first_line = f.readline().rstrip("\r\n")
             header_line = f.readline().strip()
         assert first_line == "sep=\t", f"Missing sep=\\t header in {csv_file}"
         cols = header_line.split("\t")
