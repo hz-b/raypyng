@@ -570,6 +570,15 @@ saved in your simulation folder:
   each simulation. If for instance, you exported the `ScalarElementProperties` of the Dipole, 
   you will have a list of files `0_Dipole-ScalarElementProperties.csv`
 - `looper.csv` each simulation and its parameters.
+- one combined recap CSV in the simulation folder for each configured
+  element/export-type pair, for instance `Dipole_ScalarElementProperties.csv`
+  or `DetectorAtFocus_ScalarBeamProperties.csv`
+
+These RAY-UI recap files contain one row per simulation. The first columns come
+from `looper.csv`, and the remaining columns come from the corresponding
+RAY-UI-analyzed export. If you repeated the simulations with :code:`sim.repeat > 1`,
+numeric analyzed columns are averaged across rounds before they are written to
+the combined recap file.
 
 Analysis performed by raypyng
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -747,10 +756,16 @@ Working with the results
    This section is intentionally minimal for now and will be expanded.
 
 When raypyng performs the analysis, the most convenient output is the combined
-recap file written in the simulation folder, one per exported element, for
-example ``DetectorAtFocus_RawRaysOutgoing.csv``. Each row is one simulation; the
-first columns are the scanned input parameters (taken from ``looper.csv``) and
-the remaining columns are the analyzed quantities listed above.
+recap file written in the simulation folder, one per exported element/export
+pair, for example ``DetectorAtFocus_RawRaysOutgoing.csv`` when
+:code:`sim.raypyng_analysis=True` or ``DetectorAtFocus_ScalarBeamProperties.csv`
+when :code:`sim.analyze=True`. Each row is one simulation; the first columns are
+the scanned input parameters (taken from ``looper.csv``) and the remaining
+columns are the analyzed quantities listed above.
+
+If both analysis modes are enabled at the same time, the raypyng-analysis recap
+files keep precedence for any colliding top-level filename, and the RAY-UI
+round-level files remain available inside the ``round_*`` folders.
 
 It is a plain CSV, so it can be loaded directly with pandas:
 

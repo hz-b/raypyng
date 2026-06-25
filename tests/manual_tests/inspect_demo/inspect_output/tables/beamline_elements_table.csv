@@ -1,0 +1,10 @@
+name,type,grazingIncAngle [deg],azimuthalAngle [deg],totalWidth [mm],totalLength [mm],materialCoating1,thicknessCoating1 [nm],roughnessCoating1 [nm],materialCoating2,thicknessCoating2 [nm],roughnessCoating2 [nm],materialTopLayer,thicknessTopLayer [nm],roughnessTopLayer [nm],slopeErrorSag [sec],slopeErrorMer [sec],x [mm],y [mm],z [mm]
+Dipole,Dipole,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,0.00,0.00,0.00
+M1,Toroid,1,90,50,1000,Rh,30,0.2,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,1.5,0.5,0.00,0.00,12500.00
+PremirrorM2,PlaneMirror,2.386940567621167,0,25,500,Rh,30,0.2,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,0.1,0.08,-111.72,-2.48,15699.14
+PG,PlaneGrating,n.a.,180,20,150,Au,30,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,0.1,0.05,-122.15,20.00,15997.87
+M3,Cylinder,1,270,30,550,Rh,30,0.2,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,1,0.3,-244.30,20.00,19495.74
+ExitSlit,Slit,n.a.,0,50,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,-244.30,20.00,33995.74
+KB1,Ellipsoid,1,270,50,400,Rh,30,0.2,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,0.1,0.05,-244.30,20.00,36995.74
+KB2,Ellipsoid,1.5,180,50,100,Rh,30,0.2,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,0.1,0.05,-233.83,20.00,37295.55
+DetectorAtFocus,ImagePlane,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,-181.55,-58.50,38792.58
