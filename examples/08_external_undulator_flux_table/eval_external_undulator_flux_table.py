@@ -1,68 +1,67 @@
-"""Eval for simulation_external_undulator_flux_table.py.
-
-Photon energy vs bandwidth and flux. The external undulator flux table gives a
-known source flux, so flux is shown in ph/s.
-"""
-
 import os
 
 import matplotlib
 
-matplotlib.use("Agg")  # headless: never open a window
+matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt  # noqa: E402
-import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
+
 
 if __name__ == "__main__":
     this_file_dir = os.path.dirname(os.path.realpath(__file__))
-    csv_path = os.path.join(this_file_dir, "RAYPy_Simulation_external_undulator_flux_table",
-                            "DetectorAtFocus_RawRaysOutgoing.csv")
-    group_col = None
-    title = "External undulator flux table: bandwidth & flux vs energy"
 
-    if not os.path.exists(csv_path):
-        raise SystemExit(f"[eval] expected analysis CSV not found: {csv_path}")
-    df = pd.read_csv(csv_path)
+    undulator = pd.read_csv(
+        os.path.join(
+            this_file_dir,
+            "..",
+            "undulator",
+            "undulator_harmonics_energy_photons.csv",
+        )
+    )
+    detector = pd.read_csv(
+        os.path.join(
+            this_file_dir,
+            "RAYPy_Simulation_external_undulator_flux_table",
+            "DetectorAtFocus_RawRaysOutgoing.csv",
+        )
+    ).sort_values("PhotonEnergy")
 
-    # Prefer absolute flux in ph/s; fall back to a percentage measure.
-    def first_nonzero(names):
-        for n in names:
-            if n in df.columns and np.nanmax(np.abs(pd.to_numeric(df[n], errors="coerce"))) > 0:
-                return n
-        return None
+    fig, axs = plt.subplots(2, 1, figsize=(10, 9), sharex=True)
+    xmin = detector["PhotonEnergy"].min()
+    xmax = detector["PhotonEnergy"].max()
 
-    abs_col = first_nonzero(["FluxPerMilPerBwAbs", "PhotonFlux"])
-    if abs_col == "FluxPerMilPerBwAbs":
-        flux_col, flux_label = abs_col, "Flux per 0.1%BW [ph/s]"
-    elif abs_col == "PhotonFlux":
-        flux_col, flux_label = abs_col, "Photon flux [ph/s]"
-    else:
-        flux_col = first_nonzero(["FluxPerMilPerBwPerc", "PercentageRaysSurvived"]) \
-            or "PercentageRaysSurvived"
-        flux_label = "Flux per 0.1%BW [%]" if flux_col == "FluxPerMilPerBwPerc" \
-            else "Rays survived [%]"
+    axs[0].plot(undulator["Energy1[eV]"], undulator["Photons1"], label="H1")
+    axs[0].plot(undulator["Energy3[eV]"], undulator["Photons3"], label="H3")
+    axs[0].set(
+        ylabel="Photons at source [ph/s/0.1%BW]",
+        title="Undulator harmonics from the supplied table",
+    )
+    axs[0].set_xlim(xmin, xmax)
+    axs[0].grid(True, alpha=0.3)
+    axs[0].legend()
 
-    fig, axs = plt.subplots(2, 1, figsize=(10, 8))
-    if group_col and group_col in df.columns and df[group_col].nunique() > 1:
-        groups = sorted(df[group_col].unique())
-    else:
-        group_col, groups = None, [None]
+    axs[1].plot(
+        detector["PhotonEnergy"],
+        detector["FluxPerMilPerBwAbs1"],
+        marker="o",
+        label="H1 at DetectorAtFocus",
+    )
+    axs[1].plot(
+        detector["PhotonEnergy"],
+        detector["FluxPerMilPerBwAbs3"],
+        marker="o",
+        label="H3 at DetectorAtFocus",
+    )
+    axs[1].set(
+        xlabel="Photon energy [eV]",
+        ylabel="Flux at DetectorAtFocus [ph/s/0.1%BW]",
+        title="Beamline result read directly from the recap CSV",
+    )
+    axs[1].set_xlim(xmin, xmax)
+    axs[1].grid(True, alpha=0.3)
+    axs[1].legend()
 
-    for g in groups:
-        sub = df if g is None else df[df[group_col] == g]
-        sub = sub.sort_values("PhotonEnergy")
-        label = None if g is None else f"{group_col} = {g}"
-        axs[0].plot(sub["PhotonEnergy"], sub["Bandwidth"], marker=".", label=label)
-        axs[1].plot(sub["PhotonEnergy"], sub[flux_col], marker=".", label=label)
-
-    axs[0].set(xlabel="Photon energy [eV]", ylabel="Bandwidth [eV]", title=title)
-    axs[1].set(xlabel="Photon energy [eV]", ylabel=flux_label, title="Flux vs photon energy")
-    for ax in axs:
-        ax.grid(True, alpha=0.3)
-    if group_col:
-        axs[0].legend()
-        axs[1].legend()
     fig.tight_layout()
     out_png = os.path.join(this_file_dir, "eval_external_undulator_flux_table.png")
     fig.savefig(out_png, dpi=150)

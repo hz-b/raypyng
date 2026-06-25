@@ -1,0 +1,141 @@
+{
+  "applies_to": "all raypyng analysis output files in this folder",
+  "columns": [
+    {
+      "name": "SourcePhotonFlux",
+      "unit": "photons/s"
+    },
+    {
+      "name": "SourceBandwidth",
+      "unit": "eV"
+    },
+    {
+      "name": "NumberRaysSurvived",
+      "unit": "count"
+    },
+    {
+      "name": "PercentageRaysSurvived",
+      "unit": "%"
+    },
+    {
+      "name": "PhotonEnergy",
+      "unit": "eV"
+    },
+    {
+      "name": "Bandwidth",
+      "unit": "eV"
+    },
+    {
+      "name": "HorizontalFocusFWHM",
+      "unit": "mm"
+    },
+    {
+      "name": "VerticalFocusFWHM",
+      "unit": "mm"
+    },
+    {
+      "name": "HorizontalDivergenceFWHM",
+      "unit": "deg"
+    },
+    {
+      "name": "VerticalDivergenceFWHM",
+      "unit": "deg"
+    },
+    {
+      "name": "HorizontalCenter",
+      "unit": "mm"
+    },
+    {
+      "name": "VerticalCenter",
+      "unit": "mm"
+    },
+    {
+      "name": "PhotonFlux1",
+      "unit": null
+    },
+    {
+      "name": "PhotonFlux3",
+      "unit": null
+    },
+    {
+      "name": "PhotonFlux5",
+      "unit": null
+    },
+    {
+      "name": "PhotonFlux7",
+      "unit": null
+    },
+    {
+      "name": "PhotonFlux9",
+      "unit": null
+    },
+    {
+      "name": "EnergyPerMilPerBw",
+      "unit": null
+    },
+    {
+      "name": "FluxPerMilPerBwPerc",
+      "unit": null
+    },
+    {
+      "name": "FluxPerMilPerBwAbs1",
+      "unit": null
+    },
+    {
+      "name": "FluxPerMilPerBwAbs3",
+      "unit": null
+    },
+    {
+      "name": "FluxPerMilPerBwAbs5",
+      "unit": null
+    },
+    {
+      "name": "FluxPerMilPerBwAbs7",
+      "unit": null
+    },
+    {
+      "name": "FluxPerMilPerBwAbs9",
+      "unit": null
+    },
+    {
+      "name": "AXUVCurrentAmp1",
+      "unit": null
+    },
+    {
+      "name": "AXUVCurrentAmp3",
+      "unit": null
+    },
+    {
+      "name": "AXUVCurrentAmp5",
+      "unit": null
+    },
+    {
+      "name": "AXUVCurrentAmp7",
+      "unit": null
+    },
+    {
+      "name": "AXUVCurrentAmp9",
+      "unit": null
+    },
+    {
+      "name": "GaAsPCurrentAmp1",
+      "unit": null
+    },
+    {
+      "name": "GaAsPCurrentAmp3",
+      "unit": null
+    },
+    {
+      "name": "GaAsPCurrentAmp5",
+      "unit": null
+    },
+    {
+      "name": "GaAsPCurrentAmp7",
+      "unit": null
+    },
+    {
+      "name": "GaAsPCurrentAmp9",
+      "unit": null
+    }
+  ]
+}

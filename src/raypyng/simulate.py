@@ -29,6 +29,7 @@ _ETA_NRAYS_CALIBRATION_POINTS = (
     (1.0e5, 3.9),
     (5.0e5, 16.5),
 )
+_ETA_SAFETY_FACTOR = 4.0
 _ETA_MIN_SECONDS = 5.0
 
 
@@ -1133,11 +1134,6 @@ class Simulate:
         if getattr(self, "_initial_eta_seed", None):
             data.extend(
                 [
-                    ["numberRays Basis", self._initial_eta_seed["basis"]],
-                    [
-                        "Rough First Round ETA",
-                        self._format_eta(self._initial_eta_seed["first_round_seconds"]),
-                    ],
                     [
                         f"Rough Total ETA ({self._workers} workers)",
                         self._format_eta(self._initial_eta_seed["total_seconds"]),
@@ -1227,6 +1223,7 @@ class Simulate:
                                                     are done.
         """
         multiprocessing = self._resolve_multiprocessing_workers(multiprocessing)
+        run_start = time.monotonic()
 
         if self.graxpy_efficiency and self._engine == "ray-ui":
             raise ValueError(
@@ -1314,6 +1311,10 @@ class Simulate:
             self.logger.info("graxpy efficiency aggregated to %s", out)
         if remove_round_folders:
             self._remove_round_folders()
+        total_elapsed = time.monotonic() - run_start
+        elapsed_str = self._format_eta(total_elapsed)
+        print(f"\nTotal runtime: {elapsed_str}", flush=True)
+        self.logger.info("Total runtime: %s", elapsed_str)
         self.logger.info("End of the Simulations")
         if force_exit:
             self.cleanup_child_processes()
@@ -1614,6 +1615,7 @@ class Simulate:
         else:
             estimate = np.interp(number_rays, x, y)
 
+        estimate *= _ETA_SAFETY_FACTOR
         return max(_ETA_MIN_SECONDS, float(estimate))
 
     def _round_zero_number_rays(self):
@@ -1666,7 +1668,7 @@ class Simulate:
             return
 
         eta_str = self._format_eta(self._initial_eta_seed["total_seconds"])
-        pbar.set_postfix_str(f"ETA~: {eta_str}, Seed: nrays heuristic", refresh=True)
+        pbar.set_postfix_str(f"ETA~: {eta_str}", refresh=True)
 
     def _validate_run_configuration(self):
         if self.sp is None or len(self.sp.params) == 0:
@@ -1924,8 +1926,8 @@ class Simulate:
             if pending and (time.monotonic() - last_completion) >= max_idle_secs:
                 idle = time.monotonic() - last_completion
                 self.logger.warning(
-                    f"Batch stalled: {len(pending)} futures idle for {idle:.0f}s "
-                    f"(limit {max_idle_secs:.0f}s)"
+                    f"No batch completion reported for {idle:.0f}s; "
+                    f"{len(pending)} future(s) still pending (threshold {max_idle_secs:.0f}s)"
                 )
                 timed_out_futures = list(pending)
                 pending = set()
@@ -1955,8 +1957,8 @@ class Simulate:
             if missing_sims:
                 idle_threshold = max(10.0, max_idle_secs / 4)
                 print(
-                    f"\nBatch stalled — {n_missing} sim(s) still running, "
-                    f"waiting (idle limit {idle_threshold:.0f}s)...",
+                    f"\nStill waiting for {n_missing} sim(s) to finish. "
+                    "This can be normal for longer runs; checking the output files...",
                     flush=True,
                 )
                 last_progress = time.monotonic()

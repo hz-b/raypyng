@@ -7,8 +7,8 @@ __pycache__/
 # local-only files, including data which should NOT end in the repo
 local/
 
-# Ignoring simlation tests
-RAYPy_Simulation_*
+# Ignoring simulation outputs in manual tests
+tests/manual_tests/**/RAYPy_Simulation_*
 
 # Ignore distribution on pip
 dist
@@ -40,5 +40,6 @@ examples/test_exportDipole-RawRaysOutgoing.csv
 examples/*/*.png
 examples/*/eval_*.png
 examples/**/inspect_output/
+examples/*/RAYPy_Simulation_*/round_*/
 examples/rml_demo/new_dipole_beamline.rml
 examples/runner_demo/test_export*.csv

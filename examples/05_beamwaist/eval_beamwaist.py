@@ -1,8 +1,4 @@
-"""Beamwaist example — eval step.
-
-Loads the trace saved by ``simulation_beamwaist.py`` and renders the 2D
-beamwaist plot to a PNG (no interactive window). Run the simulation first.
-"""
+"""Plot the beamwaist for the beamwaist example."""
 
 import os
 
@@ -30,15 +26,15 @@ if __name__ == '__main__':
     bw.change_name(new_name='Dip', pos=0)
     bw.change_name(new_name='Focus', pos=8)
 
-    xh, yh, x, y = bw.plot(
+    bw.plot(
         save_img=True,
-        img_name='Beamwaist',
+        img_name='eval_beamwaist',
         extension='.png',
         show_img=False,
         annotate_OE=True,
         debug=False,
     )
-    print('Saved beamwaist plot:', os.path.join('beamwaist.png'))
-
-    # one can use xh, yh, x, y to build custom plots:
-    # suggested usage: ax.pcolormesh(x, y, np.log(self.xh), cmap='inferno')
+    source_png = os.path.join(this_file_dir, 'RAYPy_Simulation_Beamwaist', 'eval_beamwaist.png')
+    target_png = os.path.join(this_file_dir, 'eval_beamwaist.png')
+    os.replace(source_png, target_png)
+    print('Saved beamwaist plot:', target_png)

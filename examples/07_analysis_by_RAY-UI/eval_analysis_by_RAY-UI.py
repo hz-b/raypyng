@@ -1,4 +1,4 @@
-"""Plot detector-at-focus bandwidth and transmission efficiency vs photon energy."""
+"""Plot photon energy vs bandwidth for the RAY-UI example."""
 
 import os
 
@@ -7,7 +7,6 @@ import matplotlib
 matplotlib.use("Agg")  # headless: never open a window
 
 import matplotlib.pyplot as plt  # noqa: E402
-import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 
 if __name__ == "__main__":

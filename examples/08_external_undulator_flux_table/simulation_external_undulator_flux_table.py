@@ -15,10 +15,10 @@ if __name__ == '__main__':
     beamline = sim.rml.beamline
 
     # define the values of the parameters to scan
-    energy   = np.arange(200, 2201, 250)
+    energy = np.arange(200, 1800.1, 50)
     SlitSize = np.array([0.1])
-    cff      = np.array([2.25])
-    nrays    = 1e4
+    cff = np.array([2.25])
+    nrays = 1e5
 
     params = [
         {beamline.SU.photonEnergy: energy},
@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     sim.params = params
     sim.simulation_name = 'external_undulator_flux_table'
-    sim.repeat = 2
+    sim.repeat = 4
     sim.analyze = False
     sim.raypyng_analysis = True
 

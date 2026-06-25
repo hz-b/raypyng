@@ -689,12 +689,17 @@ writes a single set of flux columns and computes the flux at the detector as
 
 With an undulator table, the source flux no longer comes from RAY-UI. For each
 simulated photon energy and **each harmonic** :code:`h`, raypyng linearly
-interpolates your tabulated flux ``Photons{h}`` and scales it by the fraction of
-rays that survived the beamline:
+interpolates your tabulated flux ``Photons{h}`` inside that harmonic's tabulated
+energy range and scales it by the fraction of rays that survived the beamline:
 
 .. code-block:: text
 
     PhotonFlux{h} = interp(energy, Energy{h}[eV], Photons{h}) * PercentageRaysSurvived / 100
+
+If a simulated energy falls outside the tabulated range of harmonic :code:`h`,
+raypyng writes ``NaN`` for that harmonic-derived result instead of reusing the
+edge value. This keeps the recap CSV numeric and lets plotting tools such as
+matplotlib skip the non-physical points automatically.
 
 Consequently the analyzed output gains **one set of flux columns per harmonic**
 instead of a single one. For a table with harmonics 1, 3 and 5 you get, for
@@ -785,9 +790,7 @@ It is a plain CSV, so it can be loaded directly with pandas:
 
     print(df.columns.tolist())
 
-You can then filter, plot, or further process the DataFrame as usual. A complete
-plotting example is available in `eval_permil.py
-<https://github.com/hz-b/raypyng/blob/main/examples/eval_permil.py>`_.
+You can then filter, plot, or further process the DataFrame as usual.
 
 Recipes
 ========
@@ -798,84 +801,3 @@ Two recipes are provided, one to make `Resolving Power
 one to make `Flux
 <https://github.com/hz-b/raypyng/blob/main/examples/simulation_recipee_Flux.py>`_
 simulations.
-
-
-List of available examples
-===========================
-All examples live in the `examples folder
-<https://github.com/hz-b/raypyng/blob/main/examples>`_ of the repository. A short
-description of each one follows.
-
-Simulation examples
--------------------
-These scripts run a beamline scan end to end.
-
-- `simulation_raypyng.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/simulation_raypyng.py>`_ —
-  basic simulation: scan the photon energy and exit-slit aperture of a dipole
-  beamline and let **raypyng** analyze the exported rays.
-- `simulation_analysis_by_RAY-UI.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/simulation_analysis_by_RAY-UI.py>`_ —
-  the same kind of scan, but letting **RAY-UI** perform the analysis
-  (:code:`ScalarBeamProperties` / :code:`ScalarElementProperties`).
-- `simulation_permil.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/simulation_permil.py>`_ —
-  flux and bandwidth per 0.1% bandwidth, scanning energy for two grating line
-  densities.
-- `simulation_external_undulator_flux_table.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/simulation_external_undulator_flux_table.py>`_ —
-  undulator source whose flux is taken from an external flux table
-  (:code:`sim.undulator_table`).
-- `simulation_multilayer_monochromator_efficiency.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/simulation_multilayer_monochromator_efficiency.py>`_ —
-  fold an externally computed monochromator efficiency into the results
-  (:code:`sim.efficiency`).
-- `simulation_waveFiles.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/simulation_waveFiles.py>`_ —
-  drive an Undulator from external WAVE ray files via the :code:`undulatorFile`
-  parameter.
-- `simulation_slope_errors.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/simulation_slope_errors.py>`_ —
-  scan the meridional/sagittal slope errors of the mirrors one at a time.
-- `simulation_save_space.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/simulation_save_space.py>`_ —
-  same scan as the basic example but deleting raw-ray files and round folders to
-  save disk space (:code:`remove_rawrays`, :code:`remove_round_folders`).
-- `simulation_recipee_Flux.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/simulation_recipee_Flux.py>`_ —
-  run a flux scan with the ready-made :code:`Flux` recipe.
-- `simulation_recipee_ResolvinPower.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/simulation_recipee_ResolvinPower.py>`_ —
-  run a resolving-power scan with the ready-made :code:`ResolvingPower` recipe.
-
-Building-block and post-processing examples
--------------------------------------------
-These scripts show individual pieces of raypyng without running a full scan.
-
-- `example_rml.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/example_rml.py>`_ —
-  open an RML file, list its elements and parameters, and modify a value.
-- `example_runner.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/example_runner.py>`_ —
-  drive RAY-UI directly through :code:`RayUIRunner` / :code:`RayUIAPI`
-  (load, trace, export, quit).
-- `example_waveHelper.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/example_waveHelper.py>`_ —
-  use :code:`WaveHelper` to inspect a WAVE folder and list the available
-  undulator energies/files.
-- `example_beamwaist.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/example_beamwaist.py>`_ —
-  trace and plot the beam waist along the beamline with :code:`PlotBeamwaist`.
-- `dipole.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/dipole.py>`_ —
-  compute and plot a dipole source spectrum from its magnetic field with the
-  standalone :code:`Dipole` class (no RAY-UI needed).
-- `diodes.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/diodes.py>`_ —
-  convert a photon flux into a diode current for AXUV and GaAsP diodes.
-- `eval_permil.py
-  <https://github.com/hz-b/raypyng/blob/main/examples/eval_permil.py>`_ —
-  post-process and plot the results produced by ``simulation_permil.py``.
-
-  
-  

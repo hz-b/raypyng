@@ -71,7 +71,7 @@ def test_seed_progress_bar_uses_initial_estimate():
 
     sim._seed_progress_bar_eta(pbar)
 
-    assert pbar.postfix == "ETA~: 24s, Seed: nrays heuristic"
+    assert pbar.postfix == "ETA~: 24s"
 
 
 def test_update_progress_bar_replaces_seed_with_measured_timings():
@@ -79,10 +79,18 @@ def test_update_progress_bar_replaces_seed_with_measured_timings():
     sim._workers = 2
     sim._simulations_duration_total = 8.0
     pbar = _DummyPbar(total=5)
-    pbar.postfix = "ETA~: 24s, Seed: nrays heuristic"
+    pbar.postfix = "ETA~: 24s"
 
     sim._update_progress_bar([8.0], pbar)
 
     assert "Last: 8.00s" in pbar.postfix
     assert "Avg: 8.00s/it" in pbar.postfix
     assert pbar.n == 1
+
+
+def test_number_rays_estimate_uses_conservative_safety_factor():
+    sim = Simulate(_RML, hide=True)
+
+    estimate = sim._estimate_seconds_from_number_rays(10_000)
+
+    assert estimate == 10.4

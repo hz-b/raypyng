@@ -5,15 +5,20 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Beamline inspect export can now write a styled `.xlsx` workbook in addition to CSV, with bold headers/first column, borders, alternating row fills, frozen header row, and auto-sized columns.
+- Curated docs example pages were added, with a docs build step that copies the required example figures into the documentation assets.
+- Simulations now print the total runtime at the end of a run.
 
 ### Changed
 - Simplified the inspect feature to export a single beamline-elements table instead of separate mirror and beamline tables.
 - Inspect exports now include units in the output headers for geometry, slope-error, coating-thickness, roughness, and position columns.
 - Added `openpyxl` as a package dependency to support the new XLSX export.
 - Updated the inspect demo and example beamline files to use the new single-table CSV/XLSX export flow.
+- Curated example eval scripts were simplified to be more direct and easier to read, and example simulation result folders under `examples/` are now trackable while only their nested `round_*` folders remain ignored.
+- Initial ETA seeding from `numberRays` is now more conservative, while startup progress and waiting messages were simplified to be clearer for users.
 
 ### Fixed
 - Coating, top-layer, and geometry fields in inspect exports are now read from the current inspect example RML with the intended enabled/disabled handling.
+- External undulator harmonic tables now return `NaN` outside each harmonic energy range instead of reusing edge values, and the undulator example was updated to plot the source harmonics and detector recap directly.
 
 ## [1.4.5] - 24-June-2026
 
@@ -235,4 +240,3 @@ All notable changes to this project will be documented in this file.
  
 ### Fixed
 - issue [#29](https://github.com/hz-b/raypyng/issues/29), Simulate.params used to throw an error when attempting list step-wise operation.
-
