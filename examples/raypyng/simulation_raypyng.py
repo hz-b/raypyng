@@ -6,7 +6,7 @@ if __name__ == '__main__':
     this_file_dir = os.path.dirname(os.path.realpath(__file__))
     rml_file = os.path.join(this_file_dir, '..', 'rml', 'dipole_beamline.rml')
 
-    sim = Simulate(rml_file, hide=True)
+    sim = Simulate(rml_file, hide=True, ray_path="/home/simone/Applications/Ray-UI-development-stream")
     sim.path = this_file_dir  # write output inside this example's own folder
 
     rml = sim.rml

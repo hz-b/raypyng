@@ -224,6 +224,7 @@ class PostProcess:
         remove_rawrays: bool = False,
         undulator_table=None,
         efficiency=None,
+        raw_array=None,
     ):
         """
         PostProcess routine of the RawRaysOutgoing extracted files.
@@ -273,9 +274,17 @@ class PostProcess:
         filename = os.path.join(
             dir_path, sim_number + exported_element + "-" + exported_object + ".csv"
         )
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            rays = np.genfromtxt(filename, dtype=float, delimiter="\t", names=True, skip_header=1)
+        if raw_array is not None:
+            import numpy.lib.recfunctions as rfn
+
+            rename_map = {name: f"{exported_element}_{name}" for name in raw_array.dtype.names}
+            rays = rfn.rename_fields(raw_array, rename_map)
+        else:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                rays = np.genfromtxt(
+                    filename, dtype=float, delimiter="\t", names=True, skip_header=1
+                )
         ray_properties = RayProperties(undulator_table=undulator_table)
         # account for the case that no rays survived
         try:
@@ -408,7 +417,7 @@ class PostProcess:
             dir_path, sim_number + exported_element + "_analyzed_rays" + suffix + ".dat"
         )
         ray_properties.save(new_filename)
-        if remove_rawrays:
+        if remove_rawrays and raw_array is None:
             remove_file(filename)
         return
 

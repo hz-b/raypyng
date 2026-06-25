@@ -22,6 +22,20 @@ from .recipes import SimulationRecipe
 from .rml import ObjectElement, ParamElement, RMLFile
 from .runner import RayUIAPI, RayUIRunner
 
+_RAWRAYS_ITEM_IDS = frozenset({"RawRaysOutgoing", "RawRaysIncoming", "RawRaysBeam"})
+
+
+def _write_rawrays_csv(raw_array, element_name: str, csv_path: str) -> None:
+    """Write a rawdata numpy structured array to a tab-separated CSV file.
+
+    Produces the same format that RAY-UI used to write directly, with a sep=\\t
+    compatibility header and element-prefixed column names.
+    """
+    df = pd.DataFrame({f"{element_name}_{col}": raw_array[col] for col in raw_array.dtype.names})
+    with open(csv_path, "w") as f:
+        f.write("sep=\t\n")
+        df.to_csv(f, sep="\t", index=False)
+
 
 class _ReadOnlyList(list):
     """List-like view that raises on in-place mutation.
@@ -2066,11 +2080,24 @@ def run_rml_func(parameters):
                     downstream_elements = elements_after_first_grating(rml_filename)
             except Exception as e:
                 print(f"WARNING! graxpy efficiency failed for {rml_filename}: {e}")
+        rawrays_cache = {}
         for export_params in exports:
-            api.export(*export_params)
+            element_name, export_type = export_params[0], export_params[1]
+            if export_type in _RAWRAYS_ITEM_IDS:
+                raw_array = api.rawdata(element_name, export_type)
+                rawrays_cache[(element_name, export_type)] = raw_array
+                if not remove_rawrays:
+                    csv_path = os.path.join(
+                        export_params[2],
+                        export_params[3] + element_name + "-" + export_type + ".csv",
+                    )
+                    _write_rawrays_csv(raw_array, element_name, csv_path)
+            else:
+                api.export(*export_params)
         if raypyng_analysis:
             for export_params in exports:
                 element_name = export_params[0]
+                export_type = export_params[1]
                 eff = (
                     graxpy_eff_df
                     if graxpy_eff_df is not None and element_name in downstream_elements
@@ -2079,8 +2106,9 @@ def run_rml_func(parameters):
                 pp.postprocess_RawRays(
                     *export_params,
                     rml_filename,
-                    suffix=export_params[1],
-                    remove_rawrays=remove_rawrays,
+                    suffix=export_type,
+                    remove_rawrays=False,
+                    raw_array=rawrays_cache.get((element_name, export_type)),
                     undulator_table=undulator_table,
                     efficiency=eff,
                 )

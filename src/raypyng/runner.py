@@ -11,6 +11,7 @@ import subprocess
 import sys
 import time
 
+import numpy as np
 import psutil
 
 from . import config
@@ -248,6 +249,42 @@ class RayUIRunner:
                 return None
             self._stdout_buffer.extend(chunk)
 
+    def _read_bytes(self, n: int, timeout=None):
+        """Read exactly n bytes from stdout, returning them as bytes.
+
+        Uses the same shared _stdout_buffer as _readline_with_timeout so binary
+        and line reads safely interleave without data loss.
+
+        Returns None on timeout or if the process dies before n bytes arrive.
+        """
+        if not self.isrunning:
+            return None
+
+        deadline = None if timeout is None else time.monotonic() + timeout
+        stdout_fd = self._process.stdout.fileno()
+
+        while len(self._stdout_buffer) < n:
+            if not self.isrunning:
+                break
+            wait_time = None
+            if deadline is not None:
+                wait_time = max(0.0, deadline - time.monotonic())
+                if wait_time == 0.0:
+                    return None
+            readable, _, _ = select.select([stdout_fd], [], [], wait_time)
+            if not readable:
+                return None
+            chunk = os.read(stdout_fd, max(4096, n - len(self._stdout_buffer)))
+            if not chunk:
+                break
+            self._stdout_buffer.extend(chunk)
+
+        if len(self._stdout_buffer) < n:
+            return None
+        result = bytes(self._stdout_buffer[:n])
+        del self._stdout_buffer[:n]
+        return result
+
     def _close_pipes(self):
         for stream_name in ("stdin", "stdout", "stderr"):
             stream = getattr(self._process, stream_name, None)
@@ -348,7 +385,56 @@ class RayUIAPI:
         payload = '"' + objects + '"' + " " + parameters + " " + export_path + " " + data_prefix
         return self._cmd_io("export", payload, **kwargs)
 
-    def _cmd_io(self, cmd: str, payload: str = None, /, cbNewLine=None):
+    def rawdata(self, element: str, item_id: str, timeout: float = 120.0) -> "np.ndarray":
+        """Fetch raw rays for one element directly from RAY-UI memory as a numpy structured array.
+
+        item_id must be one of: RawRaysOutgoing, RawRaysIncoming, RawRaysBeam.
+        Columns: RN RS RO OX OY OZ DX DY DZ EN PL S0 S1 S2 S3 (all float64).
+
+        Args:
+            element (str): beamline element name.
+            item_id (str): RawRaysOutgoing, RawRaysIncoming or RawRaysBeam.
+            timeout (float, optional): max seconds to wait for each step of the
+                reply (command ack, byte count, binary blob). Defaults to 120 s.
+                A RAY-UI build that does not support `rawdata` answers nothing, so
+                the timeout turns an otherwise-infinite hang into a clear error.
+
+        Raises:
+            RayPyError: if RAY-UI does not support the command, replies "failed",
+                or the data cannot be read within `timeout` seconds.
+        """
+        import io
+
+        import numpy as np
+
+        unsupported_msg = (
+            f"rawdata: RAY-UI did not respond to 'rawdata \"{element}\" {item_id}' "
+            f"within {timeout:g}s. This RAY-UI build likely does not support the "
+            f"'rawdata' command — rebuild/install RAY-UI from branch "
+            f"'feature/rawrays-stream'."
+        )
+
+        try:
+            ok = self._cmd_io("rawdata", f'"{element}" {item_id}', timeout=timeout)
+        except TimeoutError:
+            raise RayPyError(unsupported_msg) from None
+        if not ok:
+            raise RayPyError(f"rawdata {item_id} failed for element '{element}'")
+
+        nbytes_line = self._runner._readline_with_timeout(timeout=timeout)
+        if nbytes_line is None:
+            raise RayPyError(f"rawdata: no byte count received for {element}/{item_id}")
+        nbytes = int(nbytes_line.strip())
+
+        data = self._runner._read_bytes(nbytes, timeout=timeout)
+        if data is None:
+            raise RayPyError(
+                f"rawdata: failed to read {nbytes} bytes for {element}/{item_id} "
+                f"within {timeout:g}s."
+            )
+        return np.load(io.BytesIO(data))
+
+    def _cmd_io(self, cmd: str, payload: str = None, /, cbNewLine=None, timeout=None):
         """The _cmd_io is an internal method which helps to execute a RAY-UI command.
         All commands are run in the following way:
         1. A command is sent to RAY-UI
@@ -360,8 +446,14 @@ class RayUIAPI:
             cmd (str): string with command (e.g. "load" or "trace")
             payload (str, optional): possible payload for the command (e.g. rml
                                     file path for the load command). Defaults to None.
+            timeout (float, optional): max seconds to wait for the command reply.
+                                    If None (default) waits indefinitely. When the
+                                    timeout elapses a TimeoutError is raised. Useful
+                                    to detect a RAY-UI build that silently ignores a
+                                    command it does not support.
         Raises:
             RayPyError: in case of an unsupported reply
+            TimeoutError: if timeout is set and no reply arrives in time
 
         Returns:
             bool: True on success, False on RAY-UI side error
@@ -372,7 +464,7 @@ class RayUIAPI:
             self._simulation_done = False
         cmdstr = cmd + " " + payload
         self._runner._write(cmdstr)
-        status = self._wait_for_cmd_io(cmd, cbdataread=cbNewLine)
+        status = self._wait_for_cmd_io(cmd, timeout=timeout, cbdataread=cbNewLine)
         if status == "success":
             if cmd == "trace":
                 self._simulation_done = True
