@@ -25,6 +25,11 @@ if errorlevel 9009 (
 
 if "%1" == "" goto help
 
+if "%1" == "html" (
+	python prepare_example_assets.py
+	if errorlevel 1 exit /b 1
+)
+
 %SPHINXBUILD% -M %1 %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
 goto end
 

@@ -82,15 +82,17 @@ echo ""
 # run_script <path> <kind>
 run_script() {
     local script="$1" kind="$2"
-    local name elapsed
+    local name elapsed script_dir script_name
     name="$(basename "$(dirname "$script")")/$(basename "$script")"
+    script_dir="$(dirname "$script")"
+    script_name="$(basename "$script")"
 
     local t_start t_end
     t_start=$(date +%s)
 
     if [[ "$VERBOSE" == true ]]; then
         echo -e "${BLUE}--- [$kind] $name ---${NC}"
-        if python "$script"; then
+        if (cd "$script_dir" && python "$script_name"); then
             t_end=$(date +%s); elapsed=$((t_end - t_start))
             echo -e "${GREEN}✓ $name PASSED (${elapsed}s)${NC}"; echo ""
             PASSED=$((PASSED + 1))
@@ -105,7 +107,7 @@ run_script() {
         fi
     else
         echo -n "[$kind] $name ... "
-        if python "$script" > /tmp/example_output.log 2>&1; then
+        if (cd "$script_dir" && python "$script_name") > /tmp/example_output.log 2>&1; then
             t_end=$(date +%s); elapsed=$((t_end - t_start))
             echo -e "${GREEN}PASSED (${elapsed}s)${NC}"
             PASSED=$((PASSED + 1))
@@ -125,10 +127,11 @@ run_script() {
 }
 
 # Every folder that holds at least one .py (excluding generated output/caches).
+# Numbered example folders define the curated run order from low-level to advanced.
 # Paths contain no spaces.
 FOLDERS=$(find "$EXAMPLES_DIR" -name '*.py' \
     -not -path '*/RAYPy_Simulation_*/*' -not -path '*/__pycache__/*' -print \
-    | xargs -n1 dirname | sort -u)
+    | xargs -n1 dirname | sort -Vu)
 
 if [[ -z "$FOLDERS" ]]; then
     echo -e "${RED}No example scripts found under $EXAMPLES_DIR${NC}"
@@ -136,6 +139,19 @@ if [[ -z "$FOLDERS" ]]; then
 fi
 
 for folder in $FOLDERS; do
+    folder_ran_sim=false
+    folder_has_sim=false
+    folder_has_enabled_sim=false
+
+    for s in "$folder"/simulation_*.py; do
+        [[ -e "$s" ]] || continue
+        folder_has_sim=true
+        if [[ "$(basename "$s")" == "simulation_analysis_by_RAY-UI.py" && "$RUN_RAYUI_ANALYSIS" == false ]]; then
+            continue
+        fi
+        folder_has_enabled_sim=true
+    done
+
     # 1) simulations
     if [[ "$RUN_SIM" == true ]]; then
         for s in "$folder"/simulation_*.py; do
@@ -144,10 +160,17 @@ for folder in $FOLDERS; do
                 continue
             fi
             run_script "$s" sim
+            folder_ran_sim=true
         done
     fi
     # 2) evals (after their simulation, so they read fresh output)
     if [[ "$RUN_EVAL" == true ]]; then
+        if [[ "$RUN_SIM" == true && "$folder_has_sim" == true && "$folder_has_enabled_sim" == true && "$folder_ran_sim" == false ]]; then
+            continue
+        fi
+        if [[ "$RUN_SIM" == true && "$folder_has_sim" == true && "$folder_has_enabled_sim" == false ]]; then
+            continue
+        fi
         for e in "$folder"/eval_*.py; do
             [[ -e "$e" ]] && run_script "$e" eval
         done

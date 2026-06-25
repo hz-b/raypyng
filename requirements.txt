@@ -3,6 +3,7 @@ psutil>=5.9.1
 joblib>=1.1.0
 matplotlib>=3.5.1
 natsort>=8.2.0 
+openpyxl>=3.1.0
 sphinx_rtd_theme>=1.0.0
 sphinx
 sphinx-autodoc-typehints

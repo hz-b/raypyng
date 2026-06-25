@@ -1,22 +1,67 @@
-"""Tools for inspecting and visualising an RML beamline layout."""
+"""Tools for inspecting an RML beamline into a single summary table."""
 
 from __future__ import annotations
 
-import re
 from pathlib import Path
 
 import pandas as pd
 
 from .rml import RMLFile
 
+NOT_AVAILABLE = "n.a."
+
+TABLE_COLUMNS = [
+    "name",
+    "type",
+    "grazingIncAngle",
+    "azimuthalAngle",
+    "totalWidth",
+    "totalLength",
+    "materialCoating1",
+    "thicknessCoating1",
+    "roughnessCoating1",
+    "materialCoating2",
+    "thicknessCoating2",
+    "roughnessCoating2",
+    "materialTopLayer",
+    "thicknessTopLayer",
+    "roughnessTopLayer",
+    "slopeErrorSag",
+    "slopeErrorMer",
+    "x",
+    "y",
+    "z",
+]
+
+EXPORT_COLUMN_LABELS = {
+    "name": "name",
+    "type": "type",
+    "grazingIncAngle": "grazingIncAngle [deg]",
+    "azimuthalAngle": "azimuthalAngle [deg]",
+    "totalWidth": "totalWidth [mm]",
+    "totalLength": "totalLength [mm]",
+    "materialCoating1": "materialCoating1",
+    "thicknessCoating1": "thicknessCoating1 [nm]",
+    "roughnessCoating1": "roughnessCoating1 [nm]",
+    "materialCoating2": "materialCoating2",
+    "thicknessCoating2": "thicknessCoating2 [nm]",
+    "roughnessCoating2": "roughnessCoating2 [nm]",
+    "materialTopLayer": "materialTopLayer",
+    "thicknessTopLayer": "thicknessTopLayer [nm]",
+    "roughnessTopLayer": "roughnessTopLayer [nm]",
+    "slopeErrorSag": "slopeErrorSag [sec]",
+    "slopeErrorMer": "slopeErrorMer [sec]",
+    "x": "x [mm]",
+    "y": "y [mm]",
+    "z": "z [mm]",
+}
+
 
 def world_position(element) -> tuple[str, str, str]:
-    """Return the world-position (x, y, z) of an RML element as formatted strings.
-
-    Returns ``("-", "-", "-")`` if the element has no worldPosition attribute.
-    """
+    """Return the world-position (x, y, z) of an RML element as formatted strings."""
     if not hasattr(element, "worldPosition"):
-        return "-", "-", "-"
+        return NOT_AVAILABLE, NOT_AVAILABLE, NOT_AVAILABLE
+
     position = element.worldPosition
     return (
         f"{float(position.x.cdata):.2f}",
@@ -25,247 +70,121 @@ def world_position(element) -> tuple[str, str, str]:
     )
 
 
-def build_tables(
-    rml_path: str | Path,
-    mirror_name_pattern: str = r"^M\d+",
-    special_names: tuple[str, ...] = ("dipole",),
-) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Build a beamline-elements table and a mirror/dipole sub-table from an RML file.
+def _param_value(element, key: str, enabled_only: bool = False) -> str:
+    """Return a param value from an RML element, or ``n.a.`` when unavailable."""
+    if not hasattr(element, key):
+        return NOT_AVAILABLE
 
-    Args:
-        rml_path: Path to the ``.rml`` file.
-        mirror_name_pattern: Regex matched against element names to identify mirrors.
-            Defaults to ``r"^M\\d+"`` (names starting with M followed by digits).
-        special_names: Element names (case-insensitive) always included in the mirror
-            table regardless of the name pattern.  Defaults to ``("dipole",)``.
+    param = getattr(element, key)
+    if enabled_only and param.get_attribute("enabled") != "T":
+        return NOT_AVAILABLE
 
-    Returns:
-        ``(mirror_table, beamline_table)`` as DataFrames.
-        ``mirror_table`` has columns ``name, type, x, y, z, grazingIncAngle, azimuthalAngle``.
-        ``beamline_table`` has columns ``name, type, x, y, z``.
-    """
-    pattern = re.compile(mirror_name_pattern)
-    special = {n.lower() for n in special_names}
+    value = param.cdata.strip()
+    return value if value else NOT_AVAILABLE
 
+
+def _export_table(beamline_table: pd.DataFrame) -> pd.DataFrame:
+    """Return a copy of the table with unit-aware export column labels."""
+    return beamline_table.rename(columns=EXPORT_COLUMN_LABELS)
+
+
+def build_tables(rml_path: str | Path) -> pd.DataFrame:
+    """Build a single beamline-elements table from an RML file."""
     rml = RMLFile(None, template=str(rml_path))
-    mirror_rows: list[list[str]] = []
-    beamline_rows: list[list[str]] = []
+    rows: list[list[str]] = []
 
     for element in rml.beamline.children():
-        name = element.get_attribute("name") or "-"
-        element_type = element.get_attribute("type") or "-"
-        pos_x, pos_y, pos_z = world_position(element)
-
-        beamline_rows.append([name, element_type, pos_x, pos_y, pos_z])
-
-        if name.lower() in special or pattern.match(name):
-            grazing_inc_angle = (
-                f"{float(element.grazingIncAngle.cdata):.2f}"
-                if hasattr(element, "grazingIncAngle")
-                else "-"
-            )
-            azimuthal_angle = (
-                f"{float(element.azimuthalAngle.cdata):.2f}"
-                if hasattr(element, "azimuthalAngle")
-                else "-"
-            )
-            mirror_rows.append(
-                [name, element_type, pos_x, pos_y, pos_z, grazing_inc_angle, azimuthal_angle]
-            )
-
-    mirror_table = pd.DataFrame(
-        mirror_rows,
-        columns=["name", "type", "x", "y", "z", "grazingIncAngle", "azimuthalAngle"],
-    )
-    beamline_table = pd.DataFrame(
-        beamline_rows,
-        columns=["name", "type", "x", "y", "z"],
-    )
-    return mirror_table, beamline_table
-
-
-def save_tables(
-    mirror_table: pd.DataFrame,
-    beamline_table: pd.DataFrame,
-    tables_dir: str | Path,
-) -> tuple[Path, Path]:
-    """Save mirror and beamline tables as CSV files.
-
-    Args:
-        mirror_table: DataFrame returned by :func:`build_tables`.
-        beamline_table: DataFrame returned by :func:`build_tables`.
-        tables_dir: Directory in which to write the CSV files (created if absent).
-
-    Returns:
-        ``(mirror_path, beamline_path)`` — paths of the written files.
-    """
-    tables_dir = Path(tables_dir)
-    tables_dir.mkdir(parents=True, exist_ok=True)
-    mirror_path = tables_dir / "mirror_table.csv"
-    beamline_path = tables_dir / "beamline_elements_table.csv"
-    mirror_table.to_csv(mirror_path, index=False)
-    beamline_table.to_csv(beamline_path, index=False)
-    return mirror_path, beamline_path
-
-
-def plot_beamline_views(
-    beamline_table: pd.DataFrame,
-    mirror_table: pd.DataFrame,
-    output_path: str | Path,
-    title: str = "Beamline Layout",
-    show_plot: bool = False,
-) -> None:
-    """Produce top-view, side-view, and 3D plots of the beamline layout.
-
-    Args:
-        beamline_table: DataFrame with columns ``name, type, x, y, z``.
-        mirror_table: DataFrame with columns
-            ``name, type, x, y, z, grazingIncAngle, azimuthalAngle``.
-        output_path: Where to save the figure (PNG recommended).
-        title: Figure super-title.  Defaults to ``"Beamline Layout"``.
-        show_plot: If ``True``, call ``plt.show()`` after saving.
-    """
-    try:
-        import matplotlib.pyplot as plt
-    except ImportError as e:
-        raise ImportError(
-            "matplotlib is required for plot_beamline_views. "
-            "Install it with: pip install matplotlib"
-        ) from e
-
-    beamline = beamline_table.copy()
-    beamline[["x", "y", "z"]] = beamline[["x", "y", "z"]].astype(float)
-
-    mirrors = mirror_table.copy()
-    mirrors = mirrors[mirrors["azimuthalAngle"] != "-"].copy()
-    mirrors[["x", "y", "z", "azimuthalAngle"]] = mirrors[["x", "y", "z", "azimuthalAngle"]].astype(
-        float
-    )
-    mirror_names = set(mirrors["name"])
-
-    output_path = Path(output_path)
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-
-    fig = plt.figure(figsize=(18, 10), constrained_layout=True)
-    grid = fig.add_gridspec(2, 2, width_ratios=[2.4, 1.2], height_ratios=[1, 1])
-
-    ax_top = fig.add_subplot(grid[0, 0])
-    ax_side = fig.add_subplot(grid[1, 0], sharex=ax_top)
-    ax_3d = fig.add_subplot(grid[:, 1], projection="3d")
-
-    arrow_length = max(
-        (beamline["z"].max() - beamline["z"].min()) * 0.035,
-        (beamline["x"].max() - beamline["x"].min()) * 0.06,
-    )
-
-    def draw_mirror_symbol(ax, z_value, axis_value, azimuthal_angle, mirror_type):
-        if "PlaneMirror" in mirror_type:
-            if azimuthal_angle in (0.0, 180.0):
-                dz1, da1 = -arrow_length * 0.10, -arrow_length * 0.10
-                dz2, da2 = arrow_length * 0.10, arrow_length * 0.10
-            else:
-                dz1, da1 = -arrow_length * 0.10, arrow_length * 0.10
-                dz2, da2 = arrow_length * 0.10, -arrow_length * 0.10
-            ax.plot(
-                [z_value + dz1, z_value + dz2],
-                [axis_value + da1, axis_value + da2],
-                color="red",
-                linewidth=5,
-                solid_capstyle="butt",
-                zorder=4,
-            )
-        else:
-            ax.scatter([z_value], [axis_value], s=160, marker="s", color="red", zorder=4)
-
-    def draw_projection(ax, vertical_axis, subplot_title, axis_label):
-        ax.plot(beamline["z"], beamline[vertical_axis], color="#f4a12f", linewidth=1.0, zorder=1)
-        non_mirrors = beamline[~beamline["name"].isin(mirror_names)]
-        ax.scatter(non_mirrors["z"], non_mirrors[vertical_axis], color="black", s=12, zorder=3)
-
-        for _, row in beamline.iterrows():
-            z_value = row["z"]
-            axis_value = row[vertical_axis]
-            name = row["name"]
-            if name in mirror_names:
-                mirror = mirrors.loc[mirrors["name"] == name].iloc[0]
-                draw_mirror_symbol(ax, z_value, axis_value, mirror["azimuthalAngle"], row["type"])
-            y_shift = 10 if name in mirror_names else -14
-            x_shift = 0 if name in mirror_names else 2
-            ax.annotate(
-                name,
-                (z_value, axis_value),
-                xytext=(x_shift, y_shift),
-                textcoords="offset points",
-                fontsize=7,
-                ha="center" if name in mirror_names else "left",
-                alpha=0.9,
-            )
-        ax.set_title(subplot_title, loc="left", fontsize=14)
-        ax.set_xlabel("optical axis / mm")
-        ax.set_ylabel(axis_label)
-        ax.grid(False)
-        ax.spines["top"].set_visible(False)
-        ax.spines["right"].set_visible(False)
-        ax.spines["left"].set_alpha(0.25)
-        ax.spines["bottom"].set_alpha(0.25)
-        ax.tick_params(axis="both", labelsize=9, color="0.5")
-
-    draw_projection(ax_top, "x", "top view, sagittal beam", "x / mm")
-    draw_projection(ax_side, "y", "side view, meridional beam", "y / mm")
-
-    ax_3d.plot(
-        beamline["z"],
-        beamline["x"],
-        beamline["y"],
-        color="tab:green",
-        linewidth=1.2,
-        alpha=0.8,
-    )
-    ax_3d.scatter(
-        beamline["z"],
-        beamline["x"],
-        beamline["y"],
-        color="tab:green",
-        s=28,
-        depthshade=False,
-    )
-    for z_value, x_value, y_value, name in zip(
-        beamline["z"], beamline["x"], beamline["y"], beamline["name"], strict=False
-    ):
-        ax_3d.text(z_value, x_value, y_value, name, fontsize=8)
-
-    for _, mirror in mirrors.iterrows():
-        dz, dx = 0.0, 0.0
-        az = mirror["azimuthalAngle"]
-        if az == 0.0:
-            dx = arrow_length
-        elif az == 180.0:
-            dx = -arrow_length
-        elif az == 90.0:
-            dz = -arrow_length
-        elif az == 270.0:
-            dz = arrow_length
-        ax_3d.quiver(
-            mirror["z"],
-            mirror["x"],
-            mirror["y"],
-            dz,
-            dx,
-            0.0,
-            color="crimson",
-            linewidth=1.6,
-            arrow_length_ratio=0.25,
-            alpha=0.85,
+        rows.append(
+            [
+                element.get_attribute("name") or NOT_AVAILABLE,
+                element.get_attribute("type") or NOT_AVAILABLE,
+                _param_value(element, "grazingIncAngle"),
+                _param_value(element, "azimuthalAngle"),
+                _param_value(element, "totalWidth"),
+                _param_value(element, "totalLength"),
+                _param_value(element, "materialCoating1", enabled_only=True),
+                _param_value(element, "thicknessCoating1", enabled_only=True),
+                _param_value(element, "roughnessCoating1", enabled_only=True),
+                _param_value(element, "materialCoating2", enabled_only=True),
+                _param_value(element, "thicknessCoating2", enabled_only=True),
+                _param_value(element, "roughnessCoating2", enabled_only=True),
+                _param_value(element, "materialTopLayer", enabled_only=True),
+                _param_value(element, "thicknessTopLayer", enabled_only=True),
+                _param_value(element, "roughnessTopLayer", enabled_only=True),
+                _param_value(element, "slopeErrorSag"),
+                _param_value(element, "slopeErrorMer"),
+                *world_position(element),
+            ]
         )
 
-    ax_3d.set_title("3D View")
-    ax_3d.set_xlabel("z")
-    ax_3d.set_ylabel("x")
-    ax_3d.set_zlabel("y")
-    ax_3d.view_init(elev=22, azim=-64)
+    return pd.DataFrame(rows, columns=TABLE_COLUMNS)
 
-    fig.suptitle(title, fontsize=16)
-    fig.savefig(output_path, dpi=250, bbox_inches="tight")
-    if show_plot:
-        plt.show()
-    plt.close(fig)
+
+def save_tables(beamline_table: pd.DataFrame, tables_dir: str | Path) -> Path:
+    """Save the beamline table as a CSV file."""
+    tables_dir = Path(tables_dir)
+    tables_dir.mkdir(parents=True, exist_ok=True)
+    beamline_path = tables_dir / "beamline_elements_table.csv"
+    _export_table(beamline_table).to_csv(beamline_path, index=False)
+    return beamline_path
+
+
+def save_tables_xlsx(beamline_table: pd.DataFrame, tables_dir: str | Path) -> Path:
+    """Save the beamline table as a styled XLSX file."""
+    try:
+        from openpyxl import load_workbook
+        from openpyxl.styles import Border, Font, PatternFill, Side
+        from openpyxl.utils import get_column_letter
+    except ImportError as exc:
+        raise ImportError(
+            "openpyxl is required for save_tables_xlsx. Install it with: pip install openpyxl"
+        ) from exc
+
+    tables_dir = Path(tables_dir)
+    tables_dir.mkdir(parents=True, exist_ok=True)
+    beamline_path = tables_dir / "beamline_elements_table.xlsx"
+    _export_table(beamline_table).to_excel(beamline_path, index=False)
+
+    workbook = load_workbook(beamline_path)
+    worksheet = workbook.active
+    worksheet.title = "Beamline Elements"
+    worksheet.freeze_panes = "A2"
+    worksheet.sheet_view.showGridLines = False
+
+    header_fill = PatternFill(fill_type="solid", fgColor="1F4E78")
+    header_font = Font(bold=True, color="FFFFFF")
+    first_col_font = Font(bold=True)
+    even_fill = PatternFill(fill_type="solid", fgColor="EAF2F8")
+    odd_fill = PatternFill(fill_type="solid", fgColor="FDFEFE")
+    border = Border(
+        left=Side(style="thin", color="B7C3D0"),
+        right=Side(style="thin", color="B7C3D0"),
+        top=Side(style="thin", color="B7C3D0"),
+        bottom=Side(style="thin", color="B7C3D0"),
+    )
+
+    for cell in worksheet[1]:
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.border = border
+
+    for row_idx, row in enumerate(
+        worksheet.iter_rows(min_row=2, max_row=worksheet.max_row, max_col=worksheet.max_column),
+        start=2,
+    ):
+        fill = even_fill if row_idx % 2 == 0 else odd_fill
+        for col_idx, cell in enumerate(row, start=1):
+            cell.fill = fill
+            cell.border = border
+            if col_idx == 1:
+                cell.font = first_col_font
+
+    for column_cells in worksheet.columns:
+        values = [str(cell.value) if cell.value is not None else "" for cell in column_cells]
+        max_len = max(len(value) for value in values)
+        worksheet.column_dimensions[get_column_letter(column_cells[0].column)].width = min(
+            max(max_len + 2, 12), 28
+        )
+
+    workbook.save(beamline_path)
+    return beamline_path

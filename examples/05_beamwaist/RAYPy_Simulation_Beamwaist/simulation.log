@@ -1,0 +1,216 @@
+2026-06-24 10:36:51,018 - INFO - Simulation started, using 5 workers
+2026-06-24 10:36:51,021 - INFO - Start round 0
+2026-06-24 10:36:51,021 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/beamwaist/RAYPy_Simulation_Beamwaist/round_0
+2026-06-24 10:36:51,022 - INFO - Round 0: found 0/1 files for _Dipole-RawRaysOutgoing.csv
+2026-06-24 10:36:51,022 - INFO - Round 0: found 0/1 files for _M1-RawRaysOutgoing.csv
+2026-06-24 10:36:51,022 - INFO - Round 0: found 0/1 files for _PremirrorM2-RawRaysOutgoing.csv
+2026-06-24 10:36:51,022 - INFO - Round 0: found 0/1 files for _PG-RawRaysOutgoing.csv
+2026-06-24 10:36:51,022 - INFO - Round 0: found 0/1 files for _M3-RawRaysOutgoing.csv
+2026-06-24 10:36:51,022 - INFO - Round 0: found 0/1 files for _ExitSlit-RawRaysOutgoing.csv
+2026-06-24 10:36:51,022 - INFO - Round 0: found 0/1 files for _KB1-RawRaysOutgoing.csv
+2026-06-24 10:36:51,022 - INFO - Round 0: found 0/1 files for _KB2-RawRaysOutgoing.csv
+2026-06-24 10:36:51,022 - INFO - Round 0: found 0/1 files for _DetectorAtFocus-RawRaysOutgoing.csv
+2026-06-24 10:36:51,028 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/beamwaist/RAYPy_Simulation_Beamwaist/round_0/0_Beamwaist.rml
+2026-06-24 10:36:51,073 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-24 10:37:00,076 - INFO - Completed: 1, remaining: 0, /home/simone/projects/raypyng/raypyng/examples/beamwaist/RAYPy_Simulation_Beamwaist/round_0/0_Beamwaist.rml
+2026-06-24 10:37:00,076 - INFO - Batch Completed
+2026-06-24 10:37:00,076 - INFO - Waiting For batch, 25 simulations to go
+2026-06-24 10:37:00,077 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-24 10:37:00,077 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-24 10:37:00,077 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/beamwaist/RAYPy_Simulation_Beamwaist/round_0
+2026-06-24 10:37:00,077 - INFO - Round 0: found 1/1 files for _Dipole-RawRaysOutgoing.csv
+2026-06-24 10:37:00,077 - INFO - Round 0: found 1/1 files for _M1-RawRaysOutgoing.csv
+2026-06-24 10:37:00,077 - INFO - Round 0: found 1/1 files for _PremirrorM2-RawRaysOutgoing.csv
+2026-06-24 10:37:00,078 - INFO - Round 0: found 1/1 files for _PG-RawRaysOutgoing.csv
+2026-06-24 10:37:00,078 - INFO - Round 0: found 1/1 files for _M3-RawRaysOutgoing.csv
+2026-06-24 10:37:00,078 - INFO - Round 0: found 1/1 files for _ExitSlit-RawRaysOutgoing.csv
+2026-06-24 10:37:00,078 - INFO - Round 0: found 1/1 files for _KB1-RawRaysOutgoing.csv
+2026-06-24 10:37:00,078 - INFO - Round 0: found 1/1 files for _KB2-RawRaysOutgoing.csv
+2026-06-24 10:37:00,078 - INFO - Round 0: found 1/1 files for _DetectorAtFocus-RawRaysOutgoing.csv
+2026-06-24 10:37:00,078 - INFO - Round 0: final check found 0 missing simulations
+2026-06-24 10:37:00,092 - INFO - Executor shutdown completed.
+2026-06-24 10:37:00,093 - INFO - Simulation completed successfully.
+2026-06-24 10:37:00,094 - INFO - End of the Simulations
+2026-06-24 15:16:03,862 - INFO - Simulation started, using 5 workers
+2026-06-24 15:16:03,867 - INFO - Start round 0
+2026-06-24 15:16:03,867 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/beamwaist/RAYPy_Simulation_Beamwaist/round_0
+2026-06-24 15:16:03,868 - INFO - Round 0: found 1/1 files for _Dipole-RawRaysOutgoing.csv
+2026-06-24 15:16:03,868 - INFO - Round 0: found 1/1 files for _M1-RawRaysOutgoing.csv
+2026-06-24 15:16:03,868 - INFO - Round 0: found 1/1 files for _PremirrorM2-RawRaysOutgoing.csv
+2026-06-24 15:16:03,868 - INFO - Round 0: found 1/1 files for _PG-RawRaysOutgoing.csv
+2026-06-24 15:16:03,868 - INFO - Round 0: found 1/1 files for _M3-RawRaysOutgoing.csv
+2026-06-24 15:16:03,868 - INFO - Round 0: found 1/1 files for _ExitSlit-RawRaysOutgoing.csv
+2026-06-24 15:16:03,868 - INFO - Round 0: found 1/1 files for _KB1-RawRaysOutgoing.csv
+2026-06-24 15:16:03,868 - INFO - Round 0: found 1/1 files for _KB2-RawRaysOutgoing.csv
+2026-06-24 15:16:03,868 - INFO - Round 0: found 1/1 files for _DetectorAtFocus-RawRaysOutgoing.csv
+2026-06-24 15:16:03,875 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/beamwaist/RAYPy_Simulation_Beamwaist/round_0/0_Beamwaist.rml
+2026-06-24 15:16:03,922 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-24 15:16:23,924 - WARNING - Batch stalled: 1 futures idle for 20s (limit 20s)
+2026-06-24 15:16:23,925 - INFO - Marking executor as having 1 unfinished futures
+2026-06-24 15:16:23,925 - INFO - Updating progress bar
+2026-06-24 15:16:23,926 - INFO - Batch Completed
+2026-06-24 15:16:23,926 - INFO - Waiting For batch, 25 simulations to go
+2026-06-24 15:16:23,926 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-24 15:16:23,926 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-24 15:16:23,927 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/beamwaist/RAYPy_Simulation_Beamwaist/round_0
+2026-06-24 15:16:23,927 - INFO - Round 0: found 1/1 files for _Dipole-RawRaysOutgoing.csv
+2026-06-24 15:16:23,927 - INFO - Round 0: found 1/1 files for _M1-RawRaysOutgoing.csv
+2026-06-24 15:16:23,927 - INFO - Round 0: found 1/1 files for _PremirrorM2-RawRaysOutgoing.csv
+2026-06-24 15:16:23,927 - INFO - Round 0: found 1/1 files for _PG-RawRaysOutgoing.csv
+2026-06-24 15:16:23,927 - INFO - Round 0: found 1/1 files for _M3-RawRaysOutgoing.csv
+2026-06-24 15:16:23,927 - INFO - Round 0: found 1/1 files for _ExitSlit-RawRaysOutgoing.csv
+2026-06-24 15:16:23,927 - INFO - Round 0: found 1/1 files for _KB1-RawRaysOutgoing.csv
+2026-06-24 15:16:23,927 - INFO - Round 0: found 1/1 files for _KB2-RawRaysOutgoing.csv
+2026-06-24 15:16:23,927 - INFO - Round 0: found 1/1 files for _DetectorAtFocus-RawRaysOutgoing.csv
+2026-06-24 15:16:23,927 - INFO - Round 0: final check found 0 missing simulations
+2026-06-24 15:16:23,928 - INFO - Executor shutdown completed without waiting.
+2026-06-24 15:16:24,120 - INFO - Simulation completed successfully.
+2026-06-24 15:16:24,122 - INFO - End of the Simulations
+2026-06-25 12:27:30,273 - INFO - Simulation started, using 5 workers
+2026-06-25 12:27:30,273 - INFO - Rough ETA seed from numberRays (fixed): first round 5s, total 1s
+2026-06-25 12:27:30,277 - INFO - Start round 0
+2026-06-25 12:27:30,277 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/beamwaist/RAYPy_Simulation_Beamwaist/round_0
+2026-06-25 12:27:30,277 - INFO - Round 0: found 1/1 files for _Dipole-RawRaysOutgoing.csv
+2026-06-25 12:27:30,277 - INFO - Round 0: found 1/1 files for _M1-RawRaysOutgoing.csv
+2026-06-25 12:27:30,277 - INFO - Round 0: found 1/1 files for _PremirrorM2-RawRaysOutgoing.csv
+2026-06-25 12:27:30,277 - INFO - Round 0: found 1/1 files for _PG-RawRaysOutgoing.csv
+2026-06-25 12:27:30,277 - INFO - Round 0: found 1/1 files for _M3-RawRaysOutgoing.csv
+2026-06-25 12:27:30,277 - INFO - Round 0: found 1/1 files for _ExitSlit-RawRaysOutgoing.csv
+2026-06-25 12:27:30,277 - INFO - Round 0: found 1/1 files for _KB1-RawRaysOutgoing.csv
+2026-06-25 12:27:30,277 - INFO - Round 0: found 1/1 files for _KB2-RawRaysOutgoing.csv
+2026-06-25 12:27:30,277 - INFO - Round 0: found 1/1 files for _DetectorAtFocus-RawRaysOutgoing.csv
+2026-06-25 12:27:30,281 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/beamwaist/RAYPy_Simulation_Beamwaist/round_0/0_Beamwaist.rml
+2026-06-25 12:27:30,315 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 12:27:50,320 - WARNING - Batch stalled: 1 futures idle for 20s (limit 20s)
+2026-06-25 12:27:50,320 - INFO - Marking executor as having 1 unfinished futures
+2026-06-25 12:27:50,322 - INFO - Updating progress bar
+2026-06-25 12:27:50,323 - INFO - Batch Completed
+2026-06-25 12:27:50,323 - INFO - Waiting For batch, 25 simulations to go
+2026-06-25 12:27:50,323 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 12:27:50,323 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 12:27:50,323 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/beamwaist/RAYPy_Simulation_Beamwaist/round_0
+2026-06-25 12:27:50,324 - INFO - Round 0: found 1/1 files for _Dipole-RawRaysOutgoing.csv
+2026-06-25 12:27:50,324 - INFO - Round 0: found 1/1 files for _M1-RawRaysOutgoing.csv
+2026-06-25 12:27:50,324 - INFO - Round 0: found 1/1 files for _PremirrorM2-RawRaysOutgoing.csv
+2026-06-25 12:27:50,324 - INFO - Round 0: found 1/1 files for _PG-RawRaysOutgoing.csv
+2026-06-25 12:27:50,324 - INFO - Round 0: found 1/1 files for _M3-RawRaysOutgoing.csv
+2026-06-25 12:27:50,324 - INFO - Round 0: found 1/1 files for _ExitSlit-RawRaysOutgoing.csv
+2026-06-25 12:27:50,324 - INFO - Round 0: found 1/1 files for _KB1-RawRaysOutgoing.csv
+2026-06-25 12:27:50,324 - INFO - Round 0: found 1/1 files for _KB2-RawRaysOutgoing.csv
+2026-06-25 12:27:50,324 - INFO - Round 0: found 1/1 files for _DetectorAtFocus-RawRaysOutgoing.csv
+2026-06-25 12:27:50,324 - INFO - Round 0: final check found 0 missing simulations
+2026-06-25 12:27:50,325 - INFO - Executor shutdown completed without waiting.
+2026-06-25 12:27:50,393 - INFO - Simulation completed successfully.
+2026-06-25 12:27:50,393 - INFO - Create RAY-UI recap files
+2026-06-25 12:27:50,714 - INFO - End of the Simulations
+2026-06-25 12:30:56,628 - INFO - Simulation started, using 5 workers
+2026-06-25 12:30:56,628 - INFO - Rough ETA seed from numberRays (fixed): first round 5s, total 1s
+2026-06-25 12:30:56,630 - INFO - Start round 0
+2026-06-25 12:30:56,630 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/05_beamwaist/RAYPy_Simulation_Beamwaist/round_0
+2026-06-25 12:30:56,630 - INFO - Round 0: found 1/1 files for _Dipole-RawRaysOutgoing.csv
+2026-06-25 12:30:56,630 - INFO - Round 0: found 1/1 files for _M1-RawRaysOutgoing.csv
+2026-06-25 12:30:56,630 - INFO - Round 0: found 1/1 files for _PremirrorM2-RawRaysOutgoing.csv
+2026-06-25 12:30:56,630 - INFO - Round 0: found 1/1 files for _PG-RawRaysOutgoing.csv
+2026-06-25 12:30:56,630 - INFO - Round 0: found 1/1 files for _M3-RawRaysOutgoing.csv
+2026-06-25 12:30:56,630 - INFO - Round 0: found 1/1 files for _ExitSlit-RawRaysOutgoing.csv
+2026-06-25 12:30:56,630 - INFO - Round 0: found 1/1 files for _KB1-RawRaysOutgoing.csv
+2026-06-25 12:30:56,630 - INFO - Round 0: found 1/1 files for _KB2-RawRaysOutgoing.csv
+2026-06-25 12:30:56,630 - INFO - Round 0: found 1/1 files for _DetectorAtFocus-RawRaysOutgoing.csv
+2026-06-25 12:30:56,631 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/05_beamwaist/RAYPy_Simulation_Beamwaist/round_0/0_Beamwaist.rml
+2026-06-25 12:30:56,654 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 12:31:16,657 - WARNING - Batch stalled: 1 futures idle for 20s (limit 20s)
+2026-06-25 12:31:16,657 - INFO - Marking executor as having 1 unfinished futures
+2026-06-25 12:31:16,657 - INFO - Updating progress bar
+2026-06-25 12:31:16,658 - INFO - Batch Completed
+2026-06-25 12:31:16,658 - INFO - Waiting For batch, 25 simulations to go
+2026-06-25 12:31:16,658 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 12:31:16,658 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 12:31:16,658 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/05_beamwaist/RAYPy_Simulation_Beamwaist/round_0
+2026-06-25 12:31:16,658 - INFO - Round 0: found 1/1 files for _Dipole-RawRaysOutgoing.csv
+2026-06-25 12:31:16,658 - INFO - Round 0: found 1/1 files for _M1-RawRaysOutgoing.csv
+2026-06-25 12:31:16,658 - INFO - Round 0: found 1/1 files for _PremirrorM2-RawRaysOutgoing.csv
+2026-06-25 12:31:16,658 - INFO - Round 0: found 1/1 files for _PG-RawRaysOutgoing.csv
+2026-06-25 12:31:16,658 - INFO - Round 0: found 1/1 files for _M3-RawRaysOutgoing.csv
+2026-06-25 12:31:16,658 - INFO - Round 0: found 1/1 files for _ExitSlit-RawRaysOutgoing.csv
+2026-06-25 12:31:16,658 - INFO - Round 0: found 1/1 files for _KB1-RawRaysOutgoing.csv
+2026-06-25 12:31:16,658 - INFO - Round 0: found 1/1 files for _KB2-RawRaysOutgoing.csv
+2026-06-25 12:31:16,658 - INFO - Round 0: found 1/1 files for _DetectorAtFocus-RawRaysOutgoing.csv
+2026-06-25 12:31:16,658 - INFO - Round 0: final check found 0 missing simulations
+2026-06-25 12:31:16,658 - INFO - Executor shutdown completed without waiting.
+2026-06-25 12:31:16,693 - INFO - Simulation completed successfully.
+2026-06-25 12:31:16,693 - INFO - Create RAY-UI recap files
+2026-06-25 12:31:17,139 - INFO - End of the Simulations
+2026-06-25 12:53:50,388 - INFO - Simulation started, using 5 workers
+2026-06-25 12:53:50,388 - INFO - Rough ETA seed from numberRays (fixed): first round 5s, total 1s
+2026-06-25 12:53:50,390 - INFO - Start round 0
+2026-06-25 12:53:50,391 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/05_beamwaist/RAYPy_Simulation_Beamwaist/round_0
+2026-06-25 12:53:50,391 - INFO - Round 0: found 1/1 files for _Dipole-RawRaysOutgoing.csv
+2026-06-25 12:53:50,391 - INFO - Round 0: found 1/1 files for _M1-RawRaysOutgoing.csv
+2026-06-25 12:53:50,391 - INFO - Round 0: found 1/1 files for _PremirrorM2-RawRaysOutgoing.csv
+2026-06-25 12:53:50,391 - INFO - Round 0: found 1/1 files for _PG-RawRaysOutgoing.csv
+2026-06-25 12:53:50,391 - INFO - Round 0: found 1/1 files for _M3-RawRaysOutgoing.csv
+2026-06-25 12:53:50,391 - INFO - Round 0: found 1/1 files for _ExitSlit-RawRaysOutgoing.csv
+2026-06-25 12:53:50,391 - INFO - Round 0: found 1/1 files for _KB1-RawRaysOutgoing.csv
+2026-06-25 12:53:50,391 - INFO - Round 0: found 1/1 files for _KB2-RawRaysOutgoing.csv
+2026-06-25 12:53:50,391 - INFO - Round 0: found 1/1 files for _DetectorAtFocus-RawRaysOutgoing.csv
+2026-06-25 12:53:50,395 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/05_beamwaist/RAYPy_Simulation_Beamwaist/round_0/0_Beamwaist.rml
+2026-06-25 12:53:50,434 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 12:54:10,436 - WARNING - Batch stalled: 1 futures idle for 20s (limit 20s)
+2026-06-25 12:54:10,436 - INFO - Marking executor as having 1 unfinished futures
+2026-06-25 12:54:10,437 - INFO - Updating progress bar
+2026-06-25 12:54:10,437 - INFO - Batch Completed
+2026-06-25 12:54:10,437 - INFO - Waiting For batch, 25 simulations to go
+2026-06-25 12:54:10,437 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 12:54:10,437 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 12:54:10,437 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/05_beamwaist/RAYPy_Simulation_Beamwaist/round_0
+2026-06-25 12:54:10,437 - INFO - Round 0: found 1/1 files for _Dipole-RawRaysOutgoing.csv
+2026-06-25 12:54:10,437 - INFO - Round 0: found 1/1 files for _M1-RawRaysOutgoing.csv
+2026-06-25 12:54:10,437 - INFO - Round 0: found 1/1 files for _PremirrorM2-RawRaysOutgoing.csv
+2026-06-25 12:54:10,437 - INFO - Round 0: found 1/1 files for _PG-RawRaysOutgoing.csv
+2026-06-25 12:54:10,437 - INFO - Round 0: found 1/1 files for _M3-RawRaysOutgoing.csv
+2026-06-25 12:54:10,437 - INFO - Round 0: found 1/1 files for _ExitSlit-RawRaysOutgoing.csv
+2026-06-25 12:54:10,437 - INFO - Round 0: found 1/1 files for _KB1-RawRaysOutgoing.csv
+2026-06-25 12:54:10,437 - INFO - Round 0: found 1/1 files for _KB2-RawRaysOutgoing.csv
+2026-06-25 12:54:10,437 - INFO - Round 0: found 1/1 files for _DetectorAtFocus-RawRaysOutgoing.csv
+2026-06-25 12:54:10,437 - INFO - Round 0: final check found 0 missing simulations
+2026-06-25 12:54:10,437 - INFO - Executor shutdown completed without waiting.
+2026-06-25 12:54:10,468 - INFO - Simulation completed successfully.
+2026-06-25 12:54:10,468 - INFO - Create RAY-UI recap files
+2026-06-25 12:54:10,917 - INFO - End of the Simulations
+2026-06-25 12:57:07,452 - INFO - Simulation started, using 5 workers
+2026-06-25 12:57:07,452 - INFO - Rough ETA seed from numberRays (fixed): first round 5s, total 1s
+2026-06-25 12:57:07,455 - INFO - Start round 0
+2026-06-25 12:57:07,455 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/05_beamwaist/RAYPy_Simulation_Beamwaist/round_0
+2026-06-25 12:57:07,455 - INFO - Round 0: found 1/1 files for _Dipole-RawRaysOutgoing.csv
+2026-06-25 12:57:07,455 - INFO - Round 0: found 1/1 files for _M1-RawRaysOutgoing.csv
+2026-06-25 12:57:07,455 - INFO - Round 0: found 1/1 files for _PremirrorM2-RawRaysOutgoing.csv
+2026-06-25 12:57:07,455 - INFO - Round 0: found 1/1 files for _PG-RawRaysOutgoing.csv
+2026-06-25 12:57:07,455 - INFO - Round 0: found 1/1 files for _M3-RawRaysOutgoing.csv
+2026-06-25 12:57:07,455 - INFO - Round 0: found 1/1 files for _ExitSlit-RawRaysOutgoing.csv
+2026-06-25 12:57:07,455 - INFO - Round 0: found 1/1 files for _KB1-RawRaysOutgoing.csv
+2026-06-25 12:57:07,455 - INFO - Round 0: found 1/1 files for _KB2-RawRaysOutgoing.csv
+2026-06-25 12:57:07,455 - INFO - Round 0: found 1/1 files for _DetectorAtFocus-RawRaysOutgoing.csv
+2026-06-25 12:57:07,460 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/05_beamwaist/RAYPy_Simulation_Beamwaist/round_0/0_Beamwaist.rml
+2026-06-25 12:57:07,497 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 12:57:27,498 - WARNING - Batch stalled: 1 futures idle for 20s (limit 20s)
+2026-06-25 12:57:27,498 - INFO - Marking executor as having 1 unfinished futures
+2026-06-25 12:57:27,499 - INFO - Updating progress bar
+2026-06-25 12:57:27,500 - INFO - Batch Completed
+2026-06-25 12:57:27,500 - INFO - Waiting For batch, 25 simulations to go
+2026-06-25 12:57:27,500 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 12:57:27,500 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 12:57:27,500 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/05_beamwaist/RAYPy_Simulation_Beamwaist/round_0
+2026-06-25 12:57:27,500 - INFO - Round 0: found 1/1 files for _Dipole-RawRaysOutgoing.csv
+2026-06-25 12:57:27,500 - INFO - Round 0: found 1/1 files for _M1-RawRaysOutgoing.csv
+2026-06-25 12:57:27,500 - INFO - Round 0: found 1/1 files for _PremirrorM2-RawRaysOutgoing.csv
+2026-06-25 12:57:27,500 - INFO - Round 0: found 1/1 files for _PG-RawRaysOutgoing.csv
+2026-06-25 12:57:27,501 - INFO - Round 0: found 1/1 files for _M3-RawRaysOutgoing.csv
+2026-06-25 12:57:27,501 - INFO - Round 0: found 1/1 files for _ExitSlit-RawRaysOutgoing.csv
+2026-06-25 12:57:27,501 - INFO - Round 0: found 1/1 files for _KB1-RawRaysOutgoing.csv
+2026-06-25 12:57:27,501 - INFO - Round 0: found 1/1 files for _KB2-RawRaysOutgoing.csv
+2026-06-25 12:57:27,501 - INFO - Round 0: found 1/1 files for _DetectorAtFocus-RawRaysOutgoing.csv
+2026-06-25 12:57:27,501 - INFO - Round 0: final check found 0 missing simulations
+2026-06-25 12:57:27,501 - INFO - Executor shutdown completed without waiting.
+2026-06-25 12:57:27,555 - INFO - Simulation completed successfully.
+2026-06-25 12:57:27,555 - INFO - Create RAY-UI recap files
+2026-06-25 12:57:28,145 - INFO - End of the Simulations

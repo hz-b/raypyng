@@ -1,0 +1,77 @@
+{
+  "applies_to": "all raypyng analysis output files in this folder",
+  "columns": [
+    {
+      "name": "SourcePhotonFlux",
+      "unit": "photons/s"
+    },
+    {
+      "name": "SourceBandwidth",
+      "unit": "eV"
+    },
+    {
+      "name": "NumberRaysSurvived",
+      "unit": "count"
+    },
+    {
+      "name": "PercentageRaysSurvived",
+      "unit": "%"
+    },
+    {
+      "name": "PhotonEnergy",
+      "unit": "eV"
+    },
+    {
+      "name": "Bandwidth",
+      "unit": "eV"
+    },
+    {
+      "name": "HorizontalFocusFWHM",
+      "unit": "mm"
+    },
+    {
+      "name": "VerticalFocusFWHM",
+      "unit": "mm"
+    },
+    {
+      "name": "HorizontalDivergenceFWHM",
+      "unit": "deg"
+    },
+    {
+      "name": "VerticalDivergenceFWHM",
+      "unit": "deg"
+    },
+    {
+      "name": "HorizontalCenter",
+      "unit": "mm"
+    },
+    {
+      "name": "VerticalCenter",
+      "unit": "mm"
+    },
+    {
+      "name": "PhotonFlux",
+      "unit": "photons/s"
+    },
+    {
+      "name": "EnergyPerMilPerBw",
+      "unit": null
+    },
+    {
+      "name": "FluxPerMilPerBwPerc",
+      "unit": null
+    },
+    {
+      "name": "FluxPerMilPerBwAbs",
+      "unit": null
+    },
+    {
+      "name": "AXUVCurrentAmp",
+      "unit": "A"
+    },
+    {
+      "name": "GaAsPCurrentAmp",
+      "unit": "A"
+    }
+  ]
+}

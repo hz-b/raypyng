@@ -1,0 +1,132 @@
+2026-06-25 12:29:38,822 - INFO - Simulation started, using 12 workers
+2026-06-25 12:29:38,822 - INFO - Rough ETA seed from numberRays (fixed): first round 30s, total 2s
+2026-06-25 12:29:38,827 - INFO - Start round 0
+2026-06-25 12:29:38,827 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/recipee_ResolvinPower/RAYPy_Simulation_RP/round_0
+2026-06-25 12:29:38,827 - INFO - Round 0: found 0/6 files for _Dipole-ScalarBeamProperties.csv
+2026-06-25 12:29:38,828 - INFO - Round 0: found 0/6 files for _DetectorAtFocus-ScalarBeamProperties.csv
+2026-06-25 12:29:38,832 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/0_RP.rml
+2026-06-25 12:29:38,836 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/1_RP.rml
+2026-06-25 12:29:38,839 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/2_RP.rml
+2026-06-25 12:29:38,842 - INFO - Prepared sim number: 3: /home/simone/projects/raypyng/raypyng/examples/recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/3_RP.rml
+2026-06-25 12:29:38,847 - INFO - Prepared sim number: 4: /home/simone/projects/raypyng/raypyng/examples/recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/4_RP.rml
+2026-06-25 12:29:38,852 - INFO - Prepared sim number: 5: /home/simone/projects/raypyng/raypyng/examples/recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/5_RP.rml
+2026-06-25 12:29:38,928 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 12:29:58,932 - WARNING - Batch stalled: 6 futures idle for 20s (limit 20s)
+2026-06-25 12:29:58,932 - INFO - Marking executor as having 6 unfinished futures
+2026-06-25 12:30:08,935 - WARNING - Giving up: 6 sims idle for 10s
+2026-06-25 12:30:08,935 - INFO - Post-timeout: 0/6 sims appeared
+2026-06-25 12:30:08,936 - INFO - Updating progress bar
+2026-06-25 12:30:08,937 - INFO - Batch Completed
+2026-06-25 12:30:08,937 - INFO - Waiting For batch, 60 simulations to go
+2026-06-25 12:30:08,937 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 12:30:08,937 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 12:30:08,937 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/recipee_ResolvinPower/RAYPy_Simulation_RP/round_0
+2026-06-25 12:30:08,939 - INFO - Error in _execute simulations: [Errno 2] No such file or directory: '/home/simone/projects/raypyng/raypyng/examples/recipee_ResolvinPower/RAYPy_Simulation_RP/round_0'
+2026-06-25 12:30:08,940 - INFO - Executor shutdown completed without waiting.
+2026-06-25 12:30:09,074 - ERROR - Simulation failed.
+Traceback (most recent call last):
+  File "/home/simone/projects/raypyng/raypyng/src/raypyng/simulate.py", line 1287, in run
+    self._execute_simulations(multiprocessing, force, total_simulations, pbar)
+  File "/home/simone/projects/raypyng/raypyng/src/raypyng/simulate.py", line 1750, in _execute_simulations
+    rerun_missing, rerun_pbar = self._final_check_on_simulations_and_shutdown(
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/simone/projects/raypyng/raypyng/src/raypyng/simulate.py", line 1799, in _final_check_on_simulations_and_shutdown
+    round_missing = self._missing_simulations_for_round(round_number)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/simone/projects/raypyng/raypyng/src/raypyng/simulate.py", line 1064, in _missing_simulations_for_round
+    with os.scandir(round_folder) as entries:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/simone/projects/raypyng/raypyng/examples/recipee_ResolvinPower/RAYPy_Simulation_RP/round_0'
+2026-06-25 12:32:48,220 - INFO - Simulation started, using 12 workers
+2026-06-25 12:32:48,220 - INFO - Rough ETA seed from numberRays (fixed): first round 30s, total 2s
+2026-06-25 12:32:48,225 - INFO - Start round 0
+2026-06-25 12:32:48,225 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0
+2026-06-25 12:32:48,225 - INFO - Round 0: found 0/6 files for _Dipole-ScalarBeamProperties.csv
+2026-06-25 12:32:48,225 - INFO - Round 0: found 0/6 files for _DetectorAtFocus-ScalarBeamProperties.csv
+2026-06-25 12:32:48,230 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/0_RP.rml
+2026-06-25 12:32:48,233 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/1_RP.rml
+2026-06-25 12:32:48,237 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/2_RP.rml
+2026-06-25 12:32:48,241 - INFO - Prepared sim number: 3: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/3_RP.rml
+2026-06-25 12:32:48,244 - INFO - Prepared sim number: 4: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/4_RP.rml
+2026-06-25 12:32:48,248 - INFO - Prepared sim number: 5: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/5_RP.rml
+2026-06-25 12:32:48,330 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 12:33:06,030 - INFO - Completed: 1, remaining: 5, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/2_RP.rml
+2026-06-25 12:33:09,521 - INFO - Completed: 2, remaining: 4, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/4_RP.rml
+2026-06-25 12:33:09,767 - INFO - Completed: 3, remaining: 3, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/0_RP.rml
+2026-06-25 12:33:10,596 - INFO - Completed: 4, remaining: 2, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/5_RP.rml
+2026-06-25 12:33:10,712 - INFO - Completed: 5, remaining: 1, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/3_RP.rml
+2026-06-25 12:33:11,585 - INFO - Completed: 6, remaining: 0, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/1_RP.rml
+2026-06-25 12:33:11,586 - INFO - Batch Completed
+2026-06-25 12:33:11,586 - INFO - Waiting For batch, 60 simulations to go
+2026-06-25 12:33:11,586 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 12:33:11,586 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 12:33:11,586 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0
+2026-06-25 12:33:11,587 - INFO - Round 0: found 6/6 files for _Dipole-ScalarBeamProperties.csv
+2026-06-25 12:33:11,587 - INFO - Round 0: found 6/6 files for _DetectorAtFocus-ScalarBeamProperties.csv
+2026-06-25 12:33:11,587 - INFO - Round 0: final check found 0 missing simulations
+2026-06-25 12:33:11,603 - INFO - Executor shutdown completed.
+2026-06-25 12:33:11,604 - INFO - Simulation completed successfully.
+2026-06-25 12:33:11,605 - INFO - Create RAY-UI recap files
+2026-06-25 12:33:11,774 - INFO - End of the Simulations
+2026-06-25 12:55:34,744 - INFO - Simulation started, using 10 workers
+2026-06-25 12:55:34,744 - INFO - Rough ETA seed from numberRays (fixed): first round 30s, total 3s
+2026-06-25 12:55:34,750 - INFO - Start round 0
+2026-06-25 12:55:34,750 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0
+2026-06-25 12:55:34,750 - INFO - Round 0: found 6/6 files for _Dipole-ScalarBeamProperties.csv
+2026-06-25 12:55:34,750 - INFO - Round 0: found 6/6 files for _DetectorAtFocus-ScalarBeamProperties.csv
+2026-06-25 12:55:34,756 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/0_RP.rml
+2026-06-25 12:55:34,760 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/1_RP.rml
+2026-06-25 12:55:34,766 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/2_RP.rml
+2026-06-25 12:55:34,772 - INFO - Prepared sim number: 3: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/3_RP.rml
+2026-06-25 12:55:34,778 - INFO - Prepared sim number: 4: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/4_RP.rml
+2026-06-25 12:55:34,783 - INFO - Prepared sim number: 5: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/5_RP.rml
+2026-06-25 12:55:34,875 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 12:55:49,224 - INFO - Completed: 1, remaining: 5, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/1_RP.rml
+2026-06-25 12:55:50,313 - INFO - Completed: 2, remaining: 4, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/0_RP.rml
+2026-06-25 12:55:52,010 - INFO - Completed: 3, remaining: 3, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/2_RP.rml
+2026-06-25 12:55:52,671 - INFO - Completed: 4, remaining: 2, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/3_RP.rml
+2026-06-25 12:55:53,154 - INFO - Completed: 5, remaining: 1, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/4_RP.rml
+2026-06-25 12:55:54,235 - INFO - Completed: 6, remaining: 0, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/5_RP.rml
+2026-06-25 12:55:54,235 - INFO - Batch Completed
+2026-06-25 12:55:54,235 - INFO - Waiting For batch, 50 simulations to go
+2026-06-25 12:55:54,235 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 12:55:54,235 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 12:55:54,235 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0
+2026-06-25 12:55:54,235 - INFO - Round 0: found 6/6 files for _Dipole-ScalarBeamProperties.csv
+2026-06-25 12:55:54,235 - INFO - Round 0: found 6/6 files for _DetectorAtFocus-ScalarBeamProperties.csv
+2026-06-25 12:55:54,235 - INFO - Round 0: final check found 0 missing simulations
+2026-06-25 12:55:54,249 - INFO - Executor shutdown completed.
+2026-06-25 12:55:54,249 - INFO - Simulation completed successfully.
+2026-06-25 12:55:54,250 - INFO - Create RAY-UI recap files
+2026-06-25 12:55:54,466 - INFO - End of the Simulations
+2026-06-25 12:59:26,598 - INFO - Simulation started, using 10 workers
+2026-06-25 12:59:26,598 - INFO - Rough ETA seed from numberRays (fixed): first round 30s, total 3s
+2026-06-25 12:59:26,601 - INFO - Start round 0
+2026-06-25 12:59:26,601 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0
+2026-06-25 12:59:26,601 - INFO - Round 0: found 6/6 files for _Dipole-ScalarBeamProperties.csv
+2026-06-25 12:59:26,601 - INFO - Round 0: found 6/6 files for _DetectorAtFocus-ScalarBeamProperties.csv
+2026-06-25 12:59:26,604 - INFO - Prepared sim number: 0: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/0_RP.rml
+2026-06-25 12:59:26,606 - INFO - Prepared sim number: 1: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/1_RP.rml
+2026-06-25 12:59:26,608 - INFO - Prepared sim number: 2: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/2_RP.rml
+2026-06-25 12:59:26,611 - INFO - Prepared sim number: 3: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/3_RP.rml
+2026-06-25 12:59:26,613 - INFO - Prepared sim number: 4: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/4_RP.rml
+2026-06-25 12:59:26,615 - INFO - Prepared sim number: 5: /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/5_RP.rml
+2026-06-25 12:59:26,676 - INFO - Waiting for batch number: 0, initial max-idle: 20.0s
+2026-06-25 12:59:45,963 - INFO - Completed: 1, remaining: 5, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/4_RP.rml
+2026-06-25 12:59:46,962 - INFO - Completed: 2, remaining: 4, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/0_RP.rml
+2026-06-25 12:59:47,666 - INFO - Completed: 3, remaining: 3, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/2_RP.rml
+2026-06-25 12:59:48,724 - INFO - Completed: 4, remaining: 2, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/1_RP.rml
+2026-06-25 12:59:49,277 - INFO - Completed: 5, remaining: 1, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/5_RP.rml
+2026-06-25 12:59:49,444 - INFO - Completed: 6, remaining: 0, /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0/3_RP.rml
+2026-06-25 12:59:49,444 - INFO - Batch Completed
+2026-06-25 12:59:49,444 - INFO - Waiting For batch, 50 simulations to go
+2026-06-25 12:59:49,444 - INFO - Remaining simulations 0, stopping the simulations loop
+2026-06-25 12:59:49,444 - INFO - Checking that all simulations are completed before stopping the ProcessPoolExecutor
+2026-06-25 12:59:49,445 - INFO - Scanning round 0 outputs in /home/simone/projects/raypyng/raypyng/examples/11_recipee_ResolvinPower/RAYPy_Simulation_RP/round_0
+2026-06-25 12:59:49,445 - INFO - Round 0: found 6/6 files for _Dipole-ScalarBeamProperties.csv
+2026-06-25 12:59:49,445 - INFO - Round 0: found 6/6 files for _DetectorAtFocus-ScalarBeamProperties.csv
+2026-06-25 12:59:49,445 - INFO - Round 0: final check found 0 missing simulations
+2026-06-25 12:59:49,461 - INFO - Executor shutdown completed.
+2026-06-25 12:59:49,462 - INFO - Simulation completed successfully.
+2026-06-25 12:59:49,463 - INFO - Create RAY-UI recap files
+2026-06-25 12:59:49,632 - INFO - End of the Simulations
