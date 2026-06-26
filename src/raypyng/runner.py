@@ -494,11 +494,19 @@ class RayUIAPI:
                 if timecnt > timeout:
                     raise TimeoutError("timeout while waiting ray command io")
                 continue
-            if line.startswith(cmd):
-                if cmd_seen:
-                    break
-                else:
-                    cmd_seen = True
+            stripped = line.strip()
+            # The terminal status line is "<cmd> success" / "<cmd> failed"
+            # (and the "loaded failed" variant). Match it explicitly instead of
+            # "any second line starting with <cmd>": some RAY-UI builds print
+            # extra informational lines that also start with the command name
+            # (e.g. "export path: ..."), which must NOT be mistaken for the
+            # status and must fall through to cbdataread.
+            if stripped.startswith(cmd) and (
+                stripped.endswith("success") or stripped.endswith("failed")
+            ):
+                break
+            elif stripped.startswith(cmd) and not cmd_seen:
+                cmd_seen = True  # first echo of the command (ACK)
             else:
                 if cbdataread is not None:
                     cbdataread(line)
