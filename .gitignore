@@ -43,6 +43,11 @@ examples/test_exportDipole-RawRaysOutgoing.csv
 # generated outputs from the per-example folders (eval plots, demo artefacts)
 examples/*/*.png
 examples/*/eval_*.png
+!examples/00_raypyng/eval_raypyng.png
+!examples/02_dipole_demo/plot_dipole.png
+!examples/04_vls/vls_cff_vs_energy.png
+!examples/05_beamwaist/eval_beamwaist.png
+!examples/08_external_undulator_flux_table/eval_external_undulator_flux_table.png
 examples/**/inspect_output/
 examples/*/RAYPy_Simulation_*/round_*/
 examples/rml_demo/new_dipole_beamline.rml
