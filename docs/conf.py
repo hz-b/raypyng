@@ -20,9 +20,13 @@ import sphinx_rtd_theme
 
 # -- Project information -----------------------------------------------------
 
-from importlib.metadata import version as _get_version
-release = _get_version("raypyng")
-version = ".".join(release.split(".")[:2])
+from importlib.metadata import PackageNotFoundError, version as _get_version
+
+try:
+    release = _get_version("raypyng")
+except PackageNotFoundError:
+    release = "unknown"
+version = ".".join(release.split(".")[:2]) if release != "unknown" else release
 
 project = 'RayPyNG'
 copyright = '2022, Simone Vadilonga, Ruslan Ovsyannikov'
