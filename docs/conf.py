@@ -20,6 +20,10 @@ import sphinx_rtd_theme
 
 # -- Project information -----------------------------------------------------
 
+from importlib.metadata import version as _get_version
+release = _get_version("raypyng")
+version = ".".join(release.split(".")[:2])
+
 project = 'RayPyNG'
 copyright = '2022, Simone Vadilonga, Ruslan Ovsyannikov'
 author = 'Simone Vadilonga, Ruslan Ovsyannikov'

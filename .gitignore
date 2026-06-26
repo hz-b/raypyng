@@ -1,6 +1,7 @@
 # python virtual environment
 .venv/
 .token
+Export_Parts
 # python specific
 __pycache__/
 
@@ -23,7 +24,10 @@ src/raypyng.egg-info/top_level.txt
 
 # Sphinx build output and docs venvs
 docs/_build/
+docs/_html/
 docs/images/
+docs/**/__pycache__/
+docs/**/*.bak
 venv_docs/
 
 #ignore vscode stuff

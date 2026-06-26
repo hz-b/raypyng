@@ -5,6 +5,8 @@
 
 Welcome to raypyng's documentation!
 ===================================
+*Documentation for raypyng* |release|
+
 raypyng provides a simple python API to work with
 `RAY-UI
 <https://www.helmholtz-berlin.de/forschung/oe/wi/optik-strahlrohre/arbeitsgebiete/ray_en.html>`_,
