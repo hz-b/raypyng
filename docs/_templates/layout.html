@@ -1,0 +1,10 @@
+{% extends "!layout.html" %}
+
+{% block sidebartitle %}
+  {{ super() }}
+  {% if release %}
+  <div class="sidebar-version" style="margin-top: 0.5rem; font-size: 0.85em; opacity: 0.8;">
+    Version {{ release }}
+  </div>
+  {% endif %}
+{% endblock %}
