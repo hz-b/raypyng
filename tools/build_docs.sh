@@ -86,15 +86,8 @@ if [[ "${SKIP_IMAGE_SYNC}" == false ]]; then
     echo "============================================================"
     echo "Syncing images from examples/"
     echo "============================================================"
-    DOCS_IMAGES_DIR="${DOCS_DIR}/images"
-    mkdir -p "${DOCS_IMAGES_DIR}"
-
-    # Copy any plots that examples produce into docs/images/ so RST files can reference them.
-    # Add cp lines here as new example plots are introduced.
-    for png in "${PROJECT_ROOT}"/examples/*.png "${PROJECT_ROOT}"/examples/**/*.png; do
-        [[ -f "${png}" ]] && cp "${png}" "${DOCS_IMAGES_DIR}/" || true
-    done
-    echo "Images synced to ${DOCS_IMAGES_DIR}"
+    "${PYTHON_BIN}" "${DOCS_DIR}/prepare_example_assets.py"
+    echo "Images synced to ${DOCS_DIR}/images"
     echo
 fi
 
