@@ -49,6 +49,10 @@ examples/*/eval_*.png
 !examples/05_beamwaist/eval_beamwaist.png
 !examples/08_external_undulator_flux_table/eval_external_undulator_flux_table.png
 examples/**/inspect_output/
+!examples/06_inspect_demo/inspect_output/
+!examples/06_inspect_demo/inspect_output/tables/
+!examples/06_inspect_demo/inspect_output/tables/beamline_elements_table.csv
+!examples/06_inspect_demo/inspect_output/tables/beamline_elements_table.xlsx
 examples/*/RAYPy_Simulation_*/round_*/
 examples/rml_demo/new_dipole_beamline.rml
 examples/runner_demo/test_export*.csv
