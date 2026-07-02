@@ -146,6 +146,8 @@ file for each element present in the beamline:
             return self.sim_folder
 
 
+    # This entrypoint style is safe for Windows multiprocessing because spawned
+    # workers import the file without re-running main().
     if __name__ == "__main__":
         from raypyng import Simulate
 
