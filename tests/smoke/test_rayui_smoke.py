@@ -116,7 +116,7 @@ def test_api_export_single_object(rayui_api, tmp_path: Path):
     )
 
     assert result is True
-    assert (tmp_path / "outputDipole-RawRaysOutgoing.csv").is_file()
+    assert (export_dir / "single_Dipole-RawRaysOutgoing.csv").is_file()
 
 
 def test_api_export_detector_object(rayui_api, tmp_path: Path):
@@ -140,7 +140,7 @@ def test_api_export_detector_object(rayui_api, tmp_path: Path):
     )
 
     assert result is True
-    assert (tmp_path / "outputDetectorAtFocus-RawRaysOutgoing.csv").is_file()
+    assert (export_dir / "detector_DetectorAtFocus-RawRaysOutgoing.csv").is_file()
 
 
 def test_api_export_multi_object(rayui_api, tmp_path: Path):
@@ -164,5 +164,5 @@ def test_api_export_multi_object(rayui_api, tmp_path: Path):
     )
 
     assert result is True
-    assert (tmp_path / "outputDipole-RawRaysOutgoing.csv").is_file()
-    assert (tmp_path / "outputDetectorAtFocus-RawRaysOutgoing.csv").is_file()
+    assert (export_dir / "multi_Dipole-RawRaysOutgoing.csv").is_file()
+    assert (export_dir / "multi_DetectorAtFocus-RawRaysOutgoing.csv").is_file()
