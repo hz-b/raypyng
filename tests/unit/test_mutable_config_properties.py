@@ -3,7 +3,7 @@ import sys
 import unittest
 
 THIS_FILE_DIR = os.path.dirname(os.path.realpath(__file__))
-SRC_DIR = os.path.abspath(os.path.join(THIS_FILE_DIR, "..", "src"))
+SRC_DIR = os.path.abspath(os.path.join(THIS_FILE_DIR, "..", "..", "src"))
 sys.path.insert(1, SRC_DIR)
 
 from raypyng.simulate import Simulate
@@ -13,7 +13,7 @@ class TestMutableConfigProperties(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.rml_file = os.path.join(THIS_FILE_DIR, "test_bug", "rml", "elisa.rml")
+        cls.rml_file = os.path.join(THIS_FILE_DIR, "..", "data", "rml", "dipole.rml")
 
     def _make_simulation(self):
         sim = Simulate(self.rml_file, hide=True)

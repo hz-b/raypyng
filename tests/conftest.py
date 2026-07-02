@@ -1,16 +1,12 @@
-"""Shared pytest fixtures and CLI options for raypyng tests.
-
-Functional regression tests (--stable-ray-path / --dev-ray-path) are silently
-skipped when either path is not supplied or does not exist on disk.
-"""
+"""Shared pytest fixtures and CLI options for raypyng tests."""
 
 import os
 
 import pytest
 
-# These files in tests/ are plain scripts, not proper test modules.
-# They read external files on import and crash during pytest collection.
-collect_ignore = ["test_dipole.py", "test_waveHelper.py"]
+# Legacy scripts in tests/ are not proper pytest modules.
+collect_ignore = []
+collect_ignore_glob = ["manual_tests/**"]
 
 
 def pytest_addoption(parser):

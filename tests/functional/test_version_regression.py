@@ -3,11 +3,8 @@
 Both RAY-UI paths must be supplied via CLI options or environment variables —
 see tests/conftest.py.  Tests are silently skipped when paths are absent.
 
-Run via the orchestrating script:
-    ./tools/test_versions.sh --stable /path/to/RAY-UI --dev /path/to/Ray-UI-development
-
-Or directly with pytest:
-    pytest tests/functional/ \
+Run with uv on Python 3.12:
+    uv run --python 3.12 pytest tests/functional/ \
         --stable-ray-path=/path/to/RAY-UI \
         --dev-ray-path=/path/to/Ray-UI-development \
         -v
@@ -25,7 +22,7 @@ import pytest
 from raypyng import Simulate
 
 # RML shipped with the test suite — small, fast, known-good beamline
-_RML = Path(__file__).parent.parent / "rml" / "dipole.rml"
+_RML = Path(__file__).parent.parent / "data" / "rml" / "dipole.rml"
 
 # Metrics to compare and their per-metric tolerance multipliers.
 # Final tolerance = base_tolerance * multiplier.

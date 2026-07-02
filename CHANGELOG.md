@@ -44,7 +44,7 @@ All notable changes to this project will be documented in this file.
 - **rayx engine support (experimental)**: `Simulate` now accepts `engine="rayx"` to use the rayx GPU ray-tracer as a drop-in alternative to RAY-UI. Install with `pip install raypyng[rayx]`.
 - **graxpy grating efficiency**: optional RCWA-based diffraction efficiency via `graxpy_efficiency=True` on `Simulate`. Applied automatically to elements at and after the first grating. Install with `pip install raypyng[graxpy]`.
 - `Intensity2D` added to the list of recognised RAY-UI export types.
-- Version regression testing infrastructure: `tools/test_versions.sh`, `tests/functional/`, `tests/conftest.py` — run stable vs development RAY-UI comparisons with a single command.
+- Version regression testing infrastructure: `tests/functional/`, `tests/conftest.py` — run stable vs development RAY-UI comparisons with `uv run --python 3.12 pytest ...`.
 - Unit tests for `PostProcess` helper methods and export validation (no RAY-UI required).
 - `tools/bootstrap.sh` to create a `.venv` with uv + Python 3.12 and install dev dependencies.
 

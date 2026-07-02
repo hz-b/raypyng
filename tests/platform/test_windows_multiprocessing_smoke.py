@@ -8,7 +8,7 @@ from pathlib import Path
 import psutil
 import pytest
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPT_PATH = REPO_ROOT / "tests" / "manual_tests" / "windows_multiprocessing_smoke.py"
 
 

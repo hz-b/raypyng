@@ -8,9 +8,10 @@ from types import SimpleNamespace
 
 import pytest
 
+import raypyng.simulate as simulate_module
 from raypyng.simulate import Simulate
 
-_RML = str(Path(__file__).parent.parent / "rml" / "dipole.rml")
+_RML = str(Path(__file__).parent.parent / "data" / "rml" / "dipole.rml")
 
 
 @pytest.fixture
@@ -120,7 +121,7 @@ def test_shutdown_executor_force_cancel_terminates_worker_processes(
         def shutdown(self, wait, cancel_futures):
             self.shutdown_calls.append((wait, cancel_futures))
 
-    monkeypatch.setattr("raypyng.simulate.psutil.Process", lambda pid: FakeWorker(pid))
+    monkeypatch.setattr(simulate_module.psutil, "Process", lambda pid: FakeWorker(pid))
     monkeypatch.setattr(sim, "cleanup_child_processes", lambda: terminated.append("cleanup"))
 
     executor = FakeExecutor()
@@ -160,10 +161,7 @@ def test_wait_for_simulation_batch_surfaces_worker_exception_without_index_error
     sim._simulations_duration_total = 0.0
     sim.logger = SimpleNamespace(info=lambda *args, **kwargs: None, warning=lambda *args, **kwargs: None)
 
-    monkeypatch.setattr(
-        "raypyng.simulate.wait",
-        lambda pending, timeout, return_when: (set(pending), set()),
-    )
+    monkeypatch.setattr(simulate_module, "wait", lambda pending, timeout, return_when: (set(pending), set()))
 
     with pytest.raises(AttributeError, match="_hide"):
         sim._wait_for_simulation_batch(

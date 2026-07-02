@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import shutil
 import subprocess
@@ -6,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPT_PATH = REPO_ROOT / "examples" / "repro" / "simulation_raypyng_lightweight.py"
 
 

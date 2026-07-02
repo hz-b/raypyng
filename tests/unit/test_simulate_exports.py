@@ -11,7 +11,7 @@ import pytest
 
 from raypyng.simulate import Simulate
 
-_RML = str(Path(__file__).parent.parent / "rml" / "dipole.rml")
+_RML = str(Path(__file__).parent.parent / "data" / "rml" / "dipole.rml")
 
 
 @pytest.fixture

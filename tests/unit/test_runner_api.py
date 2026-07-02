@@ -8,6 +8,7 @@ import pytest
 
 from raypyng import config
 from raypyng.errors import RayPyError
+import raypyng.runner as runner_module
 from raypyng.runner import RayUIAPI
 from raypyng.runner import RayUIRunner
 
@@ -45,7 +46,7 @@ def test_runner_accepts_windows_executable_without_x_bit(
     exe_path.write_text("", encoding="utf8")
 
     monkeypatch.setattr(config, "opsys", "Windows")
-    monkeypatch.setattr("raypyng.runner.os.access", lambda *_args: False)
+    monkeypatch.setattr(runner_module.os, "access", lambda *_args: False)
 
     runner = RayUIRunner(ray_path=str(tmp_path), ray_binary="rayui.exe")
 
@@ -57,6 +58,7 @@ def test_runner_detects_windows_install_dir(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setenv("LOCALAPPDATA", r"C:\Users\tester\AppData\Local")
     monkeypatch.setenv("ProgramFiles", r"C:\Program Files")
     monkeypatch.setenv("ProgramFiles(x86)", r"C:\Program Files (x86)")
+    monkeypatch.setattr(runner_module.os.path, "expanduser", lambda path: path)
 
     existing_dirs = {
         r"C:\Users\tester\AppData\Local\Programs\RAY-UI",
@@ -65,9 +67,10 @@ def test_runner_detects_windows_install_dir(monkeypatch: pytest.MonkeyPatch):
         r"C:\Users\tester\AppData\Local\Programs\RAY-UI\rayui.exe",
     }
 
-    monkeypatch.setattr("raypyng.runner.os.path.isdir", lambda path: path in existing_dirs)
-    monkeypatch.setattr("raypyng.runner.os.path.isfile", lambda path: path in existing_files)
-    monkeypatch.setattr("raypyng.runner.os.access", lambda *_args: True)
+    normalize = lambda path: path.replace("/", "\\")
+    monkeypatch.setattr(runner_module.os.path, "isdir", lambda path: normalize(path) in existing_dirs)
+    monkeypatch.setattr(runner_module.os.path, "isfile", lambda path: normalize(path) in existing_files)
+    monkeypatch.setattr(runner_module.os, "access", lambda *_args: True)
 
     runner = object.__new__(RayUIRunner)
     runner._platform = "Windows"
@@ -75,7 +78,7 @@ def test_runner_detects_windows_install_dir(monkeypatch: pytest.MonkeyPatch):
 
     detected = runner._RayUIRunner__detect_ray_path()
 
-    assert detected == r"C:\Users\tester\AppData\Local\Programs\RAY-UI"
+    assert detected.replace("/", "\\") == r"C:\Users\tester\AppData\Local\Programs\RAY-UI"
 
 
 def test_runner_windows_hide_sets_hidden_creation_flags(
@@ -85,15 +88,22 @@ def test_runner_windows_hide_sets_hidden_creation_flags(
     exe_path.write_text("", encoding="utf8")
 
     monkeypatch.setattr(config, "opsys", "Windows")
-    monkeypatch.setattr("raypyng.runner.os.access", lambda *_args: True)
+    monkeypatch.setattr(runner_module.os, "access", lambda *_args: True)
+    monkeypatch.setattr(
+        runner_module.subprocess,
+        "STARTUPINFO",
+        type("STARTUPINFO", (), {"__init__": lambda self: setattr(self, "dwFlags", 0)}),
+        raising=False,
+    )
+    monkeypatch.setattr(runner_module.subprocess, "STARTF_USESHOWWINDOW", 1, raising=False)
+    monkeypatch.setattr(runner_module.subprocess, "SW_HIDE", 0, raising=False)
+    monkeypatch.setattr(runner_module.subprocess, "CREATE_NO_WINDOW", 0x08000000, raising=False)
 
     runner = RayUIRunner(ray_path=str(tmp_path), ray_binary="rayui.exe", hide=True)
 
     assert runner._hide == []
-    assert (
-        runner._creationflags & subprocess.CREATE_NO_WINDOW
-        == subprocess.CREATE_NO_WINDOW
-    )
+    create_no_window = getattr(runner_module.subprocess, "CREATE_NO_WINDOW", 0)
+    assert runner._creationflags & create_no_window == create_no_window
     assert runner._startupinfo is not None
 
 
@@ -102,8 +112,8 @@ def test_runner_linux_hide_uses_xvfb(tmp_path: Path, monkeypatch: pytest.MonkeyP
     exe_path.write_text("", encoding="utf8")
 
     monkeypatch.setattr(config, "opsys", "Linux")
-    monkeypatch.setattr("raypyng.runner.os.access", lambda *_args: True)
-    monkeypatch.setattr("raypyng.runner.shutil.which", lambda name: "/usr/bin/xvfb-run")
+    monkeypatch.setattr(runner_module.os, "access", lambda *_args: True)
+    monkeypatch.setattr(runner_module.shutil, "which", lambda name: "/usr/bin/xvfb-run")
 
     runner = RayUIRunner(ray_path=str(tmp_path), ray_binary="rayui.sh", hide=True)
 
@@ -115,7 +125,7 @@ def test_runner_macos_hide_does_not_wrap(tmp_path: Path, monkeypatch: pytest.Mon
     exe_path.write_text("", encoding="utf8")
 
     monkeypatch.setattr(config, "opsys", "Darwin")
-    monkeypatch.setattr("raypyng.runner.os.access", lambda *_args: True)
+    monkeypatch.setattr(runner_module.os, "access", lambda *_args: True)
 
     runner = RayUIRunner(ray_path=str(tmp_path), ray_binary="Ray-UI", hide=True)
 

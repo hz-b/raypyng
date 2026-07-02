@@ -1,29 +1,9 @@
 from __future__ import annotations
 
-import os
-import platform
 import re
-import sys
 from pathlib import Path
 
-import pytest
-
-REPO_ROOT = Path(__file__).resolve().parents[1]
-TEST_RML = REPO_ROOT / "tests" / "rml" / "dipole.rml"
-
-
-def _resolve_rayui_path() -> str | None:
-    env_path = os.environ.get("RAYUI_PATH")
-    if env_path and Path(env_path).is_dir():
-        return env_path
-
-    sys.path.insert(0, str(REPO_ROOT / "src"))
-    try:
-        from raypyng.runner import RayUIRunner
-
-        return RayUIRunner(ray_path=None, hide=(platform.system() == "Windows"))._path
-    except Exception:
-        return None
+TEST_RML = Path(__file__).resolve().parents[1] / "data" / "rml" / "dipole.rml"
 
 
 def _write_small_rml(tmp_path: Path) -> Path:
@@ -62,31 +42,6 @@ def _command_with_transcript(api, tmp_path: Path, command_name: str, func, *args
     finally:
         api._runner._readline_with_timeout = original_readline
     return result, transcript
-
-
-@pytest.fixture(scope="module")
-def rayui_path():
-    return _resolve_rayui_path()
-
-
-@pytest.fixture
-def rayui_api(rayui_path):
-    if rayui_path is None:
-        pytest.skip("RAY-UI environment not available")
-
-    sys.path.insert(0, str(REPO_ROOT / "src"))
-    from raypyng.runner import RayUIAPI, RayUIRunner
-
-    runner = RayUIRunner(ray_path=rayui_path, hide=(platform.system() == "Windows"))
-    api = RayUIAPI(runner)
-    try:
-        yield runner, api
-    finally:
-        try:
-            api.quit()
-        except Exception:
-            pass
-        runner.kill()
 
 
 def test_runner_start_stop(rayui_api):
@@ -161,7 +116,7 @@ def test_api_export_single_object(rayui_api, tmp_path: Path):
     )
 
     assert result is True
-    assert (export_dir / "single_Dipole-RawRaysOutgoing.csv").exists()
+    assert (tmp_path / "outputDipole-RawRaysOutgoing.csv").is_file()
 
 
 def test_api_export_detector_object(rayui_api, tmp_path: Path):
@@ -185,7 +140,7 @@ def test_api_export_detector_object(rayui_api, tmp_path: Path):
     )
 
     assert result is True
-    assert (export_dir / "detector_DetectorAtFocus-RawRaysOutgoing.csv").exists()
+    assert (tmp_path / "outputDetectorAtFocus-RawRaysOutgoing.csv").is_file()
 
 
 def test_api_export_multi_object(rayui_api, tmp_path: Path):
@@ -209,5 +164,5 @@ def test_api_export_multi_object(rayui_api, tmp_path: Path):
     )
 
     assert result is True
-    assert (export_dir / "multi_Dipole-RawRaysOutgoing.csv").exists()
-    assert (export_dir / "multi_DetectorAtFocus-RawRaysOutgoing.csv").exists()
+    assert (tmp_path / "outputDipole-RawRaysOutgoing.csv").is_file()
+    assert (tmp_path / "outputDetectorAtFocus-RawRaysOutgoing.csv").is_file()
