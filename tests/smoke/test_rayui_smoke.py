@@ -83,7 +83,7 @@ def test_api_trace_no_analyze(rayui_api, tmp_path: Path):
 def test_api_save(rayui_api, tmp_path: Path):
     runner, api = rayui_api
     rml_path = _write_small_rml(tmp_path)
-    save_dir = tmp_path / "save output"
+    save_dir = tmp_path / "save_output"
     save_dir.mkdir()
     save_path = save_dir / "saved copy.rml"
     runner.run()
@@ -98,7 +98,7 @@ def test_api_save(rayui_api, tmp_path: Path):
 def test_api_export_single_object(rayui_api, tmp_path: Path):
     runner, api = rayui_api
     rml_path = _write_small_rml(tmp_path)
-    export_dir = tmp_path / "export output"
+    export_dir = tmp_path / "export_output"
     export_dir.mkdir()
     runner.run()
     _command_with_transcript(api, tmp_path, "load", api.load, str(rml_path))
@@ -122,7 +122,7 @@ def test_api_export_single_object(rayui_api, tmp_path: Path):
 def test_api_export_detector_object(rayui_api, tmp_path: Path):
     runner, api = rayui_api
     rml_path = _write_small_rml(tmp_path)
-    export_dir = tmp_path / "detector output"
+    export_dir = tmp_path / "detector_output"
     export_dir.mkdir()
     runner.run()
     _command_with_transcript(api, tmp_path, "load", api.load, str(rml_path))
@@ -146,7 +146,7 @@ def test_api_export_detector_object(rayui_api, tmp_path: Path):
 def test_api_export_multi_object(rayui_api, tmp_path: Path):
     runner, api = rayui_api
     rml_path = _write_small_rml(tmp_path)
-    export_dir = tmp_path / "multi output"
+    export_dir = tmp_path / "multi_output"
     export_dir.mkdir()
     runner.run()
     _command_with_transcript(api, tmp_path, "load", api.load, str(rml_path))
