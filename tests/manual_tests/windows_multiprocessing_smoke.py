@@ -11,7 +11,7 @@ from raypyng import Simulate
 def main():
     base_dir = Path(__file__).resolve().parents[1]
     output_root = Path(os.environ["RAYPYNG_SMOKE_OUTPUT"])
-    rml_file = base_dir / "rml" / "dipole.rml"
+    rml_file = base_dir / "data" / "rml" / "dipole.rml"
 
     sim = Simulate(str(rml_file), hide=True, ray_path=os.environ["RAYUI_PATH"])
     beamline = sim.rml.beamline
@@ -27,7 +27,7 @@ def main():
         {beamline.Dipole.numberRays: 1000},
     ]
     sim.exports = [
-        {beamline.Dipole: "RawRaysOutgoing"},
+        {beamline.Dipole: ["RawRaysOutgoing"]},
         {beamline.DetectorAtFocus: ["RawRaysOutgoing"]},
     ]
     sim.run(multiprocessing=2, force=True)

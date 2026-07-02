@@ -1,6 +1,7 @@
 """Shared pytest fixtures and CLI options for raypyng tests."""
 
 import os
+import platform
 
 import pytest
 
@@ -36,6 +37,19 @@ def _resolve_path(raw):
     return expanded if os.path.isdir(expanded) else None
 
 
+def _resolve_rayui_path():
+    env_path = os.environ.get("RAYUI_PATH")
+    if env_path and os.path.isdir(env_path):
+        return env_path
+
+    try:
+        from raypyng.runner import RayUIRunner
+
+        return RayUIRunner(ray_path=None, hide=(platform.system() == "Windows"))._path
+    except Exception:
+        return None
+
+
 @pytest.fixture(scope="session")
 def stable_ray_path(request):
     raw = request.config.getoption("--stable-ray-path") or os.environ.get(
@@ -59,6 +73,14 @@ def dev_ray_path(request):
             "Development RAY-UI path not provided or not found. "
             "Pass --dev-ray-path=<dir> or set RAYUI_DEV_PATH."
         )
+    return path
+
+
+@pytest.fixture(scope="session")
+def rayui_path():
+    path = _resolve_rayui_path()
+    if path is None:
+        pytest.skip("RAY-UI environment not available")
     return path
 
 

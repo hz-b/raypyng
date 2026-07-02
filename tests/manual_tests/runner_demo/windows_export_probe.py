@@ -9,7 +9,7 @@ from raypyng.runner import RayUIAPI, RayUIRunner
 
 def main():
     repo_root = Path(__file__).resolve().parents[3]
-    rml_path = repo_root / "tests" / "rml" / "dipole.rml"
+    rml_path = repo_root / "tests" / "data" / "rml" / "dipole.rml"
     out_dir = Path(tempfile.gettempdir()) / "raypyng_windows_export_probe"
     out_dir.mkdir(parents=True, exist_ok=True)
 

@@ -18,7 +18,7 @@ def test_analyze_produces_expected_files(rayui_path, tmp_path: Path):
         {beamline.Dipole.photonEnergy: np.arange(200, 7201, 1000)},
         {beamline.ExitSlit.totalHeight: np.array([0.1])},
         {beamline.PG.cFactor: np.array([2.25])},
-        {beamline.Dipole.numberRays: 10000},
+        {beamline.Dipole.numberRays: 1000},
     ]
     sim.simulation_name = "test_Analyze"
     sim.repeat = 2

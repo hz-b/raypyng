@@ -6,37 +6,17 @@ import sys
 from pathlib import Path
 
 import psutil
-import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPT_PATH = REPO_ROOT / "tests" / "manual_tests" / "windows_multiprocessing_smoke.py"
 
-
-def _can_run_windows_rayui() -> bool:
-    if sys.platform != "win32":
-        return False
-
-    env_path = os.environ.get("RAYUI_PATH")
-    if not env_path or not Path(env_path).is_dir():
-        return False
-
-    sys.path.insert(0, str(REPO_ROOT / "src"))
-    try:
-        from raypyng.runner import RayUIRunner
-
-        RayUIRunner(ray_path=env_path, hide=True)
-    except Exception:
-        return False
-    return True
-
-
-@pytest.mark.skipif(not _can_run_windows_rayui(), reason="Windows Ray-UI environment not available")
-def test_windows_multiprocessing_smoke(tmp_path: Path):
+def test_windows_multiprocessing_smoke(rayui_path, tmp_path: Path):
     env = os.environ.copy()
     pythonpath_entries = [str(REPO_ROOT / "src")]
     if env.get("PYTHONPATH"):
         pythonpath_entries.append(env["PYTHONPATH"])
     env["PYTHONPATH"] = os.pathsep.join(pythonpath_entries)
+    env["RAYUI_PATH"] = rayui_path
     env["RAYPYNG_SMOKE_OUTPUT"] = str(tmp_path)
 
     proc = subprocess.run(

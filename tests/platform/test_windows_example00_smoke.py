@@ -5,31 +5,9 @@ import subprocess
 import sys
 from pathlib import Path
 
-import pytest
-
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
-
-def _can_run_windows_rayui() -> bool:
-    if sys.platform != "win32":
-        return False
-
-    env_path = os.environ.get("RAYUI_PATH")
-    if not env_path or not Path(env_path).is_dir():
-        return False
-
-    sys.path.insert(0, str(REPO_ROOT / "src"))
-    try:
-        from raypyng.runner import RayUIRunner
-
-        RayUIRunner(ray_path=env_path, hide=True)
-    except Exception:
-        return False
-    return True
-
-
-@pytest.mark.skipif(not _can_run_windows_rayui(), reason="Windows Ray-UI environment not available")
-def test_example00_runs_from_real_script(tmp_path: Path):
+def test_example00_runs_from_real_script(rayui_path, tmp_path: Path):
     script_path = tmp_path / "example00_windows_probe.py"
     script_path.write_text(
         """
@@ -71,6 +49,7 @@ if __name__ == "__main__":
     if env.get("PYTHONPATH"):
         pythonpath_entries.append(env["PYTHONPATH"])
     env["PYTHONPATH"] = os.pathsep.join(pythonpath_entries)
+    env["RAYUI_PATH"] = rayui_path
 
     proc = subprocess.run(
         [sys.executable, str(script_path)],
