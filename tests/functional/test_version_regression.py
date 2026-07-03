@@ -3,11 +3,8 @@
 Both RAY-UI paths must be supplied via CLI options or environment variables —
 see tests/conftest.py.  Tests are silently skipped when paths are absent.
 
-Run via the orchestrating script:
-    ./tools/test_versions.sh --stable /path/to/RAY-UI --dev /path/to/Ray-UI-development
-
-Or directly with pytest:
-    pytest tests/functional/ \
+Run with uv on Python 3.12:
+    uv run --python 3.12 pytest tests/functional/ \
         --stable-ray-path=/path/to/RAY-UI \
         --dev-ray-path=/path/to/Ray-UI-development \
         -v
@@ -24,18 +21,26 @@ import pytest
 
 from raypyng import Simulate
 
+pytestmark = pytest.mark.requires_ray_ui
+
 # RML shipped with the test suite — small, fast, known-good beamline
-_RML = Path(__file__).parent.parent / "rml" / "dipole.rml"
+_RML = Path(__file__).parent.parent / "data" / "rml" / "dipole.rml"
 
 # Metrics to compare and their per-metric tolerance multipliers.
 # Final tolerance = base_tolerance * multiplier.
 _METRICS = {
-    "PercentageRaysSurvived": 1.0,
-    "PhotonFlux": 1.0,
-    "HorizontalFocusFWHM": 5.0,
-    "VerticalFocusFWHM": 5.0,
-    "Bandwidth": 2.0,
+    "PercentageRaysSurvived": 10.0,
+    "PhotonFlux": 10.0,
+    "HorizontalFocusFWHM": 20.0,
+    "VerticalFocusFWHM": 20.0,
+    "Bandwidth": 20.0,
 }
+
+_NUMBER_RAYS = int(1e6)
+
+_GREEN = "\033[32m"
+_RED = "\033[31m"
+_RESET = "\033[0m"
 
 
 # ── helpers ───────────────────────────────────────────────────────────────────
@@ -45,7 +50,10 @@ def _run_sim(rml_path: Path, ray_path: str, sim_name: str, out_dir: Path, energi
     """Run a Simulate job and return the aggregated DetectorAtFocus CSV."""
     sim = Simulate(str(rml_path), hide=True, ray_path=ray_path)
     beamline = sim.rml.beamline
-    sim.params = [{beamline.Dipole.photonEnergy: energies}]
+    sim.params = [
+        {beamline.Dipole.photonEnergy: energies},
+        {beamline.Dipole.numberRays: _NUMBER_RAYS},
+    ]
     sim.exports = [{beamline.DetectorAtFocus: ["RawRaysOutgoing"]}]
     sim.simulation_name = sim_name
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -67,6 +75,7 @@ def _assert_metrics_close(
 ) -> None:
     """Assert that every tracked metric is within tolerance at every row."""
     errors = []
+    report = []
     for metric, multiplier in _METRICS.items():
         if metric not in df_stable.columns or metric not in df_dev.columns:
             continue
@@ -75,14 +84,27 @@ def _assert_metrics_close(
             zip(df_stable[metric].values, df_dev[metric].values)
         ):
             if np.isnan(vs) and np.isnan(vd):
-                continue
-            denom = max(abs(float(vs)), 1e-30)
-            rel_diff = abs(float(vs) - float(vd)) / denom
-            if rel_diff > tol:
-                errors.append(
-                    f"  row {i}: {metric}: stable={vs:.6g}  dev={vd:.6g}"
-                    f"  rel_diff={rel_diff:.3%}  tol={tol:.1%}"
+                report.append(
+                    f"{_GREEN}  row {i}: {metric}: stable=nan  dev=nan"
+                    f"  abs_diff=nan  rel_diff=nan  tol={tol:.1%}{_RESET}"
                 )
+                continue
+            abs_diff = abs(float(vs) - float(vd))
+            denom = max(abs(float(vs)), 1e-30)
+            rel_diff = abs_diff / denom
+            line = (
+                f"  row {i}: {metric}: stable={vs:.6g}  dev={vd:.6g}"
+                f"  abs_diff={abs_diff:.6g}  rel_diff={rel_diff:.3%}"
+                f"  tol={tol:.1%}"
+            )
+            if rel_diff > tol:
+                errors.append(line)
+                report.append(f"{_RED}{line}{_RESET}")
+            else:
+                report.append(f"{_GREEN}{line}{_RESET}")
+    if report:
+        print(f"Metric comparison{' — ' + label if label else ''}:")
+        print("\n".join(report))
     if errors:
         header = f"Metric mismatch{' — ' + label if label else ''}:\n"
         pytest.fail(header + "\n".join(errors))

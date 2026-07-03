@@ -2,6 +2,8 @@
 .venv/
 .token
 Export_Parts
+.claude/
+CLAUDE.md
 # python specific
 __pycache__/
 

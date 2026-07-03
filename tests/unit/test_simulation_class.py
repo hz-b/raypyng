@@ -2,7 +2,9 @@ import os
 import sys
 import unittest
 
-sys.path.insert(1, "../src")
+THIS_FILE_DIR = os.path.dirname(os.path.realpath(__file__))
+SRC_DIR = os.path.abspath(os.path.join(THIS_FILE_DIR, "..", "..", "src"))
+sys.path.insert(1, SRC_DIR)
 
 from raypyng.simulate import Simulate
 
@@ -11,8 +13,7 @@ class TestAnalyze(unittest.TestCase):
 
     def test_1_turn_reflectivity_on(self):
 
-        this_file_dir = os.path.dirname(os.path.realpath(__file__))
-        rml_file = os.path.join(this_file_dir, "rml/dipole.rml")
+        rml_file = os.path.join(THIS_FILE_DIR, "..", "data", "rml", "dipole.rml")
 
         sim = Simulate(rml_file, hide=True)
 
@@ -26,8 +27,7 @@ class TestAnalyze(unittest.TestCase):
 
     def test_0_turn_reflectivity_off(self):
 
-        this_file_dir = os.path.dirname(os.path.realpath(__file__))
-        rml_file = os.path.join(this_file_dir, "rml/dipole.rml")
+        rml_file = os.path.join(THIS_FILE_DIR, "..", "data", "rml", "dipole.rml")
 
         sim = Simulate(rml_file, hide=True)
 
