@@ -1,6 +1,21 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.0.0] - 3-July-2026
+
+### Added
+- Reworked the automated test suite into clear `unit`, `smoke`, `platform`, and `functional` layers, with a short `uv`/Python 3.12 runbook in `tests/test.md`.
+- Added focused unit coverage for core library and recipe behavior, including RML/XML helpers, diodes, VLS grating maths, wave helper lookup, and graxpy efficiency selection.
+
+### Changed
+- Smoke and platform tests now use temporary output directories and cross-platform Ray-UI discovery so they run consistently on Linux, macOS, and Windows when Ray-UI is available.
+- Smoke tests were trimmed to run faster by reducing the ray count for the core analyze/no-analyze flows.
+- Claude-specific repo artifacts were removed from the branch, and the obsolete `tools/test_versions.sh` wrapper was dropped in favor of direct `uv run --python 3.12 pytest ...` commands.
+
+### Fixed
+- Smoke exports now avoid spaced output paths, preventing files from landing in the repository root on macOS and Linux.
+- Platform tests now exercise the intended runtime behavior instead of being skipped solely because of the host OS.
+
 ## [1.4.6] - 25-June-2026
 
 ### Added
