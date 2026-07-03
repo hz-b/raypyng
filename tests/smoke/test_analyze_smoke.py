@@ -3,8 +3,11 @@ from __future__ import annotations
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 from raypyng.simulate import Simulate
+
+pytestmark = pytest.mark.requires_ray_ui
 
 
 def test_analyze_produces_expected_files(rayui_path, tmp_path: Path):

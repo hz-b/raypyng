@@ -3,7 +3,11 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+import pytest
+
 TEST_RML = Path(__file__).resolve().parents[1] / "data" / "rml" / "dipole.rml"
+
+pytestmark = pytest.mark.requires_ray_ui
 
 
 def _write_small_rml(tmp_path: Path) -> Path:

@@ -21,6 +21,8 @@ import pytest
 
 from raypyng import Simulate
 
+pytestmark = pytest.mark.requires_ray_ui
+
 # RML shipped with the test suite — small, fast, known-good beamline
 _RML = Path(__file__).parent.parent / "data" / "rml" / "dipole.rml"
 

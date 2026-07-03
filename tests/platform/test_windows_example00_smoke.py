@@ -5,7 +5,12 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
+
+pytestmark = pytest.mark.requires_ray_ui
+
 
 def test_example00_runs_from_real_script(rayui_path, tmp_path: Path):
     script_path = tmp_path / "example00_windows_probe.py"

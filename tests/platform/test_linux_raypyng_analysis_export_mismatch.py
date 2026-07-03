@@ -10,6 +10,8 @@ import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
+pytestmark = pytest.mark.requires_ray_ui
+
 
 def _needs_xvfb() -> bool:
     return sys.platform.startswith("linux") and shutil.which("xvfb-run") is None
