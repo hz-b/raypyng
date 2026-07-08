@@ -12,8 +12,102 @@ class BeamlineElement(XmlAttributedNameElement):
 
 ###############################################################################
 class ObjectElement(XmlAttributedNameElement):
+    _BOOLEAN_TOGGLES = {
+        "reflectivity_enabled": {
+            "param": "reflectivityType",
+            "true_value": "1",
+            "false_value": "0",
+            "true_comment": "DerivedbyMaterial",
+            "false_comment": "100%",
+        },
+        "slope_error_enabled": {
+            "param": "slopeError",
+            "true_value": "0",
+            "false_value": "1",
+            "true_comment": "Yes",
+            "false_comment": "No",
+        },
+        "alignment_error_enabled": {
+            "param": "alignmentError",
+            "true_value": "0",
+            "false_value": "1",
+            "true_comment": "Yes",
+            "false_comment": "No",
+        },
+    }
+
     def __init__(self, name: str, attributes: dict, **kwargs):
         super().__init__("id", name, attributes, **kwargs)
+
+    def __getattr__(self, key):
+        if key in self._BOOLEAN_TOGGLES:
+            return object.__getattribute__(self, key)
+        return super().__getattr__(key)
+
+    def _require_toggle_param(self, param_name: str):
+        if not hasattr(self, param_name):
+            element_name = self.resolvable_name()
+            raise AttributeError(
+                f"Beamline element '{element_name}' does not define '{param_name}' in the RML"
+            )
+        return getattr(self, param_name)
+
+    def _toggle_spec(self, property_name: str):
+        return self._BOOLEAN_TOGGLES[property_name]
+
+    def _read_boolean_toggle(self, property_name: str) -> bool:
+        spec = self._toggle_spec(property_name)
+        param_name = spec["param"]
+        param = self._require_toggle_param(param_name)
+        value = str(param.cdata).strip()
+        if value == spec["true_value"]:
+            return True
+        if value == spec["false_value"]:
+            return False
+
+        comment = str(param.attributes().get("comment", "")).strip().lower()
+        if comment == spec["true_comment"].lower():
+            return True
+        if comment == spec["false_comment"].lower():
+            return False
+        raise ValueError(
+            f"Beamline element '{self.resolvable_name()}' has unsupported '{param_name}' value "
+            f"'{param.cdata}'"
+        )
+
+    def _write_boolean_toggle(self, property_name: str, enabled: bool) -> None:
+        if not isinstance(enabled, bool):
+            raise TypeError(f"{property_name} expects a bool, got {type(enabled).__name__}")
+
+        spec = self._toggle_spec(property_name)
+        param_name = spec["param"]
+        param = self._require_toggle_param(param_name)
+        param.attributes()["comment"] = spec["true_comment"] if enabled else spec["false_comment"]
+        param.cdata = spec["true_value"] if enabled else spec["false_value"]
+
+    @property
+    def reflectivity_enabled(self) -> bool:
+        return self._read_boolean_toggle("reflectivity_enabled")
+
+    @reflectivity_enabled.setter
+    def reflectivity_enabled(self, enabled: bool) -> None:
+        self._write_boolean_toggle("reflectivity_enabled", enabled)
+
+    @property
+    def slope_error_enabled(self) -> bool:
+        return self._read_boolean_toggle("slope_error_enabled")
+
+    @slope_error_enabled.setter
+    def slope_error_enabled(self, enabled: bool) -> None:
+        self._write_boolean_toggle("slope_error_enabled", enabled)
+
+    @property
+    def alignment_error_enabled(self) -> bool:
+        return self._read_boolean_toggle("alignment_error_enabled")
+
+    @alignment_error_enabled.setter
+    def alignment_error_enabled(self, enabled: bool) -> None:
+        self._write_boolean_toggle("alignment_error_enabled", enabled)
 
 
 ###############################################################################

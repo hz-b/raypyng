@@ -6,11 +6,21 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Added `rayx` support. This is still experimental and unstable.
 - Added Windows support for `raypyng`.
+- Added per-element boolean toggles for `reflectivity`, `slopeError`, and `alignmentError` on parsed RML beamline elements.
+- Added a manual RML toggle check under `tests/manual_tests/rml_error_toggles/` that writes enabled/disabled beamline variants for visual inspection in RAY.
 
 ### Changed
 - Reworked the automated tests and added `tests/test.md` with a concise guide for running them.
 - The automatic test suite is now organized into four layers: `unit`, `smoke`, `platform`, and `functional`.
 - Added GitHub CI integration for the automated test suite.
+- Finalized the package version from `2.0.0a2` to `2.0.0`.
+- `Simulate.reflectivity()`, `Simulate.slope_errors()`, and `Simulate.alignment_errors()` now share the same per-element toggle implementation and normalize the underlying RML state consistently.
+- Split the tutorial into focused pages for RML manipulation, the RAY-UI API, simulations, and recipes, while keeping `tutorial.rst` as the landing page.
+- Ignore `.venv_publish/` and `.vscode/` at the repo level.
+
+### Fixed
+- Beamline-wide reflectivity toggling can now be controlled per element in the same style as slope and alignment errors.
+- Added unit coverage for per-element reflectivity toggles and for all three beamline-wide toggle helpers.
 
 ## [1.4.6] - 25-June-2026
 
