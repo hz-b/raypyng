@@ -111,3 +111,15 @@ The release flow is:
 4. create the release tag on `main`
 
 `main` should always reflect stable, releasable project history.
+
+## Versioning and Release Policy
+
+raypyng follows classic semantic versioning:
+
+- `MAJOR` for incompatible or substantial user-facing changes
+- `MINOR` for backward-compatible new features
+- `PATCH` for backward-compatible bug fixes and smaller corrections
+
+raypyng does not follow a fixed calendar-based release cycle. Releases are made
+when they are needed, typically after a useful set of changes has been merged,
+tested, documented, and prepared in `develop`.
