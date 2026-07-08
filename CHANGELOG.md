@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Added Windows support for `raypyng`.
 - Added per-element boolean toggles for `reflectivity`, `slopeError`, and `alignmentError` on parsed RML beamline elements.
 - Added a manual RML toggle check under `tests/manual_tests/rml_error_toggles/` that writes enabled/disabled beamline variants for visual inspection in RAY.
+- Added `Roughness` and `Slopes` simulation recipes together with automatic plotting helpers for their scan outputs.
 
 ### Changed
 - Reworked the automated tests and added `tests/test.md` with a concise guide for running them.
@@ -16,11 +17,14 @@ All notable changes to this project will be documented in this file.
 - Finalized the package version from `2.0.0a2` to `2.0.0`.
 - `Simulate.reflectivity()`, `Simulate.slope_errors()`, and `Simulate.alignment_errors()` now share the same per-element toggle implementation and normalize the underlying RML state consistently.
 - Split the tutorial into focused pages for RML manipulation, the RAY-UI API, simulations, and recipes, while keeping `tutorial.rst` as the landing page.
+- Refactored `raypyng.recipes` from a single module into a package while preserving the public import style for existing recipes.
+- Expanded the recipe docs and examples to cover the new roughness and slope workflows and to point readers to the curated examples section and GitHub example folders on `main`.
 - Ignore `.venv_publish/` and `.vscode/` at the repo level.
 
 ### Fixed
 - Beamline-wide reflectivity toggling can now be controlled per element in the same style as slope and alignment errors.
 - Added unit coverage for per-element reflectivity toggles and for all three beamline-wide toggle helpers.
+- Fixed slope-scan evaluation so unrelated scan parameters such as exit-slit settings are not treated as slope-varied elements during plotting.
 
 ## [1.4.6] - 25-June-2026
 
