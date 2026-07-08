@@ -1,13 +1,7 @@
 Tutorial
 ********
 
-.. note::
-
-   Every code block in this tutorial is written so that it can be copied and
-   pasted directly into a Python script or interpreter. Program output, when
-   shown, is given in a separate block and is not meant to be pasted back in.
-
-The tutorial is now split into focused pages:
+The tutorial is split into focused pages:
 
 .. toctree::
    :maxdepth: 2
