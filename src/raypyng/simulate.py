@@ -10,8 +10,8 @@ import signal
 import sys
 import time
 import traceback
-from contextlib import suppress
 from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
+from contextlib import suppress
 
 import numpy as np
 import pandas as pd
@@ -2116,14 +2116,9 @@ class Simulate:
             value (bool, optional): If :code:`True` the reflectivity is switched on,
                                            if :code:`False` the reflectivity is switched off.
         """
-        if value:
-            on_off = "1"
-        else:
-            on_off = "0"
-
         for oe in self.rml.beamline.children():
             if hasattr(oe, "reflectivityType"):
-                oe.reflectivityType.cdata = on_off
+                oe.reflectivity_enabled = value
 
     def slope_errors(self, slope_errors):
         """
@@ -2133,15 +2128,9 @@ class Simulate:
             value (bool, optional): If `True` the slope errors are switched on,
                                            if `False` the slope errors are switched off.
         """
-        if slope_errors:
-            on_off = "0"
-        else:
-            on_off = "1"
-
         for oe in self.rml.beamline.children():
             if hasattr(oe, "slopeError"):
-                oe.slopeError.cdata = on_off
-                # oe.slopeError.attributes()['enabled'] = enabled
+                oe.slope_error_enabled = slope_errors
 
     def alignment_errors(self, value):
         """
@@ -2154,15 +2143,9 @@ class Simulate:
         Returns:
             None
         """
-
-        if value:
-            on_off = "0"
-        else:
-            on_off = "1"
-
         for oe in self.rml.beamline.children():
             if hasattr(oe, "alignmentError"):
-                oe.alignmentError.cdata = on_off
+                oe.alignment_error_enabled = value
 
 
 def run_rml_func_rayx(parameters):

@@ -1,5 +1,6 @@
 # python virtual environment
 .venv/
+.venv_publish/
 .token
 Export_Parts
 .claude/
@@ -34,7 +35,8 @@ docs/**/__pycache__/
 docs/**/*.bak
 venv_docs/
 
-#ignore vscode stuff
+# ignore vscode stuff
+.vscode/
 .vscode/configurationCache.log
 .vscode/dryrun.log
 .vscode/targets.log
