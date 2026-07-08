@@ -95,3 +95,16 @@ See [`tests/test.md`](tests/test.md) for setup and run commands.
 - Installation guide: https://raypyng.readthedocs.io/en/latest/installation.html
 - Tutorial: https://raypyng.readthedocs.io/en/latest/tutorial.html
 - Troubleshooting: https://raypyng.readthedocs.io/en/latest/troubleshooting.html
+
+## Versioning
+
+raypyng follows classic semantic versioning:
+
+- `MAJOR` for incompatible or substantial user-facing changes
+- `MINOR` for backward-compatible new features
+- `PATCH` for backward-compatible bug fixes and smaller corrections
+
+## Contact
+
+For questions about use rights or licensing, contact Simone Vadilonga:
+`simone.vadilonga@helmholtz-berlin.de`
