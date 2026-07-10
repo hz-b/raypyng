@@ -49,7 +49,7 @@ def test_build_tables_uses_expected_schema_and_na_values():
     assert m1_row["azimuthalAngle"] == "90"
     assert m1_row["totalWidth"] == "50"
     assert m1_row["totalLength"] == "1000"
-    assert m1_row["materialCoating1"] == "n.a."
+    assert m1_row["materialCoating1"] == "Pt"
     assert m1_row["slopeErrorSag"] == "1.5"
     assert m1_row["slopeErrorMer"] == "0.5"
     assert m1_row["z"] == "12500.00"

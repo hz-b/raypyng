@@ -1,16 +1,13 @@
 Installation
 *************
-raypyng runs the simulations on **Linux** and **macOS**.
+raypyng runs the simulations on **Linux**, **macOS**, and **Windows**.
 
 .. warning::
 
-   **Windows is not supported for running simulations.** Driving RAY-UI from
-   Python relies on RAY-UI's *background mode*, which lets raypyng send commands
-   and read results over a pipe. RAY-UI does not provide a background mode on
-   Windows, so there is no way for raypyng to communicate with it there. The
-   pure-Python helpers that do not launch RAY-UI (for example reading/writing
-   ``.rml`` files or the standalone ``Dipole`` spectrum) may still work on
-   Windows, but the whole simulation workflow does not.
+   On **Windows**, multiprocessing uses Python's :code:`spawn` start method.
+   Put the code that calls :code:`sim.run(...)` inside
+   :code:`if __name__ == '__main__':` so worker processes do not re-run the
+   whole script when they import it.
 
 The installation has two parts that are common to every supported platform:
 
@@ -18,7 +15,7 @@ The installation has two parts that are common to every supported platform:
 #. Install the **raypyng** Python package.
 
 On Linux there is one extra step: installing **xvfb** so that RAY-UI can run
-headless. On macOS xvfb is **not** needed and must not be installed.
+headless. On macOS and Windows xvfb is **not** needed.
 
 Pick the section for your operating system below.
 
@@ -27,7 +24,7 @@ Install RAY-UI
 ==============
 Download the RAY-UI installer from `this link
 <https://www.helmholtz-berlin.de/forschung/oe/wi/optik-strahlrohre/arbeitsgebiete/ray_en.html>`_
-and run it. The installer is available for both Linux and macOS.
+and run it. The installer is available for Linux, macOS, and Windows.
 
 On macOS the installer creates a ``Ray-UI.app`` bundle inside the chosen
 installation folder (for example ``~/Applications/RAY-UI/Ray-UI.app``). raypyng
@@ -55,6 +52,18 @@ Once your environment is ready, install raypyng:
 .. code-block:: bash
 
    python3 -m pip install --upgrade raypyng
+
+For local development in this repository, you can also use the provided
+bootstrap scripts to create a repo-local virtual environment:
+
+- Linux/macOS: :code:`./tools/bootstrap.sh`
+- Windows PowerShell: :code:`.\tools\bootstrap_windows.ps1`
+
+On Windows, activate it with:
+
+.. code-block:: powershell
+
+   .\.venv\Scripts\Activate.ps1
 
 
 Linux installation
@@ -91,6 +100,21 @@ automatically on macOS, and trying to install it is unnecessary.
   This is harmless: it is just macOS noticing that the headless RAY-UI instances
   are being started and stopped rapidly. The simulations are not affected and
   complete normally — you can safely **ignore and dismiss these dialogs**.
+
+
+Windows installation
+====================
+On Windows you only need to install **RAY-UI** and the **raypyng** Python
+package. For local development in this repository, the easiest setup path is:
+
+.. code-block:: powershell
+
+   .\tools\bootstrap_windows.ps1
+   .\.venv\Scripts\Activate.ps1
+
+When running simulations with :code:`multiprocessing > 1`, wrap your script
+entrypoint in :code:`if __name__ == '__main__':` so spawned workers do not
+re-import and re-run the simulation setup.
 
 
 Optional: rayx engine (experimental)

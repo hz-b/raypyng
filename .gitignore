@@ -1,9 +1,14 @@
 # python virtual environment
 .venv/
+.venv_publish/
 .token
 Export_Parts
+.claude/
+CLAUDE.md
 # python specific
 __pycache__/
+.pytest_cache/
+.ruff_cache/
 
 # local-only files, including data which should NOT end in the repo
 local/
@@ -30,7 +35,8 @@ docs/**/__pycache__/
 docs/**/*.bak
 venv_docs/
 
-#ignore vscode stuff
+# ignore vscode stuff
+.vscode/
 .vscode/configurationCache.log
 .vscode/dryrun.log
 .vscode/targets.log

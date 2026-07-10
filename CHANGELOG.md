@@ -1,6 +1,31 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [2.0.0] - 3-July-2026
+
+### Added
+- Added `rayx` support. This is still experimental and unstable.
+- Added Windows support for `raypyng`.
+- Added per-element boolean toggles for `reflectivity`, `slopeError`, and `alignmentError` on parsed RML beamline elements.
+- Added a manual RML toggle check under `tests/manual_tests/rml_error_toggles/` that writes enabled/disabled beamline variants for visual inspection in RAY.
+- Added `Roughness` and `Slopes` simulation recipes together with automatic plotting helpers for their scan outputs.
+
+### Changed
+- Reworked the automated tests and added `tests/test.md` with a concise guide for running them.
+- The automatic test suite is now organized into four layers: `unit`, `smoke`, `platform`, and `functional`.
+- Added GitHub CI integration for the automated test suite.
+- Finalized the package version from `2.0.0a2` to `2.0.0`.
+- `Simulate.reflectivity()`, `Simulate.slope_errors()`, and `Simulate.alignment_errors()` now share the same per-element toggle implementation and normalize the underlying RML state consistently.
+- Split the tutorial into focused pages for RML manipulation, the RAY-UI API, simulations, and recipes, while keeping `tutorial.rst` as the landing page.
+- Refactored `raypyng.recipes` from a single module into a package while preserving the public import style for existing recipes.
+- Expanded the recipe docs and examples to cover the new roughness and slope workflows and to point readers to the curated examples section and GitHub example folders on `main`.
+- Ignore `.venv_publish/` and `.vscode/` at the repo level.
+
+### Fixed
+- Beamline-wide reflectivity toggling can now be controlled per element in the same style as slope and alignment errors.
+- Added unit coverage for per-element reflectivity toggles and for all three beamline-wide toggle helpers.
+- Fixed slope-scan evaluation so unrelated scan parameters such as exit-slit settings are not treated as slope-varied elements during plotting.
+
 ## [1.4.6] - 25-June-2026
 
 ### Added
@@ -44,7 +69,7 @@ All notable changes to this project will be documented in this file.
 - **rayx engine support (experimental)**: `Simulate` now accepts `engine="rayx"` to use the rayx GPU ray-tracer as a drop-in alternative to RAY-UI. Install with `pip install raypyng[rayx]`.
 - **graxpy grating efficiency**: optional RCWA-based diffraction efficiency via `graxpy_efficiency=True` on `Simulate`. Applied automatically to elements at and after the first grating. Install with `pip install raypyng[graxpy]`.
 - `Intensity2D` added to the list of recognised RAY-UI export types.
-- Version regression testing infrastructure: `tools/test_versions.sh`, `tests/functional/`, `tests/conftest.py` — run stable vs development RAY-UI comparisons with a single command.
+- Version regression testing infrastructure: `tests/functional/`, `tests/conftest.py` — run stable vs development RAY-UI comparisons with `uv run --python 3.12 pytest ...`.
 - Unit tests for `PostProcess` helper methods and export validation (no RAY-UI required).
 - `tools/bootstrap.sh` to create a `.venv` with uv + Python 3.12 and install dev dependencies.
 

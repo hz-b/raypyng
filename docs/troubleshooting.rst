@@ -7,32 +7,34 @@ are collected here for convenience.
 
 Does raypyng work on Windows?
 =============================
-**No, not for running simulations.** Driving RAY-UI from Python relies on
-RAY-UI's *background mode*, which is the channel raypyng uses to send commands
-and read back results. RAY-UI does not offer a background mode on Windows, so
-there is no way for raypyng to communicate with it. The simulation workflow is
-therefore supported on **Linux and macOS only**. Pure-Python helpers that do not
-launch RAY-UI (reading/writing ``.rml`` files, the standalone ``Dipole``
-spectrum, the diode conversion, …) may still work on Windows.
+**Yes.** raypyng can drive RAY-UI on Windows, including true parallel runs
+through :code:`sim.run(multiprocessing=...)`. The main Windows-specific caveat
+is Python's :code:`spawn` start method: worker processes re-import your script,
+so the call to :code:`sim.run()` must live under
+:code:`if __name__ == '__main__':`.
 
 Do I need the ``if __name__ == '__main__':`` guard?
 ===================================================
-**Yes, on macOS.** raypyng runs the simulations in parallel through Python's
-:code:`multiprocessing`. On macOS the worker processes are created with the
-:code:`spawn` start method, which **re-imports your script** in every worker. If
-the call to :code:`sim.run()` is not protected by
+**Yes, on Windows and macOS.** raypyng runs the simulations in parallel through
+Python's :code:`multiprocessing`. On Windows the worker processes are created
+with the :code:`spawn` start method, which **re-imports your script** in every
+worker. If the call to :code:`sim.run()` is not protected by
 :code:`if __name__ == '__main__':`, each worker re-runs it on import, leading to
 runaway process creation and a :code:`RuntimeError` about the bootstrapping
-phase.
+phase. macOS can hit the same problem whenever :code:`spawn` is involved.
 
 On Linux the default start method is :code:`fork`, which does not re-import the
-script, so the guard is not strictly required there — but adding it is harmless
-and keeps the same script working on both supported platforms.
+script, so the guard is not strictly required there, but adding it is harmless
+and keeps the same script working on every supported platform.
 
 I get a ``RuntimeError`` about "bootstrapping phase"
 ====================================================
 This is the symptom of the missing guard described above. Wrap your simulation
 setup and the :code:`sim.run()` call in :code:`if __name__ == '__main__':`.
+
+On Windows, also make sure you are launching from a real Python script file
+rather than from an interactive shell or notebook if you want
+:code:`multiprocessing > 1`.
 
 On macOS, "Ray-UI is not responding" / "Ray-UI quit unexpectedly"
 =================================================================
@@ -40,14 +42,13 @@ On macOS, "Ray-UI is not responding" / "Ray-UI quit unexpectedly"
 sporadically show a dialog saying that Ray-UI is not responding or quit
 unexpectedly. It is just macOS noticing that the headless RAY-UI instances are
 started and stopped rapidly. The simulations are not affected and complete
-normally — simply dismiss the dialogs.
+normally; simply dismiss the dialogs.
 
 Do I need to install xvfb?
 ==========================
 **Only on Linux.** On Linux, xvfb provides the virtual X11 framebuffer that lets
-RAY-UI run headless, and raypyng uses ``xvfb-run`` automatically. On macOS xvfb
-is **not** needed and must not be installed; raypyng skips it automatically and
-the :code:`hide` parameter is simply ignored.
+RAY-UI run headless, and raypyng uses ``xvfb-run`` automatically. On macOS and
+Windows xvfb is **not** needed.
 
 raypyng cannot find RAY-UI
 ==========================
@@ -67,10 +68,10 @@ How many parallel instances should I use?
 The ``multiprocessing`` argument to :code:`sim.run()` controls how many RAY-UI
 instances run in parallel:
 
-- an integer ``>= 1`` — that exact number of instances,
-- ``"auto"`` — the minimum between the available CPU count and the available
+- an integer ``>= 1`` - that exact number of instances,
+- ``"auto"`` - the minimum between the available CPU count and the available
   RAM in GB minus 2,
-- ``"max"`` — the minimum between the available CPU count and the available RAM
+- ``"max"`` - the minimum between the available CPU count and the available RAM
   in GB.
 
 As a rule of thumb, do not use more instances than you have CPU cores. If your

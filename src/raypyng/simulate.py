@@ -11,6 +11,7 @@ import sys
 import time
 import traceback
 from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
+from contextlib import suppress
 
 import numpy as np
 import pandas as pd
@@ -1190,6 +1191,34 @@ class Simulate:
             )
         return multiprocessing
 
+    def _select_process_pool_context(self):
+        if sys.platform == "darwin":
+            return multiprocessing.get_context("fork")
+        if sys.platform == "win32":
+            return multiprocessing.get_context("spawn")
+        return None
+
+    def _validate_windows_multiprocessing_runtime(self, workers):
+        if sys.platform != "win32" or workers <= 1:
+            return
+
+        main_module = sys.modules.get("__main__")
+        main_file = getattr(main_module, "__file__", None)
+        if not main_file:
+            raise RuntimeError(
+                "Windows multiprocessing requires launching raypyng from a Python script file. "
+                "Interactive sessions and notebooks cannot safely spawn worker processes. "
+                "Move the simulation into a script and wrap sim.run(...) in "
+                "`if __name__ == '__main__':`."
+            )
+
+        if multiprocessing.current_process().name != "MainProcess":
+            raise RuntimeError(
+                "Windows multiprocessing re-imported the simulation module inside a worker "
+                "process. Wrap the code that calls sim.run(...) in "
+                "`if __name__ == '__main__':` so only the parent process starts workers."
+            )
+
     def run(
         self,
         recipe=None,
@@ -1223,6 +1252,7 @@ class Simulate:
                                                     are done.
         """
         multiprocessing = self._resolve_multiprocessing_workers(multiprocessing)
+        self._validate_windows_multiprocessing_runtime(multiprocessing)
         run_start = time.monotonic()
 
         if self.graxpy_efficiency and self._engine == "ray-ui":
@@ -1240,7 +1270,7 @@ class Simulate:
         self._validate_run_configuration()
 
         if self._engine == "ray-ui":
-            runner = RayUIRunner(ray_path=self.ray_path, hide=True)
+            runner = RayUIRunner(ray_path=self.ray_path, hide=self._hide)
             runner.kill()
         elif self._engine == "rayx":
             try:
@@ -1394,6 +1424,56 @@ class Simulate:
                             except psutil.TimeoutExpired:
                                 proc.kill()  # Force kill if not terminated after timeout
 
+    def _terminate_executor_processes(self, executor):
+        worker_pids = []
+        for proc in list(getattr(executor, "_processes", {}).values()):
+            pid = getattr(proc, "pid", None)
+            if pid is None:
+                continue
+
+            worker_pids.append(pid)
+            with suppress(psutil.NoSuchProcess, psutil.AccessDenied):
+                worker_process = psutil.Process(pid)
+                for child in worker_process.children(recursive=True):
+                    if not self._is_rayui_or_xvfb_process(child):
+                        continue
+                    with suppress(psutil.NoSuchProcess, psutil.AccessDenied):
+                        child.terminate()
+                    with suppress(psutil.TimeoutExpired, psutil.NoSuchProcess, psutil.AccessDenied):
+                        child.wait(timeout=3)
+                    if sys.platform != "darwin":
+                        with suppress(psutil.NoSuchProcess, psutil.AccessDenied):
+                            if child.is_running():
+                                child.kill()
+
+            try:
+                if proc.is_alive():
+                    proc.terminate()
+            except Exception:  # noqa: BLE001 - best-effort teardown
+                pass
+        return worker_pids
+
+    def _shutdown_executor(self, executor, rerun_missing):
+        shutdown_wait = not rerun_missing and not self._executor_has_unfinished_futures
+        force_cancel = rerun_missing or self._executor_has_unfinished_futures
+
+        if force_cancel:
+            # cancel_futures only drops *queued* tasks; a worker already
+            # running a task keeps going and can busy-loop at 100% CPU.
+            # That worker keeps the executor's non-daemon manager thread
+            # alive, so the interpreter hangs at exit in threading._shutdown().
+            # Forcibly terminate only this executor's worker processes and
+            # their RAY-UI descendants so the pool tears down cleanly.
+            self._terminate_executor_processes(executor)
+
+        executor.shutdown(wait=shutdown_wait, cancel_futures=force_cancel)
+        self.logger.info(
+            "Executor shutdown completed%s.",
+            " without waiting" if not shutdown_wait else "",
+        )
+        if force_cancel:
+            self.cleanup_child_processes()
+
     def _remove_round_folders(self):
         for round_n in range(self._repeat):
             round_folder_path = os.path.join(self.sim_path, "round_" + str(round_n))
@@ -1488,7 +1568,8 @@ class Simulate:
                 combined = pd.concat(combined_rows, ignore_index=True)
                 combined = combined.loc[:, ~combined.columns.str.contains("^Unnamed")]
                 combined.to_csv(
-                    os.path.join(self.sim_path, f"{export}_{export_type}.csv"), index=False
+                    os.path.join(self.sim_path, f"{export}_{export_type}.csv"),
+                    index=False,
                 )
 
         if missing_files:
@@ -1706,11 +1787,7 @@ class Simulate:
         rerun_pbar = None
 
         try:
-            # On macOS the default start method is "spawn", which leaves worker
-            # processes that fail to reap on shutdown(wait=False) and busy-spin at
-            # 100% CPU; the interpreter then hangs forever in the multiprocessing
-            # atexit join(). Force "fork" on Darwin so workers reap cleanly.
-            mp_context = multiprocessing.get_context("fork") if sys.platform == "darwin" else None
+            mp_context = self._select_process_pool_context()
             executor = ProcessPoolExecutor(max_workers=num_workers, mp_context=mp_context)
             simulation_params_batch = []
             batch_length = 0
@@ -1758,29 +1835,7 @@ class Simulate:
             raise
         finally:
             if executor is not None:
-                shutdown_wait = not rerun_missing and not self._executor_has_unfinished_futures
-                force_cancel = rerun_missing or self._executor_has_unfinished_futures
-                if force_cancel:
-                    # cancel_futures only drops *queued* tasks; a worker already
-                    # running a task keeps going and can busy-loop at 100% CPU.
-                    # That worker keeps the executor's non-daemon manager thread
-                    # alive, so the interpreter hangs at exit in threading._shutdown().
-                    # Forcibly terminate this executor's own worker processes so the
-                    # pool tears down and the process can exit. Safe here: any
-                    # genuinely-missing simulations are re-run below.
-                    for proc in list(getattr(executor, "_processes", {}).values()):
-                        try:
-                            if proc.is_alive():
-                                proc.terminate()
-                        except Exception:  # noqa: BLE001 - best-effort teardown
-                            pass
-                executor.shutdown(wait=shutdown_wait, cancel_futures=force_cancel)
-                self.logger.info(
-                    "Executor shutdown completed%s.",
-                    " without waiting" if not shutdown_wait else "",
-                )
-                if force_cancel:
-                    self.cleanup_child_processes()
+                self._shutdown_executor(executor, rerun_missing)
         if rerun_missing:
             self._execute_simulations(
                 self._workers,
@@ -1921,7 +1976,8 @@ class Simulate:
                     self.logger.warning(f"Future raised exception: {e}")
                     remaining_simulations -= 1
                     last_completion = time.monotonic()
-                    self._update_progress_bar(simulations_durations, pbar)
+                    self._advance_progress_bar_for_failure(simulations_durations, pbar)
+                    raise
 
             if pending and (time.monotonic() - last_completion) >= max_idle_secs:
                 idle = time.monotonic() - last_completion
@@ -2020,6 +2076,20 @@ class Simulate:
         )
         pbar.update(1)
 
+    def _advance_progress_bar_for_failure(self, simulations_durations, pbar):
+        fallback_duration = simulations_durations[-1] if simulations_durations else 0.0
+        avg_duration = getattr(self, "_simulations_duration_total", 0.0) / max(
+            1, len(simulations_durations)
+        )
+        remaining_simulations = max(0, pbar.total - pbar.n - 1)
+        eta_seconds = avg_duration * remaining_simulations / max(1, self._workers)
+        eta_str = self._format_eta(eta_seconds)
+        pbar.set_postfix_str(
+            f"ETA: {eta_str}, Last: {fallback_duration:.2f}s, worker failed",
+            refresh=True,
+        )
+        pbar.update(1)
+
     def _setup_simulation_environment(self, recipe):
         """
         Sets up the simulation environment based on the provided recipe.
@@ -2046,14 +2116,9 @@ class Simulate:
             value (bool, optional): If :code:`True` the reflectivity is switched on,
                                            if :code:`False` the reflectivity is switched off.
         """
-        if value:
-            on_off = "1"
-        else:
-            on_off = "0"
-
         for oe in self.rml.beamline.children():
             if hasattr(oe, "reflectivityType"):
-                oe.reflectivityType.cdata = on_off
+                oe.reflectivity_enabled = value
 
     def slope_errors(self, slope_errors):
         """
@@ -2063,15 +2128,9 @@ class Simulate:
             value (bool, optional): If `True` the slope errors are switched on,
                                            if `False` the slope errors are switched off.
         """
-        if slope_errors:
-            on_off = "0"
-        else:
-            on_off = "1"
-
         for oe in self.rml.beamline.children():
             if hasattr(oe, "slopeError"):
-                oe.slopeError.cdata = on_off
-                # oe.slopeError.attributes()['enabled'] = enabled
+                oe.slope_error_enabled = slope_errors
 
     def alignment_errors(self, value):
         """
@@ -2084,15 +2143,9 @@ class Simulate:
         Returns:
             None
         """
-
-        if value:
-            on_off = "0"
-        else:
-            on_off = "1"
-
         for oe in self.rml.beamline.children():
             if hasattr(oe, "alignmentError"):
-                oe.alignmentError.cdata = on_off
+                oe.alignment_error_enabled = value
 
 
 def run_rml_func_rayx(parameters):
