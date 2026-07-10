@@ -7,7 +7,6 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from matplotlib.ticker import FuncFormatter
 
 from ..rml import ObjectElement
 from .base import (
@@ -209,30 +208,17 @@ def _bandwidth_variation_percent(subset: pd.DataFrame, x_column: str):
     return 100.0 * (subset["Bandwidth"] - reference_bandwidth) / reference_bandwidth
 
 
+def _relative_variation_percent(values: pd.Series, reference_value):
+    if pd.isna(reference_value) or np.isclose(reference_value, 0.0):
+        return values * np.nan
+    return 100.0 * (values - reference_value) / reference_value
+
+
 def _zero_reference_row(subset: pd.DataFrame, x_column: str):
     zero_rows = subset[np.isclose(subset[x_column], 0.0)]
     if zero_rows.empty:
         return None
     return zero_rows.iloc[0]
-
-
-def _absolute_delta_formatter(reference_value: float, unit: str):
-    def _formatter(value, _pos):
-        delta = value - reference_value
-        return f"{value:.3g} / {delta:+.3g} {unit}"
-
-    return FuncFormatter(_formatter)
-
-
-def _absolute_relative_formatter(reference_value: float, unit: str):
-    if pd.isna(reference_value) or np.isclose(reference_value, 0.0):
-        return _absolute_delta_formatter(reference_value, unit)
-
-    def _formatter(value, _pos):
-        relative_percent = 100.0 * (value - reference_value) / reference_value
-        return f"{value:.3g} / {relative_percent:+.3g}%"
-
-    return FuncFormatter(_formatter)
 
 
 def _axis_grid(nrows: int, ncols: int, figsize):
@@ -280,17 +266,20 @@ def plot_per_element_vibration_scan(
     ncols = len(ALIGNMENT_ERROR_PARAMETERS)
 
     fig_bw, axs_bw = _axis_grid(nrows, ncols, figsize=(4 * ncols, 3.5 * nrows))
-    fig_centers, axs_centers = _axis_grid(nrows, ncols, figsize=(4 * ncols, 3.5 * nrows))
+    fig_centers_abs, axs_centers_abs = _axis_grid(nrows, ncols, figsize=(4 * ncols, 3.5 * nrows))
+    fig_centers_rel, axs_centers_rel = _axis_grid(nrows, ncols, figsize=(4 * ncols, 3.5 * nrows))
 
     for row_idx, element_name in enumerate(element_names):
         for col_idx, param_name in enumerate(ALIGNMENT_ERROR_PARAMETERS):
             ax_bw = axs_bw[row_idx][col_idx]
-            ax_centers = axs_centers[row_idx][col_idx]
+            ax_centers_abs = axs_centers_abs[row_idx][col_idx]
+            ax_centers_rel = axs_centers_rel[row_idx][col_idx]
             subset = _scan_subset(df, element_names, parameter_columns, element_name, param_name)
 
             if subset is None:
                 _mark_unsupported(ax_bw, element_name, param_name)
-                _mark_unsupported(ax_centers, element_name, param_name)
+                _mark_unsupported(ax_centers_abs, element_name, param_name)
+                _mark_unsupported(ax_centers_rel, element_name, param_name)
                 continue
 
             x_column = parameter_columns[element_name][param_name]
@@ -313,55 +302,89 @@ def plot_per_element_vibration_scan(
                     )
                     ax_bw_right.set_ylabel("Bandwidth variation vs 0 [%]")
 
-            line_h = ax_centers.plot(
+            line_h_abs = ax_centers_abs.plot(
                 subset[x_column],
                 subset["HorizontalCenter"],
                 marker=".",
                 label="HorizontalCenter",
             )[0]
-            ax_centers.set_xlabel("Perturbation value")
-            ax_centers.set_ylabel("HorizontalCenter [mm]")
-            ax_centers.set_title(f"{element_name}\n{param_name}")
-            ax_centers.grid(True, alpha=0.3)
+            ax_centers_abs.set_xlabel("Perturbation value")
+            ax_centers_abs.set_ylabel("HorizontalCenter [mm]")
+            ax_centers_abs.set_title(f"{element_name}\n{param_name}")
+            ax_centers_abs.grid(True, alpha=0.3)
 
-            ax_centers_right = ax_centers.twinx()
-            line_v = ax_centers_right.plot(
+            ax_centers_abs_right = ax_centers_abs.twinx()
+            line_v_abs = ax_centers_abs_right.plot(
                 subset[x_column],
                 subset["VerticalCenter"],
                 marker=".",
                 color="tab:orange",
                 label="VerticalCenter",
             )[0]
-            ax_centers_right.set_ylabel("VerticalCenter [mm]")
-            ax_centers.legend([line_h, line_v], ["HorizontalCenter", "VerticalCenter"], loc="best")
+            ax_centers_abs_right.set_ylabel("VerticalCenter [mm]")
+            ax_centers_abs.legend(
+                [line_h_abs, line_v_abs], ["HorizontalCenter", "VerticalCenter"], loc="best"
+            )
 
-            if zero_reference is not None:
-                ax_centers.yaxis.set_major_formatter(
-                    _absolute_relative_formatter(zero_reference["HorizontalCenter"], "mm")
+            if zero_reference is None:
+                horizontal_relative = subset["HorizontalCenter"] * np.nan
+                vertical_relative = subset["VerticalCenter"] * np.nan
+            else:
+                horizontal_relative = _relative_variation_percent(
+                    subset["HorizontalCenter"], zero_reference["HorizontalCenter"]
                 )
-                ax_centers_right.yaxis.set_major_formatter(
-                    _absolute_relative_formatter(zero_reference["VerticalCenter"], "mm")
+                vertical_relative = _relative_variation_percent(
+                    subset["VerticalCenter"], zero_reference["VerticalCenter"]
                 )
+
+            line_h_rel = ax_centers_rel.plot(
+                subset[x_column],
+                horizontal_relative,
+                marker=".",
+                label="HorizontalCenter",
+            )[0]
+            ax_centers_rel.set_xlabel("Perturbation value")
+            ax_centers_rel.set_ylabel("HorizontalCenter variation vs 0 [%]")
+            ax_centers_rel.set_title(f"{element_name}\n{param_name}")
+            ax_centers_rel.grid(True, alpha=0.3)
+
+            ax_centers_rel_right = ax_centers_rel.twinx()
+            line_v_rel = ax_centers_rel_right.plot(
+                subset[x_column],
+                vertical_relative,
+                marker=".",
+                color="tab:orange",
+                label="VerticalCenter",
+            )[0]
+            ax_centers_rel_right.set_ylabel("VerticalCenter variation vs 0 [%]")
+            ax_centers_rel.legend(
+                [line_h_rel, line_v_rel], ["HorizontalCenter", "VerticalCenter"], loc="best"
+            )
 
     fig_bw.suptitle("Per-element vibration scan: Bandwidth")
     fig_bw.tight_layout()
-    fig_centers.suptitle("Per-element vibration scan: centers")
-    fig_centers.tight_layout()
+    fig_centers_abs.suptitle("Per-element vibration scan: centers (absolute)")
+    fig_centers_abs.tight_layout()
+    fig_centers_rel.suptitle("Per-element vibration scan: centers (relative to 0)")
+    fig_centers_rel.tight_layout()
 
     bandwidth_path = output_folder / "per_element_vibration_scan_bandwidth.png"
-    centers_path = output_folder / "per_element_vibration_scan_centers.png"
+    centers_abs_path = output_folder / "per_element_vibration_scan_centers_absolute.png"
+    centers_rel_path = output_folder / "per_element_vibration_scan_centers_relative.png"
 
     if saveplot:
         output_folder.mkdir(parents=True, exist_ok=True)
         fig_bw.savefig(bandwidth_path, dpi=150)
-        fig_centers.savefig(centers_path, dpi=150)
-        saved_paths.extend([bandwidth_path, centers_path])
+        fig_centers_abs.savefig(centers_abs_path, dpi=150)
+        fig_centers_rel.savefig(centers_rel_path, dpi=150)
+        saved_paths.extend([bandwidth_path, centers_abs_path, centers_rel_path])
 
     if showplot:
         plt.show()
 
     plt.close(fig_bw)
-    plt.close(fig_centers)
+    plt.close(fig_centers_abs)
+    plt.close(fig_centers_rel)
     return saved_paths
 
 

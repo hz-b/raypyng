@@ -475,7 +475,8 @@ def test_plot_per_element_vibration_scan_creates_expected_figures(tmp_path: Path
 
     names = {path.name for path in paths}
     assert "per_element_vibration_scan_bandwidth.png" in names
-    assert "per_element_vibration_scan_centers.png" in names
+    assert "per_element_vibration_scan_centers_absolute.png" in names
+    assert "per_element_vibration_scan_centers_relative.png" in names
 
 
 def test_plot_per_element_vibration_scan_deduplicates_center_point(tmp_path: Path):
