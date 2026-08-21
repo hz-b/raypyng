@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import raypyng.simulate as simulate_module
 from raypyng.simulate import Simulate
 
 _RML = str(Path(__file__).parent.parent / "data" / "rml" / "dipole.rml")
@@ -86,6 +87,25 @@ def test_update_progress_bar_replaces_seed_with_measured_timings():
     assert "Last: 8.00s" in pbar.postfix
     assert "Avg: 8.00s/it" in pbar.postfix
     assert pbar.n == 1
+
+
+def test_initialize_progress_bar_enables_dynamic_terminal_width(monkeypatch):
+    calls = []
+
+    class FakeTqdm:
+        def __init__(self, **kwargs):
+            calls.append(kwargs)
+
+    monkeypatch.setattr(simulate_module, "tqdm", FakeTqdm)
+
+    sim = Simulate(_RML, hide=True)
+    sim._initialize_progress_bar(3)
+    sim._initialize_progress_bar(2, description="Retrying", leave=False)
+
+    assert calls[0]["dynamic_ncols"] is True
+    assert calls[0]["leave"] is True
+    assert calls[1]["dynamic_ncols"] is True
+    assert calls[1]["leave"] is False
 
 
 def test_number_rays_estimate_uses_conservative_safety_factor():

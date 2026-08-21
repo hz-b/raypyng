@@ -20,16 +20,27 @@ echo "============================================================"
 echo "Current version: ${CURRENT_VERSION}"
 echo "============================================================"
 
-IFS='.' read -r MAJOR MINOR PATCH <<< "${CURRENT_VERSION}"
+# Parse the numeric core separately from an optional PEP 440 pre-release
+# suffix (for example, 2.0.0a1 or 2.0.0rc2).
+if [[ "${CURRENT_VERSION}" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)(.*)$ ]]; then
+    MAJOR="${BASH_REMATCH[1]}"
+    MINOR="${BASH_REMATCH[2]}"
+    PATCH="${BASH_REMATCH[3]}"
+    VERSION_SUFFIX="${BASH_REMATCH[4]}"
+else
+    echo "Error: unsupported version format: ${CURRENT_VERSION}"
+    exit 1
+fi
 
 echo
 echo "Select version bump:"
 echo "1) patch (${MAJOR}.${MINOR}.$((PATCH + 1)))"
 echo "2) minor (${MAJOR}.$((MINOR + 1)).0)"
 echo "3) major ($((MAJOR + 1)).0.0)"
-echo "4) custom"
+echo "4) alpha pre-release (${MAJOR}.${MINOR}.${PATCH}a1)"
+echo "5) custom"
 
-read -rp "Choice [1-4]: " VERSION_CHOICE
+read -rp "Choice [1-5]: " VERSION_CHOICE
 
 case "${VERSION_CHOICE}" in
     1)
@@ -42,6 +53,13 @@ case "${VERSION_CHOICE}" in
         NEW_VERSION="$((MAJOR + 1)).0.0"
         ;;
     4)
+        if [[ "${VERSION_SUFFIX}" =~ ^a([0-9]+)$ ]]; then
+            NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}a$((BASH_REMATCH[1] + 1))"
+        else
+            NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}a1"
+        fi
+        ;;
+    5)
         read -rp "Enter version: " NEW_VERSION
         ;;
     *)

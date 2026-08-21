@@ -1115,9 +1115,17 @@ class Simulate:
         else:
             return f"{int(hours):02d}h:{int(minutes):02d}min"
 
-    def _initialize_progress_bar(self, total_simulations, description="Simulations Completed"):
+    def _initialize_progress_bar(
+        self, total_simulations, description="Simulations Completed", leave=True
+    ):
         bar_format = "{desc}: {percentage:3.0f}%|{bar}| {n_fmt}/{total_fmt} {postfix}]"
-        progress_bar = tqdm(total=total_simulations, bar_format=bar_format, desc=description)
+        progress_bar = tqdm(
+            total=total_simulations,
+            bar_format=bar_format,
+            desc=description,
+            dynamic_ncols=True,
+            leave=leave,
+        )
         return progress_bar
 
     def _print_simulations_info(self):
@@ -1863,26 +1871,28 @@ class Simulate:
         missing_count = len(missing_sim)
 
         if missing_count >= 1 and self.simulations_checked is False:
-            print(
-                f"\nFinal check: {missing_count} missing simulation(s). Retrying now...",
-                flush=True,
-            )
             self.logger.info(f"Retrying {missing_count} missing simulation(s)")
             old_pbar.close()
             pbar = self._initialize_progress_bar(
-                missing_count, description="Retrying Missing Simulations"
+                missing_count,
+                description="Retrying Missing Simulations",
+                leave=False,
             )
             self.simulations_checked = True
             return True, pbar
 
         if missing_count >= 1:
+            self.logger.warning(f"{missing_count} simulation(s) still missing after retry")
+            noun = "simulation" if missing_count == 1 else "simulations"
             print(
-                f"\nWarning: {missing_count} simulation(s) still missing after retry.",
+                f"\nRetry incomplete: {missing_count} {noun} still missing.",
                 flush=True,
             )
-            self.logger.warning(f"{missing_count} simulation(s) still missing after retry")
         elif self.simulations_checked:
-            print("\nRetry complete. All simulations finished successfully.", flush=True)
+            print(
+                "\nRetry complete: all simulations finished successfully.",
+                flush=True,
+            )
 
         return False, old_pbar
 
@@ -2010,12 +2020,13 @@ class Simulate:
                 self.logger.info(f"Exception building missing-sim list: {e}")
 
             n_missing = len(missing_sims)
+            found_simulations = set()
             if missing_sims:
                 idle_threshold = max(10.0, max_idle_secs / 4)
-                print(
-                    f"\nStill waiting for {n_missing} sim(s) to finish. "
+                self.logger.info(
+                    "Still waiting for %s sim(s) to finish. "
                     "This can be normal for longer runs; checking the output files...",
-                    flush=True,
+                    n_missing,
                 )
                 last_progress = time.monotonic()
                 while missing_sims:
@@ -2023,13 +2034,17 @@ class Simulate:
                     still_missing = []
                     for sim_n, round_n, sim_file in missing_sims:
                         if self._sim_output_is_fresh(sim_n, round_n, batch_clock_start):
+                            found_simulations.add((sim_n, round_n))
                             last_progress = time.monotonic()
                             elapsed = time.time() - batch_clock_start
+                            simulations_durations.append(elapsed)
+                            self._simulations_duration_total += elapsed
                             max_idle_secs = max(60.0, elapsed * 3.0)
                             self._simulation_timeout = max_idle_secs
+                            self._update_progress_bar(simulations_durations, pbar)
                             self.logger.info(
                                 f"Sim {sim_n} appeared after {elapsed:.1f}s; "
-                                f"updating max_idle to {max_idle_secs:.0f}s"
+                                f"updating progress and max_idle to {max_idle_secs:.0f}s"
                             )
                         else:
                             still_missing.append((sim_n, round_n, sim_file))
@@ -2046,7 +2061,10 @@ class Simulate:
             if len(simulations_durations) == 0:
                 simulations_durations.append(max_idle_secs)
             self.logger.info("Updating progress bar")
-            for _i in range(remaining_simulations):
+            # Simulations whose artifacts appeared during fallback polling were
+            # already counted at detection time. Settle only the remainder here.
+            unaccounted_simulations = max(0, remaining_simulations - len(found_simulations))
+            for _i in range(unaccounted_simulations):
                 try:
                     self._update_progress_bar(simulations_durations, pbar)
                 except Exception as e:

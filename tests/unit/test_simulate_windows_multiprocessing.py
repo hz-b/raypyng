@@ -170,3 +170,134 @@ def test_wait_for_simulation_batch_surfaces_worker_exception_without_index_error
             executor=FakeExecutor(),
             pbar=FakeProgressBar(),
         )
+
+
+def test_wait_for_simulation_batch_updates_progress_when_late_artifact_appears(
+    sim, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+):
+    class FakeFuture:
+        def cancel(self):
+            return True
+
+    class FakeExecutor:
+        def submit(self, func, sim_params):
+            return FakeFuture()
+
+    class FakeProgressBar:
+        total = 2
+        n = 0
+
+        def __init__(self):
+            self.updates = []
+
+        def set_postfix_str(self, *_args, **_kwargs):
+            return None
+
+        def update(self, value):
+            self.n += value
+            self.updates.append(self.n)
+
+    progress = FakeProgressBar()
+    log_messages = []
+    sim._engine = "ray-ui"
+    sim._batch_number = 0
+    sim._simulation_timeout = 20.0
+    sim._workers = 1
+    sim._simulations_duration_total = 0.0
+    sim.logger = SimpleNamespace(
+        info=lambda *args, **kwargs: log_messages.append(args[0] % args[1:] if args[1:] else args[0]),
+        warning=lambda *args, **kwargs: None,
+    )
+
+    # The future times out; the first artifact appears during fallback polling,
+    # while the second one remains missing and is left for the retry pass.
+    monotonic_values = iter([0.0, 21.0, 21.0, 21.0, 21.0, 32.0])
+    monkeypatch.setattr(
+        simulate_module.time,
+        "monotonic",
+        lambda: next(monotonic_values, 32.0),
+    )
+    monkeypatch.setattr(simulate_module.time, "time", lambda: 102.0)
+    monkeypatch.setattr(simulate_module.time, "sleep", lambda _seconds: None)
+    monkeypatch.setattr(
+        simulate_module,
+        "wait",
+        lambda pending, timeout, return_when: (set(), set(pending)),
+    )
+    monkeypatch.setattr(sim, "_is_simulation_missing", lambda *_args: True)
+    artifact_states = iter([True, False])
+    monkeypatch.setattr(sim, "_sim_output_is_fresh", lambda *_args: next(artifact_states))
+
+    params = ("dummy.rml", False, False, False, None, False, None, None, False, 15, 0.1, 0.1)
+    sim._wait_for_simulation_batch(
+        simulations_durations=[],
+        simulation_params_batch=[
+            (params, [["Dipole", "RawRaysOutgoing", "round_0", "0"]]),
+            (params, [["Dipole", "RawRaysOutgoing", "round_0", "1"]]),
+        ],
+        executor=FakeExecutor(),
+        pbar=progress,
+    )
+
+    assert progress.updates == [1, 2]
+    assert "Still waiting for 2 sim(s) to finish." not in capsys.readouterr().out
+    assert any("Still waiting for 2 sim(s) to finish." in message for message in log_messages)
+    assert any("updating progress" in message for message in log_messages)
+
+
+class _RetryProgressBar:
+    def __init__(self):
+        self.closed = False
+
+    def close(self):
+        self.closed = True
+
+
+def test_final_check_starts_retry_without_premature_terminal_success(sim, monkeypatch, capsys):
+    sim.repeat = 1
+    sim.simulations_checked = False
+    sim.logger = SimpleNamespace(info=lambda *args, **kwargs: None, warning=lambda *args, **kwargs: None)
+    old_pbar = _RetryProgressBar()
+    created = []
+
+    def create_pbar(total, description, leave=True):
+        created.append((total, description, leave))
+        return _RetryProgressBar()
+
+    monkeypatch.setattr(sim, "_initialize_progress_bar", create_pbar)
+    monkeypatch.setattr(sim, "_missing_simulations_for_round", lambda _round: [7, 8])
+
+    rerun, retry_pbar = sim._final_check_on_simulations_and_shutdown(old_pbar)
+
+    assert rerun is True
+    assert isinstance(retry_pbar, _RetryProgressBar)
+    assert old_pbar.closed is True
+    assert created == [(2, "Retrying Missing Simulations", False)]
+    output = capsys.readouterr().out
+    assert "Final check" not in output
+    assert "Retry complete" not in output
+
+
+def test_final_check_reports_one_retry_success_message(sim, monkeypatch, capsys):
+    sim.repeat = 1
+    sim.simulations_checked = True
+    sim.logger = SimpleNamespace(info=lambda *args, **kwargs: None, warning=lambda *args, **kwargs: None)
+    monkeypatch.setattr(sim, "_missing_simulations_for_round", lambda _round: [])
+
+    rerun, pbar = sim._final_check_on_simulations_and_shutdown(_RetryProgressBar())
+
+    assert rerun is False
+    assert isinstance(pbar, _RetryProgressBar)
+    assert capsys.readouterr().out.count("Retry complete: all simulations finished successfully.") == 1
+
+
+def test_final_check_reports_one_retry_failure_message(sim, monkeypatch, capsys):
+    sim.repeat = 1
+    sim.simulations_checked = True
+    sim.logger = SimpleNamespace(info=lambda *args, **kwargs: None, warning=lambda *args, **kwargs: None)
+    monkeypatch.setattr(sim, "_missing_simulations_for_round", lambda _round: [7])
+
+    rerun, _pbar = sim._final_check_on_simulations_and_shutdown(_RetryProgressBar())
+
+    assert rerun is False
+    assert capsys.readouterr().out.count("Retry incomplete: 1 simulation still missing.") == 1
