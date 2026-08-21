@@ -2010,12 +2010,13 @@ class Simulate:
                 self.logger.info(f"Exception building missing-sim list: {e}")
 
             n_missing = len(missing_sims)
+            found_simulations = set()
             if missing_sims:
                 idle_threshold = max(10.0, max_idle_secs / 4)
-                print(
-                    f"\nStill waiting for {n_missing} sim(s) to finish. "
+                self.logger.info(
+                    "Still waiting for %s sim(s) to finish. "
                     "This can be normal for longer runs; checking the output files...",
-                    flush=True,
+                    n_missing,
                 )
                 last_progress = time.monotonic()
                 while missing_sims:
@@ -2023,13 +2024,17 @@ class Simulate:
                     still_missing = []
                     for sim_n, round_n, sim_file in missing_sims:
                         if self._sim_output_is_fresh(sim_n, round_n, batch_clock_start):
+                            found_simulations.add((sim_n, round_n))
                             last_progress = time.monotonic()
                             elapsed = time.time() - batch_clock_start
+                            simulations_durations.append(elapsed)
+                            self._simulations_duration_total += elapsed
                             max_idle_secs = max(60.0, elapsed * 3.0)
                             self._simulation_timeout = max_idle_secs
+                            self._update_progress_bar(simulations_durations, pbar)
                             self.logger.info(
                                 f"Sim {sim_n} appeared after {elapsed:.1f}s; "
-                                f"updating max_idle to {max_idle_secs:.0f}s"
+                                f"updating progress and max_idle to {max_idle_secs:.0f}s"
                             )
                         else:
                             still_missing.append((sim_n, round_n, sim_file))
@@ -2046,7 +2051,10 @@ class Simulate:
             if len(simulations_durations) == 0:
                 simulations_durations.append(max_idle_secs)
             self.logger.info("Updating progress bar")
-            for _i in range(remaining_simulations):
+            # Simulations whose artifacts appeared during fallback polling were
+            # already counted at detection time. Settle only the remainder here.
+            unaccounted_simulations = max(0, remaining_simulations - len(found_simulations))
+            for _i in range(unaccounted_simulations):
                 try:
                     self._update_progress_bar(simulations_durations, pbar)
                 except Exception as e:

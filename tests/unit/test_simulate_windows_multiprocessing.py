@@ -170,3 +170,76 @@ def test_wait_for_simulation_batch_surfaces_worker_exception_without_index_error
             executor=FakeExecutor(),
             pbar=FakeProgressBar(),
         )
+
+
+def test_wait_for_simulation_batch_updates_progress_when_late_artifact_appears(
+    sim, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+):
+    class FakeFuture:
+        def cancel(self):
+            return True
+
+    class FakeExecutor:
+        def submit(self, func, sim_params):
+            return FakeFuture()
+
+    class FakeProgressBar:
+        total = 2
+        n = 0
+
+        def __init__(self):
+            self.updates = []
+
+        def set_postfix_str(self, *_args, **_kwargs):
+            return None
+
+        def update(self, value):
+            self.n += value
+            self.updates.append(self.n)
+
+    progress = FakeProgressBar()
+    log_messages = []
+    sim._engine = "ray-ui"
+    sim._batch_number = 0
+    sim._simulation_timeout = 20.0
+    sim._workers = 1
+    sim._simulations_duration_total = 0.0
+    sim.logger = SimpleNamespace(
+        info=lambda *args, **kwargs: log_messages.append(args[0] % args[1:] if args[1:] else args[0]),
+        warning=lambda *args, **kwargs: None,
+    )
+
+    # The future times out; the first artifact appears during fallback polling,
+    # while the second one remains missing and is left for the retry pass.
+    monotonic_values = iter([0.0, 21.0, 21.0, 21.0, 21.0, 32.0])
+    monkeypatch.setattr(
+        simulate_module.time,
+        "monotonic",
+        lambda: next(monotonic_values, 32.0),
+    )
+    monkeypatch.setattr(simulate_module.time, "time", lambda: 102.0)
+    monkeypatch.setattr(simulate_module.time, "sleep", lambda _seconds: None)
+    monkeypatch.setattr(
+        simulate_module,
+        "wait",
+        lambda pending, timeout, return_when: (set(), set(pending)),
+    )
+    monkeypatch.setattr(sim, "_is_simulation_missing", lambda *_args: True)
+    artifact_states = iter([True, False])
+    monkeypatch.setattr(sim, "_sim_output_is_fresh", lambda *_args: next(artifact_states))
+
+    params = ("dummy.rml", False, False, False, None, False, None, None, False, 15, 0.1, 0.1)
+    sim._wait_for_simulation_batch(
+        simulations_durations=[],
+        simulation_params_batch=[
+            (params, [["Dipole", "RawRaysOutgoing", "round_0", "0"]]),
+            (params, [["Dipole", "RawRaysOutgoing", "round_0", "1"]]),
+        ],
+        executor=FakeExecutor(),
+        pbar=progress,
+    )
+
+    assert progress.updates == [1, 2]
+    assert "Still waiting for 2 sim(s) to finish." not in capsys.readouterr().out
+    assert any("Still waiting for 2 sim(s) to finish." in message for message in log_messages)
+    assert any("updating progress" in message for message in log_messages)
