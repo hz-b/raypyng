@@ -1115,9 +1115,17 @@ class Simulate:
         else:
             return f"{int(hours):02d}h:{int(minutes):02d}min"
 
-    def _initialize_progress_bar(self, total_simulations, description="Simulations Completed"):
+    def _initialize_progress_bar(
+        self, total_simulations, description="Simulations Completed", leave=True
+    ):
         bar_format = "{desc}: {percentage:3.0f}%|{bar}| {n_fmt}/{total_fmt} {postfix}]"
-        progress_bar = tqdm(total=total_simulations, bar_format=bar_format, desc=description)
+        progress_bar = tqdm(
+            total=total_simulations,
+            bar_format=bar_format,
+            desc=description,
+            dynamic_ncols=True,
+            leave=leave,
+        )
         return progress_bar
 
     def _print_simulations_info(self):
@@ -1863,26 +1871,28 @@ class Simulate:
         missing_count = len(missing_sim)
 
         if missing_count >= 1 and self.simulations_checked is False:
-            print(
-                f"\nFinal check: {missing_count} missing simulation(s). Retrying now...",
-                flush=True,
-            )
             self.logger.info(f"Retrying {missing_count} missing simulation(s)")
             old_pbar.close()
             pbar = self._initialize_progress_bar(
-                missing_count, description="Retrying Missing Simulations"
+                missing_count,
+                description="Retrying Missing Simulations",
+                leave=False,
             )
             self.simulations_checked = True
             return True, pbar
 
         if missing_count >= 1:
+            self.logger.warning(f"{missing_count} simulation(s) still missing after retry")
+            noun = "simulation" if missing_count == 1 else "simulations"
             print(
-                f"\nWarning: {missing_count} simulation(s) still missing after retry.",
+                f"\nRetry incomplete: {missing_count} {noun} still missing.",
                 flush=True,
             )
-            self.logger.warning(f"{missing_count} simulation(s) still missing after retry")
         elif self.simulations_checked:
-            print("\nRetry complete. All simulations finished successfully.", flush=True)
+            print(
+                "\nRetry complete: all simulations finished successfully.",
+                flush=True,
+            )
 
         return False, old_pbar
 

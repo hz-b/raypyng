@@ -243,3 +243,61 @@ def test_wait_for_simulation_batch_updates_progress_when_late_artifact_appears(
     assert "Still waiting for 2 sim(s) to finish." not in capsys.readouterr().out
     assert any("Still waiting for 2 sim(s) to finish." in message for message in log_messages)
     assert any("updating progress" in message for message in log_messages)
+
+
+class _RetryProgressBar:
+    def __init__(self):
+        self.closed = False
+
+    def close(self):
+        self.closed = True
+
+
+def test_final_check_starts_retry_without_premature_terminal_success(sim, monkeypatch, capsys):
+    sim.repeat = 1
+    sim.simulations_checked = False
+    sim.logger = SimpleNamespace(info=lambda *args, **kwargs: None, warning=lambda *args, **kwargs: None)
+    old_pbar = _RetryProgressBar()
+    created = []
+
+    def create_pbar(total, description, leave=True):
+        created.append((total, description, leave))
+        return _RetryProgressBar()
+
+    monkeypatch.setattr(sim, "_initialize_progress_bar", create_pbar)
+    monkeypatch.setattr(sim, "_missing_simulations_for_round", lambda _round: [7, 8])
+
+    rerun, retry_pbar = sim._final_check_on_simulations_and_shutdown(old_pbar)
+
+    assert rerun is True
+    assert isinstance(retry_pbar, _RetryProgressBar)
+    assert old_pbar.closed is True
+    assert created == [(2, "Retrying Missing Simulations", False)]
+    output = capsys.readouterr().out
+    assert "Final check" not in output
+    assert "Retry complete" not in output
+
+
+def test_final_check_reports_one_retry_success_message(sim, monkeypatch, capsys):
+    sim.repeat = 1
+    sim.simulations_checked = True
+    sim.logger = SimpleNamespace(info=lambda *args, **kwargs: None, warning=lambda *args, **kwargs: None)
+    monkeypatch.setattr(sim, "_missing_simulations_for_round", lambda _round: [])
+
+    rerun, pbar = sim._final_check_on_simulations_and_shutdown(_RetryProgressBar())
+
+    assert rerun is False
+    assert isinstance(pbar, _RetryProgressBar)
+    assert capsys.readouterr().out.count("Retry complete: all simulations finished successfully.") == 1
+
+
+def test_final_check_reports_one_retry_failure_message(sim, monkeypatch, capsys):
+    sim.repeat = 1
+    sim.simulations_checked = True
+    sim.logger = SimpleNamespace(info=lambda *args, **kwargs: None, warning=lambda *args, **kwargs: None)
+    monkeypatch.setattr(sim, "_missing_simulations_for_round", lambda _round: [7])
+
+    rerun, _pbar = sim._final_check_on_simulations_and_shutdown(_RetryProgressBar())
+
+    assert rerun is False
+    assert capsys.readouterr().out.count("Retry incomplete: 1 simulation still missing.") == 1
